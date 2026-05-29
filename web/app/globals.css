@@ -5,12 +5,29 @@
   --panel: #111722;
   --panel-2: #161d2b;
   --border: #232c3d;
+  --border-hover: #2d3850;
+  --header-bg: rgba(10, 13, 18, 0.82);
   --text: #e8ecf2;
   --muted: #8b97a8;
   --accent: #f5b301;
   --accent-2: #4dd4c4;
   --up: #4ade80;
   --down: #f87171;
+}
+
+html[data-theme="light"] {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --panel-2: #eef1f5;
+  --border: #e0e5ec;
+  --border-hover: #c4ccd8;
+  --header-bg: rgba(246, 247, 249, 0.85);
+  --text: #161b22;
+  --muted: #5b6675;
+  --accent: #b9810a;
+  --accent-2: #0e8f87;
+  --up: #15803d;
+  --down: #dc2626;
 }
 
 html, body {
@@ -30,7 +47,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 14px;
 }
-.panel-hover:hover { border-color: #2d3850; }
+.panel-hover:hover { border-color: var(--border-hover); }
 
 .chip {
   display: inline-flex; align-items: center;

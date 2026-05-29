@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getRadar } from "@/lib/data";
+import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
+
+const THEME_INIT = `try{if(localStorage.getItem('jotter.theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}`;
 
 export const metadata: Metadata = {
   title: "Jotter Signal — Foresight Engine",
@@ -20,10 +23,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const r = getRadar();
   return (
     <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+      </head>
       <body className="min-h-screen flex flex-col">
         <header
           className="sticky top-0 z-50 backdrop-blur"
-          style={{ background: "rgba(10,13,18,0.82)", borderBottom: "1px solid var(--border)" }}
+          style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}
         >
           <div className="mx-auto max-w-6xl px-5 h-14 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
@@ -42,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   {n.label}
                 </Link>
               ))}
+              <ThemeToggle />
             </nav>
           </div>
         </header>
