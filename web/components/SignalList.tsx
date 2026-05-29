@@ -4,12 +4,16 @@ import type { Signal } from "@/lib/types";
 import { SignalCard } from "@/components/SignalCard";
 
 export type Tab = { id: string; label: string };
+type Sort = "newest" | "oldest" | "relevance";
 
 export default function SignalList({
   tabs,
   themes = [],
   showSearch = false,
   showThemes = false,
+  showSort = true,
+  showYears = false,
+  availableYears = [],
   initialQuery = "",
   initialType = "",
 }: {
@@ -17,12 +21,17 @@ export default function SignalList({
   themes?: string[];
   showSearch?: boolean;
   showThemes?: boolean;
+  showSort?: boolean;
+  showYears?: boolean;
+  availableYears?: number[];
   initialQuery?: string;
   initialType?: string;
 }) {
   const [input, setInput] = useState(initialQuery);
   const [type, setType] = useState(initialType);
   const [theme, setTheme] = useState("");
+  const [sort, setSort] = useState<Sort>(initialQuery ? "relevance" : "newest");
+  const [years, setYears] = useState<number[]>([]);
   const [results, setResults] = useState<Signal[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -30,6 +39,8 @@ export default function SignalList({
   const committedRef = useRef(initialQuery);
   const typeRef = useRef(type); typeRef.current = type;
   const themeRef = useRef(theme); themeRef.current = theme;
+  const sortRef = useRef(sort); sortRef.current = sort;
+  const yearsRef = useRef(years); yearsRef.current = years;
   const offsetRef = useRef(0);
   const totalRef = useRef(0);
   const loadingRef = useRef(false);
@@ -45,6 +56,8 @@ export default function SignalList({
     if (committedRef.current) params.set("q", committedRef.current);
     if (typeRef.current) params.set("type", typeRef.current);
     if (themeRef.current) params.set("theme", themeRef.current);
+    if (yearsRef.current.length) params.set("years", yearsRef.current.join(","));
+    params.set("sort", sortRef.current);
     params.set("offset", String(offset));
     const res = await fetch(`/api/search?${params}`);
     const data = await res.json();
@@ -56,8 +69,10 @@ export default function SignalList({
     loadingRef.current = false;
   }, []);
 
-  useEffect(() => { fetchPage(true); }, [type, theme, fetchPage]);
+  // reload from the top when any filter changes
+  useEffect(() => { fetchPage(true); }, [type, theme, sort, years.join(","), fetchPage]);
 
+  // infinite scroll
   useEffect(() => {
     const el = sentinel.current;
     if (!el) return;
@@ -73,6 +88,10 @@ export default function SignalList({
     e.preventDefault();
     committedRef.current = input;
     fetchPage(true);
+  }
+
+  function toggleYear(y: number) {
+    setYears((prev) => (prev.includes(y) ? prev.filter((x) => x !== y) : [...prev, y]));
   }
 
   const hasMore = results.length < total;
@@ -102,13 +121,47 @@ export default function SignalList({
             {t.label}
           </button>
         ))}
-        {showThemes && (
-          <select value={theme} onChange={(e) => setTheme(e.target.value)} className="text-xs px-2 py-1.5 ml-auto">
-            <option value="">All themes</option>
-            {themes.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
-        )}
+        <div className="ml-auto flex gap-2 items-center">
+          {showThemes && (
+            <select value={theme} onChange={(e) => setTheme(e.target.value)} className="text-xs px-2 py-1.5">
+              <option value="">All themes</option>
+              {themes.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+          )}
+          {showSort && (
+            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="text-xs px-2 py-1.5">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="relevance">Most relevant</option>
+            </select>
+          )}
+        </div>
       </div>
+
+      {showYears && availableYears.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 items-center">
+          <button
+            onClick={() => setYears([])}
+            className="chip"
+            style={years.length === 0 ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
+          >
+            All years
+          </button>
+          {availableYears.map((y) => (
+            <button
+              key={y}
+              onClick={() => toggleYear(y)}
+              className="chip mono"
+              style={years.includes(y) ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
+            >
+              {y}
+            </button>
+          ))}
+          {years.length > 0 && (
+            <span className="label">{years.length} year{years.length > 1 ? "s" : ""} selected</span>
+          )}
+        </div>
+      )}
 
       <div className="label">
         {total.toLocaleString()} signals · showing {results.length.toLocaleString()}

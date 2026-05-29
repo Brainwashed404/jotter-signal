@@ -10,6 +10,7 @@ export type Signal = {
   text: string;
   themes: string[];
   links: { url: string; domain: string; anchor: string }[];
+  images?: string[];
   post_url: string;
 };
 

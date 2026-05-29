@@ -2,19 +2,19 @@
  "generated_from": "data/posts_full.jsonl",
  "totals": {
   "posts": 13056,
-  "signals": 17275,
+  "signals": 17317,
   "date_min": "2002-01-13",
   "date_max": "2026-05-29"
  },
  "signal_types": {
-  "note": 13488,
+  "note": 13505,
   "quote": 1292,
-  "book": 332,
+  "book": 333,
   "longread": 1142,
-  "chart": 52,
-  "commonplace": 706,
+  "chart": 65,
+  "commonplace": 716,
   "feedback": 50,
-  "linkblog": 213
+  "linkblog": 214
  },
  "themes": [
   {
@@ -440,7 +440,7 @@
   },
   {
    "domain": "newyorker.com",
-   "n": 141
+   "n": 143
   },
   {
    "domain": "theatlantic.com",
@@ -460,11 +460,11 @@
   },
   {
    "domain": "scripting.com",
-   "n": 62
+   "n": 63
   },
   {
    "domain": "twitter.com",
-   "n": 61
+   "n": 62
   },
   {
    "domain": "statusq.org",

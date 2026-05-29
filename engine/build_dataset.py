@@ -97,6 +97,20 @@ def links_of(htmlfrag):
 def themes_of(text):
     return [t for t, rx in THEME_RX.items() if rx.search(text)]
 
+_IMG = re.compile(r'<img\s[^>]*?src=["\']([^"\']+)["\']', re.I)
+_IMG_SKIP = ("s.w.org", "gravatar", "/emoji/", "feed-icon", "smilies", "spacer.", "pixel.", "/avatar")
+def images_of(htmlfrag):
+    out = []
+    for m in _IMG.finditer(htmlfrag):
+        u = m.group(1).strip()
+        low = u.lower()
+        if low.startswith("data:") or low.endswith(".svg"): continue
+        if any(x in low for x in _IMG_SKIP): continue
+        if u.startswith("http://"): u = "https://" + u[7:]
+        if u not in out: out.append(u)
+        if len(out) >= 4: break
+    return out
+
 # ---------- build signals ----------
 H2 = re.compile(r"<h2[^>]*>(.*?)</h2>", re.S|re.I)
 STRONG = re.compile(r"<(?:strong|b)[^>]*>(.*?)</(?:strong|b)>", re.S|re.I)
@@ -141,19 +155,20 @@ for r in rows:
             "source": "John Naughton", "source_id": "naughton",
             "type": "note", "heading": heading,
             "text": txt[:12000], "themes": themes_of(txt), "links": links_of(html)[:8],
-            "post_url": url,
+            "images": images_of(html), "post_url": url,
         })
         continue
     for i, (head, body) in enumerate(secs):
         st = classify(head)
         if st in ("skip", "music"): continue   # drop boilerplate + musical alternatives
         txt = clean_block(body)
+        imgs = images_of(body)
         # drop the opening photo + caption block (image and/or short caption before any real section)
         if i == 0 and st == "note" and ("<img" in body or len(txt) < 220):
             continue
         if st == "quote":
             if not txt: continue
-        elif len(txt) < 25:
+        elif len(txt) < 25 and not imgs:   # keep image-only sections (e.g. Chart of the Day)
             continue
         title = head if st in ("quote","book","commonplace","linkblog","chart","feedback") else heading_title(st, body, head)
         txt = dedup_title(title, txt)
@@ -162,7 +177,7 @@ for r in rows:
             "source": "John Naughton", "source_id": "naughton",
             "type": st, "heading": title,
             "text": txt[:12000], "themes": themes_of(txt), "links": links_of(body)[:8],
-            "post_url": url,
+            "images": imgs, "post_url": url,
         })
 
 with open(f"{OUT_DIR}/signals.jsonl", "w") as f:

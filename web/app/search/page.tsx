@@ -17,7 +17,9 @@ export default async function SearchPage({
   searchParams: Promise<{ q?: string; type?: string }>;
 }) {
   const sp = await searchParams;
-  const themes = getRadar().themes.map((t) => t.theme);
+  const radar = getRadar();
+  const themes = radar.themes.map((t) => t.theme);
+  const years = radar.years.map(Number).sort((a, b) => b - a); // newest first
   return (
     <div className="space-y-6">
       <div>
@@ -31,8 +33,11 @@ export default async function SearchPage({
       <SignalList
         tabs={TABS}
         themes={themes}
+        availableYears={years}
         showSearch
         showThemes
+        showSort
+        showYears
         initialQuery={sp.q ?? ""}
         initialType={sp.type ?? ""}
       />

@@ -92,6 +92,25 @@ export function SignalCard({ s }: { s: Signal }) {
         </button>
       )}
 
+      {s.images && s.images.length > 0 && (
+        <div className="mt-3 space-y-2">
+          {(open ? s.images : s.images.slice(0, 1)).map((src, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={i}
+              src={src}
+              alt=""
+              loading="lazy"
+              className="rounded-lg border w-full h-auto"
+              style={{ borderColor: "var(--border)" }}
+            />
+          ))}
+          {!open && s.images.length > 1 && (
+            <div className="label">+{s.images.length - 1} more image{s.images.length > 2 ? "s" : ""}</div>
+          )}
+        </div>
+      )}
+
       <div className="flex flex-wrap items-center gap-1.5 mt-3">
         {s.themes.slice(0, 3).map((th) => (
           <span key={th} className="chip">{th}</span>
