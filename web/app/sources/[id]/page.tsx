@@ -1,35 +1,25 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getRadar } from "@/lib/data";
+import { getExpert } from "@/lib/data";
 import { ThemeRow } from "@/components/ui";
 import { TYPE_LABEL } from "@/lib/types";
 import { fmtDate } from "@/lib/format";
 
-const AUTHORS: Record<string, { name: string; blurb: string; url: string }> = {
-  naughton: {
-    name: "John Naughton",
-    blurb:
-      "Observer columnist and Cambridge academic (technology & society). Techno-skeptical, pro-democracy, historically minded. His daily 'commonplace book' has run since 2002.",
-    url: "https://memex.naughtons.org",
-  },
-};
-
 export default async function AuthorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const author = AUTHORS[id];
-  if (!author) notFound();
+  const r = getExpert(id);
+  if (!r) notFound();
 
-  const r = getRadar();
   const types = Object.entries(r.signal_types).sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="space-y-10">
       <div>
         <Link href="/sources" className="label hover:underline">← all experts</Link>
-        <h1 className="text-3xl font-semibold tracking-tight mt-2">{author.name}</h1>
-        <p className="mt-2 max-w-2xl" style={{ color: "var(--muted)" }}>{author.blurb}</p>
-        <a href={author.url} target="_blank" rel="noopener" className="text-sm" style={{ color: "var(--accent-2)" }}>
-          {author.url.replace("https://", "")} ↗
+        <h1 className="text-3xl font-semibold tracking-tight mt-2">{r.name}</h1>
+        <p className="mt-2 max-w-2xl" style={{ color: "var(--muted)" }}>{r.blurb}</p>
+        <a href={r.url} target="_blank" rel="noopener" className="text-sm" style={{ color: "var(--accent-2)" }}>
+          {r.url.replace("https://", "")} ↗
         </a>
       </div>
 
@@ -40,7 +30,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
             <div className="label">posts</div>
           </div>
           {types.map(([t, n]) => (
-            <Link key={t} href={`/search?type=${t}`} className="panel panel-hover p-3 text-center block">
+            <Link key={t} href={`/search?type=${t}&experts=${r.id}`} className="panel panel-hover p-3 text-center block">
               <div className="text-lg font-semibold">{n.toLocaleString()}</div>
               <div className="label">{TYPE_LABEL[t] ?? t}</div>
             </Link>

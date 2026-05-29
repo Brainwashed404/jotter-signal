@@ -11,8 +11,9 @@ export async function GET(request: NextRequest) {
     .split(",")
     .map((y) => parseInt(y, 10))
     .filter((y) => !Number.isNaN(y));
+  const experts = (sp.get("experts") ?? "").split(",").filter(Boolean);
   const offset = parseInt(sp.get("offset") ?? "0", 10) || 0;
   const limit = 30;
-  const { results, total } = searchSignals(q, { type, theme, years, sort, limit, offset });
+  const { results, total } = searchSignals(q, { type, theme, years, experts, sort, limit, offset });
   return NextResponse.json({ results, total, offset, limit });
 }

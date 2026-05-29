@@ -14,9 +14,12 @@ export default function SignalList({
   showSort = true,
   showYears = false,
   availableYears = [],
+  showExperts = false,
+  availableExperts = [],
   initialQuery = "",
   initialType = "",
   initialTheme = "",
+  initialExperts = [],
 }: {
   tabs: Tab[];
   themes?: string[];
@@ -25,9 +28,12 @@ export default function SignalList({
   showSort?: boolean;
   showYears?: boolean;
   availableYears?: number[];
+  showExperts?: boolean;
+  availableExperts?: { id: string; name: string }[];
   initialQuery?: string;
   initialType?: string;
   initialTheme?: string;
+  initialExperts?: string[];
 }) {
   const [input, setInput] = useState(initialQuery);
   const [type, setType] = useState(initialType);
@@ -35,6 +41,8 @@ export default function SignalList({
   const [sort, setSort] = useState<Sort>(initialQuery ? "relevance" : "newest");
   const [years, setYears] = useState<number[]>([]);
   const [yearsOpen, setYearsOpen] = useState(false);
+  const [experts, setExperts] = useState<string[]>(initialExperts);
+  const [expertsOpen, setExpertsOpen] = useState(false);
   const [results, setResults] = useState<Signal[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -44,6 +52,7 @@ export default function SignalList({
   const themeRef = useRef(theme); themeRef.current = theme;
   const sortRef = useRef(sort); sortRef.current = sort;
   const yearsRef = useRef(years); yearsRef.current = years;
+  const expertsRef = useRef(experts); expertsRef.current = experts;
   const offsetRef = useRef(0);
   const totalRef = useRef(0);
   const loadingRef = useRef(false);
@@ -60,6 +69,7 @@ export default function SignalList({
     if (typeRef.current) params.set("type", typeRef.current);
     if (themeRef.current) params.set("theme", themeRef.current);
     if (yearsRef.current.length) params.set("years", yearsRef.current.join(","));
+    if (expertsRef.current.length) params.set("experts", expertsRef.current.join(","));
     params.set("sort", sortRef.current);
     params.set("offset", String(offset));
     const res = await fetch(`/api/search?${params}`);
@@ -73,7 +83,7 @@ export default function SignalList({
   }, []);
 
   // reload from the top when any filter changes
-  useEffect(() => { fetchPage(true); }, [type, theme, sort, years.join(","), fetchPage]);
+  useEffect(() => { fetchPage(true); }, [type, theme, sort, years.join(","), experts.join(","), fetchPage]);
 
   // infinite scroll
   useEffect(() => {
@@ -95,6 +105,9 @@ export default function SignalList({
 
   function toggleYear(y: number) {
     setYears((prev) => (prev.includes(y) ? prev.filter((x) => x !== y) : [...prev, y]));
+  }
+  function toggleExpert(id: string) {
+    setExperts((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }
 
   const hasMore = results.length < total;
@@ -131,6 +144,12 @@ export default function SignalList({
               {themes.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           )}
+          {showExperts && availableExperts.length > 1 && (
+            <button onClick={() => setExpertsOpen((o) => !o)} className="btn-ghost text-xs"
+              style={experts.length ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
+              {experts.length ? `Experts (${experts.length})` : "Select experts"} {expertsOpen ? "▲" : "▼"}
+            </button>
+          )}
           {showYears && availableYears.length > 0 && (
             <button onClick={() => setYearsOpen((o) => !o)} className="btn-ghost text-xs"
               style={years.length ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
@@ -146,6 +165,28 @@ export default function SignalList({
           )}
         </div>
       </div>
+
+      {showExperts && expertsOpen && availableExperts.length > 1 && (
+        <div className="panel p-3 flex flex-wrap gap-1.5 items-center">
+          <button
+            onClick={() => setExperts([])}
+            className="chip"
+            style={experts.length === 0 ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
+          >
+            All experts
+          </button>
+          {availableExperts.map((e) => (
+            <button
+              key={e.id}
+              onClick={() => toggleExpert(e.id)}
+              className="chip"
+              style={experts.includes(e.id) ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
+            >
+              {e.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {showYears && yearsOpen && availableYears.length > 0 && (
         <div className="panel p-3 flex flex-wrap gap-1.5 items-center">

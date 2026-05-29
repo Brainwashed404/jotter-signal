@@ -1,20 +1,38 @@
 import "server-only";
 import fs from "fs";
 import path from "path";
-import type { Signal, Radar } from "./types";
+import type { Signal, Expert, Overview } from "./types";
 
-export type { Signal, Radar, ThemeSummary } from "./types";
+export type { Signal, Expert, Overview, ThemeSummary } from "./types";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
 // cache across HMR reloads in dev
-const g = globalThis as unknown as { __signals?: Signal[]; __radar?: Radar };
+const g = globalThis as unknown as { __signals?: Signal[]; __experts?: Expert[] };
 
-export function getRadar(): Radar {
-  if (!g.__radar) {
-    g.__radar = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "radar.json"), "utf8"));
+export function getExperts(): Expert[] {
+  if (!g.__experts) {
+    g.__experts = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "experts.json"), "utf8"));
   }
-  return g.__radar!;
+  return g.__experts!;
+}
+
+export function getExpert(id: string): Expert | undefined {
+  return getExperts().find((e) => e.id === id);
+}
+
+export function getOverview(): Overview {
+  const ex = getExperts();
+  const years = Array.from(new Set(ex.flatMap((e) => e.years))).sort();
+  return {
+    experts: ex.map((e) => ({ id: e.id, name: e.name })),
+    signals: ex.reduce((n, e) => n + e.totals.signals, 0),
+    posts: ex.reduce((n, e) => n + e.totals.posts, 0),
+    date_min: ex.reduce((m, e) => (e.totals.date_min < m ? e.totals.date_min : m), ex[0]?.totals.date_min ?? ""),
+    date_max: ex.reduce((m, e) => (e.totals.date_max > m ? e.totals.date_max : m), ex[0]?.totals.date_max ?? ""),
+    years,
+    themeNames: (ex[0]?.themes ?? []).map((t) => t.theme).sort(),
+  };
 }
 
 export function getSignals(): Signal[] {
@@ -34,7 +52,7 @@ export type SortMode = "newest" | "oldest" | "relevance";
 
 export function searchSignals(
   query: string,
-  opts: { type?: string; theme?: string; years?: number[]; limit?: number; offset?: number; sort?: SortMode } = {}
+  opts: { type?: string; theme?: string; years?: number[]; experts?: string[]; limit?: number; offset?: number; sort?: SortMode } = {}
 ): { results: Signal[]; total: number } {
   const limit = opts.limit ?? 40;
   const offset = opts.offset ?? 0;
@@ -50,6 +68,10 @@ export function searchSignals(
   if (opts.years && opts.years.length) {
     const ys = new Set(opts.years);
     pool = pool.filter((s) => ys.has(s.year));
+  }
+  if (opts.experts && opts.experts.length) {
+    const es = new Set(opts.experts);
+    pool = pool.filter((s) => es.has(s.source_id));
   }
 
   // browse (no query): order the whole pool by date

@@ -139,103 +139,126 @@ def heading_title(section_type, body_html, fallback):
             return t[:200]
     return fallback
 
-rows = [json.loads(l) for l in open(SRC)]
-signals = []
-for r in rows:
-    pid = r["id"]; date = r["date"]; url = r["link"]
-    html = r["content"]["rendered"]
-    secs = split_sections(html)
-    if not secs:  # unstructured (older) post -> single note signal
+def _sig(sid, pid, date, source, source_id, st, heading, txt, imgs, links, url):
+    return {
+        "id": sid, "post_id": pid, "date": date, "year": int(date[:4]),
+        "source": source, "source_id": source_id, "type": st, "heading": heading,
+        "text": txt[:12000], "themes": themes_of(txt), "links": links[:8],
+        "images": imgs, "post_url": url,
+    }
+
+# ---------- adapter: John Naughton (rich section format) ----------
+def build_naughton(ex):
+    rows = [json.loads(l) for l in open(SRC)]
+    sigs = []
+    for r in rows:
+        pid = r["id"]; date = r["date"]; url = r["link"]
+        html = r["content"]["rendered"]
+        secs = split_sections(html)
+        if not secs:
+            txt = clean_block(html)
+            if len(txt) < 40: continue
+            heading = clean(r["title"]["rendered"]) or "Note"
+            txt = dedup_title(heading, txt)
+            sigs.append(_sig(f"{pid}-0", pid, date, ex["name"], ex["id"], "note", heading, txt, images_of(html), links_of(html), url))
+            continue
+        for i, (head, body) in enumerate(secs):
+            st = classify(head)
+            if st in ("skip", "music"): continue
+            txt = clean_block(body); imgs = images_of(body)
+            if i == 0 and st == "note" and ("<img" in body or len(txt) < 220): continue
+            if st == "quote":
+                if not txt: continue
+            elif len(txt) < 25 and not imgs:
+                continue
+            title = head if st in ("quote","book","commonplace","linkblog","chart") else heading_title(st, body, head)
+            txt = dedup_title(title, txt)
+            sigs.append(_sig(f"{pid}-{i}", pid, date, ex["name"], ex["id"], st, title, txt, imgs, links_of(body), url))
+    return sigs
+
+# ---------- adapter: generic RSS (any author / Substack) ----------
+def build_rss(ex):
+    raw = f"data/raw_{ex['id']}.jsonl"
+    if not os.path.exists(raw):
+        print(f"  ! {ex['id']}: no feed file {raw} (run fetch_expert.py) — skipping")
+        return []
+    sigs = []
+    for i, line in enumerate(open(raw)):
+        it = json.loads(line)
+        html = it.get("content", "") or ""
         txt = clean_block(html)
         if len(txt) < 40: continue
-        heading = clean(r["title"]["rendered"]) or "Note"
+        heading = clean(it.get("title", "")) or "Article"
         txt = dedup_title(heading, txt)
-        signals.append({
-            "id": f"{pid}-0", "post_id": pid, "date": date, "year": int(date[:4]),
-            "source": "John Naughton", "source_id": "naughton",
-            "type": "note", "heading": heading,
-            "text": txt[:12000], "themes": themes_of(txt), "links": links_of(html)[:8],
-            "images": images_of(html), "post_url": url,
-        })
-        continue
-    for i, (head, body) in enumerate(secs):
-        st = classify(head)
-        if st in ("skip", "music"): continue   # drop boilerplate + musical alternatives
-        txt = clean_block(body)
-        imgs = images_of(body)
-        # drop the opening photo + caption block (image and/or short caption before any real section)
-        if i == 0 and st == "note" and ("<img" in body or len(txt) < 220):
-            continue
-        if st == "quote":
-            if not txt: continue
-        elif len(txt) < 25 and not imgs:   # keep image-only sections (e.g. Chart of the Day)
-            continue
-        title = head if st in ("quote","book","commonplace","linkblog","chart","feedback") else heading_title(st, body, head)
-        txt = dedup_title(title, txt)
-        signals.append({
-            "id": f"{pid}-{i}", "post_id": pid, "date": date, "year": int(date[:4]),
-            "source": "John Naughton", "source_id": "naughton",
-            "type": st, "heading": title,
-            "text": txt[:12000], "themes": themes_of(txt), "links": links_of(body)[:8],
-            "images": imgs, "post_url": url,
-        })
+        date = it["date"]
+        sigs.append(_sig(f"{ex['id']}-{i}", f"{ex['id']}-{i}", date, ex["name"], ex["id"],
+                         "article", heading, txt, images_of(html), links_of(html), it.get("link", "")))
+    return sigs
+
+# ---------- per-expert aggregates (replaces radar.json) ----------
+def aggregate(ex, sigs):
+    by_post = {}
+    for s in sigs:
+        p = by_post.setdefault(s["post_id"], {"year": s["year"], "themes": set()})
+        p["themes"].update(s["themes"])
+    years = sorted({s["year"] for s in sigs})
+    posts_by_year = collections.Counter(p["year"] for p in by_post.values())
+    traj = {}
+    for t in THEMES:
+        hits = collections.Counter()
+        for p in by_post.values():
+            if t in p["themes"]: hits[p["year"]] += 1
+        traj[t] = {str(y): round(100 * hits[y] / max(1, posts_by_year[y]), 1) for y in years}
+    maxy = max(years); miny = min(years)
+    def momentum(t):
+        ys = traj[t]
+        rec = [ys[str(y)] for y in years if y >= maxy - 2] or [0]
+        base = [ys[str(y)] for y in years if y <= maxy - 3]
+        r = sum(rec) / len(rec)
+        b = sum(base) / len(base) if base else r
+        return round(r, 1), round(r - b, 1)
+    themes_summary = []
+    for t in THEMES:
+        cur, delta = momentum(t)
+        themes_summary.append({"theme": t, "current": cur, "delta": delta, "series": traj[t]})
+    themes_summary.sort(key=lambda x: x["current"], reverse=True)
+    def domains(yset):
+        c = collections.Counter()
+        for s in sigs:
+            if s["year"] in yset:
+                for l in s["links"]:
+                    d = l["domain"]
+                    if d in ("youtube.com","youtu.be","amzn.to","en.wikipedia.org"): continue
+                    c[d] += 1
+        return [{"domain": d, "n": n} for d, n in c.most_common(20)]
+    return {
+        "id": ex["id"], "name": ex["name"], "blurb": ex.get("blurb", ""), "url": ex.get("url", ""),
+        "totals": {"posts": len(by_post), "signals": len(sigs),
+                   "date_min": min(s["date"] for s in sigs)[:10],
+                   "date_max": max(s["date"] for s in sigs)[:10]},
+        "signal_types": dict(collections.Counter(s["type"] for s in sigs)),
+        "themes": themes_summary, "years": [str(y) for y in years],
+        "top_sources_recent": domains(set(range(maxy - 6, maxy + 1))),
+        "top_sources_early": domains(set(range(miny, miny + 9))),
+    }
+
+# ---------- orchestrate all experts ----------
+ADAPTERS = {"naughton": build_naughton, "rss": build_rss}
+experts_cfg = json.load(open("experts.json"))
+all_sigs = []
+experts_out = []
+for ex in experts_cfg:
+    fn = ADAPTERS.get(ex.get("adapter"))
+    sigs = fn(ex) if fn else []
+    if not sigs:
+        print(f"  {ex['id']}: 0 signals"); continue
+    all_sigs += sigs
+    experts_out.append(aggregate(ex, sigs))
+    print(f"  {ex['id']}: {len(sigs)} signals ({experts_out[-1]['totals']['date_min']}..{experts_out[-1]['totals']['date_max']})")
 
 with open(f"{OUT_DIR}/signals.jsonl", "w") as f:
-    for s in signals:
+    for s in all_sigs:
         f.write(json.dumps(s) + "\n")
+json.dump(experts_out, open(f"{OUT_DIR}/experts.json", "w"), indent=1)
 
-# ---------- radar aggregates ----------
-years = sorted({s["year"] for s in signals})
-post_years = collections.Counter(r["date"][:4] for r in rows)
-# theme prevalence per year (% of posts touching theme)
-post_text = {}
-for r in rows:
-    post_text[r["id"]] = (clean(r["title"]["rendered"]) + " " + clean(r["content"]["rendered"])).lower()
-traj = {}
-for t, rx in THEME_RX.items():
-    by_year = collections.Counter()
-    for r in rows:
-        if rx.search(post_text[r["id"]]): by_year[int(r["date"][:4])] += 1
-    traj[t] = {str(y): round(100*by_year[y]/max(1, post_years[str(y)]), 1) for y in years}
-
-def recent_momentum(t):
-    ys = traj[t]
-    recent = sum(ys.get(str(y),0) for y in (2023,2024,2025,2026))/4
-    base = sum(ys.get(str(y),0) for y in (2017,2018,2019,2020))/4
-    return round(recent,1), round(recent-base,1)
-
-themes_summary = []
-for t in THEMES:
-    cur, delta = recent_momentum(t)
-    themes_summary.append({"theme": t, "current": cur, "delta": delta, "series": traj[t]})
-themes_summary.sort(key=lambda x: x["current"], reverse=True)
-
-def domains(yset):
-    c = collections.Counter()
-    for s in signals:
-        if s["year"] in yset:
-            for l in s["links"]:
-                d = l["domain"]
-                if d in ("youtube.com","youtu.be","amzn.to","en.wikipedia.org"): continue
-                c[d]+=1
-    return [{"domain": d, "n": n} for d, n in c.most_common(20)]
-
-type_counts = collections.Counter(s["type"] for s in signals)
-
-radar = {
-    "generated_from": SRC,
-    "totals": {"posts": len(rows), "signals": len(signals),
-               "date_min": min(r["date"] for r in rows)[:10],
-               "date_max": max(r["date"] for r in rows)[:10]},
-    "signal_types": dict(type_counts),
-    "themes": themes_summary,
-    "years": [str(y) for y in years],
-    "top_sources_recent": domains(set(range(2020,2027))),
-    "top_sources_early": domains(set(range(2002,2011))),
-}
-json.dump(radar, open(f"{OUT_DIR}/radar.json","w"), indent=1)
-
-print(f"signals: {len(signals)}  -> {OUT_DIR}/signals.jsonl")
-print(f"signal types: {dict(type_counts)}")
-print(f"posts: {len(rows)}  range {radar['totals']['date_min']}..{radar['totals']['date_max']}")
-print("top themes now:", [(t['theme'], t['current']) for t in themes_summary[:4]])
+print(f"TOTAL: {len(all_sigs)} signals across {len(experts_out)} experts -> {OUT_DIR}/signals.jsonl + experts.json")

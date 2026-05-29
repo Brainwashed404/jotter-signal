@@ -1,0 +1,17 @@
+[
+  {
+    "id": "naughton",
+    "name": "John Naughton",
+    "blurb": "Observer columnist and Cambridge academic (technology & society). Techno-skeptical, pro-democracy, historically minded. His daily 'commonplace book' has run since 2002.",
+    "url": "https://memex.naughtons.org",
+    "adapter": "naughton"
+  },
+  {
+    "id": "doctorow",
+    "name": "Cory Doctorow",
+    "blurb": "Author and activist; writes Pluralistic on monopoly, platform power and 'enshittification' (a term he coined). Added via RSS — recent posts onward.",
+    "url": "https://pluralistic.net",
+    "feed": "https://pluralistic.net/feed/",
+    "adapter": "rss"
+  }
+]

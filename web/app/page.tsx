@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getRadar, weeklySummary } from "@/lib/data";
+import { getOverview, weeklySummary } from "@/lib/data";
 import { fmtDate } from "@/lib/format";
 
 function list(items: string[]) {
@@ -17,7 +17,7 @@ function Stat({ n, label }: { n: number | string; label: string }) {
 }
 
 export default function HomePage() {
-  const r = getRadar();
+  const o = getOverview();
   const s = weeklySummary(7);
   const topThemes = s.themes.slice(0, 3).map((t) => t.theme);
   const quote = s.quotes[0];
@@ -43,7 +43,7 @@ export default function HomePage() {
         <Stat n={s.count} label="signals this week" />
         <Stat n={s.themes.length} label="themes touched" />
         <Stat n={s.longreads.length} label="long reads" />
-        <Stat n={r.totals.signals.toLocaleString()} label="signals in archive" />
+        <Stat n={o.signals.toLocaleString()} label="signals in archive" />
       </section>
 
       {s.themes.length > 0 && (

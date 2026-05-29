@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getRadar } from "@/lib/data";
+import { getOverview } from "@/lib/data";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Logo } from "@/components/Logo";
 import { fmtDate } from "@/lib/format";
@@ -23,7 +23,7 @@ const NAV = [
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const r = getRadar();
+  const o = getOverview();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -60,8 +60,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           className="mx-auto w-full max-w-6xl px-5 py-6 mono text-xs"
           style={{ color: "var(--muted)", borderTop: "1px solid var(--border)" }}
         >
-          {r.totals.signals.toLocaleString()} signals · {r.totals.posts.toLocaleString()} posts ·{" "}
-          {fmtDate(r.totals.date_min)} → {fmtDate(r.totals.date_max)} · 1 expert active
+          {o.signals.toLocaleString()} signals · {o.posts.toLocaleString()} posts ·{" "}
+          {fmtDate(o.date_min)} → {fmtDate(o.date_max)} · {o.experts.length} expert{o.experts.length > 1 ? "s" : ""} active
         </footer>
       </body>
     </html>

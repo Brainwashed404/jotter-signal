@@ -1,8 +1,9 @@
-import { getRadar } from "@/lib/data";
+import { getOverview } from "@/lib/data";
 import SignalList, { type Tab } from "@/components/SignalList";
 
 const TABS: Tab[] = [
   { id: "", label: "Everything" },
+  { id: "article", label: "Articles" },
   { id: "longread", label: "Long Reads" },
   { id: "commonplace", label: "Commonplace" },
   { id: "quote", label: "Quotes" },
@@ -11,7 +12,7 @@ const TABS: Tab[] = [
 ];
 
 export default function LatestPage() {
-  const r = getRadar();
+  const o = getOverview();
   return (
     <div className="space-y-6">
       <div>
@@ -22,9 +23,9 @@ export default function LatestPage() {
           highlight a passage to save it.
         </p>
       </div>
-      <SignalList tabs={TABS} showSort={false} />
+      <SignalList tabs={TABS} showSort={false} showExperts availableExperts={o.experts} />
       <p className="label text-center pt-2">
-        {r.totals.signals.toLocaleString()} signals total · search the full archive under Search
+        {o.signals.toLocaleString()} signals total · search the full archive under Search
       </p>
     </div>
   );

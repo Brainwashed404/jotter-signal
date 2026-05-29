@@ -1,6 +1,6 @@
 export type Signal = {
   id: string;
-  post_id: number;
+  post_id: number | string;
   date: string;
   year: number;
   source: string;
@@ -21,7 +21,12 @@ export type ThemeSummary = {
   series: Record<string, number>;
 };
 
-export type Radar = {
+// One curated expert + their aggregates (was "Radar").
+export type Expert = {
+  id: string;
+  name: string;
+  blurb: string;
+  url: string;
   totals: { posts: number; signals: number; date_min: string; date_max: string };
   signal_types: Record<string, number>;
   themes: ThemeSummary[];
@@ -30,13 +35,24 @@ export type Radar = {
   top_sources_early: { domain: string; n: number }[];
 };
 
+// Combined view across all experts.
+export type Overview = {
+  experts: { id: string; name: string }[];
+  signals: number;
+  posts: number;
+  date_min: string;
+  date_max: string;
+  years: string[];
+  themeNames: string[];
+};
+
 export const TYPE_LABEL: Record<string, string> = {
+  article: "Article",
   longread: "Long Read",
   quote: "Quote",
   book: "Book",
   commonplace: "Commonplace",
   linkblog: "Linkblog",
   chart: "Chart",
-  feedback: "Feedback",
   note: "Note",
 };

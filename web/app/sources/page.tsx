@@ -1,16 +1,9 @@
 import Link from "next/link";
-import { getRadar } from "@/lib/data";
-
-const PLANNED = [
-  "Cory Doctorow — Pluralistic",
-  "Azeem Azhar — Exponential View",
-  "Benedict Evans",
-  "Ezra Klein",
-  "Add an RSS feed…",
-];
+import { getExperts } from "@/lib/data";
+import { fmtDate } from "@/lib/format";
 
 export default function SourcesPage() {
-  const r = getRadar();
+  const experts = getExperts();
   return (
     <div className="space-y-8">
       <div>
@@ -22,35 +15,30 @@ export default function SourcesPage() {
         </p>
       </div>
 
-      <Link href="/sources/naughton" className="panel panel-hover p-6 block">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="chip" style={{ color: "var(--up)", borderColor: "var(--up)" }}>● active</span>
-              <h2 className="text-xl font-semibold">John Naughton</h2>
+      <div className="space-y-3">
+        {experts.map((e) => (
+          <Link key={e.id} href={`/sources/${e.id}`} className="panel panel-hover p-6 block">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="chip" style={{ color: "var(--up)", borderColor: "var(--up)" }}>● active</span>
+                  <h2 className="text-xl font-semibold">{e.name}</h2>
+                </div>
+                <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{e.blurb}</p>
+                <div className="label mt-2">{fmtDate(e.totals.date_min)} → {fmtDate(e.totals.date_max)}</div>
+              </div>
+              <div className="text-right shrink-0">
+                <div className="text-2xl font-semibold">{e.totals.signals.toLocaleString()}</div>
+                <div className="label">signals · view →</div>
+              </div>
             </div>
-            <p className="mt-1" style={{ color: "var(--muted)" }}>
-              Memex 1.1 · Observer columnist & Cambridge tech-society academic
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-2xl font-semibold">{r.totals.signals.toLocaleString()}</div>
-            <div className="label">signals · view profile →</div>
-          </div>
-        </div>
-      </Link>
-
-      <div>
-        <h2 className="text-lg font-medium mb-3">Planned experts</h2>
-        <div className="grid sm:grid-cols-2 gap-3">
-          {PLANNED.map((p) => (
-            <div key={p} className="panel p-4 flex items-center justify-between" style={{ opacity: 0.7 }}>
-              <span>{p}</span>
-              <span className="chip">queued</span>
-            </div>
-          ))}
-        </div>
+          </Link>
+        ))}
       </div>
+
+      <p className="label">
+        Add an expert: drop their RSS/Substack feed into <span className="mono">engine/experts.json</span> and run the ingest.
+      </p>
     </div>
   );
 }
