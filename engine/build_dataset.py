@@ -131,6 +131,24 @@ def dedup_title(title, txt):
         return txt[len(title):].lstrip(" .,—–-:\n\t")
     return txt
 
+_CRUFT = re.compile(
+    r"^(seeds|email|copy link|share this.*|share on .+|\d+\s*min read|"
+    r"[A-Z][a-z]+ \d{1,2},? \d{4})$", re.I)
+def strip_feed_cruft(txt):
+    """Remove scraped article chrome: share buttons, read-time, date, repeated title."""
+    out = []
+    last_nonblank = None
+    for l in txt.split("\n"):
+        s = l.strip()
+        if s and _CRUFT.match(s):
+            continue
+        if s and s == last_nonblank:   # drop repeated line (e.g. title printed twice)
+            continue
+        if s:
+            last_nonblank = s
+        out.append(l)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip()
+
 def heading_title(section_type, body_html, fallback):
     m = STRONG.search(body_html)
     if m:
@@ -194,7 +212,7 @@ def build_rss(ex):
     sigs = []
     for i, it in enumerate(uniq):
         html = it.get("content", "") or ""
-        txt = clean_block(html)
+        txt = strip_feed_cruft(clean_block(html))
         if len(txt) < 40: continue
         heading = clean(it.get("title", "")) or "Article"
         txt = dedup_title(heading, txt)

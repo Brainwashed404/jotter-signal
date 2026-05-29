@@ -65,7 +65,7 @@ export function SignalCard({ s }: { s: Signal }) {
   }
 
   return (
-    <div className="panel panel-hover p-4 relative">
+    <div className={`panel panel-hover p-4 relative${open ? " md:col-span-2" : ""}`}>
       {flash && (
         <div className="absolute top-2 right-2 chip" style={{ color: "var(--up)", borderColor: "var(--up)" }}>
           ✓ highlight saved

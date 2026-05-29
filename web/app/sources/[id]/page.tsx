@@ -50,34 +50,6 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
           ))}
         </div>
       </section>
-
-      <section>
-        <h2 className="text-lg font-medium mb-3">Information diet — how the sources shifted</h2>
-        <div className="grid sm:grid-cols-2 gap-3">
-          <div className="panel p-4">
-            <div className="label mb-3">Most-linked now (2020–26)</div>
-            <ol className="space-y-1.5">
-              {r.top_sources_recent.slice(0, 12).map((d, i) => (
-                <li key={d.domain} className="flex justify-between text-sm">
-                  <span><span className="mono" style={{ color: "var(--muted)" }}>{i + 1}.</span> {d.domain}</span>
-                  <span className="mono" style={{ color: "var(--muted)" }}>{d.n}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <div className="panel p-4">
-            <div className="label mb-3">Most-linked early (2002–10)</div>
-            <ol className="space-y-1.5">
-              {r.top_sources_early.slice(0, 12).map((d, i) => (
-                <li key={d.domain} className="flex justify-between text-sm">
-                  <span><span className="mono" style={{ color: "var(--muted)" }}>{i + 1}.</span> {d.domain}</span>
-                  <span className="mono" style={{ color: "var(--muted)" }}>{d.n}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

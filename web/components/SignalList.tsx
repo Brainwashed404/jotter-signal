@@ -117,6 +117,12 @@ export default function SignalList({
     fetchPage(true);
   }
 
+  function clearSearch() {
+    setInput("");
+    committedRef.current = "";
+    fetchPage(true);
+  }
+
   function toggleYear(y: number) {
     setYears((prev) => (prev.includes(y) ? prev.filter((x) => x !== y) : [...prev, y]));
   }
@@ -130,12 +136,25 @@ export default function SignalList({
     <div className="space-y-5">
       {showSearch && (
         <form onSubmit={submit} className="flex gap-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Search the signal — e.g. AI bubble, surveillance capitalism, democratic backsliding…"
-            className="flex-1 px-4 py-3 text-sm"
-          />
+          <div className="relative flex-1">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Search the signal — e.g. AI bubble, surveillance capitalism, democratic backsliding…"
+              className="w-full px-4 py-3 pr-10 text-sm"
+            />
+            {input && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                title="Clear"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-base leading-none"
+                style={{ color: "var(--muted)" }}
+              >
+                ✕
+              </button>
+            )}
+          </div>
           <button className="btn" type="submit">Search</button>
         </form>
       )}
