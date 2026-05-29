@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useReport, removeFromReport, clearReport } from "@/lib/saved";
 
 const FORMATS = [
   { id: "brief", label: "Foresight brief", hint: "Commentary, quotes & sources organised for a client brief" },
@@ -45,20 +46,22 @@ export default function Generator() {
   const [out, setOut] = useState("");
   const [meta, setMeta] = useState<{ mode: string; count: number; filename: string } | null>(null);
   const [loading, setLoading] = useState(false);
+  const { items: reportItems } = useReport();
 
-  async function go() {
-    if (!topic) return;
+  async function call(body: object) {
     setLoading(true); setOut(""); setMeta(null);
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic, format }),
+      body: JSON.stringify(body),
     });
     const data = await res.json();
     setOut(data.markdown ?? data.error ?? "Something went wrong.");
     setMeta(data.markdown ? { mode: data.mode, count: data.count, filename: data.filename } : null);
     setLoading(false);
   }
+  const go = () => topic && call({ topic, format });
+  const goItems = () => reportItems.length && call({ items: reportItems, format });
 
   function download() {
     if (!out || !meta) return;
@@ -105,8 +108,39 @@ export default function Generator() {
           </div>
         </div>
         <button className="btn w-full" onClick={go} disabled={loading || !topic}>
-          {loading ? "Compiling…" : "Build research report"}
+          {loading ? "Compiling…" : "Build from topic"}
         </button>
+
+        <div style={{ borderTop: "1px solid var(--border)", paddingTop: "1rem" }}>
+          <div className="flex items-center justify-between mb-2">
+            <div className="label">Report basket ({reportItems.length})</div>
+            {reportItems.length > 0 && (
+              <button onClick={() => clearReport()} className="label hover:underline">clear</button>
+            )}
+          </div>
+          {reportItems.length === 0 ? (
+            <p className="label" style={{ textTransform: "none", letterSpacing: 0 }}>
+              Add signals (＋ Report) or highlights from Saved, then build a report from your own selection.
+            </p>
+          ) : (
+            <>
+              <ul className="space-y-1.5 mb-3 max-h-52 overflow-auto">
+                {reportItems.map((it) => (
+                  <li key={it.id} className="flex items-start gap-2 text-xs">
+                    <button onClick={() => removeFromReport(it.id)} title="remove" style={{ color: "var(--muted)" }}>✕</button>
+                    <span className="flex-1">
+                      {it.kind === "highlight" ? "“" + it.text.slice(0, 60) + "…”" : it.heading.slice(0, 60)}
+                      <span style={{ color: "var(--muted)" }}> · {it.source}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <button className="btn w-full" onClick={goItems} disabled={loading}>
+                {loading ? "Compiling…" : `Build from ${reportItems.length} item${reportItems.length > 1 ? "s" : ""}`}
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="panel p-6 min-h-[400px]">

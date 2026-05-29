@@ -4,6 +4,7 @@ import { SignalCard } from "@/components/SignalCard";
 import {
   useSaved, setTags, type SavedItem,
   useHighlights, updateHighlightNote, setHighlightTags, removeHighlight, type Highlight,
+  useReport, toggleReport,
 } from "@/lib/saved";
 import { fmtDate } from "@/lib/format";
 
@@ -31,11 +32,24 @@ function TagEditor({ tags, onChange }: { tags: string[]; onChange: (t: string[])
 
 function HighlightCard({ h }: { h: Highlight }) {
   const [note, setNote] = useState(h.note);
+  const { ids } = useReport();
+  const inReport = ids.has(h.id);
   return (
     <div className="panel p-4">
       <div className="flex items-center gap-2 mb-2">
         <span className="mono text-xs" style={{ color: "var(--muted)" }}>{fmtDate(h.signalDate)} · {h.source}</span>
-        <button onClick={() => removeHighlight(h.id)} className="ml-auto chip" title="delete highlight">remove</button>
+        <button
+          onClick={() => toggleReport({
+            id: h.id, kind: "highlight", heading: h.signalHeading, text: h.text, note,
+            source: h.source, sourceId: h.sourceId, date: h.signalDate, post_url: h.postUrl,
+          })}
+          className="ml-auto chip"
+          title={inReport ? "In report — click to remove" : "Add to report"}
+          style={inReport ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
+        >
+          {inReport ? "✓ Report" : "+ Report"}
+        </button>
+        <button onClick={() => removeHighlight(h.id)} className="chip" title="delete highlight">remove</button>
       </div>
       <blockquote className="border-l-2 pl-3 my-1 text-sm leading-relaxed" style={{ borderColor: "var(--accent)" }}>
         {h.text}

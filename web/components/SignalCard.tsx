@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Signal } from "@/lib/types";
 import { TYPE_LABEL } from "@/lib/types";
-import { useSaved, toggleSave, addHighlight } from "@/lib/saved";
+import { useSaved, toggleSave, addHighlight, useReport, toggleReport } from "@/lib/saved";
 import { themesFor } from "@/lib/themes";
 import { fmtDate } from "@/lib/format";
 
@@ -12,7 +12,16 @@ export function SignalCard({ s }: { s: Signal }) {
   const [sel, setSel] = useState<{ text: string; top: number; left: number } | null>(null);
   const [flash, setFlash] = useState(false);
   const { ids } = useSaved();
+  const { ids: reportIds } = useReport();
   const saved = ids.has(s.id);
+  const inReport = reportIds.has(s.id);
+
+  function addReport() {
+    toggleReport({
+      id: s.id, kind: "signal", heading: s.heading, text: s.text.slice(0, 4000),
+      source: s.source, sourceId: s.source_id, date: s.date, post_url: s.post_url,
+    });
+  }
   const long = s.text.length > 360;
   const hasImages = !!(s.images && s.images.length);
   const expandable = long || hasImages;
@@ -71,8 +80,16 @@ export function SignalCard({ s }: { s: Signal }) {
           · {s.source}
         </Link>
         <button
+          onClick={addReport}
+          className="ml-auto chip"
+          title={inReport ? "In report — click to remove" : "Add to report"}
+          style={inReport ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
+        >
+          {inReport ? "✓ Report" : "+ Report"}
+        </button>
+        <button
           onClick={() => toggleSave(s)}
-          className="ml-auto text-lg leading-none"
+          className="text-lg leading-none"
           title={saved ? "Saved — click to remove" : "Save / pin"}
           style={{ color: saved ? "var(--accent)" : "var(--muted)" }}
         >

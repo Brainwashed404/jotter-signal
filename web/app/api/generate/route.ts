@@ -86,38 +86,78 @@ function buildPack(topic: string, format: string, sigs: Signal[]): string {
   return L.join("\n");
 }
 
-export async function POST(request: NextRequest) {
-  const { topic, format = "brief" } = await request.json();
-  if (!topic) return NextResponse.json({ error: "topic required" }, { status: 400 });
+type Item = { heading: string; text: string; note?: string; source: string; date: string; post_url: string };
 
-  const sigs = retrieve(topic);
-  const key = process.env.ANTHROPIC_API_KEY;
-
-  // Default: clean research report to finish elsewhere (no AI / no paid API).
-  if (!key) {
-    return NextResponse.json({
-      markdown: buildPack(topic, format, sigs),
-      mode: "pack",
-      count: sigs.length,
-      filename: `jotter-${topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}.md`,
-    });
+function buildFromItems(items: Item[], format: string): string {
+  const today = fmtDate(new Date().toISOString());
+  const L: string[] = [];
+  L.push(`# Report — ${FORMAT_LABEL[format] ?? "Selected items"}`);
+  L.push("");
+  L.push(`*Compiled by Jotter Intelligence · ${today} · ${items.length} selected items*`);
+  L.push("");
+  L.push("---");
+  for (const it of items) {
+    L.push("");
+    L.push(`### ${it.heading}`);
+    L.push(`*${fmtDate(it.date)} · ${it.source}*`);
+    L.push("");
+    L.push(it.text);
+    if (it.note) { L.push(""); L.push(`**Your note:** ${it.note}`); }
+    L.push("");
+    L.push(`[source](${it.post_url})`);
+    L.push("");
+    L.push("---");
   }
+  return L.join("\n");
+}
 
-  // Optional: if a key is ever configured, synthesise the finished piece.
-  const evidence = sigs
-    .map((s, i) => `[${i + 1}] ${s.date.slice(0, 10)} — ${s.heading}\n${s.text.slice(0, 600)}\nSource: ${s.post_url}`)
-    .join("\n\n");
+const SYS = `You are the foresight analyst for Jotter, a strategy & thought-leadership studio.
+You work from a curated stream of trusted experts. Ground EVERY claim in the supplied material,
+cite inline like [1]. Be specific (name people, articles, dates). Distinguish structural
+convictions from live/emerging signals, and note where sources disagree. Output clean Markdown.`;
+
+async function synthesise(userContent: string, format: string) {
   const Anthropic = (await import("@anthropic-ai/sdk")).default;
-  const client = new Anthropic({ apiKey: key });
-  const sys = `You are the foresight analyst for Jotter, a strategy & thought-leadership studio.
-Ground EVERY claim in the supplied signals, cite inline like [1]. Be specific. Distinguish
-structural convictions from live signals. Note this is one lens (John Naughton). Output clean Markdown.`;
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const msg = await client.messages.create({
     model: "claude-opus-4-8",
     max_tokens: 2000,
-    system: sys,
-    messages: [{ role: "user", content: `Topic: ${topic}\n\nProduce ${FORMAT_AI[format] ?? FORMAT_AI.brief}.\n\nSIGNALS:\n${evidence}` }],
+    system: SYS,
+    messages: [{ role: "user", content: userContent }],
   });
-  const markdown = msg.content.filter((b) => b.type === "text").map((b) => (b as { text: string }).text).join("\n");
-  return NextResponse.json({ markdown, mode: "ai", count: sigs.length, filename: `jotter-${topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}.md` });
+  return msg.content.filter((b) => b.type === "text").map((b) => (b as { text: string }).text).join("\n");
+}
+
+export async function POST(request: NextRequest) {
+  const { topic, format = "brief", items } = await request.json();
+  const key = process.env.ANTHROPIC_API_KEY;
+
+  // Mode A: build from the user's report basket (saved entries + highlights)
+  if (Array.isArray(items) && items.length) {
+    const filename = `jotter-report-${new Date().toISOString().slice(0, 10)}.md`;
+    if (!key) {
+      return NextResponse.json({ markdown: buildFromItems(items as Item[], format), mode: "report", count: items.length, filename });
+    }
+    const evidence = (items as Item[])
+      .map((it, i) => `[${i + 1}] ${fmtDate(it.date)} — ${it.heading} (${it.source})\n${(it.text || "").slice(0, 800)}${it.note ? `\nAnalyst note: ${it.note}` : ""}\nSource: ${it.post_url}`)
+      .join("\n\n");
+    const markdown = await synthesise(
+      `Produce ${FORMAT_AI[format] ?? FORMAT_AI.brief}.\nBase it on these hand-picked items (respect any analyst notes):\n\n${evidence}`,
+      format
+    );
+    return NextResponse.json({ markdown, mode: "ai", count: items.length, filename });
+  }
+
+  // Mode B: topic search across the whole corpus
+  if (!topic) return NextResponse.json({ error: "topic or items required" }, { status: 400 });
+  const sigs = retrieve(topic);
+  const filename = `jotter-${topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}.md`;
+  if (!key) {
+    return NextResponse.json({ markdown: buildPack(topic, format, sigs), mode: "pack", count: sigs.length, filename });
+  }
+  const evidence = sigs
+    .map((s, i) => `[${i + 1}] ${fmtDate(s.date)} — ${s.heading} (${s.source})\n${s.text.slice(0, 600)}\nSource: ${s.post_url}`)
+    .join("\n\n");
+  const markdown = await synthesise(`Topic: ${topic}\n\nProduce ${FORMAT_AI[format] ?? FORMAT_AI.brief}.\n\nSIGNALS:\n${evidence}`, format);
+  return NextResponse.json({ markdown, mode: "ai", count: sigs.length, filename });
 }
