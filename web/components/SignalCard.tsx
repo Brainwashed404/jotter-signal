@@ -5,6 +5,7 @@ import type { Signal } from "@/lib/types";
 import { TYPE_LABEL } from "@/lib/types";
 import { useSaved, toggleSave, addHighlight } from "@/lib/saved";
 import { themesFor } from "@/lib/themes";
+import { fmtDate } from "@/lib/format";
 
 export function SignalCard({ s }: { s: Signal }) {
   const [open, setOpen] = useState(false);
@@ -13,6 +14,8 @@ export function SignalCard({ s }: { s: Signal }) {
   const { ids } = useSaved();
   const saved = ids.has(s.id);
   const long = s.text.length > 360;
+  const hasImages = !!(s.images && s.images.length);
+  const expandable = long || hasImages;
 
   // clear the floating button when the user clicks/selects elsewhere
   useEffect(() => {
@@ -63,7 +66,7 @@ export function SignalCard({ s }: { s: Signal }) {
         <span className="chip" style={{ color: "var(--accent)", borderColor: "var(--accent)" }}>
           {TYPE_LABEL[s.type] ?? s.type}
         </span>
-        <span className="mono text-xs" style={{ color: "var(--muted)" }}>{s.date.slice(0, 10)}</span>
+        <span className="mono text-xs" style={{ color: "var(--muted)" }}>{fmtDate(s.date)}</span>
         <Link href={`/sources/${s.source_id}`} className="mono text-xs hover:underline" style={{ color: "var(--muted)" }}>
           · {s.source}
         </Link>
@@ -86,15 +89,15 @@ export function SignalCard({ s }: { s: Signal }) {
       >
         {open || !long ? s.text : s.text.slice(0, 360) + "…"}
       </p>
-      {long && (
+      {expandable && (
         <button onClick={() => setOpen((o) => !o)} className="text-xs mt-1.5" style={{ color: "var(--accent-2)" }}>
-          {open ? "Show less ▲" : "Read full text ▼"}
+          {open ? "Show less ▲" : long ? "Read full text ▼" : `Show image${s.images!.length > 1 ? "s" : ""} ▼`}
         </button>
       )}
 
-      {s.images && s.images.length > 0 && (
+      {open && s.images && s.images.length > 0 && (
         <div className="mt-3 space-y-2">
-          {(open ? s.images : s.images.slice(0, 1)).map((src, i) => (
+          {s.images.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               key={i}
@@ -105,9 +108,6 @@ export function SignalCard({ s }: { s: Signal }) {
               style={{ borderColor: "var(--border)" }}
             />
           ))}
-          {!open && s.images.length > 1 && (
-            <div className="label">+{s.images.length - 1} more image{s.images.length > 2 ? "s" : ""}</div>
-          )}
         </div>
       )}
 

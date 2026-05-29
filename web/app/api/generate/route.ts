@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchSignals, type Signal } from "@/lib/data";
+import { fmtDate } from "@/lib/format";
 
 const FORMAT_LABEL: Record<string, string> = {
   brief: "Foresight brief",
@@ -29,7 +30,7 @@ function retrieve(topic: string): Signal[] {
 
 // Clean, finish-elsewhere research document.
 function buildPack(topic: string, format: string, sigs: Signal[]): string {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = fmtDate(new Date().toISOString());
   const commentary = sigs.filter((s) => ["longread", "commonplace", "linkblog", "note", "chart", "feedback"].includes(s.type));
   const quotes = sigs.filter((s) => s.type === "quote");
   const books = sigs.filter((s) => s.type === "book");
@@ -48,7 +49,7 @@ function buildPack(topic: string, format: string, sigs: Signal[]): string {
     for (const s of commentary) {
       L.push("");
       L.push(`### ${s.heading}`);
-      L.push(`*${s.date.slice(0, 10)} · ${s.type}*`);
+      L.push(`*${fmtDate(s.date)} · ${s.type}*`);
       L.push("");
       L.push(s.text);
       if (s.links.length) {
@@ -68,7 +69,7 @@ function buildPack(topic: string, format: string, sigs: Signal[]): string {
     L.push("## Quotes");
     for (const s of quotes) {
       L.push(`> ${s.text}`);
-      L.push(`> — *${s.date.slice(0, 10)}*`);
+      L.push(`> — *${fmtDate(s.date)}*`);
       L.push("");
     }
     L.push("---");

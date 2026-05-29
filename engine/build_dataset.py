@@ -40,7 +40,7 @@ def classify(heading):
     if "commonplace" in h: return "commonplace"
     if "linkblog" in h or "link blog" in h: return "linkblog"
     if "chart of the day" in h: return "chart"
-    if "feedback" in h: return "feedback"
+    if "feedback" in h: return "skip"   # drop reader feedback sections
     if "errata" in h or "this blog is also available" in h: return "skip"
     return "note"
 

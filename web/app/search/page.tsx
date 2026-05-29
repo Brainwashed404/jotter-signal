@@ -10,7 +10,6 @@ const TABS: Tab[] = [
   { id: "linkblog", label: "Linkblog" },
   { id: "chart", label: "Charts" },
   { id: "note", label: "Notes" },
-  { id: "feedback", label: "Feedback" },
 ];
 
 export default async function SearchPage({

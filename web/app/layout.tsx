@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getRadar } from "@/lib/data";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Logo } from "@/components/Logo";
+import { fmtDate } from "@/lib/format";
 import "./globals.css";
 
 const THEME_INIT = `try{if(localStorage.getItem('jotter.theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}`;
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
 };
 
 const NAV = [
-  { href: "/", label: "Latest" },
+  { href: "/", label: "Home" },
+  { href: "/latest", label: "Latest" },
   { href: "/search", label: "Search" },
   { href: "/generate", label: "Reports" },
   { href: "/sources", label: "Experts" },
@@ -59,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           style={{ color: "var(--muted)", borderTop: "1px solid var(--border)" }}
         >
           {r.totals.signals.toLocaleString()} signals · {r.totals.posts.toLocaleString()} posts ·{" "}
-          {r.totals.date_min} → {r.totals.date_max} · 1 expert active
+          {fmtDate(r.totals.date_min)} → {fmtDate(r.totals.date_max)} · 1 expert active
         </footer>
       </body>
     </html>

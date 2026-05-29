@@ -2,7 +2,7 @@
  "generated_from": "data/posts_full.jsonl",
  "totals": {
   "posts": 13056,
-  "signals": 17317,
+  "signals": 17267,
   "date_min": "2002-01-13",
   "date_max": "2026-05-29"
  },
@@ -13,7 +13,6 @@
   "longread": 1142,
   "chart": 65,
   "commonplace": 716,
-  "feedback": 50,
   "linkblog": 214
  },
  "themes": [
@@ -432,15 +431,15 @@
  "top_sources_recent": [
   {
    "domain": "theguardian.com",
-   "n": 1056
+   "n": 1054
   },
   {
    "domain": "nytimes.com",
-   "n": 372
+   "n": 369
   },
   {
    "domain": "newyorker.com",
-   "n": 143
+   "n": 142
   },
   {
    "domain": "theatlantic.com",
@@ -448,7 +447,7 @@
   },
   {
    "domain": "observer.co.uk",
-   "n": 100
+   "n": 99
   },
   {
    "domain": "ft.com",
@@ -460,7 +459,7 @@
   },
   {
    "domain": "scripting.com",
-   "n": 63
+   "n": 62
   },
   {
    "domain": "twitter.com",
@@ -503,12 +502,12 @@
    "n": 39
   },
   {
-   "domain": "bbc.co.uk",
+   "domain": "arstechnica.com",
    "n": 38
   },
   {
-   "domain": "arstechnica.com",
-   "n": 38
+   "domain": "bbc.co.uk",
+   "n": 37
   }
  ],
  "top_sources_early": [

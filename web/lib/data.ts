@@ -95,7 +95,9 @@ export type WeeklySummary = {
   count: number;
   themes: { theme: string; n: number }[];
   longreads: { heading: string; date: string; post_url: string }[];
-  domains: { domain: string; n: number }[];
+  books: { heading: string; date: string; post_url: string }[];
+  quotes: { text: string; date: string; post_url: string }[];
+  domains: { domain: string; n: number; url: string }[];
 };
 
 // Automated rolling summary of the most recent `days` of signals.
@@ -115,19 +117,26 @@ export function weeklySummary(days = 7): WeeklySummary {
   for (const s of inWin) for (const t of s.themes) tc.set(t, (tc.get(t) ?? 0) + 1);
   const themes = [...tc.entries()].map(([theme, n]) => ({ theme, n })).sort((a, b) => b.n - a.n);
 
-  const dc = new Map<string, number>();
-  for (const s of inWin) for (const l of s.links) dc.set(l.domain, (dc.get(l.domain) ?? 0) + 1);
+  const dc = new Map<string, { n: number; url: string }>();
+  for (const s of inWin)
+    for (const l of s.links) {
+      const cur = dc.get(l.domain);
+      if (cur) cur.n += 1;
+      else dc.set(l.domain, { n: 1, url: l.url });
+    }
   const domains = [...dc.entries()]
     .filter(([dm]) => !["youtube.com", "youtu.be", "amzn.to", "en.wikipedia.org"].includes(dm))
-    .map(([domain, n]) => ({ domain, n }))
+    .map(([domain, v]) => ({ domain, n: v.n, url: v.url }))
     .sort((a, b) => b.n - a.n);
 
-  const longreads = inWin
-    .filter((s) => s.type === "longread")
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .map((s) => ({ heading: s.heading, date: s.date.slice(0, 10), post_url: s.post_url }));
+  const pick = (type: string) =>
+    inWin.filter((s) => s.type === type).sort((a, b) => b.date.localeCompare(a.date));
 
-  return { from, to, days, count: inWin.length, themes, longreads, domains };
+  const longreads = pick("longread").map((s) => ({ heading: s.heading, date: s.date.slice(0, 10), post_url: s.post_url }));
+  const books = pick("book").map((s) => ({ heading: s.heading, date: s.date.slice(0, 10), post_url: s.post_url }));
+  const quotes = pick("quote").map((s) => ({ text: s.text, date: s.date.slice(0, 10), post_url: s.post_url }));
+
+  return { from, to, days, count: inWin.length, themes, longreads, books, quotes, domains };
 }
 
 // Reading feed: most recent meaningful signals, optionally filtered by type.

@@ -5,6 +5,7 @@ import {
   useSaved, setTags, type SavedItem,
   useHighlights, updateHighlightNote, setHighlightTags, removeHighlight, type Highlight,
 } from "@/lib/saved";
+import { fmtDate } from "@/lib/format";
 
 function TagEditor({ tags, onChange }: { tags: string[]; onChange: (t: string[]) => void }) {
   const [input, setInput] = useState("");
@@ -33,7 +34,7 @@ function HighlightCard({ h }: { h: Highlight }) {
   return (
     <div className="panel p-4">
       <div className="flex items-center gap-2 mb-2">
-        <span className="mono text-xs" style={{ color: "var(--muted)" }}>{h.signalDate.slice(0, 10)} · {h.source}</span>
+        <span className="mono text-xs" style={{ color: "var(--muted)" }}>{fmtDate(h.signalDate)} · {h.source}</span>
         <button onClick={() => removeHighlight(h.id)} className="ml-auto chip" title="delete highlight">remove</button>
       </div>
       <blockquote className="border-l-2 pl-3 my-1 text-sm leading-relaxed" style={{ borderColor: "var(--accent)" }}>

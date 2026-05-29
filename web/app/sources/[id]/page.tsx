@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getRadar } from "@/lib/data";
 import { ThemeRow } from "@/components/ui";
 import { TYPE_LABEL } from "@/lib/types";
+import { fmtDate } from "@/lib/format";
 
 const AUTHORS: Record<string, { name: string; blurb: string; url: string }> = {
   naughton: {
@@ -45,7 +46,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
             </Link>
           ))}
         </div>
-        <div className="label mt-3">{r.totals.date_min} → {r.totals.date_max}</div>
+        <div className="label mt-3">{fmtDate(r.totals.date_min)} → {fmtDate(r.totals.date_max)}</div>
       </section>
 
       <section>
