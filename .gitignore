@@ -1,0 +1,17 @@
+# dependencies / build
+web/node_modules/
+web/.next/
+web/out/
+node_modules/
+
+# env
+.env
+.env.local
+web/.env*
+
+# large data (regenerate via engine/ scripts)
+engine/data/*.jsonl
+web/data/signals.jsonl
+
+# os
+.DS_Store
