@@ -190,7 +190,9 @@ def build_rss(ex):
         if len(txt) < 40: continue
         heading = clean(it.get("title", "")) or "Article"
         txt = dedup_title(heading, txt)
-        date = it["date"]
+        date = it.get("date", "")
+        if not (len(date) >= 4 and date[:4].isdigit()):
+            continue  # skip items with an unparseable date
         sigs.append(_sig(f"{ex['id']}-{i}", f"{ex['id']}-{i}", date, ex["name"], ex["id"],
                          "article", heading, txt, images_of(html), links_of(html), it.get("link", "")))
     return sigs
