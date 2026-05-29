@@ -4230,5 +4230,285 @@
     "n": 10
    }
   ]
+ },
+ {
+  "id": "protein",
+  "name": "Protein (SEEDS)",
+  "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
+  "url": "https://www.protein.xyz/tag/seeds/",
+  "totals": {
+   "posts": 15,
+   "signals": 15,
+   "date_min": "2026-04-09",
+   "date_max": "2026-05-29"
+  },
+  "signal_types": {
+   "article": 15
+  },
+  "themes": [
+   {
+    "theme": "Social media & attention",
+    "current": 86.7,
+    "delta": 0.0,
+    "series": {
+     "2026": 86.7
+    }
+   },
+   {
+    "theme": "Economy & markets",
+    "current": 53.3,
+    "delta": 0.0,
+    "series": {
+     "2026": 53.3
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 53.3,
+    "delta": 0.0,
+    "series": {
+     "2026": 53.3
+    }
+   },
+   {
+    "theme": "AI & machine learning",
+    "current": 40.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 40.0
+    }
+   },
+   {
+    "theme": "Platform power / Big Tech",
+    "current": 33.3,
+    "delta": 0.0,
+    "series": {
+     "2026": 33.3
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 26.7,
+    "delta": 0.0,
+    "series": {
+     "2026": 26.7
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
+    "current": 13.3,
+    "delta": 0.0,
+    "series": {
+     "2026": 13.3
+    }
+   },
+   {
+    "theme": "Surveillance & privacy",
+    "current": 6.7,
+    "delta": 0.0,
+    "series": {
+     "2026": 6.7
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 0.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Climate & environment",
+    "current": 0.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Crypto / web3",
+    "current": 0.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 0.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 0.0
+    }
+   }
+  ],
+  "years": [
+   "2026"
+  ],
+  "top_sources_recent": [
+   {
+    "domain": "protein.xyz",
+    "n": 14
+   },
+   {
+    "domain": "instagram.com",
+    "n": 9
+   },
+   {
+    "domain": "linkedin.com",
+    "n": 6
+   },
+   {
+    "domain": "tiktok.com",
+    "n": 3
+   },
+   {
+    "domain": "newyorker.com",
+    "n": 3
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 2
+   },
+   {
+    "domain": "wsj.com",
+    "n": 2
+   },
+   {
+    "domain": "google.com",
+    "n": 2
+   },
+   {
+    "domain": "tedthoughts.substack.com",
+    "n": 1
+   },
+   {
+    "domain": "netflix.com",
+    "n": 1
+   },
+   {
+    "domain": "isthisapigeonpod.substack.com",
+    "n": 1
+   },
+   {
+    "domain": "zine.kleinkleinklein.com",
+    "n": 1
+   },
+   {
+    "domain": "hmd.com",
+    "n": 1
+   },
+   {
+    "domain": "interviewmagazine.com",
+    "n": 1
+   },
+   {
+    "domain": "wilshireonline.net",
+    "n": 1
+   },
+   {
+    "domain": "kivestudio.com",
+    "n": 1
+   },
+   {
+    "domain": "fondazioneprada.org",
+    "n": 1
+   },
+   {
+    "domain": "threesproductions.com",
+    "n": 1
+   },
+   {
+    "domain": "city-journal.org",
+    "n": 1
+   },
+   {
+    "domain": "razorfish.com",
+    "n": 1
+   }
+  ],
+  "top_sources_early": [
+   {
+    "domain": "protein.xyz",
+    "n": 14
+   },
+   {
+    "domain": "instagram.com",
+    "n": 9
+   },
+   {
+    "domain": "linkedin.com",
+    "n": 6
+   },
+   {
+    "domain": "tiktok.com",
+    "n": 3
+   },
+   {
+    "domain": "newyorker.com",
+    "n": 3
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 2
+   },
+   {
+    "domain": "wsj.com",
+    "n": 2
+   },
+   {
+    "domain": "google.com",
+    "n": 2
+   },
+   {
+    "domain": "tedthoughts.substack.com",
+    "n": 1
+   },
+   {
+    "domain": "netflix.com",
+    "n": 1
+   },
+   {
+    "domain": "isthisapigeonpod.substack.com",
+    "n": 1
+   },
+   {
+    "domain": "zine.kleinkleinklein.com",
+    "n": 1
+   },
+   {
+    "domain": "hmd.com",
+    "n": 1
+   },
+   {
+    "domain": "interviewmagazine.com",
+    "n": 1
+   },
+   {
+    "domain": "wilshireonline.net",
+    "n": 1
+   },
+   {
+    "domain": "kivestudio.com",
+    "n": 1
+   },
+   {
+    "domain": "fondazioneprada.org",
+    "n": 1
+   },
+   {
+    "domain": "threesproductions.com",
+    "n": 1
+   },
+   {
+    "domain": "city-journal.org",
+    "n": 1
+   },
+   {
+    "domain": "razorfish.com",
+    "n": 1
+   }
+  ]
  }
 ]

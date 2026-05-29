@@ -110,5 +110,13 @@
     "feed": "https://1234kyle5678.substack.com/feed",
     "adapter": "rss",
     "backfill": "substack"
+  },
+  {
+    "id": "protein",
+    "name": "Protein (SEEDS)",
+    "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
+    "url": "https://www.protein.xyz/tag/seeds/",
+    "feed": "https://www.protein.xyz/tag/seeds/feed/",
+    "adapter": "rss"
   }
 ]
