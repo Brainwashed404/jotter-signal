@@ -27,7 +27,7 @@ export default function HomePage() {
           .
         </p>
       </section>
-      <SignalList tabs={TABS} />
+      <SignalList tabs={TABS} showSort={false} />
       <p className="label text-center pt-2">
         {r.totals.signals.toLocaleString()} signals total · search everything in the Workbench
       </p>
