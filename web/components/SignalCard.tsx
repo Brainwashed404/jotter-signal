@@ -1,11 +1,32 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { Signal } from "@/lib/types";
 import { TYPE_LABEL } from "@/lib/types";
 import { useSaved, toggleSave, addHighlight, useReport, toggleReport } from "@/lib/saved";
 import { themesFor } from "@/lib/themes";
 import { fmtDate } from "@/lib/format";
+
+const LINK = /\[([^\]]+)\]\(([^)]+)\)/g;
+const demd = (t: string) => t.replace(LINK, "$1");
+
+function renderWithLinks(text: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let last = 0, i = 0, m: RegExpExecArray | null;
+  LINK.lastIndex = 0;
+  while ((m = LINK.exec(text))) {
+    if (m.index > last) nodes.push(text.slice(last, m.index));
+    nodes.push(
+      <a key={i++} href={m[2]} target="_blank" rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()} className="underline" style={{ color: "var(--accent-2)" }}>
+        {m[1]}
+      </a>
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
 
 export function SignalCard({ s }: { s: Signal }) {
   const [open, setOpen] = useState(false);
@@ -64,8 +85,19 @@ export function SignalCard({ s }: { s: Signal }) {
     setTimeout(() => setFlash(false), 1600);
   }
 
+  function onCardClick(e: React.MouseEvent) {
+    if (!expandable) return;
+    if (window.getSelection()?.toString().trim()) return;          // mid text-selection
+    if ((e.target as HTMLElement).closest("a,button,input,textarea")) return; // links/controls
+    setOpen((o) => !o);
+  }
+
   return (
-    <div className={`panel panel-hover p-4 relative${open ? " md:col-span-2" : ""}`}>
+    <div
+      onClick={onCardClick}
+      className={`panel panel-hover p-4 relative${open ? " md:col-span-2" : ""}`}
+      style={{ cursor: expandable ? "pointer" : undefined }}
+    >
       {flash && (
         <div className="absolute top-2 right-2 chip" style={{ color: "var(--up)", borderColor: "var(--up)" }}>
           ✓ highlight saved
@@ -104,7 +136,7 @@ export function SignalCard({ s }: { s: Signal }) {
         className="text-sm leading-relaxed whitespace-pre-wrap"
         style={{ color: "var(--muted)" }}
       >
-        {open || !long ? s.text : s.text.slice(0, 360) + "…"}
+        {open || !long ? renderWithLinks(s.text) : demd(s.text).slice(0, 360) + "…"}
       </p>
       {expandable && (
         <button onClick={() => setOpen((o) => !o)} className="text-xs mt-1.5" style={{ color: "var(--accent-2)" }}>

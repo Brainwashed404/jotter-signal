@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 // Current tech / media / culture headlines — the actual stories in the news now.
 const FEEDS: { url: string; source: string }[] = [
-  { url: "https://www.theverge.com/rss/index.xml", source: "The Verge" },
   { url: "https://techcrunch.com/feed/", source: "TechCrunch" },
   { url: "https://www.theguardian.com/technology/rss", source: "Guardian" },
   { url: "https://www.wired.com/feed/rss", source: "WIRED" },

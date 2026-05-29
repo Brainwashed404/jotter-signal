@@ -222,7 +222,7 @@ export function weeklyBriefing(days = 7): Briefing {
     .filter((s) => ["article", "longread", "commonplace", "note", "chart"].includes(s.type))
     .sort((a, b) => b.date.localeCompare(a.date));
   for (const s of pool) {
-    const sentences = s.text.replace(/\s+/g, " ").split(/(?<=[.!?])\s+/);
+    const sentences = s.text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\s+/g, " ").split(/(?<=[.!?])\s+/);
     for (const raw of sentences) {
       const t = raw.trim();
       if (t.length < 55 || t.length > 230) continue;

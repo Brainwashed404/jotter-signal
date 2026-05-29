@@ -66,10 +66,28 @@ def clean(htmlfrag):
 
 _BLOCK_END = re.compile(r"</(?:p|div|li|ul|ol|blockquote|h[1-6]|tr|figure|figcaption|section|article)\s*>", re.I)
 _BR = re.compile(r"<br\s*/?>", re.I)
+_A = re.compile(r'<a\s[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>', re.S | re.I)
+
+def _md_links(t):
+    """Convert <a href> into markdown [text](url) so inline links survive cleaning."""
+    def repl(m):
+        url = m.group(1).strip()
+        inner = re.sub(r"<[^>]+>", "", m.group(2)).strip()
+        low = url.lower()
+        if not low.startswith(("http://", "https://")):
+            return inner
+        if low.endswith((".jpg", ".jpeg", ".png", ".gif", ".webp")):
+            return inner
+        if not inner:
+            inner = urlparse(url).netloc.replace("www.", "")
+        inner = inner.replace("[", "").replace("]", "")
+        return f"[{inner}]({url})"
+    return _A.sub(repl, t)
 
 def clean_block(htmlfrag):
     """Paragraph-preserving text — mirrors the original post's block structure."""
     t = re.sub(r"<script.*?</script>", " ", htmlfrag, flags=re.S|re.I)
+    t = _md_links(t)
     t = _BR.sub("\n", t)
     t = _BLOCK_END.sub("\n\n", t)
     t = re.sub(r"<[^>]+>", " ", t)
@@ -134,18 +152,43 @@ def dedup_title(title, txt):
 _CRUFT = re.compile(
     r"^(seeds|email|copy link|share this.*|share on .+|\d+\s*min read|"
     r"[A-Z][a-z]+ \d{1,2},? \d{4})$", re.I)
+def _demd(s):
+    """markdown link [text](url) -> text, for pattern matching."""
+    return re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s).strip()
+
 def strip_feed_cruft(txt):
     """Remove scraped article chrome: share buttons, read-time, date, repeated title."""
     out = []
     last_nonblank = None
     for l in txt.split("\n"):
         s = l.strip()
-        if s and _CRUFT.match(s):
+        plain = _demd(s)
+        if plain and _CRUFT.match(plain):
             continue
         if s and s == last_nonblank:   # drop repeated line (e.g. title printed twice)
             continue
         if s:
             last_nonblank = s
+        out.append(l)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip()
+
+def strip_pluralistic(txt):
+    """Remove Pluralistic's recurring template (masthead, section index, trailing
+    appearances/books/colophon/permalink)."""
+    out = []
+    for l in txt.split("\n"):
+        s = l.strip()
+        low = _demd(s).lower()
+        if re.match(r"^(upcoming|recent) appearances\b", low):
+            break  # everything from here down is boilerplate
+        if re.match(r"^[->\s]{3,}$", s):
+            continue
+        if low in ("top sources:", "none", "-->", "<!--", "today's links", "today’s links"):
+            continue
+        if re.match(r"^(hey look at this|object permanence|colophon)\b", low):
+            continue
+        if re.search(r"\(\s*permalink\s*\)\s*$", low):
+            continue
         out.append(l)
     return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip()
 
@@ -217,6 +260,8 @@ def build_rss(ex):
     for i, it in enumerate(uniq):
         html = it.get("content", "") or ""
         txt = strip_feed_cruft(clean_block(html))
+        if ex["id"] == "doctorow":
+            txt = strip_pluralistic(txt)
         if len(txt) < 40: continue
         heading = clean(it.get("title", "")) or "Article"
         txt = dedup_title(heading, txt)
