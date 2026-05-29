@@ -100,26 +100,27 @@ for r in rows:
             "id": f"{pid}-0", "post_id": pid, "date": date, "year": int(date[:4]),
             "source": "John Naughton", "source_id": "naughton",
             "type": "note", "heading": clean(r["title"]["rendered"]) or "Note",
-            "text": txt[:2000], "themes": themes_of(txt), "links": links_of(html)[:8],
+            "text": txt[:12000], "themes": themes_of(txt), "links": links_of(html)[:8],
             "post_url": url,
         })
         continue
     for i, (head, body) in enumerate(secs):
         st = classify(head)
-        if st in ("skip",): continue
+        if st in ("skip", "music"): continue   # drop boilerplate + musical alternatives
         txt = clean(body)
+        # drop the opening photo + caption block (image and/or short caption before any real section)
+        if i == 0 and st == "note" and ("<img" in body or len(txt) < 220):
+            continue
         if st == "quote":
             if not txt: continue
-        elif len(txt) < 25:   # drop near-empty (e.g. photo captions)
+        elif len(txt) < 25:
             continue
-        if i == 0 and st == "note" and len(txt) < 120:
-            continue  # opening photo caption
-        title = head if st in ("quote","music","book","commonplace","linkblog","chart","feedback") else heading_title(st, body, head)
+        title = head if st in ("quote","book","commonplace","linkblog","chart","feedback") else heading_title(st, body, head)
         signals.append({
             "id": f"{pid}-{i}", "post_id": pid, "date": date, "year": int(date[:4]),
             "source": "John Naughton", "source_id": "naughton",
             "type": st, "heading": title,
-            "text": txt[:2000], "themes": themes_of(txt), "links": links_of(body)[:8],
+            "text": txt[:12000], "themes": themes_of(txt), "links": links_of(body)[:8],
             "post_url": url,
         })
 

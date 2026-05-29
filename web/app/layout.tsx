@@ -9,10 +9,11 @@ export const metadata: Metadata = {
 };
 
 const NAV = [
-  { href: "/", label: "Radar" },
+  { href: "/", label: "Latest" },
   { href: "/search", label: "Workbench" },
   { href: "/generate", label: "Generator" },
   { href: "/sources", label: "Sensors" },
+  { href: "/saved", label: "Saved" },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

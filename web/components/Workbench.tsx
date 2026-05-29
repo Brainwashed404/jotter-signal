@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import type { Signal } from "@/lib/data";
-import { SignalCard } from "@/components/ui";
+import type { Signal } from "@/lib/types";
+import { SignalCard } from "@/components/SignalCard";
 
 const TYPES = ["", "longread", "quote", "commonplace", "book", "linkblog", "note"];
 const TYPE_LABEL: Record<string, string> = {

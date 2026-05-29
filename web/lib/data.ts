@@ -1,37 +1,9 @@
 import "server-only";
 import fs from "fs";
 import path from "path";
+import type { Signal, Radar } from "./types";
 
-export type Signal = {
-  id: string;
-  post_id: number;
-  date: string;
-  year: number;
-  source: string;
-  source_id: string;
-  type: string;
-  heading: string;
-  text: string;
-  themes: string[];
-  links: { url: string; domain: string; anchor: string }[];
-  post_url: string;
-};
-
-export type ThemeSummary = {
-  theme: string;
-  current: number;
-  delta: number;
-  series: Record<string, number>;
-};
-
-export type Radar = {
-  totals: { posts: number; signals: number; date_min: string; date_max: string };
-  signal_types: Record<string, number>;
-  themes: ThemeSummary[];
-  years: string[];
-  top_sources_recent: { domain: string; n: number }[];
-  top_sources_early: { domain: string; n: number }[];
-};
+export type { Signal, Radar, ThemeSummary } from "./types";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -101,4 +73,12 @@ export function recentSignals(type: string, limit = 12): Signal[] {
     .filter((s) => s.type === type)
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, limit);
+}
+
+// Reading feed: most recent meaningful signals, optionally filtered by type.
+export function latestFeed(opts: { type?: string; limit?: number } = {}): Signal[] {
+  const limit = opts.limit ?? 40;
+  let pool = getSignals();
+  if (opts.type) pool = pool.filter((s) => s.type === opts.type);
+  return [...pool].sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
 }

@@ -1,4 +1,4 @@
-import type { Signal, ThemeSummary } from "@/lib/data";
+import type { ThemeSummary } from "@/lib/types";
 
 export function Sparkline({ series, years }: { series: Record<string, number>; years: string[] }) {
   const vals = years.map((y) => series[y] ?? 0);
@@ -10,12 +10,7 @@ export function Sparkline({ series, years }: { series: Record<string, number>; y
   return (
     <svg width={w} height={h} className="overflow-visible">
       <polyline points={pts} fill="none" stroke="var(--accent)" strokeWidth="1.5" />
-      <circle
-        cx={w}
-        cy={h - (vals[vals.length - 1] / max) * h}
-        r="2.5"
-        fill="var(--accent)"
-      />
+      <circle cx={w} cy={h - (vals[vals.length - 1] / max) * h} r="2.5" fill="var(--accent)" />
     </svg>
   );
 }
@@ -34,64 +29,6 @@ export function ThemeRow({ t, years }: { t: ThemeSummary; years: string[] }) {
         </div>
       </div>
       <Sparkline series={t.series} years={years} />
-    </div>
-  );
-}
-
-const TYPE_LABEL: Record<string, string> = {
-  longread: "Long Read",
-  quote: "Quote",
-  book: "Book",
-  commonplace: "Commonplace",
-  linkblog: "Linkblog",
-  music: "Music",
-  chart: "Chart",
-  feedback: "Feedback",
-  note: "Note",
-};
-
-export function SignalCard({ s }: { s: Signal }) {
-  return (
-    <div className="panel panel-hover p-4">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="chip" style={{ color: "var(--accent)", borderColor: "var(--accent)" }}>
-          {TYPE_LABEL[s.type] ?? s.type}
-        </span>
-        <span className="mono text-xs" style={{ color: "var(--muted)" }}>
-          {s.date.slice(0, 10)}
-        </span>
-        <span className="mono text-xs" style={{ color: "var(--muted)" }}>· {s.source}</span>
-      </div>
-      <div className="font-medium leading-snug mb-1">{s.heading}</div>
-      <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
-        {s.text.slice(0, 320)}
-        {s.text.length > 320 ? "…" : ""}
-      </p>
-      <div className="flex flex-wrap items-center gap-1.5 mt-3">
-        {s.themes.slice(0, 3).map((th) => (
-          <span key={th} className="chip">{th}</span>
-        ))}
-        {s.links.slice(0, 2).map((l, i) => (
-          <a
-            key={i}
-            href={l.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="chip"
-            style={{ color: "var(--accent-2)" }}
-          >
-            ↗ {l.domain}
-          </a>
-        ))}
-        <a
-          href={s.post_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="chip ml-auto"
-        >
-          source post
-        </a>
-      </div>
     </div>
   );
 }
