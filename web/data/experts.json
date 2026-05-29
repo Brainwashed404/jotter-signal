@@ -1939,124 +1939,6 @@
   ]
  },
  {
-  "id": "hbr",
-  "name": "Harvard Business Review",
-  "blurb": "Management, strategy, leadership and innovation ideas from HBR.",
-  "url": "https://hbr.org",
-  "totals": {
-   "posts": 24,
-   "signals": 24,
-   "date_min": "2026-05-19",
-   "date_max": "2026-05-29"
-  },
-  "signal_types": {
-   "article": 24
-  },
-  "themes": [
-   {
-    "theme": "AI & machine learning",
-    "current": 8.3,
-    "delta": 0.0,
-    "series": {
-     "2026": 8.3
-    }
-   },
-   {
-    "theme": "Labour & automation",
-    "current": 4.2,
-    "delta": 0.0,
-    "series": {
-     "2026": 4.2
-    }
-   },
-   {
-    "theme": "Platform power / Big Tech",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Democracy & disinformation",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Social media & attention",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Geopolitics & power",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Surveillance & privacy",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Climate & environment",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Crypto / web3",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Economy & markets",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Media & journalism",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   }
-  ],
-  "years": [
-   "2026"
-  ],
-  "top_sources_recent": [],
-  "top_sources_early": []
- },
- {
   "id": "mckinsey",
   "name": "McKinsey Insights",
   "blurb": "McKinsey insights and publications on business, the economy, management and technology.",
@@ -4237,277 +4119,316 @@
   "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
   "url": "https://www.protein.xyz/tag/seeds/",
   "totals": {
-   "posts": 15,
-   "signals": 15,
-   "date_min": "2026-04-09",
+   "posts": 590,
+   "signals": 590,
+   "date_min": "2016-02-01",
    "date_max": "2026-05-29"
   },
   "signal_types": {
-   "article": 15
+   "article": 590
   },
   "themes": [
    {
-    "theme": "Social media & attention",
-    "current": 86.7,
+    "theme": "Platform power / Big Tech",
+    "current": 100.0,
     "delta": 0.0,
     "series": {
-     "2026": 86.7
+     "2016": 100.0,
+     "2024": 100.0,
+     "2025": 100.0,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 100.0,
+    "delta": 0.0,
+    "series": {
+     "2016": 100.0,
+     "2024": 100.0,
+     "2025": 100.0,
+     "2026": 100.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 53.3,
-    "delta": 0.0,
+    "current": 37.2,
+    "delta": 27.5,
     "series": {
-     "2026": 53.3
+     "2016": 9.7,
+     "2024": 13.2,
+     "2025": 47.2,
+     "2026": 51.3
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 53.3,
-    "delta": 0.0,
+    "current": 35.6,
+    "delta": 23.3,
     "series": {
-     "2026": 53.3
+     "2016": 12.3,
+     "2024": 10.5,
+     "2025": 52.8,
+     "2026": 43.6
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 40.0,
-    "delta": 0.0,
+    "current": 27.2,
+    "delta": 23.7,
     "series": {
-     "2026": 40.0
-    }
-   },
-   {
-    "theme": "Platform power / Big Tech",
-    "current": 33.3,
-    "delta": 0.0,
-    "series": {
-     "2026": 33.3
+     "2016": 3.5,
+     "2024": 5.3,
+     "2025": 32.6,
+     "2026": 43.6
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 26.7,
-    "delta": 0.0,
+    "current": 9.1,
+    "delta": 7.9,
     "series": {
-     "2026": 26.7
-    }
-   },
-   {
-    "theme": "Democracy & disinformation",
-    "current": 13.3,
-    "delta": 0.0,
-    "series": {
-     "2026": 13.3
+     "2016": 1.2,
+     "2024": 0.0,
+     "2025": 6.7,
+     "2026": 20.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 6.7,
-    "delta": 0.0,
+    "current": 7.7,
+    "delta": 5.6,
     "series": {
-     "2026": 6.7
+     "2016": 2.1,
+     "2024": 5.3,
+     "2025": 10.1,
+     "2026": 7.7
     }
    },
    {
-    "theme": "Geopolitics & power",
-    "current": 0.0,
-    "delta": 0.0,
+    "theme": "Democracy & disinformation",
+    "current": 7.6,
+    "delta": 6.9,
     "series": {
-     "2026": 0.0
+     "2016": 0.7,
+     "2024": 0.0,
+     "2025": 12.4,
+     "2026": 10.3
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 0.0,
-    "delta": 0.0,
+    "current": 7.4,
+    "delta": 5.7,
     "series": {
-     "2026": 0.0
+     "2016": 1.7,
+     "2024": 2.6,
+     "2025": 14.6,
+     "2026": 5.1
     }
    },
    {
-    "theme": "Crypto / web3",
-    "current": 0.0,
-    "delta": 0.0,
+    "theme": "Geopolitics & power",
+    "current": 5.6,
+    "delta": 4.7,
     "series": {
-     "2026": 0.0
+     "2016": 0.9,
+     "2024": 2.6,
+     "2025": 9.0,
+     "2026": 5.1
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 0.0,
-    "delta": 0.0,
+    "current": 4.4,
+    "delta": 3.0,
     "series": {
-     "2026": 0.0
+     "2016": 1.4,
+     "2024": 0.0,
+     "2025": 5.6,
+     "2026": 7.7
+    }
+   },
+   {
+    "theme": "Crypto / web3",
+    "current": 4.0,
+    "delta": 2.6,
+    "series": {
+     "2016": 1.4,
+     "2024": 2.6,
+     "2025": 6.7,
+     "2026": 2.6
     }
    }
   ],
   "years": [
+   "2016",
+   "2024",
+   "2025",
    "2026"
   ],
   "top_sources_recent": [
    {
+    "domain": "linkedin.com",
+    "n": 187
+   },
+   {
+    "domain": "twitter.com",
+    "n": 166
+   },
+   {
+    "domain": "facebook.com",
+    "n": 166
+   },
+   {
+    "domain": "pinterest.com",
+    "n": 166
+   },
+   {
     "domain": "protein.xyz",
-    "n": 14
+    "n": 101
    },
    {
     "domain": "instagram.com",
+    "n": 67
+   },
+   {
+    "domain": "forum.protein.xyz",
+    "n": 13
+   },
+   {
+    "domain": "x.com",
+    "n": 10
+   },
+   {
+    "domain": "theguardian.com",
     "n": 9
    },
    {
-    "domain": "linkedin.com",
-    "n": 6
+    "domain": "tiktok.com",
+    "n": 9
    },
    {
-    "domain": "tiktok.com",
-    "n": 3
+    "domain": "reddit.com",
+    "n": 5
+   },
+   {
+    "domain": "store.protein.xyz",
+    "n": 5
+   },
+   {
+    "domain": "ft.com",
+    "n": 5
+   },
+   {
+    "domain": "proteinagency.com",
+    "n": 5
+   },
+   {
+    "domain": "dazeddigital.com",
+    "n": 5
+   },
+   {
+    "domain": "substack.com",
+    "n": 4
    },
    {
     "domain": "newyorker.com",
     "n": 3
    },
    {
-    "domain": "theguardian.com",
-    "n": 2
+    "domain": "gq.com",
+    "n": 3
    },
    {
-    "domain": "wsj.com",
-    "n": 2
+    "domain": "khole.net",
+    "n": 3
    },
    {
-    "domain": "google.com",
-    "n": 2
-   },
-   {
-    "domain": "tedthoughts.substack.com",
-    "n": 1
-   },
-   {
-    "domain": "netflix.com",
-    "n": 1
-   },
-   {
-    "domain": "isthisapigeonpod.substack.com",
-    "n": 1
-   },
-   {
-    "domain": "zine.kleinkleinklein.com",
-    "n": 1
-   },
-   {
-    "domain": "hmd.com",
-    "n": 1
-   },
-   {
-    "domain": "interviewmagazine.com",
-    "n": 1
-   },
-   {
-    "domain": "wilshireonline.net",
-    "n": 1
-   },
-   {
-    "domain": "kivestudio.com",
-    "n": 1
-   },
-   {
-    "domain": "fondazioneprada.org",
-    "n": 1
-   },
-   {
-    "domain": "threesproductions.com",
-    "n": 1
-   },
-   {
-    "domain": "city-journal.org",
-    "n": 1
-   },
-   {
-    "domain": "razorfish.com",
-    "n": 1
+    "domain": "nytimes.com",
+    "n": 3
    }
   ],
   "top_sources_early": [
    {
-    "domain": "protein.xyz",
-    "n": 14
+    "domain": "linkedin.com",
+    "n": 469
+   },
+   {
+    "domain": "twitter.com",
+    "n": 462
+   },
+   {
+    "domain": "facebook.com",
+    "n": 462
+   },
+   {
+    "domain": "pinterest.com",
+    "n": 462
+   },
+   {
+    "domain": "prote.in",
+    "n": 90
    },
    {
     "domain": "instagram.com",
-    "n": 9
+    "n": 10
    },
    {
-    "domain": "linkedin.com",
+    "domain": "protein.xyz",
+    "n": 7
+   },
+   {
+    "domain": "x.com",
     "n": 6
    },
    {
-    "domain": "tiktok.com",
+    "domain": "bellandrigg.com",
+    "n": 4
+   },
+   {
+    "domain": "medium.com",
     "n": 3
    },
    {
-    "domain": "newyorker.com",
+    "domain": "index-space.org",
     "n": 3
    },
    {
-    "domain": "theguardian.com",
+    "domain": "itunes.apple.com",
+    "n": 3
+   },
+   {
+    "domain": "campaign.prote.in",
+    "n": 3
+   },
+   {
+    "domain": "dazeddigital.com",
     "n": 2
    },
    {
-    "domain": "wsj.com",
+    "domain": "teenage.engineering",
     "n": 2
    },
    {
-    "domain": "google.com",
+    "domain": "businessoffashion.com",
     "n": 2
    },
    {
-    "domain": "tedthoughts.substack.com",
-    "n": 1
+    "domain": "summerofprotocols.com",
+    "n": 2
    },
    {
-    "domain": "netflix.com",
-    "n": 1
+    "domain": "on.com",
+    "n": 2
    },
    {
-    "domain": "isthisapigeonpod.substack.com",
-    "n": 1
+    "domain": "soccerbible.com",
+    "n": 2
    },
    {
-    "domain": "zine.kleinkleinklein.com",
-    "n": 1
-   },
-   {
-    "domain": "hmd.com",
-    "n": 1
-   },
-   {
-    "domain": "interviewmagazine.com",
-    "n": 1
-   },
-   {
-    "domain": "wilshireonline.net",
-    "n": 1
-   },
-   {
-    "domain": "kivestudio.com",
-    "n": 1
-   },
-   {
-    "domain": "fondazioneprada.org",
-    "n": 1
-   },
-   {
-    "domain": "threesproductions.com",
-    "n": 1
-   },
-   {
-    "domain": "city-journal.org",
-    "n": 1
-   },
-   {
-    "domain": "razorfish.com",
-    "n": 1
+    "domain": "musicweek.com",
+    "n": 2
    }
   ]
  }

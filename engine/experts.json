@@ -42,14 +42,6 @@
     "adapter": "rss"
   },
   {
-    "id": "hbr",
-    "name": "Harvard Business Review",
-    "blurb": "Management, strategy, leadership and innovation ideas from HBR.",
-    "url": "https://hbr.org",
-    "feed": "http://feeds.harvardbusiness.org/harvardbusiness/",
-    "adapter": "rss"
-  },
-  {
     "id": "mckinsey",
     "name": "McKinsey Insights",
     "blurb": "McKinsey insights and publications on business, the economy, management and technology.",
@@ -117,6 +109,7 @@
     "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
     "url": "https://www.protein.xyz/tag/seeds/",
     "feed": "https://www.protein.xyz/tag/seeds/feed/",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "protein"
   }
 ]

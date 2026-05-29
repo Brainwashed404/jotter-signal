@@ -76,6 +76,48 @@ def backfill_wordpress(ex):
         time.sleep(0.3)
     return out[:WP_CAP]
 
+import re as _re
+def backfill_protein(ex):
+    """Scrape a JS-light WordPress tag archive (REST disabled): paginate the tag
+    listing for article slugs, then pull each article's server-rendered body."""
+    listing = ex["url"].rstrip("/")
+    host = "https://www.protein.xyz"
+    NAV = {"/contribute/", "/about/", "/membership/", "/contact/", "/privacy-policy/",
+           "/terms/", "/jobs/", "/shop/", "/login/", "/sign-up/", "/account/", "/seeds/"}
+    slugs = []
+    for p in range(1, 60):
+        url = listing + "/" if p == 1 else f"{listing}/page/{p}/"
+        try:
+            h = get(url).decode("utf-8", "replace")
+        except Exception:
+            break
+        found = [s for s in dict.fromkeys(_re.findall(r'href="(/[a-z0-9][a-z0-9-]{5,}/)"', h)) if s not in NAV]
+        new = [s for s in found if s not in slugs]
+        if p > 1 and not new:
+            break
+        slugs += new
+        time.sleep(0.2)
+    print(f"  {len(slugs)} article slugs")
+    out = []
+    for i, slug in enumerate(slugs):
+        try:
+            a = get(host + slug).decode("utf-8", "replace")
+        except Exception:
+            continue
+        md = (_re.search(r'<meta property="article:published_time" content="([^"]*)"', a)
+              or _re.search(r'"datePublished"\s*:\s*"([^"]+)"', a))
+        mc = _re.search(r"<article[^>]*>(.*?)</article>", a, _re.S)
+        if not (md and mc):
+            continue
+        mt = _re.search(r'<meta property="og:title" content="([^"]*)"', a)
+        title = (mt.group(1) if mt else slug.strip("/")).replace(" - Protein", "").strip()
+        out.append({"title": title, "link": host + slug, "date": md.group(1),
+                    "content": mc.group(1), "categories": ["SEEDS"]})
+        time.sleep(0.15)
+        if (i + 1) % 20 == 0:
+            print(f"  …{i + 1}/{len(slugs)}")
+    return out
+
 def main():
     experts = json.load(open("experts.json"))
     want = sys.argv[1] if len(sys.argv) > 1 else None
@@ -84,7 +126,10 @@ def main():
         if not bf or (want and ex["id"] != want):
             continue
         print(f"backfilling {ex['id']} ({bf})…")
-        items = backfill_substack(ex) if bf == "substack" else backfill_wordpress(ex) if bf == "wordpress" else []
+        items = (backfill_substack(ex) if bf == "substack"
+                 else backfill_wordpress(ex) if bf == "wordpress"
+                 else backfill_protein(ex) if bf == "protein"
+                 else [])
         out = f"data/archive_{ex['id']}.jsonl"
         with open(out, "w") as f:
             for it in items:
