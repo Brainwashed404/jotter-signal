@@ -2,9 +2,9 @@
 import { useState } from "react";
 
 const FORMATS = [
-  { id: "brief", label: "Foresight brief", hint: "Client-ready: thesis, signals, implications, signposts" },
-  { id: "pov", label: "Thought-leadership POV", hint: "~600-word LinkedIn article in a confident voice" },
-  { id: "cards", label: "Trend cards", hint: "5 cards for a workshop or deck" },
+  { id: "brief", label: "Foresight brief", hint: "Commentary, quotes & sources organised for a client brief" },
+  { id: "pov", label: "Thought-leadership POV", hint: "Material to write a point-of-view article from" },
+  { id: "cards", label: "Trend cards", hint: "Evidence grouped for workshop / deck cards" },
 ];
 
 const EXAMPLES = [
@@ -14,7 +14,6 @@ const EXAMPLES = [
   "Democratic backsliding and technology",
 ];
 
-// minimal markdown -> html
 function md(src: string): string {
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const inline = (s: string) =>
@@ -23,16 +22,20 @@ function md(src: string): string {
       .replace(/\*(.+?)\*/g, "<em>$1</em>")
       .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:var(--accent-2)">$1</a>');
   const lines = src.split("\n");
-  let html = "", inList = false;
+  let html = "", inList = false, inQuote = false;
+  const closeQuote = () => { if (inQuote) { html += "</blockquote>"; inQuote = false; } };
+  const closeList = () => { if (inList) { html += "</ul>"; inList = false; } };
   for (const ln of lines) {
-    if (/^### /.test(ln)) { if (inList) { html += "</ul>"; inList = false; } html += `<h3 class="font-semibold mt-4 mb-1">${inline(ln.slice(4))}</h3>`; }
-    else if (/^## /.test(ln)) { if (inList) { html += "</ul>"; inList = false; } html += `<h2 class="text-lg font-semibold mt-5 mb-2">${inline(ln.slice(3))}</h2>`; }
-    else if (/^# /.test(ln)) { if (inList) { html += "</ul>"; inList = false; } html += `<h1 class="text-2xl font-bold mt-2 mb-2">${inline(ln.slice(2))}</h1>`; }
-    else if (/^[-*] /.test(ln)) { if (!inList) { html += '<ul class="list-disc pl-5 space-y-1 my-2">'; inList = true; } html += `<li>${inline(ln.slice(2))}</li>`; }
-    else if (ln.trim() === "") { if (inList) { html += "</ul>"; inList = false; } }
-    else { if (inList) { html += "</ul>"; inList = false; } html += `<p class="my-2 leading-relaxed">${inline(ln)}</p>`; }
+    if (/^### /.test(ln)) { closeList(); closeQuote(); html += `<h3 class="font-semibold mt-5 mb-1">${inline(ln.slice(4))}</h3>`; }
+    else if (/^## /.test(ln)) { closeList(); closeQuote(); html += `<h2 class="text-lg font-semibold mt-6 mb-2">${inline(ln.slice(3))}</h2>`; }
+    else if (/^# /.test(ln)) { closeList(); closeQuote(); html += `<h1 class="text-2xl font-bold mt-2 mb-2">${inline(ln.slice(2))}</h1>`; }
+    else if (/^> /.test(ln)) { closeList(); if (!inQuote) { html += '<blockquote class="border-l-2 pl-3 my-1" style="border-color:var(--accent)">'; inQuote = true; } html += `<div>${inline(ln.slice(2))}</div>`; }
+    else if (/^---/.test(ln)) { closeList(); closeQuote(); html += '<hr class="my-4" style="border-color:var(--border)"/>'; }
+    else if (/^[-*] /.test(ln)) { closeQuote(); if (!inList) { html += '<ul class="list-disc pl-5 space-y-1 my-2">'; inList = true; } html += `<li>${inline(ln.slice(2))}</li>`; }
+    else if (ln.trim() === "") { closeList(); closeQuote(); }
+    else { closeList(); closeQuote(); html += `<p class="my-2 leading-relaxed">${inline(ln)}</p>`; }
   }
-  if (inList) html += "</ul>";
+  closeList(); closeQuote();
   return html;
 }
 
@@ -40,7 +43,7 @@ export default function Generator() {
   const [topic, setTopic] = useState("");
   const [format, setFormat] = useState("brief");
   const [out, setOut] = useState("");
-  const [meta, setMeta] = useState<{ grounded: boolean; count: number } | null>(null);
+  const [meta, setMeta] = useState<{ mode: string; count: number; filename: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function go() {
@@ -53,8 +56,18 @@ export default function Generator() {
     });
     const data = await res.json();
     setOut(data.markdown ?? data.error ?? "Something went wrong.");
-    setMeta({ grounded: data.grounded, count: data.count });
+    setMeta(data.markdown ? { mode: data.mode, count: data.count, filename: data.filename } : null);
     setLoading(false);
+  }
+
+  function download() {
+    if (!out || !meta) return;
+    const blob = new Blob([out], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = meta.filename;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -76,7 +89,7 @@ export default function Generator() {
           </div>
         </div>
         <div>
-          <div className="label mb-2">Format</div>
+          <div className="label mb-2">Shape the pack for…</div>
           <div className="space-y-2">
             {FORMATS.map((f) => (
               <button
@@ -92,7 +105,7 @@ export default function Generator() {
           </div>
         </div>
         <button className="btn w-full" onClick={go} disabled={loading || !topic}>
-          {loading ? "Synthesising…" : "Generate"}
+          {loading ? "Compiling…" : "Build research pack"}
         </button>
       </div>
 
@@ -101,25 +114,23 @@ export default function Generator() {
           <div className="h-full grid place-items-center text-center" style={{ color: "var(--muted)" }}>
             <div>
               <div className="text-4xl mb-3">◭</div>
-              <p>Pick a topic and format.<br />The Generator grounds every claim in real signals, with citations.</p>
+              <p>Pick a topic.<br />Jotter Signal compiles a clean, sourced research pack from the archive —<br />ready to download and write from.</p>
             </div>
           </div>
         )}
-        {loading && <div className="label">Retrieving signals and synthesising…</div>}
+        {loading && <div className="label">Retrieving and organising signals…</div>}
         {out && (
           <>
             {meta && (
               <div className="flex items-center gap-2 mb-4 pb-4" style={{ borderBottom: "1px solid var(--border)" }}>
-                <span className="chip" style={{ color: meta.grounded ? "var(--up)" : "var(--accent)" }}>
-                  {meta.grounded ? "● LLM-synthesised" : "● evidence pack (no key)"}
+                <span className="chip" style={{ color: "var(--accent)" }}>
+                  {meta.mode === "ai" ? "● AI-written" : "● research pack"}
                 </span>
-                <span className="label">grounded in {meta.count} signals</span>
-                <button
-                  className="btn-ghost ml-auto text-xs"
-                  onClick={() => navigator.clipboard.writeText(out)}
-                >
-                  Copy markdown
-                </button>
+                <span className="label">{meta.count} signals · cited & dated</span>
+                <div className="ml-auto flex gap-2">
+                  <button className="btn-ghost text-xs" onClick={() => navigator.clipboard.writeText(out)}>Copy</button>
+                  <button className="btn text-xs" onClick={download}>Download .md</button>
+                </div>
               </div>
             )}
             <div dangerouslySetInnerHTML={{ __html: md(out) }} />
