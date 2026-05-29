@@ -166,6 +166,85 @@ export function weeklySummary(days = 7): WeeklySummary {
   return { from, to, days, count: inWin.length, themes, longreads, books, quotes, domains };
 }
 
+export type Briefing = {
+  from: string;
+  to: string;
+  days: number;
+  count: number;
+  expertCount: number;
+  themes: { theme: string; n: number; experts: number; delta: number }[];
+  stats: { text: string; source: string; sourceId: string; heading: string; post_url: string; date: string }[];
+};
+
+// Insightful weekly briefing: theme momentum vs the prior 4 weeks, cross-expert
+// convergence, and notable stats/claims extracted from the actual article text.
+export function weeklyBriefing(days = 7): Briefing {
+  const sigs = getSignals();
+  const to = sigs.reduce((m, s) => (s.date > m ? s.date : m), "").slice(0, 10);
+  const mk = (back: number) => {
+    const d = new Date(to + "T00:00:00Z");
+    d.setUTCDate(d.getUTCDate() - back);
+    return d.toISOString().slice(0, 10);
+  };
+  const from = mk(days);
+  const priorFrom = mk(days * 5); // 4-week baseline immediately before this week
+  const day = (s: Signal) => s.date.slice(0, 10);
+  const inWin = sigs.filter((s) => day(s) >= from && day(s) <= to);
+  const prior = sigs.filter((s) => day(s) >= priorFrom && day(s) < from);
+  const weekTotal = inWin.length || 1;
+  const priorTotal = prior.length || 1;
+
+  // theme momentum + convergence
+  const tc = new Map<string, { n: number; experts: Set<string> }>();
+  for (const s of inWin)
+    for (const t of s.themes) {
+      const e = tc.get(t) || { n: 0, experts: new Set<string>() };
+      e.n += 1; e.experts.add(s.source_id); tc.set(t, e);
+    }
+  const pc = new Map<string, number>();
+  for (const s of prior) for (const t of s.themes) pc.set(t, (pc.get(t) ?? 0) + 1);
+  const themes = [...tc.entries()]
+    .map(([theme, e]) => ({
+      theme,
+      n: e.n,
+      experts: e.experts.size,
+      delta: Math.round((100 * e.n / weekTotal - 100 * (pc.get(theme) ?? 0) / priorTotal) * 10) / 10,
+    }))
+    .sort((a, b) => b.n - a.n);
+
+  // notable stats / claims pulled from article bodies
+  // require a number adjacent to a unit (%, $, magnitude) for clean, real stats
+  const STAT = /(\d[\d,.]*\s?(?:%|percent)|\$\s?\d[\d,.]*|\b\d[\d,.]*\s?(?:bn|billion|million|trillion)\b)/i;
+  const JUNK = /(https?:|\d{1,2}:\d{2}|\d+\s?[x×]\b|@|\|)/i; // urls, timecodes, playback, handles
+  const stats: Briefing["stats"] = [];
+  const seen = new Set<string>();
+  const pool = inWin
+    .filter((s) => ["article", "longread", "commonplace", "note", "chart"].includes(s.type))
+    .sort((a, b) => b.date.localeCompare(a.date));
+  for (const s of pool) {
+    const sentences = s.text.replace(/\s+/g, " ").split(/(?<=[.!?])\s+/);
+    for (const raw of sentences) {
+      const t = raw.trim();
+      if (t.length < 55 || t.length > 230) continue;
+      if (JUNK.test(t) || !STAT.test(t)) continue;
+      if ((t.match(/[A-Za-z]/g) || []).length < t.length * 0.6) continue; // mostly prose
+      const key = t.slice(0, 60).toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      stats.push({ text: t, source: s.source, sourceId: s.source_id, heading: s.heading, post_url: s.post_url, date: s.date.slice(0, 10) });
+      break; // at most one per signal
+    }
+    if (stats.length >= 12) break;
+  }
+
+  return {
+    from, to, days,
+    count: inWin.length,
+    expertCount: new Set(inWin.map((s) => s.source_id)).size,
+    themes, stats,
+  };
+}
+
 // Reading feed: most recent meaningful signals, optionally filtered by type.
 export function latestFeed(opts: { type?: string; limit?: number } = {}): Signal[] {
   const limit = opts.limit ?? 40;
