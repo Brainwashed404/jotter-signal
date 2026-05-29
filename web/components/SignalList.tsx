@@ -46,6 +46,7 @@ export default function SignalList({
   const [results, setResults] = useState<Signal[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [trending, setTrending] = useState<{ term: string; n: number }[]>([]);
 
   const committedRef = useRef(initialQuery);
   const typeRef = useRef(type); typeRef.current = type;
@@ -97,9 +98,22 @@ export default function SignalList({
     return () => obs.disconnect();
   }, [fetchPage]);
 
+  // trending topics from the news (Search only)
+  useEffect(() => {
+    if (!showSearch) return;
+    fetch("/api/trending").then((r) => r.json()).then((d) => setTrending(d.topics || [])).catch(() => {});
+  }, [showSearch]);
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     committedRef.current = input;
+    fetchPage(true);
+  }
+
+  function searchFor(term: string) {
+    setInput(term);
+    committedRef.current = term;
+    setSort("relevance"); sortRef.current = "relevance";
     fetchPage(true);
   }
 
@@ -124,6 +138,17 @@ export default function SignalList({
           />
           <button className="btn" type="submit">Search</button>
         </form>
+      )}
+
+      {showSearch && trending.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="label">Trending in the news:</span>
+          {trending.map((t) => (
+            <button key={t.term} onClick={() => searchFor(t.term)} className="chip" title={`Search the archive for “${t.term}”`}>
+              {t.term}
+            </button>
+          ))}
+        </div>
       )}
 
       <div className="flex flex-wrap gap-2 items-center">
