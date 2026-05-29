@@ -97,11 +97,9 @@ export async function GET() {
     return { term: c.label, feeds: c.feeds.size, n: c.n, covered };
   });
 
-  // genuine trending = recurring across >=2 sources; top up with archive-covered
-  // single-source topics on quiet days. Archive-covered topics rank first.
-  const strict = scored.filter((s) => s.feeds >= 2);
-  const extra = scored.filter((s) => s.feeds < 2 && s.covered && s.n >= 2);
-  const data = [...strict, ...extra]
+  // genuine trending only = recurring across >=2 sources; archive-covered first
+  const data = scored
+    .filter((s) => s.feeds >= 2)
     .sort((a, b) => Number(b.covered) - Number(a.covered) || b.feeds - a.feeds || b.n - a.n)
     .slice(0, 12)
     .map((s) => ({ term: s.term, n: s.n }));
