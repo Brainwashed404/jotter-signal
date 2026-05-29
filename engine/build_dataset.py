@@ -44,11 +44,22 @@ def classify(heading):
     if "errata" in h or "this blog is also available" in h: return "skip"
     return "note"
 
+# subscribe / newsletter CTAs to strip (they sit at the end of the content)
+_CTA = [
+    re.compile(r"\bt?his\s+blog\s+is\s+(?:now\s+)?also\s+available\b.*$", re.I | re.S),
+    re.compile(r"\bif you.d (?:like|prefer) to (?:receive|get) this blog\b.*$", re.I | re.S),
+    # "why not subscribe" appears only in his newsletter CTA — cut its whole sentence to the end
+    re.compile(r"[^.?!]*\bwhy not subscribe\b.*$", re.I | re.S),
+]
+
 def clean(htmlfrag):
     t = re.sub(r"<script.*?</script>", " ", htmlfrag, flags=re.S|re.I)
     t = re.sub(r"<[^>]+>", " ", t)
     t = unescape(t)
-    return re.sub(r"\s+", " ", t).strip()
+    t = re.sub(r"\s+", " ", t).strip()
+    for rx in _CTA:
+        t = rx.sub("", t).strip()
+    return t
 
 def links_of(htmlfrag):
     out = []
@@ -59,6 +70,9 @@ def links_of(htmlfrag):
         if not dom or "naughton" in dom: continue
         if any(dom.endswith(e) for e in (".jpg",".png",".gif")): continue
         if url.lower().endswith((".jpg",".jpeg",".png",".gif")): continue
+        # drop subscribe / newsletter CTAs
+        if "subscribe" in anchor.lower() or "subscribe" in url.lower(): continue
+        if dom.endswith("follow.it") or "mailchi" in dom: continue
         out.append({"url": url, "domain": dom, "anchor": anchor[:160]})
     return out
 
