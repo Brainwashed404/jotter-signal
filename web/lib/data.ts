@@ -32,8 +32,10 @@ const STOP = new Set(["the","a","an","of","and","or","to","in","on","for","is","
 
 export function searchSignals(
   query: string,
-  opts: { type?: string; theme?: string; limit?: number } = {}
+  opts: { type?: string; theme?: string; limit?: number; offset?: number } = {}
 ): { results: Signal[]; total: number } {
+  const limit = opts.limit ?? 40;
+  const offset = opts.offset ?? 0;
   const sigs = getSignals();
   const terms = query.toLowerCase().split(/\W+/).filter((t) => t.length > 2 && !STOP.has(t));
   let pool = sigs;
@@ -42,7 +44,7 @@ export function searchSignals(
 
   if (terms.length === 0) {
     const sorted = [...pool].sort((a, b) => b.date.localeCompare(a.date));
-    return { results: sorted.slice(0, opts.limit ?? 40), total: pool.length };
+    return { results: sorted.slice(offset, offset + limit), total: pool.length };
   }
 
   const scored: { s: Signal; score: number }[] = [];
@@ -63,7 +65,7 @@ export function searchSignals(
   }
   scored.sort((a, b) => b.score - a.score || b.s.date.localeCompare(a.s.date));
   return {
-    results: scored.slice(0, opts.limit ?? 40).map((x) => x.s),
+    results: scored.slice(offset, offset + limit).map((x) => x.s),
     total: scored.length,
   };
 }
