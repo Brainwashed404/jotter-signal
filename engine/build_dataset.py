@@ -52,14 +52,32 @@ _CTA = [
     re.compile(r"[^.?!]*\bwhy not subscribe\b.*$", re.I | re.S),
 ]
 
-def clean(htmlfrag):
-    t = re.sub(r"<script.*?</script>", " ", htmlfrag, flags=re.S|re.I)
-    t = re.sub(r"<[^>]+>", " ", t)
-    t = unescape(t)
-    t = re.sub(r"\s+", " ", t).strip()
+def _strip_cta(t):
     for rx in _CTA:
         t = rx.sub("", t).strip()
     return t
+
+def clean(htmlfrag):
+    """Plain inline text — for short fields (headings, link anchors)."""
+    t = re.sub(r"<script.*?</script>", " ", htmlfrag, flags=re.S|re.I)
+    t = re.sub(r"<[^>]+>", " ", t)
+    t = unescape(t)
+    return re.sub(r"\s+", " ", t).strip()
+
+_BLOCK_END = re.compile(r"</(?:p|div|li|ul|ol|blockquote|h[1-6]|tr|figure|figcaption|section|article)\s*>", re.I)
+_BR = re.compile(r"<br\s*/?>", re.I)
+
+def clean_block(htmlfrag):
+    """Paragraph-preserving text — mirrors the original post's block structure."""
+    t = re.sub(r"<script.*?</script>", " ", htmlfrag, flags=re.S|re.I)
+    t = _BR.sub("\n", t)
+    t = _BLOCK_END.sub("\n\n", t)
+    t = re.sub(r"<[^>]+>", " ", t)
+    t = unescape(t)
+    t = re.sub(r"[ \t]+", " ", t)         # collapse spaces within a line
+    t = re.sub(r" *\n *", "\n", t)         # trim around line breaks
+    t = re.sub(r"\n{3,}", "\n\n", t)       # max one blank line between paras
+    return _strip_cta(t.strip()).strip()
 
 def links_of(htmlfrag):
     out = []
@@ -93,6 +111,12 @@ def split_sections(html):
             secs.append((clean(head), body))
     return secs
 
+def dedup_title(title, txt):
+    """Drop a leading repeat of the heading from the body text."""
+    if title and txt.lower().startswith(title.lower()):
+        return txt[len(title):].lstrip(" .,—–-:\n\t")
+    return txt
+
 def heading_title(section_type, body_html, fallback):
     m = STRONG.search(body_html)
     if m:
@@ -108,12 +132,14 @@ for r in rows:
     html = r["content"]["rendered"]
     secs = split_sections(html)
     if not secs:  # unstructured (older) post -> single note signal
-        txt = clean(html)
+        txt = clean_block(html)
         if len(txt) < 40: continue
+        heading = clean(r["title"]["rendered"]) or "Note"
+        txt = dedup_title(heading, txt)
         signals.append({
             "id": f"{pid}-0", "post_id": pid, "date": date, "year": int(date[:4]),
             "source": "John Naughton", "source_id": "naughton",
-            "type": "note", "heading": clean(r["title"]["rendered"]) or "Note",
+            "type": "note", "heading": heading,
             "text": txt[:12000], "themes": themes_of(txt), "links": links_of(html)[:8],
             "post_url": url,
         })
@@ -121,7 +147,7 @@ for r in rows:
     for i, (head, body) in enumerate(secs):
         st = classify(head)
         if st in ("skip", "music"): continue   # drop boilerplate + musical alternatives
-        txt = clean(body)
+        txt = clean_block(body)
         # drop the opening photo + caption block (image and/or short caption before any real section)
         if i == 0 and st == "note" and ("<img" in body or len(txt) < 220):
             continue
@@ -130,6 +156,7 @@ for r in rows:
         elif len(txt) < 25:
             continue
         title = head if st in ("quote","book","commonplace","linkblog","chart","feedback") else heading_title(st, body, head)
+        txt = dedup_title(title, txt)
         signals.append({
             "id": f"{pid}-{i}", "post_id": pid, "date": date, "year": int(date[:4]),
             "source": "John Naughton", "source_id": "naughton",
