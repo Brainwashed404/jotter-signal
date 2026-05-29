@@ -12,28 +12,31 @@
     "blurb": "Author and activist; writes Pluralistic on monopoly, platform power and 'enshittification' (a term he coined).",
     "url": "https://pluralistic.net",
     "feed": "https://pluralistic.net/feed/",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "wordpress"
   },
   {
     "id": "digitalnative",
     "name": "Digital Native (Rex Woodbury)",
-    "blurb": "Weekly writing about how technology and people intersect — consumer tech, culture and venture.",
+    "blurb": "Weekly writing about how technology and people intersect \u2014 consumer tech, culture and venture.",
     "url": "https://www.digitalnative.tech",
     "feed": "https://www.digitalnative.tech/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   },
   {
     "id": "jasminesun",
     "name": "Jasmine Sun",
-    "blurb": "An anthropology of disruption — essays on AI and Silicon Valley culture.",
+    "blurb": "An anthropology of disruption \u2014 essays on AI and Silicon Valley culture.",
     "url": "https://jasmi.news",
     "feed": "https://jasmi.news/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   },
   {
     "id": "goodinternet",
-    "name": "Good Internet (René Walter)",
-    "blurb": "A magazine about human–machine relations, AI and tech, entertainment, arts and culture.",
+    "name": "Good Internet (Ren\u00e9 Walter)",
+    "blurb": "A magazine about human\u2013machine relations, AI and tech, entertainment, arts and culture.",
     "url": "https://goodinter.net",
     "feed": "http://feeds.feedburner.com/NerdcoreRSS2",
     "adapter": "rss"
@@ -60,7 +63,8 @@
     "blurb": "Economics and other interesting stuff.",
     "url": "https://www.noahpinion.blog",
     "feed": "https://www.noahpinion.blog/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   },
   {
     "id": "peoplevsalgorithms",
@@ -68,15 +72,17 @@
     "blurb": "Old media is dead. Exploring the Information Space and the future of media and attention.",
     "url": "https://www.peoplevsalgorithms.com",
     "feed": "https://www.peoplevsalgorithms.com/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   },
   {
     "id": "resobscura",
     "name": "Benjamin Breen (Res Obscura)",
-    "blurb": "Notes on the history of technology, medicine, science, art, drugs and empire — and AI.",
+    "blurb": "Notes on the history of technology, medicine, science, art, drugs and empire \u2014 and AI.",
     "url": "https://resobscura.substack.com",
     "feed": "https://resobscura.substack.com/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   },
   {
     "id": "rushkoff",
@@ -84,7 +90,8 @@
     "blurb": "On sustaining our humanity in a highly digital world.",
     "url": "https://rushkoff.substack.com",
     "feed": "https://rushkoff.substack.com/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   },
   {
     "id": "zine",
@@ -92,7 +99,8 @@
     "blurb": "A cultural intelligence and sensemaking think tank, explaining the emergent.",
     "url": "https://zine.kleinkleinklein.com",
     "feed": "https://zine.kleinkleinklein.com/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   },
   {
     "id": "trendreport",
@@ -100,6 +108,7 @@
     "blurb": "A weekly look at news and trends you may have missed, with plenty of commentary.",
     "url": "https://1234kyle5678.substack.com",
     "feed": "https://1234kyle5678.substack.com/feed",
-    "adapter": "rss"
+    "adapter": "rss",
+    "backfill": "substack"
   }
 ]

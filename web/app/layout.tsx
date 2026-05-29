@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getOverview } from "@/lib/data";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Logo } from "@/components/Logo";
+import AutoRefresh from "@/components/AutoRefresh";
 import { fmtDate } from "@/lib/format";
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       </head>
       <body className="min-h-screen flex flex-col">
+        <AutoRefresh />
         <header
           className="sticky top-0 z-50 backdrop-blur"
           style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}

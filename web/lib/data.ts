@@ -10,6 +10,11 @@ const DATA_DIR = path.join(process.cwd(), "data");
 // cache across HMR reloads in dev
 const g = globalThis as unknown as { __signals?: Signal[]; __experts?: Expert[] };
 
+export function clearCache() {
+  delete g.__signals;
+  delete g.__experts;
+}
+
 export function getExperts(): Expert[] {
   if (!g.__experts) {
     g.__experts = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "experts.json"), "utf8"));

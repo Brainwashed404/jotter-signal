@@ -176,15 +176,23 @@ def build_naughton(ex):
             sigs.append(_sig(f"{pid}-{i}", pid, date, ex["name"], ex["id"], st, title, txt, imgs, links_of(body), url))
     return sigs
 
-# ---------- adapter: generic RSS (any author / Substack) ----------
+# ---------- adapter: generic RSS/Substack (any author) ----------
 def build_rss(ex):
-    raw = f"data/raw_{ex['id']}.jsonl"
-    if not os.path.exists(raw):
-        print(f"  ! {ex['id']}: no feed file {raw} (run fetch_expert.py) — skipping")
+    # merge deep archive (backfill) + recent RSS, archive first so it wins de-dupe
+    items = []
+    for fn in (f"data/archive_{ex['id']}.jsonl", f"data/raw_{ex['id']}.jsonl"):
+        if os.path.exists(fn):
+            items += [json.loads(l) for l in open(fn)]
+    if not items:
+        print(f"  ! {ex['id']}: no feed/archive file — skipping")
         return []
+    seen = set(); uniq = []
+    for it in items:
+        key = (it.get("link", "") or "").rstrip("/") or it.get("title", "")
+        if key in seen: continue
+        seen.add(key); uniq.append(it)
     sigs = []
-    for i, line in enumerate(open(raw)):
-        it = json.loads(line)
+    for i, it in enumerate(uniq):
         html = it.get("content", "") or ""
         txt = clean_block(html)
         if len(txt) < 40: continue
