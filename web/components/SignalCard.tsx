@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Signal } from "@/lib/types";
 import { TYPE_LABEL } from "@/lib/types";
 import { useSaved, toggleSave, addHighlight } from "@/lib/saved";
+import { themesFor } from "@/lib/themes";
 
 export function SignalCard({ s }: { s: Signal }) {
   const [open, setOpen] = useState(false);
@@ -43,6 +44,7 @@ export function SignalCard({ s }: { s: Signal }) {
       sourceId: s.source_id,
       postUrl: s.post_url,
       text: sel.text,
+      tags: themesFor(sel.text), // auto-tag by theme; blank if it's just a quip
     });
     setSel(null);
     window.getSelection()?.removeAllRanges();

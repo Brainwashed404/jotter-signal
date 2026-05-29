@@ -79,10 +79,12 @@ export type Highlight = {
 type HiStore = Record<string, Highlight>;
 const KEY_HI = "jotter.highlights.v1";
 
-export function addHighlight(h: Omit<Highlight, "id" | "note" | "tags" | "createdAt">) {
+export function addHighlight(
+  h: Omit<Highlight, "id" | "note" | "tags" | "createdAt"> & { tags?: string[] }
+) {
   const store = readKey<HiStore>(KEY_HI, {});
   const id = `${h.signalId}-${Date.now()}`;
-  store[id] = { ...h, id, note: "", tags: [], createdAt: Date.now() };
+  store[id] = { ...h, id, note: "", tags: h.tags ?? [], createdAt: Date.now() };
   writeKey(KEY_HI, store);
   return id;
 }
