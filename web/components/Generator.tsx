@@ -89,7 +89,7 @@ export default function Generator() {
           </div>
         </div>
         <div>
-          <div className="label mb-2">Shape the pack for…</div>
+          <div className="label mb-2">Shape the report for…</div>
           <div className="space-y-2">
             {FORMATS.map((f) => (
               <button
@@ -105,7 +105,7 @@ export default function Generator() {
           </div>
         </div>
         <button className="btn w-full" onClick={go} disabled={loading || !topic}>
-          {loading ? "Compiling…" : "Build research pack"}
+          {loading ? "Compiling…" : "Build research report"}
         </button>
       </div>
 
@@ -114,7 +114,7 @@ export default function Generator() {
           <div className="h-full grid place-items-center text-center" style={{ color: "var(--muted)" }}>
             <div>
               <div className="text-4xl mb-3">◭</div>
-              <p>Pick a topic.<br />Jotter Signal compiles a clean, sourced research pack from the archive —<br />ready to download and write from.</p>
+              <p>Pick a topic.<br />Jotter Intelligence compiles a clean, sourced research report from the archive —<br />ready to download and write from.</p>
             </div>
           </div>
         )}
@@ -124,7 +124,7 @@ export default function Generator() {
             {meta && (
               <div className="flex items-center gap-2 mb-4 pb-4" style={{ borderBottom: "1px solid var(--border)" }}>
                 <span className="chip" style={{ color: "var(--accent)" }}>
-                  {meta.mode === "ai" ? "● AI-written" : "● research pack"}
+                  {meta.mode === "ai" ? "● AI-written" : "● research report"}
                 </span>
                 <span className="label">{meta.count} signals · cited & dated</span>
                 <div className="ml-auto flex gap-2">

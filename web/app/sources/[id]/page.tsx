@@ -24,7 +24,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
   return (
     <div className="space-y-10">
       <div>
-        <Link href="/sources" className="label hover:underline">← all sensors</Link>
+        <Link href="/sources" className="label hover:underline">← all experts</Link>
         <h1 className="text-3xl font-semibold tracking-tight mt-2">{author.name}</h1>
         <p className="mt-2 max-w-2xl" style={{ color: "var(--muted)" }}>{author.blurb}</p>
         <a href={author.url} target="_blank" rel="noopener" className="text-sm" style={{ color: "var(--accent-2)" }}>

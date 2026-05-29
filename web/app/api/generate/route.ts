@@ -35,9 +35,9 @@ function buildPack(topic: string, format: string, sigs: Signal[]): string {
   const books = sigs.filter((s) => s.type === "book");
 
   const L: string[] = [];
-  L.push(`# Research Pack — ${topic}`);
+  L.push(`# Research Report — ${topic}`);
   L.push("");
-  L.push(`*Compiled by Jotter Signal · ${today} · ${sigs.length} signals · sensor: John Naughton (Memex 1.1)*`);
+  L.push(`*Compiled by Jotter Intelligence · ${today} · ${sigs.length} signals · expert: John Naughton (Memex 1.1)*`);
   L.push(`*Intended output: ${FORMAT_LABEL[format] ?? "Foresight brief"}*`);
   L.push("");
   L.push("---");
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
   const sigs = retrieve(topic);
   const key = process.env.ANTHROPIC_API_KEY;
 
-  // Default: clean research pack to finish elsewhere (no AI / no paid API).
+  // Default: clean research report to finish elsewhere (no AI / no paid API).
   if (!key) {
     return NextResponse.json({
       markdown: buildPack(topic, format, sigs),

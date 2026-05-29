@@ -1,12 +1,12 @@
-# Jotter Signal — Foresight Engine
+# Jotter Intelligence — Foresight Engine
 
 Turning the world's sharpest minds into thought leadership, insight and foresight.
 
-A foresight engine that ingests curated thinkers ("sensors"), atomises what they
+A foresight engine that ingests curated thinkers ("experts"), atomises what they
 surface into time-stamped **signals**, detects patterns across them (**insights**),
 and generates client-ready **foresight**.
 
-**Sensor #1:** John Naughton — *Memex 1.1* (13,056 posts, 2002–2026).
+**Expert #1:** John Naughton — *Memex 1.1* (13,056 posts, 2002–2026).
 
 ## Architecture
 
@@ -19,16 +19,17 @@ engine/   Python pipeline: scrape → atomise → enrich → build dataset
   data/             raw scrape (git-ignored)
 
 web/      Next.js 16 app — the product
-  app/              Radar (/) · Workbench (/search) · Generator (/generate) · Sensors (/sources)
+  app/              Latest (/) · Search (/search) · Reports (/generate) · Experts (/sources)
   lib/data.ts       loads signals + search
   data/             radar.json (committed) · signals.jsonl (git-ignored, regenerate)
 ```
 
-### The four surfaces
-- **Radar** — theme momentum across 24 years + the information-diet shift.
-- **Workbench** — search every atom, filter by type/theme, cited to source.
-- **Generator** — produce a foresight brief / POV / trend cards, grounded & cited.
-- **Sensors** — manage curated minds (more sensors = stronger corroboration signal).
+### The surfaces
+- **Latest** — reverse-chron reading feed of what experts are surfacing.
+- **Search** — search every atom, filter by type/theme/year, sort by date, cited to source.
+- **Reports** — produce a grounded, cited research report (brief / POV / trend cards).
+- **Experts** — manage curated minds; each profile shows theme momentum + information diet.
+- **Saved** — pinned entries and highlighted excerpts with annotations.
 
 ## Run locally
 
@@ -44,17 +45,17 @@ npm install
 npm run dev                  # http://localhost:3000
 ```
 
-### Enable LLM synthesis (Generator)
+### Enable LLM synthesis (Reports)
 Create `web/.env.local`:
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 ```
-Without a key the Generator returns a grounded *evidence pack*; with one it
-synthesises the finished artifact with **Claude Opus 4.8**, fully cited.
+Without a key Reports returns a grounded *research report* (evidence compiled from
+the archive); with one it synthesises the finished artifact with **Claude Opus 4.8**, fully cited.
 
 ## Roadmap
-- Add more sensors (RSS-based ingestion) → cross-source **convergence** detection
+- Add more experts (RSS-based ingestion) → cross-source **convergence** detection
 - Scheduled ingestion for near-real-time trend tracking
-- Semantic (vector) search + RAG chat on the Workbench
+- Semantic (vector) search + RAG chat on Search
 - Weekly "Signals → Insights" digest
 - Deploy to jotter.media

@@ -23,11 +23,11 @@ export default async function SearchPage({
   return (
     <div className="space-y-6">
       <div>
-        <div className="label">Workbench</div>
+        <div className="label">Search</div>
         <h1 className="text-3xl font-semibold tracking-tight mt-1">Interrogate the signal</h1>
         <p className="mt-2 max-w-2xl" style={{ color: "var(--muted)" }}>
-          Search every atom your sensors have surfaced. Filter by type or theme. Each result is
-          cited back to the original post.
+          Search every atom your experts have surfaced. Filter by type, theme or year, and sort by
+          date. Each result is cited back to the original post.
         </p>
       </div>
       <SignalList

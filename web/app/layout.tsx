@@ -7,15 +7,15 @@ import "./globals.css";
 const THEME_INIT = `try{if(localStorage.getItem('jotter.theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}`;
 
 export const metadata: Metadata = {
-  title: "Jotter Signal — Foresight Engine",
+  title: "Jotter Intelligence — Foresight Engine",
   description: "Turning the world's sharpest minds into thought leadership.",
 };
 
 const NAV = [
   { href: "/", label: "Latest" },
-  { href: "/search", label: "Workbench" },
-  { href: "/generate", label: "Generator" },
-  { href: "/sources", label: "Sensors" },
+  { href: "/search", label: "Search" },
+  { href: "/generate", label: "Reports" },
+  { href: "/sources", label: "Experts" },
   { href: "/saved", label: "Saved" },
 ];
 
@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="flex items-center gap-2">
               <span className="text-lg" style={{ color: "var(--accent)" }}>◭</span>
               <span className="font-semibold tracking-tight">Jotter</span>
-              <span className="mono text-xs" style={{ color: "var(--muted)" }}>SIGNAL</span>
+              <span className="mono text-xs" style={{ color: "var(--muted)" }}>INTELLIGENCE</span>
             </Link>
             <nav className="flex items-center gap-1">
               {NAV.map((n) => (
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           style={{ color: "var(--muted)", borderTop: "1px solid var(--border)" }}
         >
           {r.totals.signals.toLocaleString()} signals · {r.totals.posts.toLocaleString()} posts ·{" "}
-          {r.totals.date_min} → {r.totals.date_max} · 1 sensor active
+          {r.totals.date_min} → {r.totals.date_max} · 1 expert active
         </footer>
       </body>
     </html>

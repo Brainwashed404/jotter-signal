@@ -19,8 +19,8 @@ export default function HomePage() {
         <div className="label">Latest signal</div>
         <h1 className="text-3xl font-semibold tracking-tight mt-1">What he's surfacing</h1>
         <p className="mt-2 max-w-2xl" style={{ color: "var(--muted)" }}>
-          The most recent things your sensors flagged — read in full, right here, and scroll back
-          through the whole archive. Pin anything worth keeping with ★. Currently 1 sensor:{" "}
+          The most recent things your experts flagged — read in full, right here, and scroll back
+          through the whole archive. Pin anything worth keeping with ★. Currently 1 expert:{" "}
           <a href="/sources/naughton" className="hover:underline" style={{ color: "var(--accent-2)" }}>
             John Naughton
           </a>
@@ -29,7 +29,7 @@ export default function HomePage() {
       </section>
       <SignalList tabs={TABS} showSort={false} />
       <p className="label text-center pt-2">
-        {r.totals.signals.toLocaleString()} signals total · search everything in the Workbench
+        {r.totals.signals.toLocaleString()} signals total · search the full archive under Search
       </p>
     </div>
   );

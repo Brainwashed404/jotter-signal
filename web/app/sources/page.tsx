@@ -14,10 +14,10 @@ export default function SourcesPage() {
   return (
     <div className="space-y-8">
       <div>
-        <div className="label">Sensors</div>
+        <div className="label">Experts</div>
         <h1 className="text-3xl font-semibold tracking-tight mt-1">Your curated minds</h1>
         <p className="mt-2 max-w-2xl" style={{ color: "var(--muted)" }}>
-          Each sensor is a trusted thinker whose stream is atomised into signals. Click in to see
+          Each expert is a trusted thinker whose stream is atomised into signals. Click in to see
           how they&apos;ve covered themes across their writing life, and their information diet.
         </p>
       </div>
@@ -41,7 +41,7 @@ export default function SourcesPage() {
       </Link>
 
       <div>
-        <h2 className="text-lg font-medium mb-3">Planned sensors</h2>
+        <h2 className="text-lg font-medium mb-3">Planned experts</h2>
         <div className="grid sm:grid-cols-2 gap-3">
           {PLANNED.map((p) => (
             <div key={p} className="panel p-4 flex items-center justify-between" style={{ opacity: 0.7 }}>
