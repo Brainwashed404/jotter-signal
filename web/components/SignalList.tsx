@@ -16,6 +16,7 @@ export default function SignalList({
   availableYears = [],
   initialQuery = "",
   initialType = "",
+  initialTheme = "",
 }: {
   tabs: Tab[];
   themes?: string[];
@@ -26,10 +27,11 @@ export default function SignalList({
   availableYears?: number[];
   initialQuery?: string;
   initialType?: string;
+  initialTheme?: string;
 }) {
   const [input, setInput] = useState(initialQuery);
   const [type, setType] = useState(initialType);
-  const [theme, setTheme] = useState("");
+  const [theme, setTheme] = useState(initialTheme);
   const [sort, setSort] = useState<Sort>(initialQuery ? "relevance" : "newest");
   const [years, setYears] = useState<number[]>([]);
   const [yearsOpen, setYearsOpen] = useState(false);

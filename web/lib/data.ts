@@ -88,6 +88,48 @@ export function recentSignals(type: string, limit = 12): Signal[] {
     .slice(0, limit);
 }
 
+export type WeeklySummary = {
+  from: string;
+  to: string;
+  days: number;
+  count: number;
+  themes: { theme: string; n: number }[];
+  longreads: { heading: string; date: string; post_url: string }[];
+  domains: { domain: string; n: number }[];
+};
+
+// Automated rolling summary of the most recent `days` of signals.
+export function weeklySummary(days = 7): WeeklySummary {
+  const sigs = getSignals();
+  const to = sigs.reduce((m, s) => (s.date > m ? s.date : m), "").slice(0, 10);
+  const d = new Date(to + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() - days);
+  const from = d.toISOString().slice(0, 10);
+
+  const inWin = sigs.filter((s) => {
+    const day = s.date.slice(0, 10);
+    return day >= from && day <= to;
+  });
+
+  const tc = new Map<string, number>();
+  for (const s of inWin) for (const t of s.themes) tc.set(t, (tc.get(t) ?? 0) + 1);
+  const themes = [...tc.entries()].map(([theme, n]) => ({ theme, n })).sort((a, b) => b.n - a.n);
+
+  const dc = new Map<string, number>();
+  for (const s of inWin) for (const l of s.links) dc.set(l.domain, (dc.get(l.domain) ?? 0) + 1);
+  const domains = [...dc.entries()]
+    .filter(([dm]) => !["youtube.com", "youtu.be", "amzn.to", "en.wikipedia.org"].includes(dm))
+    .map(([domain, n]) => ({ domain, n }))
+    .sort((a, b) => b.n - a.n);
+
+  const longreads = inWin
+    .filter((s) => s.type === "longread")
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .map((s) => ({ heading: s.heading, date: s.date.slice(0, 10), post_url: s.post_url }));
+
+  return { from, to, days, count: inWin.length, themes, longreads, domains };
+}
+
 // Reading feed: most recent meaningful signals, optionally filtered by type.
 export function latestFeed(opts: { type?: string; limit?: number } = {}): Signal[] {
   const limit = opts.limit ?? 40;

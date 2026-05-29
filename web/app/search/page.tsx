@@ -16,7 +16,7 @@ const TABS: Tab[] = [
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; type?: string }>;
+  searchParams: Promise<{ q?: string; type?: string; theme?: string }>;
 }) {
   const sp = await searchParams;
   const radar = getRadar();
@@ -42,6 +42,7 @@ export default async function SearchPage({
         showYears
         initialQuery={sp.q ?? ""}
         initialType={sp.type ?? ""}
+        initialTheme={sp.theme ?? ""}
       />
     </div>
   );
