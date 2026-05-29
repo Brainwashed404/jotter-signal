@@ -3,18 +3,20 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import type { Signal } from "@/lib/types";
 import { SignalCard } from "@/components/SignalCard";
 
-const TYPES = ["", "longread", "quote", "commonplace", "book", "linkblog", "note"];
-const TYPE_LABEL: Record<string, string> = {
-  "": "All", longread: "Long Reads", quote: "Quotes", commonplace: "Commonplace",
-  book: "Books", linkblog: "Linkblog", note: "Notes",
-};
+export type Tab = { id: string; label: string };
 
-export default function Workbench({
-  themes,
+export default function SignalList({
+  tabs,
+  themes = [],
+  showSearch = false,
+  showThemes = false,
   initialQuery = "",
   initialType = "",
 }: {
-  themes: string[];
+  tabs: Tab[];
+  themes?: string[];
+  showSearch?: boolean;
+  showThemes?: boolean;
   initialQuery?: string;
   initialType?: string;
 }) {
@@ -25,7 +27,6 @@ export default function Workbench({
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  // refs read by the stable fetcher (avoids stale closures in the observer)
   const committedRef = useRef(initialQuery);
   const typeRef = useRef(type); typeRef.current = type;
   const themeRef = useRef(theme); themeRef.current = theme;
@@ -36,7 +37,7 @@ export default function Workbench({
 
   const fetchPage = useCallback(async (reset: boolean) => {
     if (loadingRef.current) return;
-    if (!reset && offsetRef.current >= totalRef.current) return; // nothing more
+    if (!reset && offsetRef.current >= totalRef.current) return;
     loadingRef.current = true;
     setLoading(true);
     const offset = reset ? 0 : offsetRef.current;
@@ -55,10 +56,8 @@ export default function Workbench({
     loadingRef.current = false;
   }, []);
 
-  // reload from the top when filters change (and on mount)
   useEffect(() => { fetchPage(true); }, [type, theme, fetchPage]);
 
-  // infinite scroll
   useEffect(() => {
     const el = sentinel.current;
     if (!el) return;
@@ -79,36 +78,40 @@ export default function Workbench({
   const hasMore = results.length < total;
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={submit} className="flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Search the signal — e.g. AI bubble, surveillance capitalism, democratic backsliding…"
-          className="flex-1 px-4 py-3 text-sm"
-        />
-        <button className="btn" type="submit">Search</button>
-      </form>
+    <div className="space-y-5">
+      {showSearch && (
+        <form onSubmit={submit} className="flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Search the signal — e.g. AI bubble, surveillance capitalism, democratic backsliding…"
+            className="flex-1 px-4 py-3 text-sm"
+          />
+          <button className="btn" type="submit">Search</button>
+        </form>
+      )}
 
       <div className="flex flex-wrap gap-2 items-center">
-        {TYPES.map((t) => (
+        {tabs.map((t) => (
           <button
-            key={t}
-            onClick={() => setType(t)}
+            key={t.id}
+            onClick={() => setType(t.id)}
             className="chip"
-            style={type === t ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
+            style={type === t.id ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
           >
-            {TYPE_LABEL[t]}
+            {t.label}
           </button>
         ))}
-        <select value={theme} onChange={(e) => setTheme(e.target.value)} className="text-xs px-2 py-1.5 ml-auto">
-          <option value="">All themes</option>
-          {themes.map((t) => <option key={t} value={t}>{t}</option>)}
-        </select>
+        {showThemes && (
+          <select value={theme} onChange={(e) => setTheme(e.target.value)} className="text-xs px-2 py-1.5 ml-auto">
+            <option value="">All themes</option>
+            {themes.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        )}
       </div>
 
       <div className="label">
-        {total.toLocaleString()} matching signals · showing {results.length.toLocaleString()}
+        {total.toLocaleString()} signals · showing {results.length.toLocaleString()}
       </div>
 
       <div className="grid md:grid-cols-2 gap-3">

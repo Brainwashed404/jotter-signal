@@ -1,5 +1,15 @@
 import { getRadar } from "@/lib/data";
-import Workbench from "@/components/Workbench";
+import SignalList, { type Tab } from "@/components/SignalList";
+
+const TABS: Tab[] = [
+  { id: "", label: "All" },
+  { id: "longread", label: "Long Reads" },
+  { id: "quote", label: "Quotes" },
+  { id: "commonplace", label: "Commonplace" },
+  { id: "book", label: "Books" },
+  { id: "linkblog", label: "Linkblog" },
+  { id: "note", label: "Notes" },
+];
 
 export default async function SearchPage({
   searchParams,
@@ -18,7 +28,14 @@ export default async function SearchPage({
           cited back to the original post.
         </p>
       </div>
-      <Workbench themes={themes} initialQuery={sp.q ?? ""} initialType={sp.type ?? ""} />
+      <SignalList
+        tabs={TABS}
+        themes={themes}
+        showSearch
+        showThemes
+        initialQuery={sp.q ?? ""}
+        initialType={sp.type ?? ""}
+      />
     </div>
   );
 }
