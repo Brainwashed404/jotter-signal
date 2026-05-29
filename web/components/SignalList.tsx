@@ -32,6 +32,7 @@ export default function SignalList({
   const [theme, setTheme] = useState("");
   const [sort, setSort] = useState<Sort>(initialQuery ? "relevance" : "newest");
   const [years, setYears] = useState<number[]>([]);
+  const [yearsOpen, setYearsOpen] = useState(false);
   const [results, setResults] = useState<Signal[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -128,6 +129,12 @@ export default function SignalList({
               {themes.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           )}
+          {showYears && availableYears.length > 0 && (
+            <button onClick={() => setYearsOpen((o) => !o)} className="btn-ghost text-xs"
+              style={years.length ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
+              {years.length ? `Years (${years.length})` : "Select years"} {yearsOpen ? "▲" : "▼"}
+            </button>
+          )}
           {showSort && (
             <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="text-xs px-2 py-1.5">
               <option value="newest">Newest first</option>
@@ -138,8 +145,8 @@ export default function SignalList({
         </div>
       </div>
 
-      {showYears && availableYears.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 items-center">
+      {showYears && yearsOpen && availableYears.length > 0 && (
+        <div className="panel p-3 flex flex-wrap gap-1.5 items-center">
           <button
             onClick={() => setYears([])}
             className="chip"
@@ -157,9 +164,6 @@ export default function SignalList({
               {y}
             </button>
           ))}
-          {years.length > 0 && (
-            <span className="label">{years.length} year{years.length > 1 ? "s" : ""} selected</span>
-          )}
         </div>
       )}
 
