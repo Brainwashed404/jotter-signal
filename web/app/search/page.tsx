@@ -8,7 +8,9 @@ const TABS: Tab[] = [
   { id: "commonplace", label: "Commonplace" },
   { id: "book", label: "Books" },
   { id: "linkblog", label: "Linkblog" },
+  { id: "chart", label: "Charts" },
   { id: "note", label: "Notes" },
+  { id: "feedback", label: "Feedback" },
 ];
 
 export default async function SearchPage({

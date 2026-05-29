@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getRadar } from "@/lib/data";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Logo } from "@/components/Logo";
 import "./globals.css";
 
 const THEME_INIT = `try{if(localStorage.getItem('jotter.theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}`;
@@ -33,9 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <div className="mx-auto max-w-6xl px-5 h-14 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-lg" style={{ color: "var(--accent)" }}>◭</span>
+              <Logo size={26} />
               <span className="font-semibold tracking-tight">Jotter</span>
-              <span className="mono text-xs" style={{ color: "var(--muted)" }}>INTELLIGENCE</span>
+              <span className="font-semibold tracking-tight" style={{ color: "var(--muted)" }}>Intelligence</span>
             </Link>
             <nav className="flex items-center gap-1">
               {NAV.map((n) => (

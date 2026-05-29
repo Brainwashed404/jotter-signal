@@ -39,10 +39,10 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
             <div className="label">posts</div>
           </div>
           {types.map(([t, n]) => (
-            <div key={t} className="panel p-3 text-center">
+            <Link key={t} href={`/search?type=${t}`} className="panel panel-hover p-3 text-center block">
               <div className="text-lg font-semibold">{n.toLocaleString()}</div>
               <div className="label">{TYPE_LABEL[t] ?? t}</div>
-            </div>
+            </Link>
           ))}
         </div>
         <div className="label mt-3">{r.totals.date_min} → {r.totals.date_max}</div>
