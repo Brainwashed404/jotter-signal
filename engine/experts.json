@@ -113,5 +113,63 @@
     "adapter": "rss",
     "backfill": "wordpress",
     "cap": 1500
+  },
+  {
+    "id": "semafor",
+    "name": "Semafor Technology",
+    "blurb": "Semafor's technology coverage \u2014 AI, platforms and the business of tech.",
+    "url": "https://www.semafor.com/vertical/tech",
+    "feed": "https://www.semafor.com/rss.xml",
+    "adapter": "rss",
+    "category": "Technology"
+  },
+  {
+    "id": "theoverspill",
+    "name": "Charles Arthur (The Overspill)",
+    "blurb": "Daily 'Start Up' roundup of the most important tech links and commentary, from the ex-Guardian technology editor.",
+    "url": "https://theoverspill.blog",
+    "feed": "https://theoverspill.blog/feed/",
+    "adapter": "rss",
+    "backfill": "wpcom",
+    "wpcom": "theoverspill.blog",
+    "cap": 800
+  },
+  {
+    "id": "neural",
+    "name": "Neural",
+    "blurb": "New media art, electronic music and hacktivism \u2014 a critical magazine running since 1993.",
+    "url": "https://neural.it",
+    "feed": "https://neural.it/feed/",
+    "adapter": "rss"
+  },
+  {
+    "id": "enlightenmentecon",
+    "name": "Diane Coyle (Enlightenment Economics)",
+    "blurb": "The economics of technology, productivity, measurement and the digital economy.",
+    "url": "http://www.enlightenmenteconomics.com",
+    "feed": "http://www.enlightenmenteconomics.com/blog/feed/",
+    "adapter": "rss",
+    "backfill": "wordpress",
+    "cap": 600
+  },
+  {
+    "id": "booktwo",
+    "name": "James Bridle (booktwo)",
+    "blurb": "Artist and writer on technology, intelligence and the more-than-human (New Dark Age, Ways of Being).",
+    "url": "https://booktwo.org",
+    "feed": "https://booktwo.org/feed/",
+    "adapter": "rss",
+    "backfill": "wordpress",
+    "cap": 900
+  },
+  {
+    "id": "netwars",
+    "name": "Wendy M. Grossman (net.wars)",
+    "blurb": "Weekly column on the borders between cyberspace and real life \u2014 privacy, rights and tech policy.",
+    "url": "https://netwars.pelicancrossing.net",
+    "feed": "https://netwars.pelicancrossing.net/feed/",
+    "adapter": "rss",
+    "backfill": "wordpress",
+    "cap": 400
   }
 ]

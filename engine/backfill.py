@@ -119,6 +119,29 @@ def backfill_protein(ex):
             print(f"  …{i + 1}/{len(slugs)}")
     return out
 
+def backfill_wpcom(ex):
+    """WordPress.com-hosted sites (own REST disabled) via the public API."""
+    site = ex["wpcom"]
+    cap = ex.get("cap", WP_CAP)
+    out, page = [], 1
+    while len(out) < cap:
+        url = f"https://public-api.wordpress.com/wp/v2/sites/{site}/posts?per_page=100&page={page}&_fields=date,link,title,content"
+        try:
+            batch = json.loads(get(url))
+        except urllib.error.HTTPError as e:
+            if e.code in (400, 403):
+                break
+            raise
+        if not batch:
+            break
+        for r in batch:
+            out.append({"title": r["title"]["rendered"], "link": r["link"],
+                        "date": r["date"], "content": r["content"]["rendered"], "categories": []})
+        print(f"  …page {page} ({len(out)})")
+        page += 1
+        time.sleep(0.3)
+    return out[:cap]
+
 def main():
     experts = json.load(open("experts.json"))
     want = sys.argv[1] if len(sys.argv) > 1 else None
@@ -129,6 +152,7 @@ def main():
         print(f"backfilling {ex['id']} ({bf})…")
         items = (backfill_substack(ex) if bf == "substack"
                  else backfill_wordpress(ex) if bf == "wordpress"
+                 else backfill_wpcom(ex) if bf == "wpcom"
                  else backfill_protein(ex) if bf == "protein"
                  else [])
         out = f"data/archive_{ex['id']}.jsonl"

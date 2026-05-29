@@ -204,6 +204,10 @@ def build_rss(ex):
     if not items:
         print(f"  ! {ex['id']}: no feed/archive file — skipping")
         return []
+    # optional category filter (e.g. Semafor -> Technology vertical only)
+    catwant = (ex.get("category") or "").lower()
+    if catwant:
+        items = [it for it in items if any(catwant in (c or "").lower() for c in it.get("categories", []))]
     seen = set(); uniq = []
     for it in items:
         key = (it.get("link", "") or "").rstrip("/") or it.get("title", "")
