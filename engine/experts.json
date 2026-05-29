@@ -42,14 +42,6 @@
     "adapter": "rss"
   },
   {
-    "id": "mckinsey",
-    "name": "McKinsey Insights",
-    "blurb": "McKinsey insights and publications on business, the economy, management and technology.",
-    "url": "https://www.mckinsey.com",
-    "feed": "http://www.mckinsey.com/Insights/rss.aspx",
-    "adapter": "rss"
-  },
-  {
     "id": "noahpinion",
     "name": "Noah Smith (Noahpinion)",
     "blurb": "Economics and other interesting stuff.",
