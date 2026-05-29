@@ -57,8 +57,9 @@ def backfill_substack(ex):
 
 def backfill_wordpress(ex):
     base = ex.get("wp", ex["url"].rstrip("/"))
+    cap = ex.get("cap", WP_CAP)
     out, page = [], 1
-    while len(out) < WP_CAP:
+    while len(out) < cap:
         url = f"{base}/wp-json/wp/v2/posts?per_page=100&page={page}&_fields=date,link,title,content"
         try:
             batch = json.loads(get(url))
@@ -74,7 +75,7 @@ def backfill_wordpress(ex):
         print(f"  …page {page} ({len(out)})")
         page += 1
         time.sleep(0.3)
-    return out[:WP_CAP]
+    return out[:cap]
 
 import re as _re
 def backfill_protein(ex):

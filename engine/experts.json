@@ -103,5 +103,15 @@
     "feed": "https://www.protein.xyz/tag/seeds/feed/",
     "adapter": "rss",
     "backfill": "protein"
+  },
+  {
+    "id": "futurism",
+    "name": "Futurism",
+    "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
+    "url": "https://futurism.com",
+    "feed": "https://futurism.com/feed",
+    "adapter": "rss",
+    "backfill": "wordpress",
+    "cap": 1500
   }
 ]
