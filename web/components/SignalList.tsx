@@ -46,7 +46,7 @@ export default function SignalList({
   const [results, setResults] = useState<Signal[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [trending, setTrending] = useState<{ term: string; n: number }[]>([]);
+  const [trending, setTrending] = useState<{ title: string; url: string; source: string; term: string }[]>([]);
 
   const committedRef = useRef(initialQuery);
   const typeRef = useRef(type); typeRef.current = type;
@@ -141,13 +141,23 @@ export default function SignalList({
       )}
 
       {showSearch && trending.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="label">Trending in the news:</span>
-          {trending.map((t) => (
-            <button key={t.term} onClick={() => searchFor(t.term)} className="chip" title={`Search the archive for “${t.term}”`}>
-              {t.term}
-            </button>
-          ))}
+        <div className="panel p-4">
+          <div className="label mb-2">In the news now · click ↳ to see what your experts have said</div>
+          <ul className="space-y-1.5">
+            {trending.map((t, i) => (
+              <li key={i} className="flex items-baseline gap-2 text-sm">
+                <a href={t.url} target="_blank" rel="noopener" className="flex-1 hover:underline truncate">{t.title}</a>
+                <span className="label shrink-0">{t.source}</span>
+                <button
+                  onClick={() => searchFor(t.term)}
+                  className="chip shrink-0"
+                  title={`Search the archive for “${t.term}”`}
+                >
+                  ↳ {t.term.length > 22 ? t.term.slice(0, 22) + "…" : t.term}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 

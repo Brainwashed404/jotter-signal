@@ -1,109 +1,96 @@
 import { NextResponse } from "next/server";
-import { getSignals } from "@/lib/data";
 
-// Domain-relevant news feeds (tech / media / culture) — not general world news.
-const FEEDS = [
-  "https://feeds.bbci.co.uk/news/technology/rss.xml",
-  "https://www.theguardian.com/technology/rss",
-  "https://www.theguardian.com/media/rss",
-  "https://www.wired.com/feed/rss",
-  "https://techcrunch.com/feed/",
-  "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
-  "https://www.theverge.com/rss/index.xml",
+// Current tech / media / culture headlines — the actual stories in the news now.
+const FEEDS: { url: string; source: string }[] = [
+  { url: "https://www.theverge.com/rss/index.xml", source: "The Verge" },
+  { url: "https://techcrunch.com/feed/", source: "TechCrunch" },
+  { url: "https://www.theguardian.com/technology/rss", source: "Guardian" },
+  { url: "https://www.wired.com/feed/rss", source: "WIRED" },
+  { url: "https://feeds.bbci.co.uk/news/technology/rss.xml", source: "BBC" },
+  { url: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", source: "NYT" },
 ];
 
 const STOP = new Set([
-  // headline glue
   "The", "A", "An", "How", "Why", "What", "When", "Who", "Where", "New", "This", "That",
-  "Live", "Watch", "Video", "Opinion", "Analysis", "Could", "Will", "Has", "Have", "Is",
-  "Are", "Be", "To", "In", "On", "Of", "For", "And", "But", "After", "Before", "Says",
-  "Mr", "Ms", "Mrs", "Dr", "My", "Your", "It", "We", "They", "Best", "First", "Review",
-  "Here", "These", "Now", "More", "Most", "One", "Two", "Three", "Inside", "Meet", "Can",
-  // months
-  "January", "February", "March", "April", "May", "June", "July", "August", "September",
-  "October", "November", "December", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-  // generic tech / news nouns
-  "Tech", "Technology", "Future", "Internet", "Online", "Digital", "Data", "App", "Apps",
-  "Web", "Software", "Hardware", "Update", "Guide", "News", "Report", "Story", "Week", "Day",
-  "Year", "Today", "World", "People", "Company", "Companies", "Startup", "Startups",
-  "Driving", "Call", "Duty", "Game", "Games", "Show", "Series", "Season", "Deal", "Deals",
-  "Sale", "Top", "Tips", "Things", "Way", "Ways", "Time", "Times", "Life", "Work",
-  // publications
-  "Guardian", "BBC", "Wired", "Verge", "NYT", "Post", "Reuters", "CNN", "TechCrunch", "Observer",
+  "Live", "Watch", "Could", "Will", "Has", "Have", "Is", "Are", "To", "In", "On", "Of",
+  "For", "And", "But", "After", "Before", "Says", "My", "Your", "It", "We", "They", "Best",
+  "First", "Here", "These", "Now", "More", "Most", "Inside", "Meet", "Can", "Review",
+  "Tech", "Asked", "So", "Hands-On", "With", "Best", "Gave",
 ]);
-const NOISE = new Set(["tech life", "tech now", "newscast", "the papers", "us", "uk"]);
 
-type Cache = { at: number; data: { term: string; n: number }[] };
-const g = globalThis as unknown as { __trending?: Cache; __headblob?: string };
+type NewsItem = { title: string; url: string; source: string; term: string; date: string };
+type Cache = { at: number; data: NewsItem[] };
+const g = globalThis as unknown as { __news?: Cache };
 const TTL = 30 * 60 * 1000;
 
-function titles(xml: string): string[] {
-  // works for RSS <item> and Atom <entry>; drop the first <title> (publication name)
-  const all = [...xml.matchAll(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/g)].map((m) =>
-    m[1].replace(/&amp;/g, "&").replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"').trim()
-  );
-  return all.slice(1);
+function decode(s: string) {
+  return s.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"').replace(/&#8217;|&#x2019;/g, "’").replace(/&[a-z]+;/g, " ").trim();
 }
 
-function entities(title: string): string[] {
-  const found = title.match(/\b([A-Z][a-zA-Z0-9.&'’-]+(?:\s+[A-Z][a-zA-Z0-9.&'’-]+){0,3})\b/g) || [];
-  const out: string[] = [];
-  for (let p of found) {
-    const words = p.split(/\s+/).filter((w) => !STOP.has(w));
-    if (!words.length) continue;
-    p = words.join(" ");
-    if (p.length < 3) continue;
-    if (words.length === 1 && p.length < 4 && !["AI", "EU"].includes(p)) continue;
-    out.push(p);
+// salient search phrase from a headline: first proper-noun phrase, else key words
+function termOf(title: string): string {
+  const strip = (s: string) => s.replace(/[’']s$/i, "").trim();
+  const ent = title.match(/\b[A-Z][a-zA-Z0-9.&'’-]+(?:\s+[A-Z][a-zA-Z0-9.&'’-]+){0,3}\b/g) || [];
+  for (const e of ent) {
+    const words = e.split(/\s+/).filter((w) => !STOP.has(w));
+    const phrase = strip(words.join(" "));
+    if (phrase.length > 3) return phrase;
+  }
+  return strip(title.split(/\s+/).filter((w) => w.length > 3 && !STOP.has(w)).slice(0, 3).join(" "));
+}
+
+function parse(xml: string, source: string): NewsItem[] {
+  const blocks = xml.split(/<(?:item|entry)[\s>]/i).slice(1);
+  const out: NewsItem[] = [];
+  for (const b of blocks) {
+    const tm = b.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+    if (!tm) continue;
+    const title = decode(tm[1]);
+    if (title.length < 12) continue;
+    // link: RSS <link>url</link> or Atom <link href="url"/>
+    let url = "";
+    const linkText = b.match(/<link>([\s\S]*?)<\/link>/i);
+    const linkHref = b.match(/<link[^>]*href="([^"]+)"/i);
+    url = (linkText && linkText[1].trim()) || (linkHref && linkHref[1]) || "";
+    const dm = b.match(/<(?:pubDate|published|updated|dc:date)>([\s\S]*?)<\/(?:pubDate|published|updated|dc:date)>/i);
+    const date = dm ? dm[1].trim() : "";
+    out.push({ title, url, source, term: termOf(title), date });
   }
   return out;
 }
 
-function headBlob(): string {
-  if (!g.__headblob) {
-    g.__headblob = getSignals().map((s) => s.heading).join(" \n ").toLowerCase();
-  }
-  return g.__headblob;
-}
-
 export async function GET() {
-  if (g.__trending && Date.now() - g.__trending.at < TTL) {
-    return NextResponse.json({ topics: g.__trending.data });
+  if (g.__news && Date.now() - g.__news.at < TTL) {
+    return NextResponse.json({ topics: g.__news.data });
   }
-
-  // term -> {feeds it appears in, total mentions, label}
-  const cand = new Map<string, { feeds: Set<number>; n: number; label: string }>();
+  const all: NewsItem[] = [];
   await Promise.all(
-    FEEDS.map(async (url, fi) => {
+    FEEDS.map(async (f) => {
       try {
-        const res = await fetch(url, { headers: { "User-Agent": "jotter-intelligence/1.0" }, signal: AbortSignal.timeout(8000) });
+        const res = await fetch(f.url, { headers: { "User-Agent": "jotter-intelligence/1.0" }, signal: AbortSignal.timeout(8000) });
         const xml = await res.text();
-        for (const t of titles(xml))
-          for (const e of entities(t)) {
-            const key = e.toLowerCase();
-            if (NOISE.has(key)) continue;
-            const c = cand.get(key) || { feeds: new Set<number>(), n: 0, label: e };
-            c.feeds.add(fi); c.n += 1; cand.set(key, c);
-          }
+        all.push(...parse(xml, f.source).slice(0, 6)); // a few most-recent per source
       } catch {
-        /* skip dead feed */
+        /* skip */
       }
     })
   );
-
-  const blob = headBlob();
-  const scored = [...cand.entries()].map(([key, c]) => {
-    const covered = blob.includes(key); // does any expert headline mention it?
-    return { term: c.label, feeds: c.feeds.size, n: c.n, covered };
-  });
-
-  // genuine trending only = recurring across >=2 sources; archive-covered first
-  const data = scored
-    .filter((s) => s.feeds >= 2)
-    .sort((a, b) => Number(b.covered) - Number(a.covered) || b.feeds - a.feeds || b.n - a.n)
-    .slice(0, 12)
-    .map((s) => ({ term: s.term, n: s.n }));
-
-  g.__trending = { at: Date.now(), data };
+  // newest first, dedupe near-identical headlines, interleave sources
+  all.sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
+  const seen = new Set<string>();
+  const seenSrc = new Map<string, number>();
+  const data: NewsItem[] = [];
+  for (const it of all) {
+    const key = it.title.toLowerCase().slice(0, 40);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const sc = seenSrc.get(it.source) ?? 0;
+    if (sc >= 3) continue; // max 3 per source for variety
+    seenSrc.set(it.source, sc + 1);
+    data.push(it);
+    if (data.length >= 9) break;
+  }
+  g.__news = { at: Date.now(), data };
   return NextResponse.json({ topics: data });
 }
