@@ -142,6 +142,41 @@ def backfill_wpcom(ex):
         time.sleep(0.3)
     return out[:cap]
 
+def backfill_lsn(ex):
+    """LS:N Global Daily Signals: split the (cookieless, metered-free) index page
+    by its <h3> signal headers. Recent-only + accumulates across daily runs."""
+    import os
+    base = "https://www.lsnglobal.com"
+    h = get(base + "/daily-signals").decode("utf-8", "replace")
+    dm = _re.search(r"(\d{2})\.(\d{2})\.(\d{4})", h)
+    date = f"{dm.group(3)}-{dm.group(2)}-{dm.group(1)}T08:00:00" if dm else ""
+    links = {}
+    for m in _re.finditer(r'href="(/daily-signals/article/\d+/([a-z0-9-]+))"', h):
+        links[m.group(2)] = base + m.group(1)
+    parts = _re.split(r"<h3[^>]*>(.*?)</h3>", h, flags=_re.S)
+    STOP = ("markets", "communities", "micro trends", "big ideas", "viewpoints",
+            "podcasts", "most recent", "previous daily")
+    today, it = [], iter(parts[1:])
+    for head, body in zip(it, it):
+        title = _re.sub(r"\s+", " ", _re.sub(r"<[^>]+>", " ", head)).strip()
+        low = title.lower()
+        if low.startswith("by ") or len(title) < 8:
+            continue
+        if any(low.startswith(s) or low == s for s in STOP):
+            break  # reached the sidebar / related lists
+        if len(_re.sub(r"<[^>]+>", " ", body).strip()) < 80:
+            continue
+        slug = _re.sub(r"[^a-z0-9]+", "-", low).strip("-")
+        link = next((u for s, u in links.items() if slug[:18] in s or s in slug), base + "/daily-signals")
+        today.append({"title": title, "link": link, "date": date, "content": body, "categories": ["Daily Signals"]})
+    fn = f"data/archive_{ex['id']}.jsonl"
+    existing = [json.loads(l) for l in open(fn)] if os.path.exists(fn) else []
+    merged = {}
+    for it2 in existing + today:
+        merged[(it2.get("date", "")[:10], it2.get("title", "")[:60])] = it2
+    print(f"  +{len(today)} today, {len(merged)} total")
+    return list(merged.values())
+
 def main():
     experts = json.load(open("experts.json"))
     want = sys.argv[1] if len(sys.argv) > 1 else None
@@ -154,6 +189,7 @@ def main():
                  else backfill_wordpress(ex) if bf == "wordpress"
                  else backfill_wpcom(ex) if bf == "wpcom"
                  else backfill_protein(ex) if bf == "protein"
+                 else backfill_lsn(ex) if bf == "lsn"
                  else [])
         out = f"data/archive_{ex['id']}.jsonl"
         with open(out, "w") as f:

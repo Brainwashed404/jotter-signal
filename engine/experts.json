@@ -171,5 +171,13 @@
     "adapter": "rss",
     "backfill": "wordpress",
     "cap": 400
+  },
+  {
+    "id": "lsn",
+    "name": "LS:N Global (Daily Signals)",
+    "blurb": "The Future Laboratory's daily consumer-culture signals: emerging behaviours, brand moves and stats across sectors.",
+    "url": "https://www.lsnglobal.com/daily-signals",
+    "adapter": "rss",
+    "backfill": "lsn"
   }
 ]
