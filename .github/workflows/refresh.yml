@@ -1,8 +1,8 @@
-name: Nightly data refresh
+name: Data refresh
 
 on:
   schedule:
-    - cron: "0 4 * * *"   # 4 AM UTC — runs after most sources have published overnight
+    - cron: "0 */4 * * *"  # every 4 hours (00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC)
   workflow_dispatch:        # allow manual trigger from the Actions tab
 
 jobs:
@@ -57,7 +57,8 @@ jobs:
           aws s3 cp engine-data.tar.gz "s3://${R2_BUCKET}/engine-data.tar.gz" \
             --endpoint-url "${R2_ENDPOINT}"
 
-      # Publish the rebuilt signals for the app to fetch on next cold start
+      # Publish the rebuilt signals for the app to fetch on next cold start.
+      # signals.jsonl is gzipped → signals.jsonl.gz (110 MB → ~31 MB) before upload.
       - name: Upload signals and experts to R2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -65,7 +66,8 @@ jobs:
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
-          aws s3 cp web/data/signals.jsonl "s3://${R2_BUCKET}/signals.jsonl" \
+          gzip -kf web/data/signals.jsonl
+          aws s3 cp web/data/signals.jsonl.gz "s3://${R2_BUCKET}/signals.jsonl.gz" \
             --endpoint-url "${R2_ENDPOINT}"
           aws s3 cp web/data/experts.json "s3://${R2_BUCKET}/experts.json" \
             --endpoint-url "${R2_ENDPOINT}"
