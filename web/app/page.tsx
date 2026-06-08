@@ -3,6 +3,7 @@ import TrendingWidget from "@/components/TrendingWidget";
 import CollapsibleSection from "@/components/CollapsibleSection";
 import LatestInsights from "@/components/LatestInsights";
 import MarketsSnapshot from "@/components/MarketsSnapshot";
+import WorldCupChart from "@/components/WorldCupChart";
 import CtaFooter from "@/components/CtaFooter";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,10 @@ export default async function HomePage() {
 
       <CollapsibleSection title="Markets">
         <MarketsSnapshot />
+      </CollapsibleSection>
+
+      <CollapsibleSection title="World Cup 2026 🏆">
+        <WorldCupChart />
       </CollapsibleSection>
 
       <CollapsibleSection title="Latest Expert Insights">
