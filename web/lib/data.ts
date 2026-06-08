@@ -91,8 +91,15 @@ export async function loadData(): Promise<void> {
         g.__experts = JSON.parse(expsText) as Expert[];
         g.__signalsAt = at;
         g.__expertsAt = at;
+      } catch (err) {
+        // Data fetch failed (e.g. storage cap exceeded). Fall back to empty state so
+        // the app renders rather than throwing a 500. Cache the empty result for 5 min
+        // so we don't hammer the storage endpoint, then retry automatically.
+        console.error("[data] loadData failed, serving empty state:", err);
+        if (!g.__signals) { g.__signals = []; g.__signalsAt = at; }
+        if (!g.__experts) { g.__experts = []; g.__expertsAt = at; }
       } finally {
-        g.__loadPromise = undefined; // allow retry on error
+        g.__loadPromise = undefined; // allow retry on next TTL window
       }
     })();
   }
