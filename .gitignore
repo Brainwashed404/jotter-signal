@@ -12,6 +12,7 @@ web/.env*
 # large data (regenerate via engine/ scripts)
 engine/data/*.jsonl
 web/data/signals.jsonl
+web/data/signals.jsonl.gz
 
 # os
 .DS_Store

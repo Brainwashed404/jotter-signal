@@ -9,12 +9,13 @@ const gunzip = promisify(zlib.gunzip);
 
 export type { Signal, Expert, Overview, ThemeSummary } from "./types";
 
-// Set DATA_URL in Vercel env vars to the public root of your R2 bucket,
-// e.g. "https://pub-xxxx.r2.dev". When unset the app reads from the local filesystem
-// (dev mode, same as always).
+// DATA_URL is used by scripts/fetch-data.js at BUILD TIME to download data files.
+// At RUNTIME the app always reads from the local filesystem (data bundled into the
+// serverless function via outputFileTracingIncludes). Network fetches are only used
+// as a fallback if the local file is somehow missing.
 const DATA_URL = process.env.DATA_URL?.replace(/\/$/, "");
-// How long to keep remote data in-process before re-fetching. 30 min means fresh
-// nightly builds are visible within half an hour of the GitHub Action completing.
+// How long to keep data in-process before re-reading. Since data is baked into the
+// build, 30 min is fine — the lambda will reuse it until the next cold start.
 const CACHE_TTL = 30 * 60 * 1000;
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -66,35 +67,64 @@ export function clearCache() {
  * Add `await loadData()` at the top of any Server Component or API route handler
  * that calls getSignals / getExperts / searchSignals / etc.
  */
+const SIGNALS_GZ_PATH = path.join(DATA_DIR, "signals.jsonl.gz");
+
+/**
+ * Pre-load signal data into the in-process cache.
+ *
+ * Priority order:
+ *   1. Local signals.jsonl.gz — bundled at build time via scripts/fetch-data.js.
+ *      This is the normal production path: zero network calls at runtime.
+ *   2. Network fetch from DATA_URL — fallback if the bundled file is missing
+ *      (shouldn't happen in normal builds, but handles edge cases gracefully).
+ *   3. Empty state — if both fail, the app renders with empty sections rather
+ *      than returning a 500.
+ *
+ * Development (no DATA_URL + no .gz file): returns immediately;
+ * getSignals/getExperts read from the local filesystem on demand.
+ */
 export async function loadData(): Promise<void> {
-  if (!DATA_URL) return; // dev: filesystem reads handle caching themselves
+  // Check if a bundled gz file exists (production: baked in at build time)
+  const hasBundledGz = fs.existsSync(SIGNALS_GZ_PATH);
+
+  if (!hasBundledGz && !DATA_URL) return; // dev: filesystem reads handle caching themselves
 
   const at = remoteCacheKey();
   if (g.__signals && g.__signalsAt === at) return; // still within TTL window
 
-  // Deduplicate concurrent in-flight fetches on cold start
+  // Deduplicate concurrent in-flight loads on cold start
   if (!g.__loadPromise) {
     g.__loadPromise = (async () => {
       try {
-        const [sigsRes, expsRes] = await Promise.all([
-          fetch(`${DATA_URL}/signals.jsonl.gz`, { cache: "no-store" }),
-          fetch(`${DATA_URL}/experts.json`, { cache: "no-store" }),
-        ]);
-        if (!sigsRes.ok) throw new Error(`signals.jsonl.gz fetch failed: ${sigsRes.status}`);
-        if (!expsRes.ok) throw new Error(`experts.json fetch failed: ${expsRes.status}`);
-        const [sigsGz, expsText] = await Promise.all([
-          sigsRes.arrayBuffer().then((b) => gunzip(Buffer.from(b))),
-          expsRes.text(),
-        ]);
-        const sigsText = sigsGz.toString("utf8");
+        let sigsText: string;
+        let expsText: string;
+
+        if (hasBundledGz) {
+          // Fast path: read locally bundled files (no network I/O)
+          const compressed = fs.readFileSync(SIGNALS_GZ_PATH);
+          const decompressed = await gunzip(compressed);
+          sigsText = decompressed.toString("utf8");
+          expsText = fs.readFileSync(EXPERTS_PATH, "utf8");
+        } else {
+          // Fallback: fetch from remote storage (only if no bundled file)
+          const [sigsRes, expsRes] = await Promise.all([
+            fetch(`${DATA_URL}/signals.jsonl.gz`, { cache: "no-store" }),
+            fetch(`${DATA_URL}/experts.json`, { cache: "no-store" }),
+          ]);
+          if (!sigsRes.ok) throw new Error(`signals.jsonl.gz fetch failed: ${sigsRes.status}`);
+          if (!expsRes.ok) throw new Error(`experts.json fetch failed: ${expsRes.status}`);
+          const sigsGz = await sigsRes.arrayBuffer().then((b) => gunzip(Buffer.from(b)));
+          sigsText = sigsGz.toString("utf8");
+          expsText = await expsRes.text();
+        }
+
         g.__signals = sigsText.split("\n").filter(Boolean).map((l) => JSON.parse(l) as Signal);
         g.__experts = JSON.parse(expsText) as Expert[];
         g.__signalsAt = at;
         g.__expertsAt = at;
       } catch (err) {
-        // Data fetch failed (e.g. storage cap exceeded). Fall back to empty state so
-        // the app renders rather than throwing a 500. Cache the empty result for 5 min
-        // so we don't hammer the storage endpoint, then retry automatically.
+        // All data sources failed. Fall back to empty state so the app renders
+        // rather than throwing a 500.
         console.error("[data] loadData failed, serving empty state:", err);
         if (!g.__signals) { g.__signals = []; g.__signalsAt = at; }
         if (!g.__experts) { g.__experts = []; g.__expertsAt = at; }
