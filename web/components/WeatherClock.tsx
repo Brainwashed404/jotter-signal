@@ -46,20 +46,27 @@ export default function WeatherClock({ activeSection, onToggle, onWeatherData }:
 
     let cached: Geo | null = null;
     try { cached = JSON.parse(localStorage.getItem(GEO_KEY) || "null"); } catch {}
+
     if (cached && Date.now() - cached.at < GEO_TTL) {
+      // Precise coords cached — use them directly.
       fetchWeather(`?lat=${cached.lat}&lon=${cached.lon}`);
-    } else if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const geo: Geo = { lat: pos.coords.latitude, lon: pos.coords.longitude, at: Date.now() };
-          try { localStorage.setItem(GEO_KEY, JSON.stringify(geo)); } catch {}
-          fetchWeather(`?lat=${geo.lat}&lon=${geo.lon}`);
-        },
-        () => fetchWeather(""),
-        { timeout: 8000, maximumAge: GEO_TTL }
-      );
     } else {
+      // No cached coords: fire immediately using IP geolocation on the server
+      // (no permission prompt, ~instant). Then simultaneously try for precise
+      // browser coordinates in the background — if granted, silently update.
       fetchWeather("");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            if (cancelled) return;
+            const geo: Geo = { lat: pos.coords.latitude, lon: pos.coords.longitude, at: Date.now() };
+            try { localStorage.setItem(GEO_KEY, JSON.stringify(geo)); } catch {}
+            fetchWeather(`?lat=${geo.lat}&lon=${geo.lon}`);
+          },
+          () => {}, // already showing IP-based weather — nothing to do
+          { timeout: 8000, maximumAge: GEO_TTL }
+        );
+      }
     }
     return () => { cancelled = true; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
