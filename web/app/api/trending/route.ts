@@ -46,12 +46,8 @@ const CATEGORIES: Record<string, Feed[]> = {
   timeout: [
     { url: "https://www.timeout.com/london/feed.rss", source: "Time Out", match: "/news/" },
   ],
-  reddit: [
-    { url: "https://hnrss.org/frontpage", source: "HN" },
-  ],
-  futurology: [
-    { url: "https://futurism.com/feed", source: "Futurism" },
-  ],
+  reddit: [],     // handled by fetchReddit in CUSTOM (via Redlib)
+  futurology: [], // handled by fetchReddit in CUSTOM (via Redlib)
   technology: [
     { url: "https://techcrunch.com/feed/", source: "TechCrunch" },
     { url: "https://www.theguardian.com/technology/rss", source: "Guardian" },
@@ -160,6 +156,28 @@ async function fetchGoogleTrends(): Promise<NewsItem[]> {
     return [];
   }
 }
+// Reddit blocks requests from datacentre IPs (so a direct fetch works locally but
+// 403s on Vercel). Route through Redlib — an open-source Reddit front-end whose own
+// servers fetch Reddit and expose a standard RSS feed. Try instances in order so the
+// tab survives one going down.
+const REDLIB_HOSTS = ["https://redlib.perennialte.ch", "https://redlib.r4fo.com"];
+async function fetchReddit(subreddit: string, sort: string, source: string): Promise<NewsItem[]> {
+  for (const host of REDLIB_HOSTS) {
+    try {
+      const res = await fetch(`${host}/r/${subreddit}.rss?sort=${sort}`, {
+        headers: { "User-Agent": "Mozilla/5.0 jotter-intelligence/1.0" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!res.ok) continue;
+      const items = parse(await res.text(), source);
+      if (items.length) return items.slice(0, 10);
+    } catch {
+      /* try the next instance */
+    }
+  }
+  return [];
+}
+
 // Reuters "Top Stories": reuters.com blocks scraping (401), so pull recent Reuters
 // articles via Google News RSS and strip the trailing " - Reuters" source tag.
 async function fetchReuters(): Promise<NewsItem[]> {
@@ -439,8 +457,6 @@ export async function GET(request: Request) {
   const param = new URL(request.url).searchParams.get("category") ?? DEFAULT_CATEGORY;
   if (!g.__news) g.__news = {};
 
-  // Non-RSS / scraped / API sources each have a dedicated fetcher. (FT, reddit/HN, and
-  // futurology go through the generic RSS path in CATEGORIES below.)
   const CUSTOM: Record<string, () => Promise<NewsItem[]>> = {
     wikipedia: fetchWikipediaTop,
     guardian: fetchGuardianMostRead,
@@ -448,6 +464,8 @@ export async function GET(request: Request) {
     google: fetchGoogleTrends,
     reuters: fetchReuters,
     bbc: fetchBbcMostRead,
+    reddit: () => fetchReddit("news", "rising", "Reddit"),
+    futurology: () => fetchReddit("Futurology", "new", "r/Futurology"),
   };
   if (CUSTOM[param]) {
     const cached = g.__news[param];
