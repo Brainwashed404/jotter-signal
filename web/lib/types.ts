@@ -6,12 +6,16 @@ export type Signal = {
   source: string;
   source_id: string;
   type: string;
+  kind: string;
   heading: string;
   text: string;
   themes: string[];
   links: { url: string; domain: string; anchor: string }[];
   images?: string[];
   post_url: string;
+  category?: "author" | "publication";  // source type — cards hide an author's blog name, keep publication names
+  upload_id?: string;    // groups the chunks from one uploaded PDF
+  upload_name?: string;  // original PDF filename / title
 };
 
 export type ThemeSummary = {
@@ -29,10 +33,13 @@ export type Expert = {
   url: string;
   totals: { posts: number; signals: number; date_min: string; date_max: string };
   signal_types: Record<string, number>;
+  signal_kinds: Record<string, number>;
   themes: ThemeSummary[];
   years: string[];
   top_sources_recent: { domain: string; n: number }[];
   top_sources_early: { domain: string; n: number }[];
+  uploaded?: boolean;                       // user-created profile (PDF/RSS), editable/deletable
+  category?: "author" | "publication";      // Experts page = authors; Publications page = publications
 };
 
 // Combined view across all experts.
@@ -55,4 +62,13 @@ export const TYPE_LABEL: Record<string, string> = {
   linkblog: "Linkblog",
   chart: "Chart",
   note: "Note",
+};
+
+export const KIND_LABEL: Record<string, string> = {
+  longread: "Long Read",
+  article:  "Article",
+  quote:    "Quote",
+  links:    "Links",
+  data:     "Data",
+  qanda:    "Q&A",
 };

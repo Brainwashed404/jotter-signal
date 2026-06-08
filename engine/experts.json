@@ -1,45 +1,60 @@
 [
   {
+    "id": "bilawalsidhu",
+    "name": "Bilawal Sidhu (Map the World)",
+    "blurb": "Creator and TED curator on spatial computing, AI world models, AR/VR and visual effects. Ex-Google PM for XR and 3D maps; writes the 'Map the World' newsletter.",
+    "url": "https://www.spatialintelligence.ai",
+    "feed": "https://www.spatialintelligence.ai/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
     "id": "naughton",
-    "name": "John Naughton",
+    "name": "John Naughton (Memex 1.1)",
     "blurb": "Observer columnist and Cambridge academic (technology & society). Techno-skeptical, pro-democracy, historically minded. His daily 'commonplace book' has run since 2002.",
     "url": "https://memex.naughtons.org",
-    "adapter": "naughton"
+    "adapter": "naughton",
+    "category": "author"
   },
   {
     "id": "doctorow",
-    "name": "Cory Doctorow",
+    "name": "Cory Doctorow (Pluralistic)",
     "blurb": "Author and activist; writes Pluralistic on monopoly, platform power and 'enshittification' (a term he coined).",
     "url": "https://pluralistic.net",
     "feed": "https://pluralistic.net/feed/",
-    "adapter": "rss",
-    "backfill": "wordpress"
+    "adapter": "doctorow",
+    "backfill": "wordpress",
+    "category": "author"
   },
   {
     "id": "digitalnative",
-    "name": "Digital Native (Rex Woodbury)",
-    "blurb": "Weekly writing about how technology and people intersect \u2014 consumer tech, culture and venture.",
+    "name": "Rex Woodbury (Digital Native)",
+    "blurb": "Weekly writing about how technology and people intersect — consumer tech, culture and venture.",
     "url": "https://www.digitalnative.tech",
     "feed": "https://www.digitalnative.tech/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "jasminesun",
     "name": "Jasmine Sun",
-    "blurb": "An anthropology of disruption \u2014 essays on AI and Silicon Valley culture.",
+    "blurb": "An anthropology of disruption — essays on AI and Silicon Valley culture.",
     "url": "https://jasmi.news",
     "feed": "https://jasmi.news/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "goodinternet",
-    "name": "Good Internet (Ren\u00e9 Walter)",
-    "blurb": "A magazine about human\u2013machine relations, AI and tech, entertainment, arts and culture.",
+    "name": "René Walter (Good Internet)",
+    "blurb": "A magazine about human–machine relations, AI and tech, entertainment, arts and culture.",
     "url": "https://goodinter.net",
     "feed": "http://feeds.feedburner.com/NerdcoreRSS2",
-    "adapter": "rss"
+    "adapter": "rss",
+    "category": "author"
   },
   {
     "id": "noahpinion",
@@ -48,25 +63,28 @@
     "url": "https://www.noahpinion.blog",
     "feed": "https://www.noahpinion.blog/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "peoplevsalgorithms",
-    "name": "People vs Algorithms",
+    "name": "Troy Young (People vs Algorithms)",
     "blurb": "Old media is dead. Exploring the Information Space and the future of media and attention.",
     "url": "https://www.peoplevsalgorithms.com",
     "feed": "https://www.peoplevsalgorithms.com/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "resobscura",
     "name": "Benjamin Breen (Res Obscura)",
-    "blurb": "Notes on the history of technology, medicine, science, art, drugs and empire \u2014 and AI.",
+    "blurb": "Notes on the history of technology, medicine, science, art, drugs and empire — and AI.",
     "url": "https://resobscura.substack.com",
     "feed": "https://resobscura.substack.com/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "rushkoff",
@@ -75,16 +93,18 @@
     "url": "https://rushkoff.substack.com",
     "feed": "https://rushkoff.substack.com/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "zine",
-    "name": "ZINE (Klein Klein Klein)",
+    "name": "Matt Klein (Zine)",
     "blurb": "A cultural intelligence and sensemaking think tank, explaining the emergent.",
     "url": "https://zine.kleinkleinklein.com",
     "feed": "https://zine.kleinkleinklein.com/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "trendreport",
@@ -93,35 +113,39 @@
     "url": "https://1234kyle5678.substack.com",
     "feed": "https://1234kyle5678.substack.com/feed",
     "adapter": "rss",
-    "backfill": "substack"
+    "backfill": "substack",
+    "category": "author"
   },
   {
     "id": "protein",
     "name": "Protein (SEEDS)",
-    "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
+    "blurb": "SEEDS — Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
     "url": "https://www.protein.xyz/tag/seeds/",
     "feed": "https://www.protein.xyz/tag/seeds/feed/",
     "adapter": "rss",
-    "backfill": "protein"
+    "backfill": "protein",
+    "category": "publication"
   },
   {
     "id": "futurism",
     "name": "Futurism",
-    "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
+    "blurb": "Science and technology news — AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
     "url": "https://futurism.com",
     "feed": "https://futurism.com/feed",
     "adapter": "rss",
     "backfill": "wordpress",
-    "cap": 1500
+    "cap": 1500,
+    "category": "publication"
   },
   {
     "id": "semafor",
     "name": "Semafor Technology",
-    "blurb": "Semafor's technology coverage \u2014 AI, platforms and the business of tech.",
+    "blurb": "Semafor's technology coverage — AI, platforms and the business of tech.",
     "url": "https://www.semafor.com/vertical/tech",
     "feed": "https://www.semafor.com/rss.xml",
     "adapter": "rss",
-    "category": "Technology"
+    "category": "publication",
+    "vertical": "Technology"
   },
   {
     "id": "theoverspill",
@@ -132,25 +156,28 @@
     "adapter": "rss",
     "backfill": "wpcom",
     "wpcom": "theoverspill.blog",
-    "cap": 800
+    "cap": 800,
+    "category": "author"
   },
   {
     "id": "neural",
     "name": "Neural",
-    "blurb": "New media art, electronic music and hacktivism \u2014 a critical magazine running since 1993.",
+    "blurb": "New media art, electronic music and hacktivism — a critical magazine running since 1993.",
     "url": "https://neural.it",
     "feed": "https://neural.it/feed/",
-    "adapter": "rss"
+    "adapter": "rss",
+    "category": "publication"
   },
   {
     "id": "enlightenmentecon",
     "name": "Diane Coyle (Enlightenment Economics)",
     "blurb": "The economics of technology, productivity, measurement and the digital economy.",
     "url": "http://www.enlightenmenteconomics.com",
-    "feed": "http://www.enlightenmenteconomics.com/blog/feed/",
     "adapter": "rss",
     "backfill": "wordpress",
-    "cap": 600
+    "cap": 600,
+    "category": "author",
+    "archived": true
   },
   {
     "id": "booktwo",
@@ -160,17 +187,100 @@
     "feed": "https://booktwo.org/feed/",
     "adapter": "rss",
     "backfill": "wordpress",
-    "cap": 900
+    "cap": 900,
+    "category": "author"
   },
   {
     "id": "netwars",
     "name": "Wendy M. Grossman (net.wars)",
-    "blurb": "Weekly column on the borders between cyberspace and real life \u2014 privacy, rights and tech policy.",
+    "blurb": "Weekly column on the borders between cyberspace and real life — privacy, rights and tech policy.",
     "url": "https://netwars.pelicancrossing.net",
     "feed": "https://netwars.pelicancrossing.net/feed/",
     "adapter": "rss",
     "backfill": "wordpress",
-    "cap": 400
+    "cap": 400,
+    "category": "author"
+  },
+  {
+    "id": "exponentialview",
+    "name": "Exponential View",
+    "blurb": "Azeem Azhar on AI, technology and the exponential age — weekly analysis of how fast-moving tech reshapes business, society and geopolitics.",
+    "url": "https://www.exponentialview.co",
+    "feed": "https://www.exponentialview.co/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "cap": 1000,
+    "category": "publication"
+  },
+  {
+    "id": "derekthompson",
+    "name": "Derek Thompson",
+    "blurb": "Atlantic writer and podcaster on economics, technology and the 'abundance' agenda: building a better world by making more of what matters.",
+    "url": "https://www.derekthompson.org",
+    "feed": "https://www.derekthompson.org/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
+    "id": "rishad",
+    "name": "Rishad Tobaccowala",
+    "blurb": "Former Publicis strategist writing on the future of work, marketing and human-centred business in the age of AI.",
+    "url": "https://rishad.substack.com",
+    "feed": "https://rishad.substack.com/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
+    "id": "8ball",
+    "name": "Sean Monahan (8Ball)",
+    "blurb": "A signals newsletter tracking emerging shifts across technology, culture and business.",
+    "url": "https://www.8ball.report",
+    "feed": "https://www.8ball.report/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
+    "id": "notboring",
+    "name": "Packy McCormick (Not Boring)",
+    "blurb": "Not Boring: optimistic, deeply researched essays on technology companies, markets and the businesses building the future.",
+    "url": "https://www.notboring.co",
+    "feed": "https://www.notboring.co/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
+    "id": "whyisthisinteresting",
+    "name": "Noah Brier & Colin Nagy (Why Is This Interesting?)",
+    "blurb": "A daily newsletter on the most interesting things in the world, from media and design to science and culture.",
+    "url": "https://whyisthisinteresting.substack.com",
+    "feed": "https://whyisthisinteresting.substack.com/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
+    "id": "astralcodexten",
+    "name": "Scott Alexander (Astral Codex Ten)",
+    "blurb": "Astral Codex Ten: long-form essays on science, medicine, philosophy, politics and rationality.",
+    "url": "https://www.astralcodexten.com",
+    "feed": "https://www.astralcodexten.com/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
+    "id": "a16z",
+    "name": "a16z",
+    "blurb": "Andreessen Horowitz's publication on technology, startups and the ideas shaping the future.",
+    "url": "https://www.a16z.news",
+    "feed": "https://www.a16z.news/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "publication"
   },
   {
     "id": "lsn",
@@ -178,6 +288,17 @@
     "blurb": "The Future Laboratory's daily consumer-culture signals: emerging behaviours, brand moves and stats across sectors.",
     "url": "https://www.lsnglobal.com/daily-signals",
     "adapter": "rss",
-    "backfill": "lsn"
+    "backfill": "lsn",
+    "category": "publication"
+  },
+  {
+    "id": "lastweekincollapse",
+    "name": "Last Week in Collapse",
+    "blurb": "A weekly roundup of collapse-related developments posted to r/collapse: environment, conflict, economy, energy and society, with sourced stats and links.",
+    "url": "https://www.reddit.com/user/LastWeekInCollapse/",
+    "feed": "https://www.reddit.com/user/LastWeekInCollapse/submitted.rss",
+    "adapter": "rss",
+    "category": "publication",
+    "backfill": "reddit"
   }
 ]

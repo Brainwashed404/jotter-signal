@@ -21,8 +21,9 @@ def get(u):
 
 def backfill_substack(ex):
     base = ex["url"].rstrip("/")
+    cap = ex.get("cap", SUBSTACK_CAP)
     posts, offset = [], 0
-    while len(posts) < SUBSTACK_CAP:
+    while len(posts) < cap:
         try:
             batch = json.loads(get(f"{base}/api/v1/archive?sort=new&limit=12&offset={offset}"))
         except Exception as e:
@@ -32,7 +33,7 @@ def backfill_substack(ex):
         posts += batch
         offset += 12   # Substack pages at 12 per request
         time.sleep(0.2)
-    posts = posts[:SUBSTACK_CAP]
+    posts = posts[:cap]
     out = []
     for i, p in enumerate(posts):
         slug = p.get("slug"); title = p.get("title") or ""
@@ -46,11 +47,32 @@ def backfill_substack(ex):
             except Exception:
                 body = ""
             time.sleep(0.15)
+        if not body and link:
+            # For paid posts the API only returns a short truncated_body_text.
+            # Fetch the public HTML page instead — it contains the full free preview.
+            try:
+                import re as _re
+                html = get(link).decode("utf-8", errors="replace")
+                m = _re.search(r"<article[^>]*>([\s\S]+?)</article>", html, _re.I)
+                if m:
+                    art = m.group(1)
+                    # strip from paywall gate onward
+                    gate = _re.search(
+                        r"<[^>]+>(?:This post is for paid subscribers?|Subscribe to continue reading)[^<]*</[^>]+>",
+                        art, _re.I
+                    )
+                    if gate:
+                        art = art[:gate.start()]
+                    body = art.strip()
+            except Exception:
+                body = ""
+            time.sleep(0.2)
         if not body:
             body = p.get("truncated_body_text") or p.get("description") or ""
         if not (date and (title or body)):
             continue
-        out.append({"title": title, "link": link, "date": date, "content": body, "categories": []})
+        out.append({"title": title, "link": link, "date": date, "content": body,
+                    "categories": [], "audience": p.get("audience", "")})
         if (i + 1) % 25 == 0:
             print(f"  …{i + 1}/{len(posts)}")
     return out
@@ -177,6 +199,57 @@ def backfill_lsn(ex):
     print(f"  +{len(today)} today, {len(merged)} total")
     return list(merged.values())
 
+def backfill_reddit(ex):
+    """Page the Arctic-Shift archive (a public Pushshift mirror, current through 2026) for a
+    Reddit user's full self-post history — the .rss feed only carries ~25 recent items. Stores
+    each post's body as lightly-cleaned markdown so links survive as [text](url) for the build."""
+    import datetime, html as _h
+    m = _re.search(r"/user/([^/]+)", ex.get("url", "") or "")
+    author = m.group(1) if m else ex["id"]
+    def clean_md(md):
+        md = _h.unescape(md or "")
+        md = _re.sub(r"(?m)^\s{0,3}#{1,6}\s+", "", md)        # headings
+        md = _re.sub(r"\*\*(.+?)\*\*", r"\1", md)              # bold
+        md = _re.sub(r"\*([^*\n]+)\*", r"\1", md)              # italic *…*
+        md = _re.sub(r"(?<!\w)_([^_\n]+)_(?!\w)", r"\1", md)   # italic _…_
+        md = _re.sub(r"(?m)^\s{0,3}>\s?", "", md)              # blockquote markers
+        md = _re.sub(r"(?m)^\s{0,3}[-*]\s+", "• ", md)         # bullets
+        md = _re.sub(r"(?m)^\s*[-*_]{3,}\s*$", "", md)         # horizontal rules
+        return md.strip()
+    out, before, seen = [], None, set()
+    for page in range(15):   # fast (~1s/page); loop stops early when history is exhausted
+        u = f"https://arctic-shift.photon-reddit.com/api/posts/search?author={author}&limit=100&sort=desc"
+        if before:
+            u += f"&before={before}"
+        try:
+            data = json.loads(get(u)).get("data", [])
+        except Exception as e:
+            print(f"  ! page {page+1}: {e}"); break
+        if not data:
+            break
+        for p in data:
+            cid = p.get("id")
+            if not cid or cid in seen:
+                continue
+            seen.add(cid)
+            body = p.get("selftext") or ""
+            cu = p.get("created_utc")
+            if len(body) < 200 or not cu:   # skip link-posts / removed / stubs
+                continue
+            out.append({
+                "title": (p.get("title") or "").strip(),
+                "link": "https://www.reddit.com" + (p.get("permalink") or ""),
+                "date": datetime.datetime.fromtimestamp(int(cu), datetime.timezone.utc).isoformat(),
+                "content": clean_md(body),
+                "categories": [p.get("subreddit") or ""],
+            })
+        before = min(int(p["created_utc"]) for p in data if p.get("created_utc"))
+        print(f"  page {page+1}: {len(data)} fetched, {len(out)} kept, before={before}")
+        if len(data) < 100:
+            break
+        time.sleep(1)
+    return out
+
 def main():
     experts = json.load(open("experts.json"))
     want = sys.argv[1] if len(sys.argv) > 1 else None
@@ -190,6 +263,7 @@ def main():
                  else backfill_wpcom(ex) if bf == "wpcom"
                  else backfill_protein(ex) if bf == "protein"
                  else backfill_lsn(ex) if bf == "lsn"
+                 else backfill_reddit(ex) if bf == "reddit"
                  else [])
         out = f"data/archive_{ex['id']}.jsonl"
         with open(out, "w") as f:

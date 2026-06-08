@@ -6,7 +6,7 @@ Output: data/raw_<id>.jsonl  with {title, link, date, content, categories}
 
 Substack feeds live at https://NAME.substack.com/feed — same shape as this.
 """
-import json, sys, urllib.request, xml.etree.ElementTree as ET
+import json, os, sys, urllib.request, xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timezone
 
@@ -15,7 +15,7 @@ A = "{http://www.w3.org/2005/Atom}"
 
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": "jotter-intelligence/1.0"})
-    with urllib.request.urlopen(req, timeout=60) as r:
+    with urllib.request.urlopen(req, timeout=25) as r:
         return r.read()
 
 def to_iso(s):
@@ -68,25 +68,59 @@ def parse(xml_bytes):
     return items
 
 def run(expert):
-    if expert.get("adapter") != "rss":
+    # Fetch any expert that has a feed — covers adapter "rss" AND "doctorow"
+    # (Pluralistic), whose recent posts arrive via RSS even though it's atomised
+    # with a custom builder. Naughton has no feed (use fetch_naughton_recent.py).
+    if not expert.get("feed"):
         return
     print(f"fetching {expert['id']} <- {expert['feed']}")
-    items = parse(fetch(expert["feed"]))
+    fresh = [it for it in parse(fetch(expert["feed"])) if it["date"]]
     out = f"data/raw_{expert['id']}.jsonl"
+    # Never overwrite good data with an empty/failed parse (transient feed hiccup).
+    if not fresh:
+        print(f"  0 items — keeping existing {out}")
+        return
+    # Append-dedupe: merge with existing file so history accumulates across runs.
+    existing = []
+    if os.path.exists(out):
+        try:
+            existing = [json.loads(l) for l in open(out)]
+        except Exception:
+            pass
+    def key(it):
+        return (it.get("link", "") or "").rstrip("/") or it.get("title", "")[:60]
+    existing_keys = {key(it) for it in existing}
+    new_count = sum(1 for it in fresh if key(it) not in existing_keys)
+    seen = set()
+    items = []
+    for it in fresh + existing:
+        k = key(it)
+        if k in seen:
+            continue
+        seen.add(k)
+        items.append(it)
     with open(out, "w") as f:
         for it in items:
-            if it["date"]:
-                f.write(json.dumps(it) + "\n")
-    print(f"  {len(items)} items -> {out}")
+            f.write(json.dumps(it) + "\n")
+    print(f"  +{new_count} new, {len(items)} total -> {out}")
 
 def main():
     experts = json.load(open("experts.json"))
     want = sys.argv[1] if len(sys.argv) > 1 else None
+    failures = 0
     for ex in experts:
         if want and ex["id"] != want:
             continue
-        if ex.get("adapter") == "rss":
+        if not ex.get("feed"):
+            continue
+        # Isolate each feed: one dead/slow/404 feed must NOT abort the whole refresh.
+        try:
             run(ex)
+        except Exception as e:
+            failures += 1
+            print(f"  ! {ex['id']} fetch failed ({type(e).__name__}: {str(e)[:80]}) — skipping")
+    if failures:
+        print(f"done with {failures} feed failure(s)")
 
 if __name__ == "__main__":
     main()

@@ -35,7 +35,7 @@ function useStore<T>(key: string, fallback: T): T {
 }
 
 /* ---------------- saved entries (pinned signals) ---------------- */
-export type SavedItem = { signal: Signal; tags: string[]; savedAt: number };
+export type SavedItem = { signal: Signal; tags: string[]; savedAt: number; note?: string };
 type SavedStore = Record<string, SavedItem>;
 const KEY_SAVED = "jotter.saved.v1";
 
@@ -48,6 +48,10 @@ export function toggleSave(signal: Signal) {
 export function setTags(id: string, tags: string[]) {
   const store = readKey<SavedStore>(KEY_SAVED, {});
   if (store[id]) { store[id].tags = tags; writeKey(KEY_SAVED, store); }
+}
+export function updateSavedNote(id: string, note: string) {
+  const store = readKey<SavedStore>(KEY_SAVED, {});
+  if (store[id]) { store[id].note = note; writeKey(KEY_SAVED, store); }
 }
 export function removeSaved(id: string) {
   const store = readKey<SavedStore>(KEY_SAVED, {});
@@ -106,42 +110,4 @@ export function useHighlights() {
   const items = Object.values(store).sort((a, b) => b.createdAt - a.createdAt);
   const allTags = Array.from(new Set(items.flatMap((i) => i.tags))).sort();
   return { items, allTags };
-}
-
-/* ---------------- report basket (feeds the Reports generator) ---------------- */
-export type ReportItem = {
-  id: string;
-  kind: "signal" | "highlight";
-  heading: string;
-  text: string;
-  note?: string;
-  source: string;
-  sourceId: string;
-  date: string;
-  post_url: string;
-  addedAt: number;
-};
-type ReportStore = Record<string, ReportItem>;
-const KEY_REPORT = "jotter.report.v1";
-
-/** Toggle an item in/out of the report basket. */
-export function toggleReport(it: Omit<ReportItem, "addedAt">) {
-  const s = readKey<ReportStore>(KEY_REPORT, {});
-  if (s[it.id]) delete s[it.id];
-  else s[it.id] = { ...it, addedAt: Date.now() };
-  writeKey(KEY_REPORT, s);
-}
-export function removeFromReport(id: string) {
-  const s = readKey<ReportStore>(KEY_REPORT, {});
-  delete s[id];
-  writeKey(KEY_REPORT, s);
-}
-export function clearReport() {
-  writeKey(KEY_REPORT, {});
-}
-export function useReport() {
-  const store = useStore<ReportStore>(KEY_REPORT, {});
-  const items = Object.values(store).sort((a, b) => a.addedAt - b.addedAt);
-  const ids = new Set(Object.keys(store));
-  return { items, ids };
 }

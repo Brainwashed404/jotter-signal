@@ -1,0 +1,72 @@
+name: Nightly data refresh
+
+on:
+  schedule:
+    - cron: "0 4 * * *"   # 4 AM UTC — runs after most sources have published overnight
+  workflow_dispatch:        # allow manual trigger from the Actions tab
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # awscli speaks the S3-compatible R2 API
+      - name: Install AWS CLI
+        run: pip install awscli --quiet
+
+      # Download the previous engine/data/ archive so incremental fetch has history
+      - name: Restore engine data from R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          aws s3 cp "s3://${R2_BUCKET}/engine-data.tar.gz" engine-data.tar.gz \
+            --endpoint-url "${R2_ENDPOINT}" 2>/dev/null \
+            && tar xzf engine-data.tar.gz -C engine/ \
+            && echo "Restored existing engine data archive" \
+            || echo "No existing archive — starting fresh (first run or manual reset)"
+
+      # Incremental: fetch latest from all feeds + rebuild signals.jsonl.
+      # --no-backfill skips the deep archive pass (that only runs locally when
+      # adding a new source). Add --ids a,b,c to limit to specific sources.
+      - name: Run incremental refresh
+        run: |
+          cd engine
+          python3 refresh_all.py --no-backfill
+
+      # Persist updated engine/data/ so next run can be incremental
+      - name: Upload engine data archive to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          tar czf engine-data.tar.gz -C engine data/
+          aws s3 cp engine-data.tar.gz "s3://${R2_BUCKET}/engine-data.tar.gz" \
+            --endpoint-url "${R2_ENDPOINT}"
+
+      # Publish the rebuilt signals for the app to fetch on next cold start
+      - name: Upload signals and experts to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          aws s3 cp web/data/signals.jsonl "s3://${R2_BUCKET}/signals.jsonl" \
+            --endpoint-url "${R2_ENDPOINT}"
+          aws s3 cp web/data/experts.json "s3://${R2_BUCKET}/experts.json" \
+            --endpoint-url "${R2_ENDPOINT}"
+          echo "Upload complete"

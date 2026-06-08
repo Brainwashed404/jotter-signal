@@ -1,0 +1,34 @@
+"use client";
+import { useState, type ReactNode } from "react";
+
+export default function CollapsibleSection({
+  title,
+  defaultOpen = true,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <section>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-2 w-full text-left mb-3"
+        aria-expanded={open}
+      >
+        <h2 className="text-lg font-medium">{title}</h2>
+        <svg
+          width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="ml-auto transition-transform duration-200"
+          style={{ color: "var(--muted)", transform: open ? "rotate(0deg)" : "rotate(-90deg)" }}
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+      {open && children}
+    </section>
+  );
+}

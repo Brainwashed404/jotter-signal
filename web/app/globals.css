@@ -7,10 +7,11 @@
   --border: #232c3d;
   --border-hover: #2d3850;
   --header-bg: rgba(10, 13, 18, 0.82);
-  --text: #e8ecf2;
+  --text: #ffffff;
   --muted: #8b97a8;
   --accent: #e3bb4e;
   --accent-2: #8acbb0;
+  --on-accent: #1a1205; /* text/icon colour to sit ON an --accent background */
   --up: #4ade80;
   --down: #f87171;
 }
@@ -26,6 +27,7 @@ html[data-theme="light"] {
   --muted: #6a6f5e;
   --accent: #e3bb4e;
   --accent-2: #8acbb0;
+  --on-accent: #1a1205;
   --up: #15803d;
   --down: #dc2626;
 }
@@ -35,6 +37,11 @@ html, body {
   color: var(--text);
   -webkit-font-smoothing: antialiased;
 }
+
+/* Article / body copy colour: softened (muted) in light, pure white in EVERY
+   night mode (dark = the absence of data-theme). Works across all skins. */
+html[data-theme="light"] { --body-text: var(--muted); }
+html:not([data-theme="light"]) { --body-text: #ffffff; }
 
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -84,3 +91,659 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent); }
   border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; cursor: pointer;
 }
 .btn-ghost:hover { border-color: var(--accent); }
+
+/* Selected chips/ghost-buttons (active filter pills etc.) fill with the accent so
+   the selected state is clearly visible on EVERY skin — including monochrome ones
+   where accent == text would otherwise be invisible. Components mark selection with
+   inline `color/border-color: var(--accent)`; this matches that and fills the pill.
+   `--on-accent` is the readable text colour to sit on the accent fill (per skin). */
+.chip[style*="--accent)"], .btn-ghost[style*="--accent)"] {
+  background: var(--accent) !important; color: var(--on-accent) !important; border-color: var(--accent) !important;
+}
+
+/* Weather/date/clock pill — its corner shape follows each skin's chrome.
+   Balanced mix: full pill (default/lcars/bubblegum), rounded (8px) for the soft skins,
+   square (0) only for the genuinely pixel / terminal / CRT / wireframe skins. */
+.weather-pill { border-radius: 999px; }
+html[data-skin="neo"] .weather-pill, html[data-skin="system7"] .weather-pill, html[data-skin="mac"] .weather-pill, html[data-skin="editorial"] .weather-pill, html[data-skin="deco"] .weather-pill, html[data-skin="swiss"] .weather-pill, html[data-skin="win95"] .weather-pill, html[data-skin="darkside"] .weather-pill { border-radius: 8px; }
+html[data-skin="tech"] .weather-pill, html[data-skin="cyber"] .weather-pill, html[data-skin="punk"] .weather-pill, html[data-skin="pixel"] .weather-pill, html[data-skin="terminal"] .weather-pill, html[data-skin="amber"] .weather-pill, html[data-skin="teletext"] .weather-pill, html[data-skin="fairlight"] .weather-pill, html[data-skin="vector"] .weather-pill, html[data-skin="system1"] .weather-pill, html[data-skin="bitmap"] .weather-pill { border-radius: 0; }
+
+/* Hide scrollbar but keep scrollability (radio station list). */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Theme toggle: icon swap — plays on mount via React key remount */
+@keyframes theme-icon-in {
+  from { opacity: 0; transform: rotate(-70deg) scale(0.4); }
+  to   { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+.theme-icon { display: inline-flex; animation: theme-icon-in 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* Settings gear: spin on hover */
+@keyframes gear-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+a[href="/settings"]:hover .gear-icon { animation: gear-spin 650ms cubic-bezier(0.4, 0, 0.2, 1); transform-origin: center; }
+
+/* ============================================================
+   Display size — scales the whole UI (set by the settings page).
+   ============================================================ */
+html[data-fontsize="sm"] { zoom: 0.9; }
+html[data-fontsize="lg"] { zoom: 1.12; }
+html[data-fontsize="xl"] { zoom: 1.25; }
+
+/* Mono terminal skins (amber/teletext/fairlight): enlarge just the READING copy for
+   legibility — no zoom, so the layout, radio sidebar and settings grid are identical
+   to every other skin. */
+html[data-skin="amber"] main .text-\[13px\], html[data-skin="teletext"] main .text-\[13px\], html[data-skin="fairlight"] main .text-\[13px\] { font-size: 15px; }
+html[data-skin="amber"] main .whitespace-pre-wrap, html[data-skin="teletext"] main .whitespace-pre-wrap, html[data-skin="fairlight"] main .whitespace-pre-wrap { font-size: 15px; line-height: 1.65; }
+html[data-skin="amber"] main .font-medium.leading-snug, html[data-skin="teletext"] main .font-medium.leading-snug, html[data-skin="fairlight"] main .font-medium.leading-snug { font-size: 17px; }
+
+/* ============================================================
+   ALTERNATIVE SKINS (set via data-skin on <html>).
+   Each ships a LIGHT palette (base rule) + a NIGHT mode
+   (html[data-skin=X]:not([data-theme="light"]) — dark mode is
+   the *absence* of data-theme). Component chrome reads the vars
+   via --ink (structural line/shadow colour) + --accent, so the
+   borders / shadows / fonts are shared across both modes.
+   ============================================================ */
+
+/* ---------- Jotter (default — no data-skin attribute when active) ---------- */
+html:not([data-skin]) .panel { transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease; }
+html:not([data-skin]) .panel-hover:hover { border-color: var(--accent); box-shadow: 0 6px 20px -4px color-mix(in srgb, var(--accent) 20%, transparent); transform: translateY(-2px); }
+
+/* ---------- Modern Neobrutalism ---------- */
+html[data-skin="neo"] {
+  --bg:#fcfdf2; --panel:#ffffff; --panel-2:#f1f2e8; --ink:#000000;
+  --border:#000000; --border-hover:#000000; --header-bg:rgba(252,253,242,0.92);
+  --text:#0a0a0a; --muted:#4b4b4b; --accent:#14b8a6; --accent-2:#0d9488; --on-accent:#ffffff; --up:#15803d; --down:#dc2626;
+}
+html[data-skin="neo"]:not([data-theme="light"]) {
+  --bg:#15161b; --panel:#202229; --panel-2:#2a2d36; --ink:#ffffff;
+  --border:#ffffff; --border-hover:#ffffff; --header-bg:rgba(21,22,27,0.92);
+  --text:#ffffff; --muted:#a7a7a0; --accent:#2dd4bf; --accent-2:#5eead4; --up:#4ade80; --down:#f87171;
+}
+html[data-skin="neo"] body { font-family:var(--font-neo),"Arial Black",system-ui,sans-serif; font-weight:500; }
+html[data-skin="neo"] h1, html[data-skin="neo"] h2, html[data-skin="neo"] h3, html[data-skin="neo"] h4 { font-weight:800; letter-spacing:-0.01em; }
+html[data-skin="neo"] main .gap-3 { gap:1.5rem; }
+html[data-skin="neo"] main .gap-2 { gap:1rem; }
+html[data-skin="neo"] main .space-y-3 > * + * { margin-top:1.25rem; }
+html[data-skin="neo"] main .space-y-6 > * + * { margin-top:2.25rem; }
+html[data-skin="neo"] main .space-y-8 > * + * { margin-top:2.75rem; }
+html[data-skin="neo"] main .space-y-10 > * + * { margin-top:3.25rem; }
+html[data-skin="neo"] .panel { border:3px solid var(--ink); border-radius:6px; box-shadow:4px 4px 0 0 var(--ink); transition:box-shadow 120ms ease, transform 120ms ease, border-color 120ms ease; }
+html[data-skin="neo"] .panel-hover:hover { border-color:var(--ink); transform:translate(-2px,-2px); box-shadow:6px 6px 0 0 var(--ink); }
+html[data-skin="neo"] .chip { border:2px solid var(--ink); border-radius:4px; color:var(--text); font-weight:600; transition:background-color 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
+html[data-skin="neo"] .chip:hover { transform:translate(-1px,-1px); box-shadow:2px 2px 0 0 var(--ink); }
+html[data-skin="neo"] .chip:active { transform:translate(1px,1px); box-shadow:0 0 0 0; background:var(--accent); color:#000; }
+html[data-skin="neo"] input, html[data-skin="neo"] textarea, html[data-skin="neo"] select { border:2px solid var(--ink); border-radius:4px; }
+html[data-skin="neo"] .btn, html[data-skin="neo"] .btn-ghost { border:3px solid var(--ink); border-radius:6px; box-shadow:4px 4px 0 0 var(--ink); transition:background-color 120ms ease, color 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
+html[data-skin="neo"] .btn { font-weight:700; color:#000; }
+html[data-skin="neo"] .btn-ghost { font-weight:600; }
+html[data-skin="neo"] .btn:hover, html[data-skin="neo"] .btn-ghost:hover { filter:none; transform:translate(-2px,-2px); box-shadow:6px 6px 0 0 var(--ink); }
+html[data-skin="neo"] .btn:active, html[data-skin="neo"] .btn-ghost:active { transform:translate(4px,4px); box-shadow:0 0 0 0; background:var(--accent); color:#000; }
+html[data-skin="neo"] ::selection { background:var(--accent); color:#000; }
+
+/* ---------- Tech-Minimal ---------- */
+html[data-skin="tech"] {
+  --bg:#fcfdf2; --panel:#fcfdf2; --panel-2:#f1f2e8; --ink:#000000;
+  --border:#000000; --border-hover:#000000; --header-bg:rgba(252,253,242,0.95);
+  --text:#0a0a0a; --muted:#555555; --accent:#15803d; --accent-2:#0a0a0a; --on-accent:var(--bg); --up:#15803d; --down:#b91c1c;
+}
+html[data-skin="tech"]:not([data-theme="light"]) {
+  --bg:#0a0e0a; --panel:#0d120d; --panel-2:#121a12; --ink:#3ddc7e;
+  --border:#1f7a45; --border-hover:#3ddc7e; --header-bg:rgba(10,14,10,0.95);
+  --text:#ffffff; --muted:#5fa877; --accent:#3ddc7e; --accent-2:#cdebd4; --up:#3ddc7e; --down:#ff6b6b;
+  --body-text:#3ddc7e; /* terminal-green article text (overrides the global white) */
+}
+html[data-skin="tech"] body, html[data-skin="tech"] input, html[data-skin="tech"] textarea, html[data-skin="tech"] select, html[data-skin="tech"] button { font-family:var(--font-tech), ui-monospace, "SF Mono", Menlo, monospace; }
+html[data-skin="tech"] h1, html[data-skin="tech"] h2, html[data-skin="tech"] h3, html[data-skin="tech"] h4 { letter-spacing:-0.02em; }
+html[data-skin="tech"] .panel { border:1px solid var(--border); border-radius:0; box-shadow:none; }
+html[data-skin="tech"] .panel-hover:hover { border-color:var(--border-hover); background:var(--panel-2); }
+html[data-skin="tech"] .chip { border:1px solid var(--border); border-radius:0; color:var(--text); background:transparent; transition:background-color 100ms ease, color 100ms ease; }
+html[data-skin="tech"] .chip:active { background:var(--accent); color:var(--bg); }
+html[data-skin="tech"] input, html[data-skin="tech"] textarea, html[data-skin="tech"] select { border:1px solid var(--border); border-radius:0; }
+html[data-skin="tech"] .btn { background:var(--ink); color:var(--bg); border-radius:0; border:1px solid var(--ink); font-weight:600; transition:background-color 120ms ease, color 120ms ease, transform 100ms ease; }
+html[data-skin="tech"] .btn:hover { filter:none; background:var(--bg); color:var(--ink); }
+html[data-skin="tech"] .btn:active { transform:translateY(1px); background:var(--accent); color:var(--bg); border-color:var(--accent); }
+html[data-skin="tech"] .btn-ghost { border:1px solid var(--border); border-radius:0; }
+html[data-skin="tech"] .btn-ghost:hover { border-color:var(--border-hover); background:var(--panel-2); }
+html[data-skin="tech"] ::selection { background:var(--accent); color:var(--bg); }
+
+/* ---------- Punk Riso ---------- */
+html[data-skin="punk"] {
+  --bg:#f7f3e8; --panel:#fbf8ef; --panel-2:#efe9d8; --ink:#000000;
+  --border:#111111; --border-hover:#ff48b0; --header-bg:rgba(247,243,232,0.9);
+  --text:#141414; --muted:#5a564c; --accent:#ff48b0; --accent-2:#ff48b0; --on-accent:var(--ink); --up:#1f9d57; --down:#ff48b0;
+}
+html[data-skin="punk"]:not([data-theme="light"]) {
+  --bg:#15120e; --panel:#1c1813; --panel-2:#241f18; --ink:#ffffff;
+  --border:#ffffff; --border-hover:#ff5bb8; --header-bg:rgba(21,18,14,0.9);
+  --text:#ffffff; --muted:#a89c88; --accent:#ff5bb8; --accent-2:#ff5bb8; --up:#5bd98a; --down:#ff5bb8;
+}
+html[data-skin="punk"] body { font-family:ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+html[data-skin="punk"] h1, html[data-skin="punk"] h2, html[data-skin="punk"] h3, html[data-skin="punk"] h4 { font-family:var(--font-punk), "Arial Narrow", system-ui, sans-serif; text-transform:uppercase; letter-spacing:0.01em; font-weight:400; }
+html[data-skin="punk"] main .gap-3 { gap:1.5rem; }
+html[data-skin="punk"] main .space-y-8 > * + * { margin-top:2.75rem; }
+html[data-skin="punk"] .panel { background:var(--panel); border:2px solid var(--ink); border-radius:0; box-shadow:5px 5px 0 0 var(--accent); transition:box-shadow 120ms ease, transform 120ms ease; }
+html[data-skin="punk"] .panel-hover:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 0 var(--accent); }
+html[data-skin="punk"] .chip { border:1.5px solid var(--ink); border-radius:0; color:var(--text); background:var(--panel); font-weight:700; transform:rotate(-1.5deg); }
+html[data-skin="punk"] input, html[data-skin="punk"] textarea, html[data-skin="punk"] select { border:2px solid var(--ink); border-radius:0; background:var(--panel); }
+html[data-skin="punk"] .btn { background:var(--ink); color:var(--bg); border:2px solid var(--ink); border-radius:0; font-weight:700; text-transform:uppercase; box-shadow:4px 4px 0 0 var(--accent); transition:background-color 120ms ease, color 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
+html[data-skin="punk"] .btn:hover { filter:none; transform:translate(-2px,-2px); box-shadow:6px 6px 0 0 var(--accent); }
+html[data-skin="punk"] .btn:active { transform:translate(4px,4px); box-shadow:0 0 0 0; background:var(--accent); color:var(--ink); }
+html[data-skin="punk"] .btn-ghost { background:var(--panel); color:var(--ink); border:2px solid var(--ink); border-radius:0; box-shadow:4px 4px 0 0 var(--accent); transition:transform 120ms ease, box-shadow 120ms ease; }
+html[data-skin="punk"] .btn-ghost:hover { border-color:var(--ink); transform:translate(-2px,-2px); box-shadow:6px 6px 0 0 var(--accent); }
+html[data-skin="punk"] ::selection { background:var(--accent); color:var(--ink); }
+
+/* ---------- Editorial (Broadsheet) ---------- */
+html[data-skin="editorial"] {
+  --bg:#fbfaf5; --panel:#ffffff; --panel-2:#f1efe7; --ink:#1a1a1a;
+  --border:#d8d3c4; --border-hover:#1a1a1a; --header-bg:rgba(251,250,245,0.88);
+  --text:#1a1a1a; --muted:#6b665a; --accent:#b23a2e; --accent-2:#2b4a6f; --on-accent:#ffffff; --up:#3f6b3f; --down:#b23a2e;
+}
+html[data-skin="editorial"]:not([data-theme="light"]) {
+  --bg:#16150f; --panel:#1d1c15; --panel-2:#26241b; --ink:#f1ede0;
+  --border:#403d31; --border-hover:#f1ede0; --header-bg:rgba(22,21,15,0.88);
+  --text:#ffffff; --muted:#a39d8a; --accent:#e0796b; --accent-2:#8fb0d6; --up:#9bb87a; --down:#e0796b;
+}
+html[data-skin="editorial"] body { font-family:"Iowan Old Style", Georgia, "Times New Roman", serif; }
+html[data-skin="editorial"] h1, html[data-skin="editorial"] h2, html[data-skin="editorial"] h3, html[data-skin="editorial"] h4 { font-family:var(--font-serif), Georgia, serif; font-weight:600; letter-spacing:-0.01em; }
+html[data-skin="editorial"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:2px; box-shadow:none; transition:border-color 160ms ease; }
+html[data-skin="editorial"] .panel-hover:hover { border-color:var(--border-hover); }
+html[data-skin="editorial"] .chip { border:1px solid var(--border); border-radius:2px; color:var(--text); background:transparent; text-transform:uppercase; letter-spacing:0.07em; }
+html[data-skin="editorial"] input, html[data-skin="editorial"] textarea, html[data-skin="editorial"] select { border:1px solid var(--border); border-radius:2px; }
+html[data-skin="editorial"] .btn { background:#e8b008; color:#1a1a14; border:1px solid #b8890a; border-radius:2px; font-weight:600; transition:background-color 140ms ease, color 140ms ease, border-color 140ms ease, transform 120ms ease; }
+html[data-skin="editorial"] .btn:hover { filter:brightness(1.06); background:#f5c518; border-color:#caa00a; color:#1a1a14; }
+html[data-skin="editorial"] .btn:active { transform:translateY(1px); }
+html[data-skin="editorial"] .btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); border-radius:2px; }
+html[data-skin="editorial"] .btn-ghost:hover { border-color:var(--ink); }
+html[data-skin="editorial"] ::selection { background:var(--accent); color:#fff; }
+
+/* ---------- Bubblegum (Soft Pop) ---------- */
+html[data-skin="bubblegum"] {
+  --bg:#fff2f9; --panel:#ffffff; --panel-2:#ffe6f3; --ink:#7a3b63;
+  --border:#ffd1e8; --border-hover:#ff5fa2; --header-bg:rgba(255,242,249,0.85);
+  --text:#5a2d49; --muted:#a877a0; --accent:#ff5fa2; --accent-2:#a78bfa; --on-accent:#ffffff; --up:#34c98a; --down:#ff5f7a;
+}
+html[data-skin="bubblegum"]:not([data-theme="light"]) {
+  --bg:#1f1424; --panel:#2a1b32; --panel-2:#352140; --ink:#ffd6ef;
+  --border:#4a2f54; --border-hover:#ff7ab8; --header-bg:rgba(31,20,36,0.85);
+  --text:#ffffff; --muted:#c79bc7; --accent:#ff7ab8; --accent-2:#b9a0ff; --up:#4bd99a; --down:#ff7a92;
+}
+html[data-skin="bubblegum"] body { font-family:var(--font-bubble), ui-rounded, "Quicksand", system-ui, sans-serif; }
+html[data-skin="bubblegum"] h1, html[data-skin="bubblegum"] h2, html[data-skin="bubblegum"] h3, html[data-skin="bubblegum"] h4 { font-family:var(--font-bubble), ui-rounded, system-ui, sans-serif; font-weight:600; letter-spacing:0; }
+html[data-skin="bubblegum"] .panel { background:var(--panel); border:2px solid var(--border); border-radius:24px; box-shadow:0 10px 24px -8px rgba(255,95,162,0.28); transition:box-shadow 200ms ease, transform 200ms cubic-bezier(.34,1.56,.64,1); }
+html[data-skin="bubblegum"] .panel-hover:hover { transform:translateY(-3px); box-shadow:0 16px 30px -8px rgba(255,95,162,0.4); }
+html[data-skin="bubblegum"] .chip { border:2px solid var(--border); border-radius:999px; color:var(--accent); background:var(--panel-2); font-weight:600; }
+html[data-skin="bubblegum"] input, html[data-skin="bubblegum"] textarea, html[data-skin="bubblegum"] select { border:2px solid var(--border); border-radius:16px; }
+html[data-skin="bubblegum"] .btn { background:var(--accent); color:#fff; border:none; border-radius:999px; font-weight:600; box-shadow:0 6px 16px -4px rgba(255,95,162,0.5); transition:transform 200ms cubic-bezier(.34,1.56,.64,1), box-shadow 200ms ease, filter 140ms ease; }
+html[data-skin="bubblegum"] .btn:hover { filter:brightness(1.05); transform:translateY(-2px) scale(1.02); box-shadow:0 10px 22px -4px rgba(255,95,162,0.6); }
+html[data-skin="bubblegum"] .btn:active { transform:translateY(1px) scale(0.95); box-shadow:0 3px 10px -4px rgba(255,95,162,0.5); }
+html[data-skin="bubblegum"] .btn-ghost { background:var(--panel-2); color:var(--accent); border:2px solid var(--border); border-radius:999px; transition:transform 200ms cubic-bezier(.34,1.56,.64,1), border-color 140ms ease; }
+html[data-skin="bubblegum"] .btn-ghost:hover { transform:translateY(-2px) scale(1.02); border-color:var(--accent); }
+html[data-skin="bubblegum"] .btn-ghost:active { transform:translateY(1px) scale(0.95); }
+html[data-skin="bubblegum"] ::selection { background:var(--accent); color:#fff; }
+
+/* ---------- Pixel Arcade (8-bit) ---------- */
+html[data-skin="pixel"] {
+  --bg:#f3f1e0; --panel:#ffffff; --panel-2:#e7e4cf; --ink:#1b1b2e;
+  --border:#1b1b2e; --border-hover:#e63946; --header-bg:rgba(243,241,224,0.92);
+  --text:#1b1b2e; --muted:#5a5a72; --accent:#e63946; --accent-2:#2d6cdf; --on-accent:#ffffff; --up:#2faa55; --down:#e63946;
+}
+html[data-skin="pixel"]:not([data-theme="light"]) {
+  --bg:#0c0c16; --panel:#14142a; --panel-2:#1c1c3a; --ink:#f3f1e0;
+  --border:#f3f1e0; --border-hover:#ff5d6c; --header-bg:rgba(12,12,22,0.92);
+  --text:#ffffff; --muted:#9a9ac0; --accent:#ff5d6c; --accent-2:#5b9cff; --up:#56d97a; --down:#ff5d6c;
+}
+html[data-skin="pixel"] body { font-family:var(--font-tech), ui-monospace, monospace; }
+html[data-skin="pixel"] h1, html[data-skin="pixel"] h2, html[data-skin="pixel"] h3, html[data-skin="pixel"] h4, html[data-skin="pixel"] .label, html[data-skin="pixel"] .chip, html[data-skin="pixel"] .btn, html[data-skin="pixel"] .btn-ghost { font-family:var(--font-pixel), var(--font-tech), monospace; }
+html[data-skin="pixel"] h1, html[data-skin="pixel"] h2, html[data-skin="pixel"] h3, html[data-skin="pixel"] h4 { font-weight:400; line-height:1.5; letter-spacing:0; }
+html[data-skin="pixel"] main .gap-3 { gap:1.5rem; }
+html[data-skin="pixel"] main .space-y-8 > * + * { margin-top:2.75rem; }
+html[data-skin="pixel"] .panel { background:var(--panel); border:3px solid var(--ink); border-radius:0; box-shadow:6px 6px 0 0 var(--ink); transition:transform 90ms steps(2,end), box-shadow 90ms steps(2,end); }
+html[data-skin="pixel"] .panel-hover:hover { transform:translate(-2px,-2px); box-shadow:8px 8px 0 0 var(--ink); }
+html[data-skin="pixel"] .chip { border:2px solid var(--ink); border-radius:0; color:var(--text); background:var(--panel-2); font-size:9px; }
+html[data-skin="pixel"] input, html[data-skin="pixel"] textarea, html[data-skin="pixel"] select { border:3px solid var(--ink); border-radius:0; }
+html[data-skin="pixel"] .btn { background:var(--accent); color:#fff; border:3px solid var(--ink); border-radius:0; box-shadow:4px 4px 0 0 var(--ink); transition:transform 90ms steps(2,end), box-shadow 90ms steps(2,end), background-color 90ms steps(2,end); }
+html[data-skin="pixel"] .btn:hover { filter:none; transform:translate(-2px,-2px); box-shadow:6px 6px 0 0 var(--ink); }
+html[data-skin="pixel"] .btn:active { transform:translate(4px,4px); box-shadow:0 0 0 0; background:var(--accent-2); }
+html[data-skin="pixel"] .btn-ghost { background:var(--panel); color:var(--text); border:3px solid var(--ink); border-radius:0; box-shadow:4px 4px 0 0 var(--ink); transition:transform 90ms steps(2,end), box-shadow 90ms steps(2,end); }
+html[data-skin="pixel"] .btn-ghost:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 0 var(--ink); }
+html[data-skin="pixel"] ::selection { background:var(--accent); color:#fff; }
+
+/* ---------- Deco Luxe (Art Deco) ---------- */
+html[data-skin="deco"] {
+  --bg:#f6f2e7; --panel:#fbf8ef; --panel-2:#efe9d6; --ink:#1d3b32;
+  --border:#c9a227; --border-hover:#1d3b32; --header-bg:rgba(246,242,231,0.9);
+  --text:#1d3b32; --muted:#7d7256; --accent:#b8923f; --accent-2:#1e6b54; --up:#1e6b54; --down:#a8503a;
+}
+html[data-skin="deco"]:not([data-theme="light"]) {
+  --bg:#0e110f; --panel:#151a17; --panel-2:#1d231f; --ink:#e8dcb8;
+  --border:#9a7d33; --border-hover:#e8dcb8; --header-bg:rgba(14,17,15,0.9);
+  --text:#ffffff; --muted:#a99f7e; --accent:#d4af52; --accent-2:#4fae8c; --up:#4fae8c; --down:#cf7a5e;
+}
+html[data-skin="deco"] body { font-family:ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+html[data-skin="deco"] h1, html[data-skin="deco"] h2, html[data-skin="deco"] h3, html[data-skin="deco"] h4 { font-family:var(--font-deco), "Century Gothic", system-ui, sans-serif; font-weight:400; letter-spacing:0.05em; text-transform:uppercase; }
+html[data-skin="deco"] .panel { background:var(--panel); border:1px solid var(--accent); border-radius:2px; box-shadow:inset 0 0 0 4px var(--panel), inset 0 0 0 5px color-mix(in srgb, var(--accent) 45%, transparent); transition:box-shadow 200ms ease, border-color 200ms ease; }
+html[data-skin="deco"] .panel-hover:hover { border-color:var(--border-hover); }
+html[data-skin="deco"] .chip { border:1px solid var(--accent); border-radius:0; color:var(--accent); background:transparent; text-transform:uppercase; letter-spacing:0.06em; }
+html[data-skin="deco"] input, html[data-skin="deco"] textarea, html[data-skin="deco"] select { border:1px solid var(--accent); border-radius:2px; }
+html[data-skin="deco"] .btn { background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:2px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; transition:background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 120ms ease; }
+html[data-skin="deco"] .btn:hover { filter:none; background:var(--accent); color:#1a1a14; box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+html[data-skin="deco"] .btn:active { transform:translateY(1px); }
+html[data-skin="deco"] .btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); border-radius:2px; }
+html[data-skin="deco"] .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+html[data-skin="deco"] ::selection { background:var(--accent); color:#1a1a14; }
+
+/* ---------- Cyber HUD ---------- */
+html[data-skin="cyber"] {
+  --bg:#eef3f6; --panel:#ffffff; --panel-2:#dde8ef; --ink:#0a2a33;
+  --border:#19b6c9; --border-hover:#ff3d8b; --header-bg:rgba(238,243,246,0.9);
+  --text:#0a2a33; --muted:#4a6b75; --accent:#0bb6cf; --accent-2:#ff3d8b; --up:#10b981; --down:#ff3d8b;
+}
+html[data-skin="cyber"]:not([data-theme="light"]) {
+  --bg:#070b12; --panel:#0d1622; --panel-2:#13202f; --ink:#9fe9f5;
+  --border:#1fd3e8; --border-hover:#ff5c9d; --header-bg:rgba(7,11,18,0.9);
+  --text:#ffffff; --muted:#5f8a96; --accent:#1fd3e8; --accent-2:#ff5c9d; --up:#22e3a0; --down:#ff5c9d;
+}
+html[data-skin="cyber"] body, html[data-skin="cyber"] input, html[data-skin="cyber"] textarea, html[data-skin="cyber"] select, html[data-skin="cyber"] button { font-family:var(--font-tech), ui-monospace, monospace; }
+html[data-skin="cyber"] h1, html[data-skin="cyber"] h2, html[data-skin="cyber"] h3, html[data-skin="cyber"] h4 { font-family:var(--font-cyber), var(--font-tech), monospace; letter-spacing:0.04em; text-transform:uppercase; }
+html[data-skin="cyber"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:0; clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px)); transition:border-color 160ms ease; }
+html[data-skin="cyber"] .panel-hover:hover { border-color:var(--border-hover); }
+html[data-skin="cyber"] .chip { border:1px solid var(--border); border-radius:0; color:var(--accent); background:transparent; font-family:var(--font-cyber), var(--font-tech), monospace; text-transform:uppercase; letter-spacing:0.04em; font-size:10px; transition:background-color 140ms ease, color 140ms ease, border-color 140ms ease; }
+/* Selected state (set inline as color/border var(--accent)) was invisible because the
+   default cyber chip is already cyan — give it a solid fill so selection reads clearly. */
+html[data-skin="cyber"] .chip[style*="--accent)"], html[data-skin="cyber"] .btn-ghost[style*="--accent)"] {
+  background:var(--accent); color:#04181f !important; border-color:var(--accent) !important;
+}
+html[data-skin="cyber"] input, html[data-skin="cyber"] textarea, html[data-skin="cyber"] select { border:1px solid var(--border); border-radius:0; }
+html[data-skin="cyber"] .btn { background:var(--accent); color:#04181f; border:1px solid var(--accent); border-radius:0; font-weight:600; letter-spacing:0.06em; clip-path:polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px); transition:background-color 140ms ease, color 140ms ease, filter 140ms ease, transform 100ms ease; }
+html[data-skin="cyber"] .btn:hover { filter:brightness(1.12); }
+html[data-skin="cyber"] .btn:active { transform:translateY(1px); background:var(--accent-2); color:#fff; border-color:var(--accent-2); }
+html[data-skin="cyber"] .btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); border-radius:0; clip-path:polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px); transition:border-color 140ms ease, color 140ms ease; }
+html[data-skin="cyber"] .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+html[data-skin="cyber"] ::selection { background:var(--accent); color:#04181f; }
+
+/* ---------- Dark Side (Imperial battle-station HUD) ----------
+   Black command console: Sith-red readouts + cold azure data. Sharp 0-radius
+   panels with a thin red top "readout" line + red glow on hover; angular
+   uppercase Chakra Petch heads over IBM Plex Mono body. Dark-first (a light
+   "schematic" mode is defined for completeness). */
+html[data-skin="darkside"] {
+  --bg:#eef0f3; --panel:#ffffff; --panel-2:#e2e5ea; --ink:#b02a30;
+  --border:#cfa6a8; --border-hover:#cc2b2b; --header-bg:rgba(238,240,243,0.92);
+  --text:#15171c; --muted:#6a7280; --accent:#d11f1f; --accent-2:#1f7fb0; --on-accent:#ffffff; --up:#15803d; --down:#cc2b2b;
+}
+html[data-skin="darkside"]:not([data-theme="light"]) {
+  --bg:#05060a; --panel:#0c0e15; --panel-2:#13161f; --ink:#ff3b3b;
+  --border:#5e1c20; --border-hover:#ff3b3b; --header-bg:rgba(5,6,10,0.92);
+  --text:#e9ebf2; --muted:#6b7585; --accent:#ff2b2b; --accent-2:#46b6e6; --on-accent:#ffffff; --up:#34d17e; --down:#ff4d4d;
+}
+html[data-skin="darkside"] body, html[data-skin="darkside"] input, html[data-skin="darkside"] textarea, html[data-skin="darkside"] select, html[data-skin="darkside"] button { font-family:var(--font-plex), ui-monospace, monospace; letter-spacing:0.01em; }
+html[data-skin="darkside"] h1, html[data-skin="darkside"] h2, html[data-skin="darkside"] h3, html[data-skin="darkside"] h4 { font-family:var(--font-vector), var(--font-plex), monospace; text-transform:uppercase; letter-spacing:0.08em; }
+html[data-skin="darkside"] .label { letter-spacing:0.1em; }
+html[data-skin="darkside"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:0; box-shadow:inset 0 1px 0 color-mix(in srgb, var(--accent) 32%, transparent); transition:border-color 160ms ease, box-shadow 160ms ease; }
+html[data-skin="darkside"] .panel-hover:hover { border-color:var(--border-hover); box-shadow:inset 0 1px 0 var(--accent), 0 0 16px -4px color-mix(in srgb, var(--accent) 55%, transparent); }
+html[data-skin="darkside"] .chip { border:1px solid var(--border); border-radius:0; color:var(--accent); background:transparent; text-transform:uppercase; letter-spacing:0.06em; font-size:10px; transition:background-color 140ms ease, color 140ms ease, border-color 140ms ease; }
+html[data-skin="darkside"] .chip[style*="--accent)"], html[data-skin="darkside"] .btn-ghost[style*="--accent)"] { background:var(--accent); color:#0a0203 !important; border-color:var(--accent) !important; }
+html[data-skin="darkside"] input, html[data-skin="darkside"] textarea, html[data-skin="darkside"] select { border:1px solid var(--border); border-radius:0; }
+html[data-skin="darkside"] .btn { background:var(--accent); color:#0a0203; border:1px solid var(--accent); border-radius:0; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; transition:filter 140ms ease, box-shadow 140ms ease, transform 100ms ease; }
+html[data-skin="darkside"] .btn:hover { filter:brightness(1.1); box-shadow:0 0 16px -3px color-mix(in srgb, var(--accent) 70%, transparent); }
+html[data-skin="darkside"] .btn:active { transform:translateY(1px); }
+html[data-skin="darkside"] .btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); border-radius:0; transition:border-color 140ms ease, color 140ms ease; }
+html[data-skin="darkside"] .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+html[data-skin="darkside"] ::selection { background:var(--accent); color:#0a0203; }
+
+/* ---------- Macintosh System 1 (1984) — 1-bit black & white ----------
+   Identity: pure monochrome, square white windows on a grey desktop, a hard 1px
+   black drop shadow, Geneva/Chicago system type, inverted (black) selection.
+   Night mode = a clean inversion (white on black). */
+html[data-skin="system1"] {
+  --bg:#c8c8c8; --panel:#ffffff; --panel-2:#e6e6e6; --ink:#000000;
+  --border:#000000; --border-hover:#000000; --header-bg:#ffffff;
+  --text:#000000; --muted:#3a3a3a; --accent:#000000; --accent-2:#000000; --on-accent:#ffffff; --up:#000000; --down:#000000;
+}
+html[data-skin="system1"]:not([data-theme="light"]) {
+  --bg:#000000; --panel:#101010; --panel-2:#1c1c1c; --ink:#ffffff;
+  --border:#ffffff; --border-hover:#ffffff; --header-bg:#000000;
+  --text:#ffffff; --muted:#b5b5b5; --accent:#ffffff; --accent-2:#ffffff; --on-accent:#000000; --up:#ffffff; --down:#ffffff;
+}
+html[data-skin="system1"] body, html[data-skin="system1"] input, html[data-skin="system1"] textarea, html[data-skin="system1"] select, html[data-skin="system1"] button { font-family:"Geneva","Chicago",-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif; }
+html[data-skin="system1"] h1, html[data-skin="system1"] h2, html[data-skin="system1"] h3, html[data-skin="system1"] h4 { font-weight:700; letter-spacing:0; }
+html[data-skin="system1"] .panel { background:var(--panel); border:1px solid var(--ink); border-radius:0; box-shadow:2px 2px 0 0 var(--ink); transition:box-shadow 120ms ease, transform 120ms ease; }
+html[data-skin="system1"] .panel-hover:hover { transform:translate(-1px,-1px); box-shadow:3px 3px 0 0 var(--ink); }
+html[data-skin="system1"] .chip { border:1px solid var(--ink); border-radius:0; color:var(--text); background:var(--panel); font-size:10px; }
+html[data-skin="system1"] input, html[data-skin="system1"] textarea, html[data-skin="system1"] select { border:1px solid var(--ink); border-radius:0; background:var(--panel); }
+html[data-skin="system1"] .btn { background:var(--ink); color:var(--panel); border:1px solid var(--ink); border-radius:0; font-weight:700; box-shadow:2px 2px 0 0 var(--ink); transition:transform 110ms ease, box-shadow 110ms ease; }
+html[data-skin="system1"] .btn:hover { filter:none; }
+html[data-skin="system1"] .btn:active { transform:translate(2px,2px); box-shadow:0 0 0 0; }
+html[data-skin="system1"] .btn-ghost { background:var(--panel); color:var(--text); border:1px solid var(--ink); border-radius:0; box-shadow:2px 2px 0 0 var(--ink); transition:transform 110ms ease, box-shadow 110ms ease; }
+html[data-skin="system1"] .btn-ghost:active { transform:translate(2px,2px); box-shadow:0 0 0 0; }
+html[data-skin="system1"] ::selection { background:var(--text); color:var(--panel); }
+
+/* ---------- Macintosh System 7 (1991) — B&W chrome, teal desktop, colour arrives ----------
+   B&W window chrome (black borders, 1px hard shadow) sitting on the classic
+   System 7 teal desktop, with blue + red colour accents (selection/links). */
+html[data-skin="system7"] {
+  --bg:#6d8a96; --panel:#ffffff; --panel-2:#dcdcdc; --ink:#000000;
+  --border:#000000; --border-hover:#0e8a9c; --header-bg:#dcdcdc;
+  --text:#000000; --muted:#3f4a4f; --accent:#0e8a9c; --accent-2:#d72a2a; --on-accent:#ffffff; --up:#15803d; --down:#cc2222;
+}
+html[data-skin="system7"]:not([data-theme="light"]) {
+  --bg:#1f2d33; --panel:#0f1518; --panel-2:#1a2429; --ink:#e8edf0;
+  --border:#e8edf0; --border-hover:#3fc6d6; --header-bg:#1a2429;
+  --text:#ffffff; --muted:#9fb0b8; --accent:#3fc6d6; --accent-2:#ff7a6f; --on-accent:#0f1518; --up:#34d17e; --down:#ff6b6b;
+}
+html[data-skin="system7"] body, html[data-skin="system7"] input, html[data-skin="system7"] textarea, html[data-skin="system7"] select, html[data-skin="system7"] button { font-family:"Geneva","Chicago",-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif; }
+html[data-skin="system7"] h1, html[data-skin="system7"] h2, html[data-skin="system7"] h3, html[data-skin="system7"] h4 { font-weight:700; }
+html[data-skin="system7"] .panel { background:var(--panel); border:1px solid var(--ink); border-radius:2px; box-shadow:1px 1px 0 0 var(--ink); transition:border-color 120ms ease, box-shadow 120ms ease; }
+html[data-skin="system7"] .panel-hover:hover { border-color:var(--accent); box-shadow:2px 2px 0 0 var(--accent); }
+html[data-skin="system7"] .chip { border:1px solid var(--ink); border-radius:2px; color:var(--text); background:var(--panel-2); font-size:10px; }
+html[data-skin="system7"] input, html[data-skin="system7"] textarea, html[data-skin="system7"] select { border:1px solid var(--ink); border-radius:2px; background:var(--panel); }
+html[data-skin="system7"] .btn { background:var(--accent); color:var(--on-accent); border:1px solid var(--ink); border-radius:2px; font-weight:700; box-shadow:1px 1px 0 0 var(--ink); transition:transform 110ms ease, box-shadow 110ms ease, filter 120ms ease; }
+html[data-skin="system7"] .btn:hover { filter:brightness(1.08); }
+html[data-skin="system7"] .btn:active { transform:translate(1px,1px); box-shadow:0 0 0 0; }
+html[data-skin="system7"] .btn-ghost { background:var(--panel); color:var(--text); border:1px solid var(--ink); border-radius:2px; box-shadow:1px 1px 0 0 var(--ink); transition:border-color 120ms ease; }
+html[data-skin="system7"] .btn-ghost:hover { border-color:var(--accent); }
+html[data-skin="system7"] ::selection { background:var(--accent); color:var(--on-accent); }
+
+/* ---------- Bitmap (1-bit dithered art) ----------
+   Fine halftone dot dither across the desktop, Silkscreen pixel headings over a
+   mono body, stark high-contrast B&W, chunky stepped hard shadows. */
+html[data-skin="bitmap"] {
+  --bg:#ffffff; --panel:#ffffff; --panel-2:#ececec; --ink:#000000;
+  --border:#000000; --border-hover:#000000; --header-bg:rgba(255,255,255,0.95);
+  --text:#000000; --muted:#333333; --accent:#000000; --accent-2:#000000; --on-accent:#ffffff; --up:#000000; --down:#000000;
+}
+html[data-skin="bitmap"]:not([data-theme="light"]) {
+  --bg:#000000; --panel:#000000; --panel-2:#141414; --ink:#ffffff;
+  --border:#ffffff; --border-hover:#ffffff; --header-bg:rgba(0,0,0,0.95);
+  --text:#ffffff; --muted:#cfcfcf; --accent:#ffffff; --accent-2:#ffffff; --on-accent:#000000; --up:#ffffff; --down:#ffffff;
+}
+html[data-skin="bitmap"] body { background-image:radial-gradient(rgba(0,0,0,0.18) 0.6px, transparent 0.7px); background-size:4px 4px; }
+html[data-skin="bitmap"]:not([data-theme="light"]) body { background-image:radial-gradient(rgba(255,255,255,0.16) 0.6px, transparent 0.7px); }
+html[data-skin="bitmap"] body, html[data-skin="bitmap"] input, html[data-skin="bitmap"] textarea, html[data-skin="bitmap"] select { font-family:var(--font-tech), ui-monospace, monospace; }
+html[data-skin="bitmap"] h1, html[data-skin="bitmap"] h2, html[data-skin="bitmap"] h3, html[data-skin="bitmap"] h4 { font-family:var(--font-pixel), var(--font-tech), monospace; text-transform:uppercase; letter-spacing:0.02em; }
+html[data-skin="bitmap"] .panel { background:var(--panel); border:2px solid var(--ink); border-radius:0; box-shadow:3px 3px 0 0 var(--ink); transition:transform 100ms steps(2,end), box-shadow 100ms steps(2,end); }
+html[data-skin="bitmap"] .panel-hover:hover { transform:translate(-1px,-1px); box-shadow:4px 4px 0 0 var(--ink); }
+html[data-skin="bitmap"] .chip { border:1px solid var(--ink); border-radius:0; color:var(--text); background:var(--panel); font-size:10px; }
+html[data-skin="bitmap"] input, html[data-skin="bitmap"] textarea, html[data-skin="bitmap"] select { border:2px solid var(--ink); border-radius:0; background:var(--panel); }
+html[data-skin="bitmap"] .btn { background:var(--ink); color:var(--panel); border:2px solid var(--ink); border-radius:0; box-shadow:3px 3px 0 0 var(--ink); font-family:var(--font-pixel), var(--font-tech), monospace; font-size:12px; transition:transform 90ms steps(2,end), box-shadow 90ms steps(2,end); }
+html[data-skin="bitmap"] .btn:hover { filter:none; }
+html[data-skin="bitmap"] .btn:active { transform:translate(3px,3px); box-shadow:0 0 0 0; }
+html[data-skin="bitmap"] .btn-ghost { background:var(--panel); color:var(--text); border:2px solid var(--ink); border-radius:0; box-shadow:3px 3px 0 0 var(--ink); transition:transform 90ms steps(2,end), box-shadow 90ms steps(2,end); }
+html[data-skin="bitmap"] .btn-ghost:active { transform:translate(3px,3px); box-shadow:0 0 0 0; }
+html[data-skin="bitmap"] ::selection { background:var(--text); color:var(--panel); }
+
+/* ---------- Windows 95 (retro desktop) ----------
+   Identity = the 3D bevel: raised silver panels/buttons (bright top-left,
+   dark bottom-right via 4 stacked inset shadows), sunken white input wells,
+   and buttons that invert to a pressed/sunken bevel on :active. */
+html[data-skin="win95"] {
+  --bg:#008080; --panel:#c0c0c0; --panel-2:#c0c0c0; --ink:#000000;
+  --border:#808080; --border-hover:#000080; --header-bg:#c0c0c0;
+  --text:#000000; --muted:#404040; --accent:#000080; --accent-2:#008080; --up:#008000; --down:#800000;
+  --bevel-hi:#ffffff; --bevel-hi2:#dfdfdf; --bevel-lo:#808080; --field:#ffffff; --field-text:#000000;
+}
+html[data-skin="win95"]:not([data-theme="light"]) {
+  --bg:#0c1f1f; --panel:#3a3a3a; --panel-2:#2e2e2e; --ink:#ffffff;
+  --border:#1a1a1a; --border-hover:#5a8fd0; --header-bg:#3a3a3a;
+  --text:#ffffff; --muted:#bdbdbd; --accent:#3a6ea5; --accent-2:#2aa198; --up:#5bd98a; --down:#e57373;
+  --bevel-hi:#6e6e6e; --bevel-hi2:#565656; --bevel-lo:#0e0e0e; --field:#1e1e1e; --field-text:#ffffff;
+}
+html[data-skin="win95"] body { font-family:"Tahoma", "Geneva", "MS Sans Serif", "Segoe UI", sans-serif; }
+html[data-skin="win95"] h1, html[data-skin="win95"] h2, html[data-skin="win95"] h3, html[data-skin="win95"] h4 { font-weight:700; letter-spacing:0; }
+html[data-skin="win95"] .panel {
+  background:var(--panel); border:none; border-radius:0;
+  box-shadow: inset -1px -1px 0 0 #000, inset 1px 1px 0 0 var(--bevel-hi), inset -2px -2px 0 0 var(--bevel-lo), inset 2px 2px 0 0 var(--bevel-hi2);
+}
+html[data-skin="win95"] .chip {
+  background:var(--panel); color:var(--text); border:none; border-radius:0; font-weight:400; padding:3px 9px;
+  box-shadow: inset -1px -1px 0 0 #000, inset 1px 1px 0 0 var(--bevel-hi), inset -2px -2px 0 0 var(--bevel-lo), inset 2px 2px 0 0 var(--bevel-hi2);
+}
+/* selected chip = the classic navy list-item highlight (flat, white text) */
+html[data-skin="win95"] .chip[style*="--accent)"], html[data-skin="win95"] .btn-ghost[style*="--accent)"] {
+  background:var(--accent) !important; color:#fff !important; box-shadow:none;
+}
+html[data-skin="win95"] input, html[data-skin="win95"] textarea, html[data-skin="win95"] select {
+  background:var(--field); color:var(--field-text); border:none; border-radius:0;
+  box-shadow: inset 1px 1px 0 0 var(--bevel-lo), inset -1px -1px 0 0 var(--bevel-hi), inset 2px 2px 0 0 #000, inset -2px -2px 0 0 var(--bevel-hi2);
+}
+html[data-skin="win95"] .btn, html[data-skin="win95"] .btn-ghost {
+  background:var(--panel); color:var(--text); border:none; border-radius:0; font-weight:400;
+  box-shadow: inset -1px -1px 0 0 #000, inset 1px 1px 0 0 var(--bevel-hi), inset -2px -2px 0 0 var(--bevel-lo), inset 2px 2px 0 0 var(--bevel-hi2);
+  transition: box-shadow 40ms steps(1), transform 40ms steps(1);
+}
+html[data-skin="win95"] .btn:hover, html[data-skin="win95"] .btn-ghost:hover { filter:none; }
+html[data-skin="win95"] .btn:active, html[data-skin="win95"] .btn-ghost:active {
+  box-shadow: inset 1px 1px 0 0 #000, inset -1px -1px 0 0 var(--bevel-hi), inset 2px 2px 0 0 var(--bevel-lo), inset -2px -2px 0 0 var(--bevel-hi2);
+  transform: translate(1px, 1px); filter:none;
+}
+html[data-skin="win95"] ::selection { background:var(--accent); color:#fff; }
+
+/* ============================================================
+   RETRO HUD / TERMINAL SKINS — each light + dark.
+   ============================================================ */
+
+/* ---------- Amber CRT (phosphor terminal) ---------- */
+html[data-skin="amber"] {
+  --bg:#f4ead2; --panel:#fbf3de; --panel-2:#ece0c0; --ink:#6e4a12;
+  --border:#c0a463; --border-hover:#6e4a12; --header-bg:rgba(244,234,210,0.9);
+  --text:#5a3d0a; --muted:#8a6a30; --accent:#a8600a; --accent-2:#6f7a18; --up:#5a7a1a; --down:#a83a1a;
+  --scan:rgba(110,74,18,0.05);
+}
+html[data-skin="amber"]:not([data-theme="light"]) {
+  --bg:#0d0b06; --panel:#161109; --panel-2:#1f1710; --ink:#ffb000;
+  --border:#5a3f10; --border-hover:#ffb000; --header-bg:rgba(13,11,6,0.9);
+  --text:#ffb000; --muted:#b3801f; --accent:#ffb000; --accent-2:#9fd84a; --up:#9fd84a; --down:#ff6b3a;
+  --body-text:#ffb000; --scan:rgba(0,0,0,0.4);
+}
+html[data-skin="amber"] body { font-family:var(--font-vt), ui-monospace, monospace; }
+html[data-skin="amber"] body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:9990;
+  background:repeating-linear-gradient(0deg, var(--scan) 0 1px, transparent 1px 3px); }
+html[data-skin="amber"] h1, html[data-skin="amber"] h2, html[data-skin="amber"] h3, html[data-skin="amber"] h4 {
+  font-family:var(--font-vt), monospace; text-transform:uppercase; letter-spacing:0.06em; text-shadow:0 0 6px color-mix(in srgb, var(--accent) 45%, transparent); }
+html[data-skin="amber"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:2px; box-shadow:inset 0 0 24px -16px var(--accent); }
+html[data-skin="amber"] .panel-hover:hover { border-color:var(--accent); }
+html[data-skin="amber"] .chip { border:1px solid var(--border); border-radius:2px; color:var(--text); background:transparent; text-transform:uppercase; letter-spacing:0.04em; transition:background-color 120ms, color 120ms; }
+html[data-skin="amber"] .chip[style*="--accent)"] { background:var(--accent) !important; color:var(--bg) !important; border-color:var(--accent) !important; }
+html[data-skin="amber"] input, html[data-skin="amber"] textarea, html[data-skin="amber"] select { background:var(--panel-2); border:1px solid var(--border); border-radius:2px; }
+html[data-skin="amber"] input:focus, html[data-skin="amber"] textarea:focus, html[data-skin="amber"] select:focus { border-color:var(--accent); box-shadow:0 0 8px -2px var(--accent); }
+html[data-skin="amber"] .btn { background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:2px; font-weight:400; text-transform:uppercase; letter-spacing:0.06em; transition:background-color 120ms, color 120ms, box-shadow 120ms, transform 80ms; }
+html[data-skin="amber"] .btn:hover { filter:none; background:var(--accent); color:var(--bg); box-shadow:0 0 12px -2px var(--accent); }
+html[data-skin="amber"] .btn:active { transform:translateY(1px); filter:brightness(1.15); }
+html[data-skin="amber"] .btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); border-radius:2px; }
+html[data-skin="amber"] .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+html[data-skin="amber"] ::selection { background:var(--accent); color:var(--bg); }
+
+/* ---------- LCARS (starship console) ---------- */
+html[data-skin="lcars"] {
+  --bg:#eceff5; --panel:#ffffff; --panel-2:#dce3ee; --ink:#b5731a;
+  --border:#b5731a; --border-hover:#2a7fa8; --header-bg:rgba(236,239,245,0.9);
+  --text:#11151f; --muted:#5a6473; --accent:#b5731a; --accent-2:#2a7fa8; --up:#2e8a52; --down:#cc4a3a;
+}
+html[data-skin="lcars"]:not([data-theme="light"]) {
+  --bg:#06080f; --panel:#0e111a; --panel-2:#181d28; --ink:#eaa83b;
+  --border:#eaa83b; --border-hover:#56b6d8; --header-bg:rgba(6,8,15,0.85);
+  --text:#ffffff; --muted:#9aa6c0; --accent:#eaa83b; --accent-2:#56b6d8; --up:#7ed99a; --down:#ff7a6b;
+}
+html[data-skin="lcars"] body { font-family:ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+html[data-skin="lcars"] h1, html[data-skin="lcars"] h2, html[data-skin="lcars"] h3, html[data-skin="lcars"] h4 {
+  font-family:var(--font-lcars), "Arial Narrow", sans-serif; text-transform:uppercase; letter-spacing:0.04em; color:var(--accent); font-weight:700; }
+html[data-skin="lcars"] .panel { background:var(--panel); border:none; border-left:8px solid var(--accent); border-radius:20px; }
+html[data-skin="lcars"] .panel-hover:hover { border-left-color:var(--border-hover); }
+html[data-skin="lcars"] .chip { font-family:var(--font-lcars), "Arial Narrow", sans-serif; background:var(--accent-2); color:#000; border:none; border-radius:999px; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; transition:background-color 140ms, transform 120ms; }
+html[data-skin="lcars"] .chip[style*="--accent)"] { background:var(--accent) !important; color:#000 !important; }
+html[data-skin="lcars"] input, html[data-skin="lcars"] textarea, html[data-skin="lcars"] select { background:var(--panel-2); border:none; border-radius:999px; padding-left:14px; }
+html[data-skin="lcars"] .btn { font-family:var(--font-lcars), "Arial Narrow", sans-serif; background:var(--accent); color:#000; border:none; border-radius:999px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; transition:background-color 140ms, transform 140ms cubic-bezier(.34,1.4,.64,1); }
+html[data-skin="lcars"] .btn:hover { filter:none; background:var(--border-hover); }
+html[data-skin="lcars"] .btn:active { transform:scale(0.95); background:var(--accent-2); }
+html[data-skin="lcars"] .btn-ghost { background:transparent; color:var(--accent); border:2px solid var(--accent); border-radius:999px; }
+html[data-skin="lcars"] .btn-ghost:hover { background:var(--accent); color:#000; }
+html[data-skin="lcars"] ::selection { background:var(--accent); color:#000; }
+
+/* ---------- Teletext (broadcast mosaic) ---------- */
+html[data-skin="teletext"] {
+  --bg:#ffffff; --panel:#ffffff; --panel-2:#f0f0f0; --ink:#000000;
+  --border:#000000; --border-hover:#0000cc; --header-bg:rgba(255,255,255,0.92);
+  --text:#000000; --muted:#444444; --accent:#0033cc; --accent-2:#0077aa; --up:#008000; --down:#0033cc;
+}
+html[data-skin="teletext"]:not([data-theme="light"]) {
+  --bg:#000000; --panel:#000000; --panel-2:#0a0a0a; --ink:#ffffff;
+  --border:#ffffff; --border-hover:#ffff00; --header-bg:rgba(0,0,0,0.9);
+  --text:#ffffff; --muted:#5fd7ff; --accent:#ffff00; --accent-2:#00ffff; --up:#00ff00; --down:#ff5555;
+}
+html[data-skin="teletext"] body { font-family:var(--font-vt), ui-monospace, monospace; }
+html[data-skin="teletext"] h1, html[data-skin="teletext"] h2, html[data-skin="teletext"] h3, html[data-skin="teletext"] h4 {
+  font-family:var(--font-vt), monospace; text-transform:uppercase; letter-spacing:0.05em; color:var(--accent); font-weight:400; }
+html[data-skin="teletext"] .panel { background:var(--panel); border:2px solid var(--border); border-radius:0; box-shadow:none; }
+html[data-skin="teletext"] .panel-hover:hover { border-color:var(--border-hover); }
+html[data-skin="teletext"] .chip { border:1px solid var(--border); border-radius:0; color:var(--accent-2); background:transparent; text-transform:uppercase; transition:background-color 100ms, color 100ms; }
+html[data-skin="teletext"] .chip[style*="--accent)"] { background:var(--accent) !important; color:#000 !important; border-color:var(--accent) !important; }
+html[data-skin="teletext"] input, html[data-skin="teletext"] textarea, html[data-skin="teletext"] select { background:var(--panel-2); border:2px solid var(--border); border-radius:0; }
+html[data-skin="teletext"] .btn { background:var(--accent); color:#000; border:2px solid var(--border); border-radius:0; font-weight:400; text-transform:uppercase; transition:background-color 100ms, transform 80ms; }
+html[data-skin="teletext"] .btn:hover { filter:none; background:var(--accent-2); color:#000; }
+html[data-skin="teletext"] .btn:active { transform:translate(1px,1px); }
+html[data-skin="teletext"] .btn-ghost { background:transparent; color:var(--text); border:2px solid var(--border); border-radius:0; }
+html[data-skin="teletext"] .btn-ghost:hover { background:var(--accent); color:#000; border-color:var(--accent); }
+html[data-skin="teletext"] ::selection { background:var(--accent); color:#000; }
+
+/* ---------- Intelligence Terminal (Bloomberg) ---------- */
+html[data-skin="terminal"] {
+  --bg:#ebeef3; --panel:#ffffff; --panel-2:#dee3ec; --ink:#c2570a;
+  --border:#ccd3df; --border-hover:#c2570a; --header-bg:rgba(235,238,243,0.92);
+  --text:#101826; --muted:#5a6472; --accent:#c2570a; --accent-2:#15803d; --up:#15803d; --down:#c0392b;
+}
+html[data-skin="terminal"]:not([data-theme="light"]) {
+  --bg:#0a0a0a; --panel:#121210; --panel-2:#1b1a16; --ink:#ff9500;
+  --border:#3a2e10; --border-hover:#ff9500; --header-bg:rgba(10,10,10,0.92);
+  --text:#ffffff; --muted:#8a8a7a; --accent:#ff9500; --accent-2:#33d17a; --up:#33d17a; --down:#ff4d4d;
+}
+html[data-skin="terminal"] body, html[data-skin="terminal"] input, html[data-skin="terminal"] textarea, html[data-skin="terminal"] select, html[data-skin="terminal"] button { font-family:var(--font-plex), ui-monospace, monospace; }
+html[data-skin="terminal"] h1, html[data-skin="terminal"] h2, html[data-skin="terminal"] h3, html[data-skin="terminal"] h4 {
+  font-family:var(--font-plex), monospace; text-transform:uppercase; letter-spacing:0.06em; color:var(--accent); font-weight:600; }
+html[data-skin="terminal"] .panel { background:var(--panel); border:1px solid var(--border); border-top:2px solid var(--accent); border-radius:0; box-shadow:none; }
+html[data-skin="terminal"] .panel-hover:hover { border-color:var(--border-hover); border-top-color:var(--accent); }
+html[data-skin="terminal"] .chip { border:1px solid var(--border); border-radius:0; color:var(--accent); background:transparent; text-transform:uppercase; font-size:10px; transition:background-color 120ms, color 120ms; }
+html[data-skin="terminal"] .chip[style*="--accent)"] { background:var(--accent) !important; color:var(--bg) !important; border-color:var(--accent) !important; }
+html[data-skin="terminal"] input, html[data-skin="terminal"] textarea, html[data-skin="terminal"] select { background:var(--panel-2); border:1px solid var(--border); border-radius:0; }
+html[data-skin="terminal"] input:focus, html[data-skin="terminal"] textarea:focus, html[data-skin="terminal"] select:focus { border-color:var(--accent); }
+html[data-skin="terminal"] .btn { background:var(--accent); color:var(--bg); border:none; border-radius:0; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; transition:background-color 120ms, filter 120ms, transform 80ms; }
+html[data-skin="terminal"] .btn:hover { filter:brightness(1.1); }
+html[data-skin="terminal"] .btn:active { transform:translateY(1px); background:var(--accent-2); color:var(--bg); }
+html[data-skin="terminal"] .btn-ghost { background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:0; }
+html[data-skin="terminal"] .btn-ghost:hover { background:var(--accent); color:var(--bg); }
+html[data-skin="terminal"] ::selection { background:var(--accent); color:var(--bg); }
+
+/* ---------- Classic Mac System 7 (black & white) ---------- */
+html[data-skin="mac"] {
+  --bg:#b8b8b8; --panel:#ffffff; --panel-2:#dddddd; --ink:#000000;
+  --border:#000000; --border-hover:#000000; --header-bg:repeating-linear-gradient(#ffffff, #ffffff 1px, #d7d7d7 1px, #d7d7d7 2px);
+  --text:#000000; --muted:#555555; --accent:#000000; --accent-2:#000088; --up:#006600; --down:#990000;
+}
+html[data-skin="mac"]:not([data-theme="light"]) {
+  --bg:#1a1a1a; --panel:#0a0a0a; --panel-2:#262626; --ink:#ffffff;
+  --border:#ffffff; --border-hover:#ffffff; --header-bg:repeating-linear-gradient(#262626, #262626 1px, #161616 1px, #161616 2px);
+  --text:#ffffff; --muted:#aaaaaa; --accent:#ffffff; --accent-2:#6688ff; --up:#66cc66; --down:#ff6666;
+}
+html[data-skin="mac"] body { font-family:"Geneva", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+html[data-skin="mac"] h1, html[data-skin="mac"] h2, html[data-skin="mac"] h3, html[data-skin="mac"] h4 { font-weight:700; letter-spacing:-0.01em; }
+html[data-skin="mac"] .panel { background:var(--panel); border:1px solid var(--ink); border-radius:6px; box-shadow:1px 1px 0 0 var(--ink); }
+html[data-skin="mac"] .panel-hover:hover { box-shadow:2px 2px 0 0 var(--ink); }
+html[data-skin="mac"] .chip { background:var(--panel); color:var(--text); border:1px solid var(--ink); border-radius:10px; transition:background-color 100ms, color 100ms; }
+html[data-skin="mac"] .chip[style*="--accent)"] { background:var(--ink) !important; color:var(--panel) !important; border-color:var(--ink) !important; }
+html[data-skin="mac"] input, html[data-skin="mac"] textarea, html[data-skin="mac"] select { background:var(--panel); border:1px solid var(--ink); border-radius:4px; }
+html[data-skin="mac"] .btn { background:var(--panel); color:var(--ink); border:2px solid var(--ink); border-radius:12px; font-weight:700; transition:background-color 90ms, color 90ms, transform 70ms; }
+html[data-skin="mac"] .btn:hover { filter:none; background:var(--panel-2); }
+html[data-skin="mac"] .btn:active { background:var(--ink); color:var(--panel); transform:translateY(1px); }
+html[data-skin="mac"] .btn-ghost { background:var(--panel); color:var(--ink); border:1px solid var(--ink); border-radius:12px; }
+html[data-skin="mac"] .btn-ghost:hover { background:var(--panel-2); }
+html[data-skin="mac"] ::selection { background:var(--ink); color:var(--panel); }
+
+/* ---------- Vector Wireframe (Tron / blueprint) ---------- */
+html[data-skin="vector"] {
+  --bg:#eef2f8; --panel:rgba(255,255,255,0.45); --panel-2:#dde6f2; --ink:#1a3a8a;
+  --border:#2a5bd0; --border-hover:#c0307a; --header-bg:rgba(238,242,248,0.85);
+  --text:#11224a; --muted:#5a6a8a; --accent:#1a4bc0; --accent-2:#c0307a; --up:#1e7a44; --down:#c0392b;
+}
+html[data-skin="vector"]:not([data-theme="light"]) {
+  --bg:#000308; --panel:rgba(4,16,24,0.4); --panel-2:rgba(8,28,38,0.55); --ink:#34e2e2;
+  --border:#34e2e2; --border-hover:#ff5fa2; --header-bg:rgba(0,3,8,0.85);
+  --text:#ffffff; --muted:#5a9aa0; --accent:#34e2e2; --accent-2:#ff5fa2; --up:#6effc0; --down:#ff6b8a;
+}
+html[data-skin="vector"] body { font-family:ui-sans-serif, system-ui, sans-serif; }
+html[data-skin="vector"] h1, html[data-skin="vector"] h2, html[data-skin="vector"] h3, html[data-skin="vector"] h4 {
+  font-family:var(--font-vector), ui-sans-serif, sans-serif; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent); }
+html[data-skin="vector"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:0; box-shadow:0 0 10px -3px var(--border), inset 0 0 18px -10px var(--border); }
+html[data-skin="vector"] .panel-hover:hover { border-color:var(--border-hover); box-shadow:0 0 16px -2px var(--border-hover); }
+html[data-skin="vector"] .chip { border:1px solid var(--border); border-radius:0; color:var(--accent); background:transparent; text-transform:uppercase; letter-spacing:0.04em; transition:background-color 140ms, color 140ms, box-shadow 140ms; }
+html[data-skin="vector"] .chip[style*="--accent)"] { background:var(--accent) !important; color:var(--bg) !important; border-color:var(--accent) !important; box-shadow:0 0 10px -2px var(--accent); }
+html[data-skin="vector"] input, html[data-skin="vector"] textarea, html[data-skin="vector"] select { background:transparent; border:1px solid var(--border); border-radius:0; }
+html[data-skin="vector"] input:focus, html[data-skin="vector"] textarea:focus, html[data-skin="vector"] select:focus { border-color:var(--accent); box-shadow:0 0 10px -2px var(--accent); }
+html[data-skin="vector"] .btn { background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:0; text-transform:uppercase; letter-spacing:0.06em; box-shadow:0 0 8px -3px var(--accent); transition:background-color 140ms, color 140ms, box-shadow 140ms, transform 90ms; }
+html[data-skin="vector"] .btn:hover { filter:none; background:color-mix(in srgb, var(--accent) 16%, transparent); box-shadow:0 0 16px -2px var(--accent); }
+html[data-skin="vector"] .btn:active { transform:translateY(1px); background:var(--accent); color:var(--bg); }
+html[data-skin="vector"] .btn-ghost { background:transparent; color:var(--accent-2); border:1px solid var(--accent-2); border-radius:0; }
+html[data-skin="vector"] .btn-ghost:hover { background:color-mix(in srgb, var(--accent-2) 16%, transparent); box-shadow:0 0 14px -3px var(--accent-2); }
+html[data-skin="vector"] ::selection { background:var(--accent); color:var(--bg); }
+
+/* ---------- Fairlight CMI (green-phosphor music workstation) ---------- */
+html[data-skin="fairlight"] {
+  --bg:#eaf3ec; --panel:#f4faf5; --panel-2:#dceadf; --ink:#0a6a3f;
+  --border:#7ab89a; --border-hover:#0a6a3f; --header-bg:rgba(234,243,236,0.9);
+  --text:#064a2c; --muted:#3a7a5a; --accent:#0a8a4a; --accent-2:#0a6a8a; --up:#0a8a4a; --down:#a83a1a;
+  --scan:rgba(10,74,44,0.05);
+}
+html[data-skin="fairlight"]:not([data-theme="light"]) {
+  --bg:#000400; --panel:#021207; --panel-2:#04180a; --ink:#2dffa6;
+  --border:#0a5a32; --border-hover:#2dffa6; --header-bg:rgba(0,4,0,0.9);
+  --text:#2dffa6; --muted:#19a86a; --accent:#2dffa6; --accent-2:#7affd0; --up:#2dffa6; --down:#ff5a4a;
+  --body-text:#2dffa6; --scan:rgba(0,0,0,0.42);
+}
+html[data-skin="fairlight"] body { font-family:var(--font-vt), ui-monospace, monospace; }
+html[data-skin="fairlight"] body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:9990;
+  background:repeating-linear-gradient(0deg, var(--scan) 0 1px, transparent 1px 3px); }
+/* inverted green header bars — the signature Fairlight Page-R look */
+html[data-skin="fairlight"] h1, html[data-skin="fairlight"] h2, html[data-skin="fairlight"] h3, html[data-skin="fairlight"] h4 {
+  background:var(--accent); color:#000; display:inline-block; padding:0 8px; text-transform:uppercase; letter-spacing:0.05em; }
+html[data-skin="fairlight"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:0; box-shadow:inset 0 0 22px -16px var(--accent); }
+html[data-skin="fairlight"] .panel-hover:hover { border-color:var(--accent); }
+html[data-skin="fairlight"] .chip { border:1px solid var(--border); border-radius:0; color:var(--accent); background:transparent; text-transform:uppercase; transition:background-color 100ms, color 100ms; }
+html[data-skin="fairlight"] .chip[style*="--accent)"] { background:var(--accent) !important; color:var(--bg) !important; border-color:var(--accent) !important; }
+html[data-skin="fairlight"] input, html[data-skin="fairlight"] textarea, html[data-skin="fairlight"] select { background:var(--panel-2); border:1px solid var(--border); border-radius:0; }
+html[data-skin="fairlight"] input:focus, html[data-skin="fairlight"] textarea:focus, html[data-skin="fairlight"] select:focus { border-color:var(--accent); box-shadow:0 0 8px -2px var(--accent); }
+html[data-skin="fairlight"] .btn { background:var(--accent); color:var(--bg); border:1px solid var(--accent); border-radius:0; font-weight:400; text-transform:uppercase; letter-spacing:0.05em; transition:filter 120ms, box-shadow 120ms, transform 80ms; }
+html[data-skin="fairlight"] .btn:hover { filter:brightness(1.12); box-shadow:0 0 12px -2px var(--accent); }
+html[data-skin="fairlight"] .btn:active { transform:translateY(1px); }
+html[data-skin="fairlight"] .btn-ghost { background:transparent; color:var(--accent); border:1px solid var(--border); border-radius:0; }
+html[data-skin="fairlight"] .btn-ghost:hover { border-color:var(--accent); }
+html[data-skin="fairlight"] ::selection { background:var(--accent); color:var(--bg); }
+
+/* ---------- Swiss / Bauhaus (International Typographic Style) ---------- */
+html[data-skin="swiss"] {
+  --bg:#f0f0ee; --panel:#ffffff; --panel-2:#e6e6e3; --ink:#0a0a0a;
+  --border:#111111; --border-hover:#c8960a; --header-bg:rgba(240,240,238,0.9);
+  --text:#0a0a0a; --muted:#6a6a6a; --accent:#c8960a; --accent-2:#c8960a; --up:#1a7a3a; --down:#c2540a;
+}
+html[data-skin="swiss"]:not([data-theme="light"]) {
+  --bg:#0d0d0d; --panel:#161616; --panel-2:#202020; --ink:#ffffff;
+  --border:#ffffff; --border-hover:#f2c200; --header-bg:rgba(13,13,13,0.9);
+  --text:#ffffff; --muted:#9a9a9a; --accent:#f2c200; --accent-2:#f2c200; --up:#4ade80; --down:#ff7a45;
+}
+html[data-skin="swiss"] body { font-family:var(--font-swiss), "Helvetica Neue", Helvetica, Arial, sans-serif; }
+html[data-skin="swiss"] h1, html[data-skin="swiss"] h2, html[data-skin="swiss"] h3, html[data-skin="swiss"] h4 {
+  font-family:var(--font-swiss), "Helvetica Neue", Arial, sans-serif; font-weight:800; letter-spacing:-0.03em; }
+/* bold top rule per panel = the Swiss grid; flat, no shadows */
+html[data-skin="swiss"] .panel { background:var(--panel); border:none; border-top:3px solid var(--text); border-radius:0; box-shadow:none; }
+html[data-skin="swiss"] .panel-hover:hover { border-top-color:var(--accent); }
+html[data-skin="swiss"] .chip { border:1px solid var(--border); border-radius:0; color:var(--text); background:transparent; text-transform:uppercase; letter-spacing:0.04em; transition:background-color 120ms, color 120ms; }
+html[data-skin="swiss"] .chip[style*="--accent)"] { background:var(--accent) !important; color:#000 !important; border-color:var(--accent) !important; }
+html[data-skin="swiss"] input, html[data-skin="swiss"] textarea, html[data-skin="swiss"] select { background:var(--panel); border:1px solid var(--border); border-radius:0; }
+html[data-skin="swiss"] .btn { background:var(--text); color:var(--bg); border:2px solid var(--text); border-radius:0; font-weight:700; text-transform:uppercase; letter-spacing:0.02em; transition:background-color 120ms, color 120ms, border-color 120ms, transform 80ms; }
+html[data-skin="swiss"] .btn:hover { filter:none; background:var(--bg); color:var(--text); }
+html[data-skin="swiss"] .btn:active { transform:translateY(1px); background:var(--accent); border-color:var(--accent); color:#000; }
+html[data-skin="swiss"] .btn-ghost { background:transparent; color:var(--text); border:2px solid var(--text); border-radius:0; }
+html[data-skin="swiss"] .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+html[data-skin="swiss"] ::selection { background:var(--accent); color:#000; }

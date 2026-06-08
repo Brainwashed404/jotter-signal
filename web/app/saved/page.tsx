@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SignalCard } from "@/components/SignalCard";
 import {
-  useSaved, setTags, type SavedItem,
+  useSaved, setTags, updateSavedNote, type SavedItem,
   useHighlights, updateHighlightNote, setHighlightTags, removeHighlight, type Highlight,
-  useReport, toggleReport,
 } from "@/lib/saved";
 import { fmtDate } from "@/lib/format";
+import CtaFooter from "@/components/CtaFooter";
 
 function TagEditor({ tags, onChange }: { tags: string[]; onChange: (t: string[]) => void }) {
   const [input, setInput] = useState("");
@@ -30,26 +30,68 @@ function TagEditor({ tags, onChange }: { tags: string[]; onChange: (t: string[])
   );
 }
 
+function TagFilter({ tags, value, onChange, total }: { tags: string[]; value: string; onChange: (t: string) => void; total: number }) {
+  if (tags.length === 0) return null;
+  return (
+    <div className="flex flex-wrap gap-2">
+      <button onClick={() => onChange("")} className="chip" style={value === "" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
+        All ({total})
+      </button>
+      {tags.map((t) => (
+        <button key={t} onClick={() => onChange(t)} className="chip" style={value === t ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
+          {t}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function HighlightCard({ h }: { h: Highlight }) {
   const [note, setNote] = useState(h.note);
-  const { ids } = useReport();
-  const inReport = ids.has(h.id);
+
+  // Share (mirrors SignalCard): OS share sheet, else an Email/WhatsApp/Copy menu.
+  const shareRef = useRef<HTMLDivElement>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const shareUrl = h.postUrl || "";
+  const shareText = `“${h.text}”${shareUrl ? `\n${shareUrl}` : ""}`;
+  const enc = encodeURIComponent(shareText);
+  const mailto = `mailto:?subject=${encodeURIComponent(h.signalHeading)}&body=${enc}`;
+  const whatsapp = `https://wa.me/?text=${enc}`;
+  function onShare() {
+    const nav = typeof navigator !== "undefined" ? navigator : undefined;
+    if (nav && "share" in nav) nav.share({ title: h.signalHeading, text: h.text, url: shareUrl || undefined }).catch(() => {});
+    else setShareOpen((o) => !o);
+  }
+  function copyShare() {
+    navigator.clipboard?.writeText(shareText);
+    setShareOpen(false);
+  }
+  useEffect(() => {
+    if (!shareOpen) return;
+    const close = (e: MouseEvent) => { if (shareRef.current && !shareRef.current.contains(e.target as Node)) setShareOpen(false); };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [shareOpen]);
+
   return (
     <div className="panel p-4">
       <div className="flex items-center gap-2 mb-2">
         <span className="mono text-xs" style={{ color: "var(--muted)" }}>{fmtDate(h.signalDate)} · {h.source}</span>
-        <button
-          onClick={() => toggleReport({
-            id: h.id, kind: "highlight", heading: h.signalHeading, text: h.text, note,
-            source: h.source, sourceId: h.sourceId, date: h.signalDate, post_url: h.postUrl,
-          })}
-          className="ml-auto chip"
-          title={inReport ? "In report — click to remove" : "Add to report"}
-          style={inReport ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
-        >
-          {inReport ? "✓ Report" : "+ Report"}
+        <div ref={shareRef} className="ml-auto relative">
+          <button onClick={onShare} className="chip" title="Share">Share</button>
+          {shareOpen && (
+            <div className="absolute right-0 top-full mt-1 z-20 panel p-1 flex flex-col text-sm min-w-[140px]"
+              style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}>
+              <a href={mailto} className="px-3 py-1.5 rounded hover:bg-[var(--panel-2)]" onClick={() => setShareOpen(false)}>Email</a>
+              <a href={whatsapp} target="_blank" rel="noopener" className="px-3 py-1.5 rounded hover:bg-[var(--panel-2)]" onClick={() => setShareOpen(false)}>WhatsApp</a>
+              <button onClick={copyShare} className="px-3 py-1.5 rounded hover:bg-[var(--panel-2)] text-left">Copy link</button>
+            </div>
+          )}
+        </div>
+        <button onClick={() => removeHighlight(h.id)} className="text-lg leading-none"
+          title="Saved highlight — click to remove" style={{ color: "var(--accent)" }}>
+          ★
         </button>
-        <button onClick={() => removeHighlight(h.id)} className="chip" title="delete highlight">remove</button>
       </div>
       <blockquote className="border-l-2 pl-3 my-1 text-sm leading-relaxed" style={{ borderColor: "var(--accent)" }}>
         {h.text}
@@ -59,7 +101,7 @@ function HighlightCard({ h }: { h: Highlight }) {
         value={note}
         onChange={(e) => setNote(e.target.value)}
         onBlur={() => updateHighlightNote(h.id, note)}
-        placeholder="Add an annotation…"
+        placeholder="Jot down your thoughts…"
         className="w-full text-sm px-3 py-2 mt-1"
         rows={2}
       />
@@ -71,74 +113,89 @@ function HighlightCard({ h }: { h: Highlight }) {
   );
 }
 
-export default function SavedPage() {
-  const { items, allTags } = useSaved();
-  const { items: highlights, allTags: hiTags } = useHighlights();
-  const [tab, setTab] = useState<"entries" | "highlights">("entries");
-  const [filter, setFilter] = useState("");
+function SavedArticleCard({ item }: { item: SavedItem }) {
+  const [note, setNote] = useState(item.note ?? "");
+  return (
+    <div>
+      <SignalCard s={item.signal} noReadState />
+      <div className="mt-2 px-1 space-y-2">
+        <textarea
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          onBlur={() => updateSavedNote(item.signal.id, note)}
+          placeholder="Jot down your thoughts…"
+          className="w-full text-sm px-3 py-2"
+          rows={2}
+          style={{ borderRadius: "10px" }}
+        />
+        <TagEditor tags={item.tags} onChange={(t) => setTags(item.signal.id, t)} />
+      </div>
+    </div>
+  );
+}
 
-  const entryShown = filter ? items.filter((i) => i.tags.includes(filter)) : items;
-  const hiShown = filter ? highlights.filter((i) => i.tags.includes(filter)) : highlights;
-  const tags = tab === "entries" ? allTags : hiTags;
-  const list = tab === "entries" ? items : highlights;
+export default function SavedPage() {
+  const { items: entries, allTags: entryTags } = useSaved();
+  const { items: highlights, allTags: hiTags } = useHighlights();
+  const [tab, setTab] = useState<"articles" | "highlights">("articles");
+  const [filter, setFilter] = useState("");
+  const [query, setQuery] = useState("");
+
+  const switchTab = (t: "articles" | "highlights") => { setTab(t); setFilter(""); };
+  const tags = tab === "articles" ? entryTags : hiTags;
+  const total = tab === "articles" ? entries.length : highlights.length;
+  const q = query.trim().toLowerCase();
+  const matchEntry = (i: SavedItem) => !q || [i.signal.heading, i.signal.text, i.signal.source, ...i.tags, i.note ?? ""].join(" ").toLowerCase().includes(q);
+  const matchHi = (h: Highlight) => !q || [h.text, h.signalHeading, h.source, ...h.tags].join(" ").toLowerCase().includes(q);
+  const shownEntries = entries.filter((i) => (!filter || i.tags.includes(filter)) && matchEntry(i));
+  const shownHi = highlights.filter((i) => (!filter || i.tags.includes(filter)) && matchHi(i));
 
   return (
     <div className="space-y-6">
-      <div>
-        <div className="label">Saved</div>
-        <h1 className="text-3xl font-semibold tracking-tight mt-1">Your collection</h1>
-        <p className="mt-2 max-w-2xl" style={{ color: "var(--muted)" }}>
-          Pinned entries and your own highlighted excerpts with annotations. Tag anything to build
-          themed collections — the raw material for your writing.
-        </p>
-      </div>
-
-      <div className="flex gap-2">
-        <button onClick={() => { setTab("entries"); setFilter(""); }} className="btn-ghost text-sm"
-          style={tab === "entries" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
-          Entries ({items.length})
+      {/* sticky, centred tab switcher + search */}
+      <div className="sticky z-40 -mx-5 px-5 py-3 flex items-center gap-2 backdrop-blur"
+        style={{ top: "3.5rem", background: "var(--header-bg)" }}>
+        <div className="flex-1" />
+        <button onClick={() => switchTab("articles")} className="btn-ghost text-sm"
+          style={tab === "articles" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
+          Articles ({entries.length})
         </button>
-        <button onClick={() => { setTab("highlights"); setFilter(""); }} className="btn-ghost text-sm"
+        <button onClick={() => switchTab("highlights")} className="btn-ghost text-sm"
           style={tab === "highlights" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
           Highlights ({highlights.length})
         </button>
+        <div className="flex-1 flex justify-end">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search saved…"
+            className="text-sm px-3 py-1.5 rounded-lg border bg-transparent w-44 max-w-[40vw] outline-none"
+            style={{ borderColor: "var(--border)" }}
+          />
+        </div>
       </div>
 
-      {tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          <button onClick={() => setFilter("")} className="chip" style={filter === "" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
-            All ({list.length})
-          </button>
-          {tags.map((t) => (
-            <button key={t} onClick={() => setFilter(t)} className="chip" style={filter === t ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
-              {t}
-            </button>
-          ))}
-        </div>
-      )}
+      <TagFilter tags={tags} value={filter} onChange={setFilter} total={total} />
 
-      {tab === "entries" ? (
-        entryShown.length === 0 ? (
+      {tab === "articles" ? (
+        shownEntries.length === 0 ? (
           <Empty icon="☆" text="Nothing pinned yet. Hit the ★ on any signal to save it here." />
         ) : (
           <div className="space-y-4">
-            {entryShown.map((item: SavedItem) => (
-              <div key={item.signal.id}>
-                <SignalCard s={item.signal} />
-                <div className="mt-2 px-1">
-                  <TagEditor tags={item.tags} onChange={(t) => setTags(item.signal.id, t)} />
-                </div>
-              </div>
+            {shownEntries.map((item: SavedItem) => (
+              <SavedArticleCard key={item.signal.id} item={item} />
             ))}
           </div>
         )
-      ) : hiShown.length === 0 ? (
+      ) : shownHi.length === 0 ? (
         <Empty icon="✎" text="No highlights yet. Select any text in a signal and click “★ Save highlight”." />
       ) : (
         <div className="grid md:grid-cols-2 gap-3">
-          {hiShown.map((h) => <HighlightCard key={h.id} h={h} />)}
+          {shownHi.map((h) => <HighlightCard key={h.id} h={h} />)}
         </div>
       )}
+
+      <CtaFooter />
     </div>
   );
 }

@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { Signal } from "@/lib/types";
-import { TYPE_LABEL } from "@/lib/types";
-import { useSaved, toggleSave, addHighlight, useReport, toggleReport } from "@/lib/saved";
+import { KIND_LABEL } from "@/lib/types";
+import { useSaved, toggleSave, addHighlight } from "@/lib/saved";
 import { themesFor } from "@/lib/themes";
 import { fmtDate } from "@/lib/format";
 
@@ -28,24 +28,64 @@ function renderWithLinks(text: string): ReactNode[] {
   return nodes;
 }
 
-export function SignalCard({ s }: { s: Signal }) {
-  const [open, setOpen] = useState(false);
-  const [sel, setSel] = useState<{ text: string; top: number; left: number } | null>(null);
-  const [flash, setFlash] = useState(false);
-  const { ids } = useSaved();
-  const { ids: reportIds } = useReport();
-  const saved = ids.has(s.id);
-  const inReport = reportIds.has(s.id);
+const READ_KEY = "jotter.read.v1";
+function getReadIds(): Set<string> {
+  try { return new Set(JSON.parse(localStorage.getItem(READ_KEY) || "[]")); } catch { return new Set(); }
+}
+function markReadId(id: string) {
+  try { const s = getReadIds(); s.add(id); localStorage.setItem(READ_KEY, JSON.stringify([...s])); } catch {}
+}
 
-  function addReport() {
-    toggleReport({
-      id: s.id, kind: "signal", heading: s.heading, text: s.text.slice(0, 4000),
-      source: s.source, sourceId: s.source_id, date: s.date, post_url: s.post_url,
-    });
+export function SignalCard({ s, noReadState = false }: { s: Signal; noReadState?: boolean }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const shareRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const [read, setRead] = useState(false);
+  const [sel, setSel] = useState<{ text: string; top: number; left: number } | null>(null);
+  const [flash, setFlash] = useState("");
+  const [shareOpen, setShareOpen] = useState(false);
+  const { ids } = useSaved();
+  const saved = ids.has(s.id);
+
+  // Read-state is suppressed in the Saved section (everything there is obviously already seen).
+  useEffect(() => { if (!noReadState) setRead(getReadIds().has(s.id)); }, [s.id, noReadState]);
+
+  // Share this box's content via the OS sheet (email/WhatsApp/etc), or a fallback menu.
+  const shareUrl = s.post_url || "";
+  const shareText = `${s.heading}${shareUrl ? `\n${shareUrl}` : ""}`;
+  const enc = encodeURIComponent(shareText);
+  const mailto = `mailto:?subject=${encodeURIComponent(s.heading)}&body=${enc}`;
+  const whatsapp = `https://wa.me/?text=${enc}`;
+
+  function onShare(e: React.MouseEvent) {
+    e.stopPropagation();
+    const nav = typeof navigator !== "undefined" ? navigator : undefined;
+    if (nav && "share" in nav) {
+      nav.share({ title: s.heading, text: s.heading, url: shareUrl || undefined }).catch(() => {});
+    } else {
+      setShareOpen((o) => !o);
+    }
+  }
+  function copyShare() {
+    navigator.clipboard?.writeText(shareText);
+    setShareOpen(false);
+    setFlash("✓ copied"); setTimeout(() => setFlash(""), 1600);
   }
   const long = s.text.length > 360;
   const hasImages = !!(s.images && s.images.length);
   const expandable = long || hasImages;
+  // Cards show the author's name only (strip the "(Blog)" suffix); publications keep their full name.
+  const sourceLabel = s.category === "publication" ? s.source : s.source.replace(/\s*\([^)]*\)\s*$/, "");
+
+  // close the share menu only when clicking outside it
+  useEffect(() => {
+    if (!shareOpen) return;
+    const close = (e: MouseEvent) => {
+      if (shareRef.current && !shareRef.current.contains(e.target as Node)) setShareOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [shareOpen]);
 
   // clear the floating button when the user clicks/selects elsewhere
   useEffect(() => {
@@ -81,46 +121,70 @@ export function SignalCard({ s }: { s: Signal }) {
     });
     setSel(null);
     window.getSelection()?.removeAllRanges();
-    setFlash(true);
-    setTimeout(() => setFlash(false), 1600);
+    setFlash("✓ highlight saved");
+    setTimeout(() => setFlash(""), 1600);
   }
 
   function onCardClick(e: React.MouseEvent) {
     if (!expandable) return;
-    if (window.getSelection()?.toString().trim()) return;          // mid text-selection
-    if ((e.target as HTMLElement).closest("a,button,input,textarea")) return; // links/controls
-    setOpen((o) => !o);
+    if (window.getSelection()?.toString().trim()) return;
+    if ((e.target as HTMLElement).closest("a,button,input,textarea")) return;
+    setOpen((o) => {
+      const next = !o;
+      if (next) {
+        if (!noReadState) { markReadId(s.id); setRead(true); }
+        setTimeout(() => {
+          const el = cardRef.current;
+          if (!el) return;
+          const top = el.getBoundingClientRect().top + window.scrollY - 72;
+          window.scrollTo({ top, behavior: "smooth" });
+        }, 0);
+      }
+      return next;
+    });
   }
 
   return (
     <div
+      ref={cardRef}
       onClick={onCardClick}
       className={`panel panel-hover p-4 relative${open ? " md:col-span-2" : ""}`}
       style={{ cursor: expandable ? "pointer" : undefined }}
     >
+      {read && !open && !noReadState && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ borderRadius: "14px", background: "color-mix(in srgb, var(--bg) 45%, transparent)" }}
+        >
+          <span className="label absolute bottom-2.5 left-2.5" style={{ opacity: 0.5 }}>✓ read</span>
+        </div>
+      )}
       {flash && (
         <div className="absolute top-2 right-2 chip" style={{ color: "var(--up)", borderColor: "var(--up)" }}>
-          ✓ highlight saved
+          {flash}
         </div>
       )}
       <div className="flex items-center gap-2 mb-2">
         <span className="chip" style={{ color: "var(--accent)", borderColor: "var(--accent)" }}>
-          {TYPE_LABEL[s.type] ?? s.type}
+          {KIND_LABEL[s.kind] ?? KIND_LABEL[s.type] ?? s.kind}
         </span>
         <span className="mono text-xs" style={{ color: "var(--muted)" }}>{fmtDate(s.date)}</span>
         <Link href={`/sources/${s.source_id}`} className="mono text-xs hover:underline" style={{ color: "var(--muted)" }}>
-          · {s.source}
+          · {sourceLabel}
         </Link>
+        <div ref={shareRef} className="ml-auto relative">
+          <button onClick={onShare} className="chip" title="Share">Share</button>
+          {shareOpen && (
+            <div className="absolute right-0 top-full mt-1 z-20 panel p-1 flex flex-col text-sm min-w-[140px]"
+              onClick={(e) => e.stopPropagation()} style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}>
+              <a href={mailto} className="px-3 py-1.5 rounded hover:bg-[var(--panel-2)]" onClick={() => setShareOpen(false)}>Email</a>
+              <a href={whatsapp} target="_blank" rel="noopener" className="px-3 py-1.5 rounded hover:bg-[var(--panel-2)]" onClick={() => setShareOpen(false)}>WhatsApp</a>
+              <button onClick={copyShare} className="px-3 py-1.5 rounded hover:bg-[var(--panel-2)] text-left">Copy link</button>
+            </div>
+          )}
+        </div>
         <button
-          onClick={addReport}
-          className="ml-auto chip"
-          title={inReport ? "In report — click to remove" : "Add to report"}
-          style={inReport ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
-        >
-          {inReport ? "✓ Report" : "+ Report"}
-        </button>
-        <button
-          onClick={() => toggleSave(s)}
+          onClick={(e) => { e.stopPropagation(); toggleSave(s); }}
           className="text-lg leading-none"
           title={saved ? "Saved — click to remove" : "Save / pin"}
           style={{ color: saved ? "var(--accent)" : "var(--muted)" }}
@@ -134,7 +198,7 @@ export function SignalCard({ s }: { s: Signal }) {
       <p
         onMouseUp={onMouseUp}
         className="text-sm leading-relaxed whitespace-pre-wrap"
-        style={{ color: "var(--muted)" }}
+        style={{ color: "var(--body-text)", overflowWrap: "anywhere", wordBreak: "break-word" }}
       >
         {open || !long ? renderWithLinks(s.text) : demd(s.text).slice(0, 360) + "…"}
       </p>
@@ -161,9 +225,6 @@ export function SignalCard({ s }: { s: Signal }) {
       )}
 
       <div className="flex flex-wrap items-center gap-1.5 mt-3">
-        {s.themes.slice(0, 3).map((th) => (
-          <span key={th} className="chip">{th}</span>
-        ))}
         {(open ? s.links : s.links.slice(0, 2)).map((l, i) => (
           <a key={i} href={l.url} target="_blank" rel="noopener noreferrer" className="chip" style={{ color: "var(--accent-2)" }}>
             ↗ {l.anchor ? l.anchor.slice(0, 28) : l.domain}

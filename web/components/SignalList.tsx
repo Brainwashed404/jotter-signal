@@ -8,6 +8,7 @@ type Sort = "newest" | "oldest" | "relevance";
 
 export default function SignalList({
   tabs,
+  filterBy = "kind",
   themes = [],
   showSearch = false,
   showThemes = false,
@@ -16,12 +17,14 @@ export default function SignalList({
   availableYears = [],
   showExperts = false,
   availableExperts = [],
+  searchSuggestions = [],
   initialQuery = "",
   initialType = "",
   initialTheme = "",
   initialExperts = [],
 }: {
   tabs: Tab[];
+  filterBy?: "type" | "kind";
   themes?: string[];
   showSearch?: boolean;
   showThemes?: boolean;
@@ -30,6 +33,7 @@ export default function SignalList({
   availableYears?: number[];
   showExperts?: boolean;
   availableExperts?: { id: string; name: string }[];
+  searchSuggestions?: string[];
   initialQuery?: string;
   initialType?: string;
   initialTheme?: string;
@@ -46,7 +50,24 @@ export default function SignalList({
   const [results, setResults] = useState<Signal[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [trending, setTrending] = useState<{ title: string; url: string; source: string; term: string }[]>([]);
+  const sugSample = (n: number) => {
+    const a = [...searchSuggestions];
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a.slice(0, n);
+  };
+  // Deterministic initial slice so SSR and hydration match (searchSuggestions is
+  // already shuffled per-request server-side). Re-randomised client-side on demand.
+  const [suggestions, setSuggestions] = useState<string[]>(() => searchSuggestions.slice(0, 6));
+
+  // Keep the "try" suggestions fresh: reshuffle on mount, then rotate every 8s so the
+  // bar never shows the same set for long. (Client-only, so no SSR/hydration mismatch.)
+  useEffect(() => {
+    if (searchSuggestions.length <= 6) return;
+    setSuggestions(sugSample(6));
+    const id = setInterval(() => setSuggestions(sugSample(6)), 8000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const committedRef = useRef(initialQuery);
   const typeRef = useRef(type); typeRef.current = type;
@@ -67,7 +88,7 @@ export default function SignalList({
     const offset = reset ? 0 : offsetRef.current;
     const params = new URLSearchParams();
     if (committedRef.current) params.set("q", committedRef.current);
-    if (typeRef.current) params.set("type", typeRef.current);
+    if (typeRef.current) params.set(filterBy, typeRef.current);
     if (themeRef.current) params.set("theme", themeRef.current);
     if (yearsRef.current.length) params.set("years", yearsRef.current.join(","));
     if (expertsRef.current.length) params.set("experts", expertsRef.current.join(","));
@@ -98,29 +119,26 @@ export default function SignalList({
     return () => obs.disconnect();
   }, [fetchPage]);
 
-  // trending topics from the news (Search only)
-  useEffect(() => {
-    if (!showSearch) return;
-    fetch("/api/trending").then((r) => r.json()).then((d) => setTrending(d.topics || [])).catch(() => {});
-  }, [showSearch]);
-
   function submit(e: React.FormEvent) {
     e.preventDefault();
     committedRef.current = input;
     fetchPage(true);
+    setSuggestions(sugSample(6)); // always offer fresh suggestions after a search
   }
 
-  function searchFor(term: string) {
+  function runSearch(term: string) {
     setInput(term);
     committedRef.current = term;
     setSort("relevance"); sortRef.current = "relevance";
     fetchPage(true);
+    setSuggestions(sugSample(6));
   }
 
   function clearSearch() {
     setInput("");
     committedRef.current = "";
     fetchPage(true);
+    setSuggestions(sugSample(6));
   }
 
   function toggleYear(y: number) {
@@ -140,7 +158,7 @@ export default function SignalList({
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Search the signal — e.g. AI bubble, surveillance capitalism, democratic backsliding…"
+              placeholder={suggestions.length ? `Search the signal: e.g. ${suggestions.slice(0, 3).join(", ")}…` : "Search the signal…"}
               className="w-full px-4 py-3 pr-10 text-sm"
             />
             {input && (
@@ -159,27 +177,6 @@ export default function SignalList({
         </form>
       )}
 
-      {showSearch && trending.length > 0 && (
-        <div className="panel p-4">
-          <div className="label mb-2">In the news now · click ↳ to see what your experts have said</div>
-          <ul className="space-y-1.5">
-            {trending.map((t, i) => (
-              <li key={i} className="flex items-baseline gap-2 text-sm">
-                <a href={t.url} target="_blank" rel="noopener" className="flex-1 hover:underline truncate">{t.title}</a>
-                <span className="label shrink-0">{t.source}</span>
-                <button
-                  onClick={() => searchFor(t.term)}
-                  className="chip shrink-0"
-                  title={`Search the archive for “${t.term}”`}
-                >
-                  ↳ {t.term.length > 22 ? t.term.slice(0, 22) + "…" : t.term}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       <div className="flex flex-wrap gap-2 items-center">
         {tabs.map((t) => (
           <button
@@ -193,7 +190,8 @@ export default function SignalList({
         ))}
         <div className="ml-auto flex gap-2 items-center">
           {showThemes && (
-            <select value={theme} onChange={(e) => setTheme(e.target.value)} className="text-xs px-2 py-1.5">
+            <select value={theme} onChange={(e) => setTheme(e.target.value)} className="btn-ghost text-xs"
+              style={theme ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
               <option value="">All themes</option>
               {themes.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
@@ -211,7 +209,7 @@ export default function SignalList({
             </button>
           )}
           {showSort && (
-            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="text-xs px-2 py-1.5">
+            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="btn-ghost text-xs">
               <option value="newest">Newest first</option>
               <option value="oldest">Oldest first</option>
               <option value="relevance">Most relevant</option>
@@ -263,10 +261,6 @@ export default function SignalList({
           ))}
         </div>
       )}
-
-      <div className="label">
-        {total.toLocaleString()} signals · showing {results.length.toLocaleString()}
-      </div>
 
       <div className="grid md:grid-cols-2 gap-3">
         {results.map((s) => <SignalCard key={s.id} s={s} />)}
