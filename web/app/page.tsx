@@ -6,7 +6,7 @@ import MarketsSnapshot from "@/components/MarketsSnapshot";
 import WorldCupChart from "@/components/WorldCupChart";
 import CtaFooter from "@/components/CtaFooter";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // cache the page for 5 min; Vercel serves all visitors from one render
 
 export default async function HomePage() {
   await loadData();
