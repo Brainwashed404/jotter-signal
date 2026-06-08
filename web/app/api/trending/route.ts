@@ -39,15 +39,22 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://www.politico.eu/feed/", source: "Politico" },
     { url: "https://inews.co.uk/news/politics/feed", source: "i" },
   ],
+  // "Money" tab (id kept as `ft` so existing saved pill orders aren't disturbed):
+  // a mix of business/finance outlets. WSJ & Economist are partly paywalled but
+  // included by request.
   ft: [
+    { url: "https://www.forbes.com/business/feed/", source: "Forbes" },
     { url: "https://www.ft.com/rss/home/international", source: "FT" },
+    { url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml", source: "WSJ" },
+    { url: "https://www.economist.com/finance-and-economics/rss.xml", source: "Economist" },
     { url: "https://feeds.marketwatch.com/marketwatch/topstories/", source: "MarketWatch" },
   ],
   timeout: [
     { url: "https://www.timeout.com/london/feed.rss", source: "Time Out", match: "/news/" },
   ],
-  reddit: [],     // handled by fetchReddit in CUSTOM (via Redlib)
-  futurology: [], // handled by fetchReddit in CUSTOM (via Redlib)
+  futurology: [
+    { url: "https://futurism.com/feed", source: "Futurism" },
+  ],
   technology: [
     { url: "https://techcrunch.com/feed/", source: "TechCrunch" },
     { url: "https://www.theguardian.com/technology/rss", source: "Guardian" },
@@ -61,7 +68,7 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://www.vox.com/rss/future-perfect/index.xml", source: "Vox Future Perfect" },
   ],
 };
-export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "guardian", "ft", "reuters", "bbc", "timeout", "reddit", "wikipedia", "github", "google"];
+export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "guardian", "ft", "reuters", "bbc", "timeout", "wikipedia", "github", "google"];
 
 // GitHub trending repos (monthly, English) — scraped from the trending page (no API);
 // repo name + tagline + this-month star gain, ordered by that star volume.
@@ -156,28 +163,6 @@ async function fetchGoogleTrends(): Promise<NewsItem[]> {
     return [];
   }
 }
-// Reddit blocks requests from datacentre IPs (so a direct fetch works locally but
-// 403s on Vercel). Route through Redlib — an open-source Reddit front-end whose own
-// servers fetch Reddit and expose a standard RSS feed. Try instances in order so the
-// tab survives one going down.
-const REDLIB_HOSTS = ["https://redlib.perennialte.ch", "https://redlib.r4fo.com"];
-async function fetchReddit(subreddit: string, sort: string, source: string): Promise<NewsItem[]> {
-  for (const host of REDLIB_HOSTS) {
-    try {
-      const res = await fetch(`${host}/r/${subreddit}.rss?sort=${sort}`, {
-        headers: { "User-Agent": "Mozilla/5.0 jotter-intelligence/1.0" },
-        signal: AbortSignal.timeout(8000),
-      });
-      if (!res.ok) continue;
-      const items = parse(await res.text(), source);
-      if (items.length) return items.slice(0, 10);
-    } catch {
-      /* try the next instance */
-    }
-  }
-  return [];
-}
-
 // Reuters "Top Stories": reuters.com blocks scraping (401), so pull recent Reuters
 // articles via Google News RSS and strip the trailing " - Reuters" source tag.
 async function fetchReuters(): Promise<NewsItem[]> {
@@ -464,8 +449,6 @@ export async function GET(request: Request) {
     google: fetchGoogleTrends,
     reuters: fetchReuters,
     bbc: fetchBbcMostRead,
-    reddit: () => fetchReddit("news", "rising", "Reddit"),
-    futurology: () => fetchReddit("Futurology", "new", "r/Futurology"),
   };
   if (CUSTOM[param]) {
     const cached = g.__news[param];
