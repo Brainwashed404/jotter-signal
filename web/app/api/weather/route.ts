@@ -35,7 +35,19 @@ export async function GET(req: Request) {
   let lat = sp.has("lat") ? Number(sp.get("lat")) : NaN;
   let lon = sp.has("lon") ? Number(sp.get("lon")) : NaN;
   let place = "";
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) { lat = 51.5074; lon = -0.1278; place = "London"; }
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    // Use Vercel's automatic IP geolocation headers as a no-permission-needed fallback.
+    // These are set on every request in production; fall back to London in local dev.
+    const ipLat = (req as unknown as { headers: { get(k: string): string | null } }).headers.get("x-vercel-ip-latitude");
+    const ipLon = (req as unknown as { headers: { get(k: string): string | null } }).headers.get("x-vercel-ip-longitude");
+    const ipCity = (req as unknown as { headers: { get(k: string): string | null } }).headers.get("x-vercel-ip-city");
+    if (ipLat && ipLon && Number.isFinite(Number(ipLat))) {
+      lat = Number(ipLat); lon = Number(ipLon);
+      place = ipCity ? decodeURIComponent(ipCity) : "";
+    } else {
+      lat = 51.5074; lon = -0.1278; place = "London"; // local dev fallback
+    }
+  }
 
   const key = `${lat.toFixed(2)},${lon.toFixed(2)}`;
   g.__weather ??= {};
