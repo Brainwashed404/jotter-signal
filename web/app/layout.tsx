@@ -21,11 +21,13 @@ const decoFont = Poiret_One({ subsets: ["latin"], weight: "400", variable: "--fo
 const cyberFont = Orbitron({ subsets: ["latin"], variable: "--font-cyber", display: "swap" });
 
 // Apply theme + skin + display size before first paint (no flash of unstyled appearance).
+// data-theme="light" is set as the SSR default on <html>; the script only removes it for
+// users who have explicitly chosen dark mode, and applies any saved skin/size overrides.
 const APPEARANCE_INIT = `try{var d=document.documentElement;
-if(localStorage.getItem('jotter.theme.v2')!=='dark')d.setAttribute('data-theme','light');
+if(localStorage.getItem('jotter.theme.v2')==='dark')d.removeAttribute('data-theme');
 var s=localStorage.getItem('jotter.skin.v1');if(s&&s!=='default')d.setAttribute('data-skin',s);
 var f=localStorage.getItem('jotter.fontsize.v1');if(f&&f!=='md')d.setAttribute('data-fontsize',f);
-}catch(e){document.documentElement.setAttribute('data-theme','light');}`;
+}catch(e){}`;
 
 export const metadata: Metadata = {
   title: "Jotter Intelligence — Foresight Engine",
@@ -34,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${neoFont.variable} ${serifFont.variable} ${techFont.variable} ${punkFont.variable} ${bubbleFont.variable} ${pixelFont.variable} ${decoFont.variable} ${cyberFont.variable} ${vtFont.variable} ${lcarsFont.variable} ${plexFont.variable} ${vectorFont.variable} ${swissFont.variable}`}>
+    <html lang="en" data-theme="light" suppressHydrationWarning className={`${neoFont.variable} ${serifFont.variable} ${techFont.variable} ${punkFont.variable} ${bubbleFont.variable} ${pixelFont.variable} ${decoFont.variable} ${cyberFont.variable} ${vtFont.variable} ${lcarsFont.variable} ${plexFont.variable} ${vectorFont.variable} ${swissFont.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: APPEARANCE_INIT }} />
       </head>
