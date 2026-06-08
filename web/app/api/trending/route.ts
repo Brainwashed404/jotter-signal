@@ -40,13 +40,18 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://inews.co.uk/news/politics/feed", source: "i" },
   ],
   ft: [
-    { url: "https://www.ft.com/rss/home", source: "FT" },
+    { url: "https://www.ft.com/rss/home/international", source: "FT" },
+    { url: "https://feeds.marketwatch.com/marketwatch/topstories/", source: "MarketWatch" },
   ],
   timeout: [
     { url: "https://www.timeout.com/london/feed.rss", source: "Time Out", match: "/news/" },
   ],
-  reddit: [],    // handled by fetchRedditJson in CUSTOM
-  futurology: [], // handled by fetchFuturologyJson in CUSTOM
+  reddit: [
+    { url: "https://hnrss.org/frontpage", source: "HN" },
+  ],
+  futurology: [
+    { url: "https://futurism.com/feed", source: "Futurism" },
+  ],
   technology: [
     { url: "https://techcrunch.com/feed/", source: "TechCrunch" },
     { url: "https://www.theguardian.com/technology/rss", source: "Guardian" },
@@ -434,36 +439,8 @@ export async function GET(request: Request) {
   const param = new URL(request.url).searchParams.get("category") ?? DEFAULT_CATEGORY;
   if (!g.__news) g.__news = {};
 
-  // Non-RSS / scraped / API sources each have a dedicated fetcher. (FT is a normal RSS
-  // feed, so it goes through the generic path below.)
-  async function fetchRedditJson(subreddit: string, sort: string): Promise<NewsItem[]> {
-    try {
-      const res = await fetch(`https://www.reddit.com/r/${subreddit}/${sort}.json?limit=25`, {
-        headers: { "User-Agent": "Mozilla/5.0 jotter-intelligence/1.0" },
-        signal: AbortSignal.timeout(8000),
-      });
-      if (!res.ok) return [];
-      const json = await res.json();
-      const posts: { data: { title: string; url: string; permalink: string; is_self: boolean; score: number } }[] =
-        json?.data?.children ?? [];
-      const out: NewsItem[] = [];
-      const seen = new Set<string>();
-      for (const { data: p } of posts) {
-        const title = decode(p.title);
-        if (title.length < 12 || GEAR_RE.test(title)) continue;
-        const url = p.is_self
-          ? `https://www.reddit.com${p.permalink}`
-          : p.url;
-        const key = title.toLowerCase().slice(0, 40);
-        if (seen.has(key)) continue;
-        seen.add(key);
-        out.push({ title, url, source: subreddit === "Futurology" ? "r/Futurology" : "Reddit", term: termOf(title), date: "" });
-        if (out.length >= 10) break;
-      }
-      return out;
-    } catch { return []; }
-  }
-
+  // Non-RSS / scraped / API sources each have a dedicated fetcher. (FT, reddit/HN, and
+  // futurology go through the generic RSS path in CATEGORIES below.)
   const CUSTOM: Record<string, () => Promise<NewsItem[]>> = {
     wikipedia: fetchWikipediaTop,
     guardian: fetchGuardianMostRead,
@@ -471,8 +448,6 @@ export async function GET(request: Request) {
     google: fetchGoogleTrends,
     reuters: fetchReuters,
     bbc: fetchBbcMostRead,
-    reddit: () => fetchRedditJson("news", "rising"),
-    futurology: () => fetchRedditJson("Futurology", "new"),
   };
   if (CUSTOM[param]) {
     const cached = g.__news[param];

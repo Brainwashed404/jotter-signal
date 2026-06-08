@@ -16,7 +16,7 @@ const CATEGORIES = [
   { id: "reuters", label: "Reuters" },
   { id: "bbc", label: "BBC" },
   { id: "timeout", label: "Time Out" },
-  { id: "reddit", label: "Reddit" },
+  { id: "reddit", label: "HN" },
   { id: "wikipedia", label: "Wikipedia" },
   { id: "github", label: "GitHub" },
   { id: "google", label: "Google" },
