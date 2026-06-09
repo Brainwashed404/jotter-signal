@@ -17,3 +17,7 @@ web/data/signals.jsonl.gz
 # os
 .DS_Store
 web/data/.last_refresh
+
+# local publish credentials
+engine/.env
+engine-data.tar.gz
