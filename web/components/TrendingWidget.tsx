@@ -11,6 +11,7 @@ const CATEGORIES = [
   { id: "politics", label: "Politics" },
   { id: "technology", label: "Tech" },
   { id: "futurology", label: "Futurism" },
+  { id: "hn", label: "HN" },
   { id: "guardian", label: "Guardian" },
   { id: "ft", label: "Money" },
   { id: "reuters", label: "Reuters" },

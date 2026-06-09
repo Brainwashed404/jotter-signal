@@ -30,6 +30,7 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://www.cnbc.com/id/100003114/device/rss/rss.html", source: "CNBC" },
     { url: "https://www.cityam.com/feed/", source: "City AM" },
     { url: "https://feeds.npr.org/1006/rss.xml", source: "NPR" },
+    // Telegraph blocks server-side fetches (hard firewall) so omitted.
   ],
   politics: [
     { url: "https://www.theguardian.com/politics/rss", source: "Guardian" },
@@ -58,18 +59,21 @@ const CATEGORIES: Record<string, Feed[]> = {
   reddit: [],   // handled by fetchReddit in CUSTOM (via Redlib — bypasses Vercel IP block)
   technology: [
     { url: "https://techcrunch.com/feed/", source: "TechCrunch" },
-    { url: "https://www.theguardian.com/technology/rss", source: "Guardian" },
+    { url: "https://www.theguardian.com/uk/technology/rss", source: "Guardian" },
     { url: "https://feeds.bbci.co.uk/news/technology/rss.xml", source: "BBC" },
     { url: "https://feeds.arstechnica.com/arstechnica/index", source: "Ars Technica" },
-    { url: "https://www.theverge.com/rss/index.xml", source: "The Verge" },
     { url: "https://www.theregister.com/headlines.atom", source: "The Register" },
     { url: "https://thenextweb.com/feed", source: "The Next Web" },
     { url: "https://restofworld.org/feed/latest/", source: "Rest of World" },
-    { url: "https://www.vice.com/en/topic/tech/rss", source: "Vice" },
-    { url: "https://www.vox.com/rss/future-perfect/index.xml", source: "Vox Future Perfect" },
+    { url: "https://venturebeat.com/feed/", source: "VentureBeat" },
+    { url: "https://www.digitaltrends.com/feed/", source: "Digital Trends" },
+    { url: "https://www.404media.co/feed", source: "404 Media" },
+  ],
+  hn: [
+    { url: "https://hnrss.org/newest", source: "HN" },
   ],
 };
-export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "guardian", "ft", "reuters", "bbc", "timeout", "reddit", "wikipedia", "github", "google"];
+export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "hn", "guardian", "ft", "reuters", "bbc", "timeout", "reddit", "wikipedia", "github", "google"];
 
 // GitHub trending repos (monthly, English) — scraped from the trending page (no API);
 // repo name + tagline + this-month star gain, ordered by that star volume.

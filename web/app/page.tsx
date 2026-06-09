@@ -22,7 +22,7 @@ export default async function HomePage() {
         <MarketsSnapshot />
       </CollapsibleSection>
 
-      <CollapsibleSection title="World Cup 2026 🏆">
+      <CollapsibleSection title="World Cup 2026" defaultOpen={false}>
         <WorldCupChart />
       </CollapsibleSection>
 
