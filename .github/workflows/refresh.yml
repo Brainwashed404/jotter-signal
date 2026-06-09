@@ -47,6 +47,9 @@ jobs:
       # backfill_ids set, deep-backfill just those sources once (their archive
       # file is then persisted in engine-data.tar.gz for all future runs).
       - name: Run refresh
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: |
           cd engine
           if [ -n "${{ github.event.inputs.backfill_ids }}" ]; then

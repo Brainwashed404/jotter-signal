@@ -55,6 +55,12 @@ def main():
 
         print()
 
+    # Ingest newsletters from the dedicated Gmail mailbox (skipped if creds absent).
+    if os.environ.get("GMAIL_USER") and os.environ.get("GMAIL_APP_PASSWORD"):
+        print("=== fetch_newsletters ===")
+        run(["python3", "fetch_newsletters.py"])
+        print()
+
     print("=== build_dataset ===")
     run(["python3", "build_dataset.py"])
     print("\nDone. Restart the dev server to reload signals.")

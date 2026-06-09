@@ -246,6 +246,18 @@ def strip_reddit(txt):
     txt = re.sub(r"\[(?:link|comments)\]\([^)]*\)", "", txt, flags=re.I)
     return re.sub(r"\n{3,}", "\n\n", txt).strip()
 
+_EMAIL_CRUFT = re.compile(
+    r"^\s*(view (this )?(email|newsletter) (in|on) (your )?(browser|the web)|"
+    r"unsubscribe|update (your )?preferences|manage (your )?subscription|"
+    r"you('re| are) receiving this|sent to\b|copyright ©|©\s*\d{4}|"
+    r"powered by\b|add us to your address book|forward (this )?to a friend|"
+    r"having trouble (reading|viewing))\b.*$", re.I)
+def strip_email_cruft(txt):
+    """Drop the standard email chrome: view-in-browser, unsubscribe, preferences,
+    copyright/address footers — the lines every newsletter platform injects."""
+    lines = [l for l in txt.split("\n") if not _EMAIL_CRUFT.match(l.strip())]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
 def strip_digitalnative(txt):
     """Remove Digital Native's recurring masthead/subscribe block at the top of each post.
 
@@ -499,6 +511,8 @@ def build_rss(ex):
             txt = strip_digitalnative(txt)
         if ex["id"] == "exponentialview":
             txt = strip_exponentialview(txt)
+        if ex.get("source_kind") == "newsletter":
+            txt = strip_email_cruft(txt)
         is_reddit = "reddit.com" in ((ex.get("feed") or "") + (ex.get("url") or ""))
         if is_reddit:
             txt = strip_reddit(txt)
@@ -574,6 +588,13 @@ def aggregate(ex, sigs):
 # ---------- orchestrate all experts ----------
 ADAPTERS = {"naughton": build_naughton, "doctorow": build_doctorow, "rss": build_rss}
 experts_cfg = json.load(open("experts.json"))
+# Auto-discovered newsletter sources (one per email sender) live in a separate
+# manifest written by fetch_newsletters.py, so curated experts.json stays clean.
+if os.path.exists("data/newsletters.json"):
+    try:
+        experts_cfg += list(json.load(open("data/newsletters.json")).values())
+    except Exception as e:
+        print(f"  ! newsletters.json load failed: {e}")
 all_sigs = []
 experts_out = []
 for ex in experts_cfg:
