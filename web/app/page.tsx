@@ -1,4 +1,4 @@
-import { loadData, getRecentFeed } from "@/lib/data";
+import { loadData, getLatestPerExpert } from "@/lib/data";
 import TrendingWidget from "@/components/TrendingWidget";
 import CollapsibleSection from "@/components/CollapsibleSection";
 import LatestInsights from "@/components/LatestInsights";
@@ -10,7 +10,7 @@ export const revalidate = 300; // cache the page for 5 min; Vercel serves all vi
 
 export default async function HomePage() {
   await loadData();
-  const recentFeed = getRecentFeed(7);
+  const recentFeed = getLatestPerExpert(7); // ONE latest post per expert/publication, last 7 days
 
   return (
     <div className="space-y-8">

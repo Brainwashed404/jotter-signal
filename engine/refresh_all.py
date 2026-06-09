@@ -48,7 +48,9 @@ def main():
 
         time.sleep(DELAY)
 
-        if do_backfill and ex.get("backfill"):
+        # Always backfill feed-less sources (e.g. LSN): the backfill is their ONLY
+        # data source, so skipping it on --no-backfill runs freezes them.
+        if ex.get("backfill") and (do_backfill or not ex.get("feed")):
             print(f"[{eid}] backfill ({ex['backfill']})")
             run(["python3", "backfill.py", eid])
             time.sleep(DELAY)

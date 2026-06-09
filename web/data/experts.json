@@ -9585,74 +9585,74 @@
   "blurb": "The Future Laboratory's daily consumer-culture signals: emerging behaviours, brand moves and stats across sectors.",
   "url": "https://www.lsnglobal.com/daily-signals",
   "totals": {
-   "posts": 15,
-   "signals": 15,
+   "posts": 18,
+   "signals": 18,
    "date_min": "2026-05-29",
-   "date_max": "2026-06-08"
+   "date_max": "2026-06-09"
   },
   "signal_types": {
-   "article": 15
+   "article": 18
   },
   "signal_kinds": {
    "article": 8,
-   "links": 6,
-   "data": 1
+   "links": 8,
+   "data": 2
   },
   "themes": [
    {
     "theme": "Social media & attention",
-    "current": 26.7,
+    "current": 27.8,
     "delta": 0.0,
     "series": {
-     "2026": 26.7
+     "2026": 27.8
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 26.7,
+    "current": 27.8,
     "delta": 0.0,
     "series": {
-     "2026": 26.7
+     "2026": 27.8
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 13.3,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 13.3
+     "2026": 11.1
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 13.3,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 13.3
+     "2026": 11.1
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 13.3,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 13.3
-    }
-   },
-   {
-    "theme": "Geopolitics & power",
-    "current": 6.7,
-    "delta": 0.0,
-    "series": {
-     "2026": 6.7
+     "2026": 11.1
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 0.0,
+    "current": 5.6,
     "delta": 0.0,
     "series": {
-     "2026": 0.0
+     "2026": 5.6
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 5.6,
+    "delta": 0.0,
+    "series": {
+     "2026": 5.6
     }
    },
    {
@@ -9702,7 +9702,7 @@
   "top_sources_recent": [
    {
     "domain": "lsnglobal.com",
-    "n": 57
+    "n": 70
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
@@ -9736,7 +9736,7 @@
   "top_sources_early": [
    {
     "domain": "lsnglobal.com",
-    "n": 57
+    "n": 70
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
