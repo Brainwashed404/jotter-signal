@@ -62,8 +62,25 @@ jobs:
             python3 refresh_all.py --no-backfill
           fi
 
+      # Guard: if this build is much smaller than the one already committed, the
+      # engine-data restore probably failed (e.g. B2 cap), so the build is degraded.
+      # Don't publish it — keep the good committed data until a healthy build returns.
+      - name: Check build health
+        id: health
+        run: |
+          NEW=$(wc -l < web/data/signals.jsonl)
+          OLD=$(git show HEAD:web/data/signals.jsonl.gz 2>/dev/null | gunzip -c 2>/dev/null | wc -l || echo 0)
+          echo "signals: new=$NEW committed=$OLD"
+          if [ "$OLD" -eq 0 ] || [ "$NEW" -ge "$((OLD * 9 / 10))" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Degraded build ($NEW < 90% of $OLD) — skipping publish to protect committed data"
+          fi
+
       # Persist updated engine/data/ so next run can be incremental
       - name: Upload engine data archive to R2
+        if: steps.health.outputs.ok == 'true'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -77,6 +94,7 @@ jobs:
       # Publish the rebuilt signals for the app to fetch on next cold start.
       # signals.jsonl is gzipped → signals.jsonl.gz (110 MB → ~31 MB) before upload.
       - name: Upload signals and experts to R2
+        if: steps.health.outputs.ok == 'true'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -97,6 +115,7 @@ jobs:
       # triggers the rebuild. No "[skip ci]" (Vercel honours it); this workflow only
       # triggers on schedule/dispatch, not push, so the commit can't loop back in.
       - name: Commit fresh data + trigger site rebuild
+        if: steps.health.outputs.ok == 'true'
         run: |
           git config user.name "jotter-bot"
           git config user.email "actions@github.com"
