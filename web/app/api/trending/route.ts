@@ -20,19 +20,16 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://www.aljazeera.com/xml/rss/all.xml", source: "Al Jazeera" },
     { url: "https://feeds.skynews.com/feeds/rss/world.xml", source: "Sky News" },
     { url: "https://www.independent.co.uk/news/world/rss", source: "Independent" },
-    { url: "https://rss.dw.com/rdf/rss-en-all", source: "DW" },
-    { url: "https://www.euronews.com/rss", source: "Euronews" },
     { url: "https://feeds.npr.org/1004/rss.xml", source: "NPR" },
     { url: "https://www.cbc.ca/webfeed/rss/rss-world", source: "CBC" },
   ],
+  // Business: UK business-section feeds only (per request). Telegraph omitted —
+  // it has no working public RSS (feeds firewalled/discontinued, even via relay).
   business: [
-    { url: "https://www.theguardian.com/business/rss", source: "Guardian" },
     { url: "https://feeds.bbci.co.uk/news/business/rss.xml", source: "BBC" },
+    { url: "https://www.theguardian.com/uk/business/rss", source: "Guardian" },
+    { url: "https://www.cityam.com/category/business/feed/", source: "City AM" },
     { url: "https://feeds.skynews.com/feeds/rss/business.xml", source: "Sky News" },
-    { url: "https://www.cnbc.com/id/100003114/device/rss/rss.html", source: "CNBC" },
-    { url: "https://www.cityam.com/feed/", source: "City AM" },
-    { url: "https://feeds.npr.org/1006/rss.xml", source: "NPR" },
-    // Telegraph blocks server-side fetches (hard firewall) so omitted.
   ],
   politics: [
     { url: "https://www.theguardian.com/politics/rss", source: "Guardian" },
