@@ -91,11 +91,12 @@ jobs:
           echo "Upload complete"
 
       # The live site bakes its data at BUILD time, so fresh storage alone isn't
-      # enough — push an empty commit so Vercel rebuilds and picks it up. (A push
-      # by GITHUB_TOKEN doesn't re-trigger this workflow, so there's no loop.)
+      # enough — push an empty commit so Vercel rebuilds and picks it up. No "[skip ci]"
+      # (Vercel honours it and would skip the build); this workflow only triggers on
+      # schedule/dispatch, not push, so the commit can't loop back into it.
       - name: Trigger site rebuild
         run: |
           git config user.name "jotter-bot"
           git config user.email "actions@github.com"
-          git commit --allow-empty -m "data: scheduled refresh $(date -u +%FT%TZ) [skip ci]"
+          git commit --allow-empty -m "data: scheduled refresh $(date -u +%FT%TZ)"
           git push
