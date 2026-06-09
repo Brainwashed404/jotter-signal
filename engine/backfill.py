@@ -164,6 +164,47 @@ def backfill_wpcom(ex):
         time.sleep(0.3)
     return out[:cap]
 
+def backfill_squarespace(ex):
+    """Squarespace collections (e.g. ben-evans.com essays) via the public
+    ?format=json pagination. Each page returns up to 10 items with full HTML
+    `body`; `nextPageOffset` (publishOn epoch-ms of the last item) pages back."""
+    base = ex.get("squarespace", ex["feed"].split("?")[0])  # collection URL, no query
+    if base.startswith("/"):
+        base = ex["url"].rstrip("/") + base
+    cap = ex.get("cap", WP_CAP)
+    out, offset, seen = [], None, set()
+    while len(out) < cap:
+        url = f"{base}?format=json-pretty" + (f"&offset={offset}" if offset else "")
+        try:
+            data = json.loads(get(url))
+        except urllib.error.HTTPError as e:
+            if e.code in (400, 403, 404):
+                break
+            raise
+        items = data.get("items", [])
+        if not items:
+            break
+        for r in items:
+            link = r.get("fullUrl", "")
+            if link.startswith("/"):
+                link = ex["url"].rstrip("/") + link
+            if not link or link in seen:
+                continue
+            seen.add(link)
+            ms = r.get("publishOn") or r.get("addedOn") or 0
+            date = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(ms / 1000)) if ms else ""
+            out.append({"title": r.get("title", ""), "link": link,
+                        "date": date, "content": r.get("body", ""), "categories": []})
+        print(f"  …offset {offset or 'start'} ({len(out)})")
+        pag = data.get("pagination", {})
+        if not pag.get("nextPage"):
+            break
+        offset = pag.get("nextPageOffset")
+        if not offset:
+            break
+        time.sleep(0.3)
+    return out[:cap]
+
 def backfill_lsn(ex):
     """LS:N Global Daily Signals: split the (cookieless, metered-free) index page
     by its <h3> signal headers. Recent-only + accumulates across daily runs."""
@@ -264,6 +305,7 @@ def main():
                  else backfill_protein(ex) if bf == "protein"
                  else backfill_lsn(ex) if bf == "lsn"
                  else backfill_reddit(ex) if bf == "reddit"
+                 else backfill_squarespace(ex) if bf == "squarespace"
                  else [])
         out = f"data/archive_{ex['id']}.jsonl"
         with open(out, "w") as f:

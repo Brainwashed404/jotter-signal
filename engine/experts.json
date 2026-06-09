@@ -1,5 +1,17 @@
 [
   {
+    "id": "benedictevans",
+    "name": "Benedict Evans",
+    "blurb": "Tech analyst on the structural shifts in tech and media: mobile, platforms, AI, and where attention and value move next. Ex-a16z; writes widely-read essays and a weekly newsletter.",
+    "url": "https://www.ben-evans.com",
+    "feed": "https://www.ben-evans.com/benedictevans?format=rss",
+    "adapter": "rss",
+    "backfill": "squarespace",
+    "squarespace": "https://www.ben-evans.com/benedictevans",
+    "cap": 600,
+    "category": "author"
+  },
+  {
     "id": "bilawalsidhu",
     "name": "Bilawal Sidhu (Map the World)",
     "blurb": "Creator and TED curator on spatial computing, AI world models, AR/VR and visual effects. Ex-Google PM for XR and 3D maps; writes the 'Map the World' newsletter.",

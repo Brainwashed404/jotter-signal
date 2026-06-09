@@ -18,7 +18,7 @@ const CATEGORIES = [
   { id: "bbc", label: "BBC" },
   { id: "timeout", label: "Time Out" },
   { id: "reddit", label: "Reddit" },
-  { id: "wikipedia", label: "Wikipedia" },
+  { id: "wikipedia", label: "Wiki" },
   { id: "github", label: "GitHub" },
   { id: "google", label: "Google" },
 ];

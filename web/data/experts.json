@@ -1,5 +1,475 @@
 [
  {
+  "id": "benedictevans",
+  "name": "Benedict Evans",
+  "blurb": "Tech analyst on the structural shifts in tech and media: mobile, platforms, AI, and where attention and value move next. Ex-a16z; writes widely-read essays and a weekly newsletter.",
+  "url": "https://www.ben-evans.com",
+  "totals": {
+   "posts": 581,
+   "signals": 581,
+   "date_min": "2012-01-03",
+   "date_max": "2026-05-24"
+  },
+  "signal_types": {
+   "article": 581
+  },
+  "signal_kinds": {
+   "longread": 140,
+   "article": 341,
+   "links": 81,
+   "quote": 8,
+   "data": 11
+  },
+  "themes": [
+   {
+    "theme": "AI & machine learning",
+    "current": 97.2,
+    "delta": 64.7,
+    "series": {
+     "2012": 0.0,
+     "2013": 1.9,
+     "2014": 6.0,
+     "2015": 15.1,
+     "2016": 56.5,
+     "2017": 61.1,
+     "2018": 55.6,
+     "2019": 76.5,
+     "2020": 18.2,
+     "2021": 12.5,
+     "2022": 37.5,
+     "2023": 50.0,
+     "2024": 91.7,
+     "2025": 100.0,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Platform power / Big Tech",
+    "current": 95.2,
+    "delta": 8.2,
+    "series": {
+     "2012": 64.7,
+     "2013": 66.7,
+     "2014": 72.3,
+     "2015": 88.7,
+     "2016": 78.3,
+     "2017": 100.0,
+     "2018": 77.8,
+     "2019": 100.0,
+     "2020": 95.5,
+     "2021": 100.0,
+     "2022": 100.0,
+     "2023": 100.0,
+     "2024": 100.0,
+     "2025": 85.7,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Economy & markets",
+    "current": 91.7,
+    "delta": 32.0,
+    "series": {
+     "2012": 30.9,
+     "2013": 40.3,
+     "2014": 47.0,
+     "2015": 52.8,
+     "2016": 52.2,
+     "2017": 77.8,
+     "2018": 77.8,
+     "2019": 47.1,
+     "2020": 77.3,
+     "2021": 87.5,
+     "2022": 50.0,
+     "2023": 75.0,
+     "2024": 75.0,
+     "2025": 100.0,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 61.5,
+    "delta": 23.8,
+    "series": {
+     "2012": 5.9,
+     "2013": 16.4,
+     "2014": 15.7,
+     "2015": 28.3,
+     "2016": 43.5,
+     "2017": 38.9,
+     "2018": 22.2,
+     "2019": 41.2,
+     "2020": 36.4,
+     "2021": 66.7,
+     "2022": 87.5,
+     "2023": 50.0,
+     "2024": 41.7,
+     "2025": 42.9,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 61.5,
+    "delta": 35.3,
+    "series": {
+     "2012": 5.1,
+     "2013": 10.7,
+     "2014": 10.8,
+     "2015": 15.1,
+     "2016": 17.4,
+     "2017": 27.8,
+     "2018": 22.2,
+     "2019": 11.8,
+     "2020": 31.8,
+     "2021": 50.0,
+     "2022": 50.0,
+     "2023": 62.5,
+     "2024": 41.7,
+     "2025": 42.9,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 54.0,
+    "delta": 36.3,
+    "series": {
+     "2012": 0.0,
+     "2013": 3.8,
+     "2014": 6.0,
+     "2015": 9.4,
+     "2016": 30.4,
+     "2017": 27.8,
+     "2018": 33.3,
+     "2019": 17.6,
+     "2020": 4.5,
+     "2021": 16.7,
+     "2022": 12.5,
+     "2023": 50.0,
+     "2024": 33.3,
+     "2025": 28.6,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 40.1,
+    "delta": 26.8,
+    "series": {
+     "2012": 0.7,
+     "2013": 1.3,
+     "2014": 4.8,
+     "2015": 7.5,
+     "2016": 0.0,
+     "2017": 0.0,
+     "2018": 0.0,
+     "2019": 11.8,
+     "2020": 45.5,
+     "2021": 37.5,
+     "2022": 25.0,
+     "2023": 25.0,
+     "2024": 41.7,
+     "2025": 28.6,
+     "2026": 50.0
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 24.2,
+    "delta": 3.4,
+    "series": {
+     "2012": 13.2,
+     "2013": 27.0,
+     "2014": 25.3,
+     "2015": 32.1,
+     "2016": 17.4,
+     "2017": 16.7,
+     "2018": 33.3,
+     "2019": 29.4,
+     "2020": 13.6,
+     "2021": 4.2,
+     "2022": 25.0,
+     "2023": 12.5,
+     "2024": 8.3,
+     "2025": 14.3,
+     "2026": 50.0
+    }
+   },
+   {
+    "theme": "Surveillance & privacy",
+    "current": 15.9,
+    "delta": -3.9,
+    "series": {
+     "2012": 1.5,
+     "2013": 0.6,
+     "2014": 1.2,
+     "2015": 7.5,
+     "2016": 17.4,
+     "2017": 16.7,
+     "2018": 0.0,
+     "2019": 47.1,
+     "2020": 40.9,
+     "2021": 41.7,
+     "2022": 37.5,
+     "2023": 25.0,
+     "2024": 33.3,
+     "2025": 14.3,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
+    "current": 2.8,
+    "delta": -1.0,
+    "series": {
+     "2012": 1.5,
+     "2013": 1.9,
+     "2014": 0.0,
+     "2015": 0.0,
+     "2016": 4.3,
+     "2017": 0.0,
+     "2018": 11.1,
+     "2019": 0.0,
+     "2020": 13.6,
+     "2021": 0.0,
+     "2022": 0.0,
+     "2023": 12.5,
+     "2024": 8.3,
+     "2025": 0.0,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Crypto / web3",
+    "current": 2.8,
+    "delta": -5.9,
+    "series": {
+     "2012": 0.0,
+     "2013": 0.0,
+     "2014": 2.4,
+     "2015": 1.9,
+     "2016": 0.0,
+     "2017": 5.6,
+     "2018": 11.1,
+     "2019": 23.5,
+     "2020": 13.6,
+     "2021": 20.8,
+     "2022": 25.0,
+     "2023": 0.0,
+     "2024": 8.3,
+     "2025": 0.0,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Climate & environment",
+    "current": 0.0,
+    "delta": -0.6,
+    "series": {
+     "2012": 0.0,
+     "2013": 0.0,
+     "2014": 0.0,
+     "2015": 1.9,
+     "2016": 0.0,
+     "2017": 5.6,
+     "2018": 0.0,
+     "2019": 0.0,
+     "2020": 0.0,
+     "2021": 0.0,
+     "2022": 0.0,
+     "2023": 0.0,
+     "2024": 0.0,
+     "2025": 0.0,
+     "2026": 0.0
+    }
+   }
+  ],
+  "years": [
+   "2012",
+   "2013",
+   "2014",
+   "2015",
+   "2016",
+   "2017",
+   "2018",
+   "2019",
+   "2020",
+   "2021",
+   "2022",
+   "2023",
+   "2024",
+   "2025",
+   "2026"
+  ],
+  "top_sources_recent": [
+   {
+    "domain": "ben-evans.com",
+    "n": 60
+   },
+   {
+    "domain": "twitter.com",
+    "n": 11
+   },
+   {
+    "domain": "gov.uk",
+    "n": 7
+   },
+   {
+    "domain": "pewresearch.org",
+    "n": 4
+   },
+   {
+    "domain": "bloomberg.com",
+    "n": 4
+   },
+   {
+    "domain": "techcrunch.com",
+    "n": 4
+   },
+   {
+    "domain": "theinformation.com",
+    "n": 3
+   },
+   {
+    "domain": "wsj.com",
+    "n": 3
+   },
+   {
+    "domain": "openai.com",
+    "n": 3
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 3
+   },
+   {
+    "domain": "theverge.com",
+    "n": 3
+   },
+   {
+    "domain": "justice.gov",
+    "n": 3
+   },
+   {
+    "domain": "trends.google.com",
+    "n": 3
+   },
+   {
+    "domain": "google.com",
+    "n": 3
+   },
+   {
+    "domain": "thegongshow.tumblr.com",
+    "n": 3
+   },
+   {
+    "domain": "nvca.org",
+    "n": 3
+   },
+   {
+    "domain": "frame.io",
+    "n": 3
+   },
+   {
+    "domain": "ec.europa.eu",
+    "n": 3
+   },
+   {
+    "domain": "onetonline.org",
+    "n": 2
+   },
+   {
+    "domain": "hugo.blog",
+    "n": 2
+   }
+  ],
+  "top_sources_early": [
+   {
+    "domain": "ben-evans.com",
+    "n": 165
+   },
+   {
+    "domain": "twitter.com",
+    "n": 38
+   },
+   {
+    "domain": "slideshare.net",
+    "n": 18
+   },
+   {
+    "domain": "itunes.apple.com",
+    "n": 18
+   },
+   {
+    "domain": "endersanalysis.com",
+    "n": 16
+   },
+   {
+    "domain": "google.com",
+    "n": 12
+   },
+   {
+    "domain": "stakeholders.ofcom.org.uk",
+    "n": 11
+   },
+   {
+    "domain": "en.m.wikipedia.org",
+    "n": 10
+   },
+   {
+    "domain": "t.co",
+    "n": 10
+   },
+   {
+    "domain": "alibaba.com",
+    "n": 9
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 8
+   },
+   {
+    "domain": "apple.com",
+    "n": 8
+   },
+   {
+    "domain": "a16z.com",
+    "n": 7
+   },
+   {
+    "domain": "developer.android.com",
+    "n": 7
+   },
+   {
+    "domain": "feeds.soundcloud.com",
+    "n": 7
+   },
+   {
+    "domain": "techcrunch.com",
+    "n": 6
+   },
+   {
+    "domain": "play.google.com",
+    "n": 6
+   },
+   {
+    "domain": "everlaw.com",
+    "n": 5
+   },
+   {
+    "domain": "arstechnica.com",
+    "n": 5
+   },
+   {
+    "domain": "asymco.com",
+    "n": 5
+   }
+  ],
+  "category": "author"
+ },
+ {
   "id": "bilawalsidhu",
   "name": "Bilawal Sidhu (Map the World)",
   "blurb": "Creator and TED curator on spatial computing, AI world models, AR/VR and visual effects. Ex-Google PM for XR and 3D maps; writes the 'Map the World' newsletter.",
