@@ -91,6 +91,12 @@ def clean_block(htmlfrag):
     # HTML doc with literal '>' chars, which would break the generic <[^>]+> stripper
     # below and leak the embed markup as text — so match the tag respecting quotes.
     t = re.sub(r"""<iframe\b(?:[^>"']|"[^"]*"|'[^']*')*>""", " ", t, flags=re.S|re.I)
+    # Substack embeds (tweets, link cards) carry a big escaped-JSON `data-attrs="…"`
+    # that can hold raw '>' chars; those break the generic <[^>]+> stripper below and
+    # leak the JSON as text. Drop the whole embed block, matching tags quote-aware so
+    # the data-attrs value (incl any '>') is consumed, not leaked.
+    t = re.sub(r"""<(div|figure|p)\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-attrs=(?:[^>"']|"[^"]*"|'[^']*')*>[\s\S]*?</\1>""", " ", t, flags=re.I)
+    t = re.sub(r"""<[a-z][a-z0-9]*\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-attrs=(?:[^>"']|"[^"]*"|'[^']*')*>""", " ", t, flags=re.I)
     t = _md_links(t)
     t = _BR.sub("\n", t)
     t = _BLOCK_END.sub("\n\n", t)
