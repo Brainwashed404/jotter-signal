@@ -32,6 +32,14 @@ RELAY_DOMAINS = {"substack.com", "mail.beehiiv.com", "beehiiv.com", "mailchimpap
 # email->RSS bridge, alongside his essays. Keys are computed source ids ("nl-"+slug).
 IGNORE_SLUGS = {"nl-benedict-evans", "nl-benedicts-newsletter", "nl-ben-evans"}
 
+# Transactional / system senders that aren't newsletters — never make a source.
+SKIP_SENDER_RE = re.compile(
+    r"(no-?reply|do-?not-?reply|mailer-daemon|postmaster|notifications?@|"
+    r"@(accounts\.|mail\.)?google\.com|forwarding-noreply@)", re.I)
+
+# One-time cleanup of source ids created before the filters above existed.
+PURGE_SLUGS = {"nl-google"}
+
 
 def slug(s):
     s = re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
@@ -142,6 +150,8 @@ def main():
             continue
         msg = email.message_from_bytes(mdata[0][1])
         name, addr = parseaddr(msg.get("From", ""))
+        if SKIP_SENDER_RE.search(addr):
+            continue  # transactional/system mail, not a newsletter
         name = decode_header(name) or (addr.split("@")[0] if "@" in addr else "Unknown")
         domain = addr.split("@")[-1].lower() if "@" in addr else ""
         sid = "nl-" + slug(name)
@@ -200,6 +210,16 @@ def main():
             "category": entry.get("category", "publication"),
             "source_kind": "newsletter",
         }
+
+    # Self-heal: drop sources that should never have existed (curated duplicates +
+    # one-time junk created before the sender filters), deleting their raw files too.
+    for dead in [s for s in manifest if s in IGNORE_SLUGS or s in PURGE_SLUGS]:
+        manifest.pop(dead, None)
+        try:
+            os.remove(os.path.join(DATA, f"raw_{dead}.jsonl"))
+        except FileNotFoundError:
+            pass
+        print(f"[newsletters] pruned stale source {dead}")
 
     if new_uids:
         state[fkey] = max(new_uids)
