@@ -10,6 +10,9 @@ on:
         required: false
         default: ""
 
+permissions:
+  contents: write   # allow the rebuild-trigger step to push an empty commit
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -86,3 +89,13 @@ jobs:
           aws s3 cp web/data/experts.json "s3://${R2_BUCKET}/experts.json" \
             --endpoint-url "${R2_ENDPOINT}"
           echo "Upload complete"
+
+      # The live site bakes its data at BUILD time, so fresh storage alone isn't
+      # enough — push an empty commit so Vercel rebuilds and picks it up. (A push
+      # by GITHUB_TOKEN doesn't re-trigger this workflow, so there's no loop.)
+      - name: Trigger site rebuild
+        run: |
+          git config user.name "jotter-bot"
+          git config user.email "actions@github.com"
+          git commit --allow-empty -m "data: scheduled refresh $(date -u +%FT%TZ) [skip ci]"
+          git push
