@@ -27,6 +27,11 @@ RELAY_DOMAINS = {"substack.com", "mail.beehiiv.com", "beehiiv.com", "mailchimpap
                  "mailchi.mp", "ghost.io", "convertkit-mail.com", "convertkit-mail2.com",
                  "kill-the-newsletter.com", "list-manage.com", "sendgrid.net"}
 
+# Senders already covered by a curated source — skip so they don't get a duplicate
+# tile. Ben Evans' newsletter flows into the curated `benedictevans` source via the
+# email->RSS bridge, alongside his essays. Keys are computed source ids ("nl-"+slug).
+IGNORE_SLUGS = {"nl-benedict-evans", "nl-benedicts-newsletter", "nl-ben-evans"}
+
 
 def slug(s):
     s = re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
@@ -140,6 +145,8 @@ def main():
         name = decode_header(name) or (addr.split("@")[0] if "@" in addr else "Unknown")
         domain = addr.split("@")[-1].lower() if "@" in addr else ""
         sid = "nl-" + slug(name)
+        if sid in IGNORE_SLUGS:
+            continue  # handled by a curated source — don't create a duplicate
         subject = decode_header(msg.get("Subject", "")) or "(no subject)"
         try:
             date = parsedate_to_datetime(msg.get("Date", "")).isoformat()

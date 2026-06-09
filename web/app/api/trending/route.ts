@@ -56,7 +56,6 @@ const CATEGORIES: Record<string, Feed[]> = {
   futurology: [
     { url: "https://futurism.com/feed", source: "Futurism" },
   ],
-  reddit: [],   // handled by fetchReddit in CUSTOM (via Redlib — bypasses Vercel IP block)
   technology: [
     { url: "https://techcrunch.com/feed/", source: "TechCrunch" },
     { url: "https://www.theguardian.com/uk/technology/rss", source: "Guardian" },
@@ -73,7 +72,7 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://hnrss.org/newest", source: "HN" },
   ],
 };
-export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "hn", "guardian", "ft", "reuters", "bbc", "timeout", "reddit", "wikipedia", "github", "google"];
+export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "hn", "guardian", "ft", "reuters", "bbc", "timeout", "wikipedia", "github", "google"];
 
 // GitHub trending repos (monthly, English) — scraped from the trending page (no API);
 // repo name + tagline + this-month star gain, ordered by that star volume.
@@ -168,25 +167,6 @@ async function fetchGoogleTrends(): Promise<NewsItem[]> {
     return [];
   }
 }
-// Reddit blocks requests from datacentre IPs, so a direct fetch 403s on Vercel.
-// Route through Redlib (open-source Reddit front-end) which exposes standard RSS.
-// Two instances tried in order for resilience.
-const REDLIB_HOSTS = ["https://redlib.perennialte.ch", "https://redlib.r4fo.com"];
-async function fetchReddit(subreddit: string, sort: string, source: string): Promise<NewsItem[]> {
-  for (const host of REDLIB_HOSTS) {
-    try {
-      const res = await fetch(`${host}/r/${subreddit}.rss?sort=${sort}`, {
-        headers: { "User-Agent": "Mozilla/5.0 jotter-intelligence/1.0" },
-        signal: AbortSignal.timeout(8000),
-      });
-      if (!res.ok) continue;
-      const items = parse(await res.text(), source);
-      if (items.length) return items.slice(0, 10);
-    } catch { /* try next instance */ }
-  }
-  return [];
-}
-
 // Reuters "Top Stories": reuters.com blocks scraping (401), so pull recent Reuters
 // articles via Google News RSS and strip the trailing " - Reuters" source tag.
 async function fetchReuters(): Promise<NewsItem[]> {
@@ -473,7 +453,6 @@ export async function GET(request: Request) {
     google: fetchGoogleTrends,
     reuters: fetchReuters,
     bbc: fetchBbcMostRead,
-    reddit: () => fetchReddit("news", "rising", "Reddit"),
   };
   if (CUSTOM[param]) {
     const cached = g.__news[param];
@@ -501,7 +480,7 @@ export async function GET(request: Request) {
         const xml = await res.text();
         let items = parse(xml, f.source);
         if (f.match) items = items.filter((it) => it.url.includes(f.match!));
-        all.push(...items.slice(0, 12)); // candidates per feed; single-feed cats (FT/Reddit) need ≥10
+        all.push(...items.slice(0, 12)); // candidates per feed; single-feed cats (e.g. FT) need ≥10
       } catch {
         /* skip */
       }

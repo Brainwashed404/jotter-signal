@@ -17,7 +17,6 @@ const CATEGORIES = [
   { id: "reuters", label: "Reuters" },
   { id: "bbc", label: "BBC" },
   { id: "timeout", label: "Time Out" },
-  { id: "reddit", label: "Reddit" },
   { id: "wikipedia", label: "Wiki" },
   { id: "github", label: "GitHub" },
   { id: "google", label: "Google" },
@@ -79,10 +78,7 @@ export default function TrendingWidget() {
       if (!force && cache[category]) { setTopics(cache[category]); setLoading(false); return; }
       if (!force) setLoading(true);
       try {
-        // Reddit uses a dedicated edge-function endpoint (runs on Cloudflare IPs, not AWS,
-        // so it isn't subject to Reddit's datacenter IP block).
-        const url = category === "reddit" ? "/api/reddit" : `/api/trending?category=${category}`;
-        const d = await (await fetch(url, { cache: "no-store" })).json();
+        const d = await (await fetch(`/api/trending?category=${category}`, { cache: "no-store" })).json();
         if (cancelled) return;
         const t = d.topics || [];
         setTopics(t);
