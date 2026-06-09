@@ -6,7 +6,7 @@ Output: data/raw_<id>.jsonl  with {title, link, date, content, categories}
 
 Substack feeds live at https://NAME.substack.com/feed — same shape as this.
 """
-import json, os, sys, urllib.request, xml.etree.ElementTree as ET
+import json, os, sys, urllib.request, urllib.parse, xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timezone
 
@@ -17,6 +17,26 @@ def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": "jotter-intelligence/1.0"})
     with urllib.request.urlopen(req, timeout=25) as r:
         return r.read()
+
+# Substack (and a few others) block datacenter IPs, so a direct fetch 403s in CI but
+# works from a home IP. rss2json relays the fetch from a non-blocked IP and returns
+# parsed JSON, so it's an automatic fallback that keeps every source working in CI
+# with no manual step. Free, no key, used only when the direct fetch fails/empties.
+def fetch_via_rss2json(feed_url):
+    raw = fetch("https://api.rss2json.com/v1/api.json?rss_url=" + urllib.parse.quote(feed_url, safe=""))
+    data = json.loads(raw)
+    if data.get("status") != "ok":
+        return []
+    out = []
+    for it in data.get("items", []):
+        out.append({
+            "title": (it.get("title") or "").strip(),
+            "link": (it.get("link") or "").strip(),
+            "date": to_iso(it.get("pubDate") or ""),
+            "content": it.get("content") or it.get("description") or "",
+            "categories": it.get("categories") or [],
+        })
+    return out
 
 def to_iso(s):
     s = (s or "").strip()
@@ -81,10 +101,20 @@ def run(expert):
     fresh = []
     for furl in feeds:
         print(f"fetching {expert['id']} <- {furl}")
+        items = []
         try:
-            fresh += [it for it in parse(fetch(furl)) if it["date"]]
+            items = [it for it in parse(fetch(furl)) if it["date"]]
         except Exception as e:
-            print(f"  ! {furl} failed ({e}) — skipping")
+            print(f"  ! direct fetch failed ({e})")
+        if not items:
+            # Blocked (e.g. Substack 403s the CI IP) or empty — relay via rss2json.
+            try:
+                items = [it for it in fetch_via_rss2json(furl) if it["date"]]
+                if items:
+                    print(f"  ✓ {len(items)} via rss2json fallback")
+            except Exception as e:
+                print(f"  ! rss2json fallback failed ({e})")
+        fresh += items
     # Never overwrite good data with an empty/failed parse (transient feed hiccup).
     if not fresh:
         print(f"  0 items — keeping existing {out}")
