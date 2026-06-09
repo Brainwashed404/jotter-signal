@@ -105,8 +105,8 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent); }
    Balanced mix: full pill (default/lcars/bubblegum), rounded (8px) for the soft skins,
    square (0) only for the genuinely pixel / terminal / CRT / wireframe skins. */
 .weather-pill { border-radius: 999px; }
-html[data-skin="neo"] .weather-pill, html[data-skin="system7"] .weather-pill, html[data-skin="mac"] .weather-pill, html[data-skin="editorial"] .weather-pill, html[data-skin="deco"] .weather-pill, html[data-skin="swiss"] .weather-pill, html[data-skin="win95"] .weather-pill, html[data-skin="darkside"] .weather-pill { border-radius: 8px; }
-html[data-skin="tech"] .weather-pill, html[data-skin="cyber"] .weather-pill, html[data-skin="punk"] .weather-pill, html[data-skin="pixel"] .weather-pill, html[data-skin="terminal"] .weather-pill, html[data-skin="amber"] .weather-pill, html[data-skin="teletext"] .weather-pill, html[data-skin="fairlight"] .weather-pill, html[data-skin="vector"] .weather-pill, html[data-skin="system1"] .weather-pill, html[data-skin="bitmap"] .weather-pill { border-radius: 0; }
+html[data-skin="neo"] .weather-pill, html[data-skin="system7"] .weather-pill, html[data-skin="mac"] .weather-pill, html[data-skin="editorial"] .weather-pill, html[data-skin="deco"] .weather-pill, html[data-skin="swiss"] .weather-pill, html[data-skin="win95"] .weather-pill, html[data-skin="darkside"] .weather-pill, html[data-skin="beos"] .weather-pill, html[data-skin="risc"] .weather-pill { border-radius: 8px; }
+html[data-skin="tech"] .weather-pill, html[data-skin="cyber"] .weather-pill, html[data-skin="punk"] .weather-pill, html[data-skin="pixel"] .weather-pill, html[data-skin="terminal"] .weather-pill, html[data-skin="amber"] .weather-pill, html[data-skin="teletext"] .weather-pill, html[data-skin="fairlight"] .weather-pill, html[data-skin="vector"] .weather-pill, html[data-skin="system1"] .weather-pill, html[data-skin="bitmap"] .weather-pill, html[data-skin="next"] .weather-pill, html[data-skin="irix"] .weather-pill, html[data-skin="win31"] .weather-pill, html[data-skin="cde"] .weather-pill { border-radius: 0; }
 
 /* Hide scrollbar but keep scrollability (radio station list). */
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
@@ -747,3 +747,146 @@ html[data-skin="swiss"] .btn:active { transform:translateY(1px); background:var(
 html[data-skin="swiss"] .btn-ghost { background:transparent; color:var(--text); border:2px solid var(--text); border-radius:0; }
 html[data-skin="swiss"] .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
 html[data-skin="swiss"] ::selection { background:var(--accent); color:#000; }
+
+/* ============================================================
+   WORKSTATION / OS-MUSEUM SKINS — each light + dark.
+   Names are evocative, not trademarked.
+   ============================================================ */
+
+/* ---------- "Cube" (NeXTSTEP, 1989) — chiseled grey, beveled, Helvetica ---------- */
+html[data-skin="next"] {
+  --bg:#9a9a9a; --panel:#d6d6d6; --panel-2:#bcbcbc; --ink:#1c1c1c;
+  --border:#6a6a6a; --border-hover:#1c1c1c; --header-bg:#c4c4c4;
+  --text:#161616; --muted:#454545; --accent:#33558c; --accent-2:#8a3a3a; --on-accent:#ffffff; --up:#1e6b3a; --down:#9a2a2a;
+}
+html[data-skin="next"]:not([data-theme="light"]) {
+  --bg:#2a2a2a; --panel:#383838; --panel-2:#454545; --ink:#e6e6e6;
+  --border:#5a5a5a; --border-hover:#aebfe0; --header-bg:#383838;
+  --text:#ffffff; --muted:#a8a8a8; --accent:#8aa0c8; --accent-2:#d68a8a; --on-accent:#1c1c1c; --up:#5fc98a; --down:#ff7a7a;
+}
+html[data-skin="next"] body, html[data-skin="next"] input, html[data-skin="next"] textarea, html[data-skin="next"] select, html[data-skin="next"] button { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+html[data-skin="next"] h1, html[data-skin="next"] h2, html[data-skin="next"] h3, html[data-skin="next"] h4 { font-weight:700; letter-spacing:-0.01em; }
+html[data-skin="next"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.5), inset -1px -1px 0 0 rgba(0,0,0,0.35); transition:box-shadow 140ms ease, transform 140ms ease; }
+html[data-skin="next"] .panel-hover:hover { transform:translateY(-1px); box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.6), inset -1px -1px 0 0 rgba(0,0,0,0.4), 0 3px 10px -3px rgba(0,0,0,0.4); }
+html[data-skin="next"] .chip { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.45), inset -1px -1px 0 0 rgba(0,0,0,0.3); }
+html[data-skin="next"] input, html[data-skin="next"] textarea, html[data-skin="next"] select { background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(0,0,0,0.3); }
+html[data-skin="next"] .btn { background:var(--panel); color:var(--text); border:1px solid #000; border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.6), inset -1px -1px 0 0 rgba(0,0,0,0.4); transition:transform 90ms ease; }
+html[data-skin="next"] .btn:hover { filter:brightness(1.04); }
+html[data-skin="next"] .btn:active { box-shadow: inset -1px -1px 0 0 rgba(255,255,255,0.4), inset 1px 1px 0 0 rgba(0,0,0,0.4); }
+html[data-skin="next"] .btn-ghost { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.45), inset -1px -1px 0 0 rgba(0,0,0,0.3); }
+html[data-skin="next"] ::selection { background:var(--accent); color:#fff; }
+
+/* ---------- "Yellow Tab" (BeOS, 1996) — yellow tabs, clean grey + teal ---------- */
+html[data-skin="beos"] {
+  --bg:#d4d0c8; --panel:#ffffff; --panel-2:#ececec; --ink:#1a1a1a;
+  --border:#9a9a9a; --border-hover:#f0a800; --header-bg:#f4c000;
+  --text:#1a1a1a; --muted:#565656; --accent:#e69a00; --accent-2:#1f8a9a; --on-accent:#1a1a1a; --up:#1e8a4a; --down:#cc3a2a;
+}
+html[data-skin="beos"]:not([data-theme="light"]) {
+  --bg:#1d1d1f; --panel:#2a2a2c; --panel-2:#343437; --ink:#ededed;
+  --border:#4a4a4d; --border-hover:#ffce3a; --header-bg:#3a3a1a;
+  --text:#ffffff; --muted:#a6a6a8; --accent:#ffce3a; --accent-2:#46c6d6; --on-accent:#1a1a1a; --up:#46d17e; --down:#ff6b5a;
+}
+html[data-skin="beos"] body, html[data-skin="beos"] input, html[data-skin="beos"] textarea, html[data-skin="beos"] select, html[data-skin="beos"] button { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+html[data-skin="beos"] h1, html[data-skin="beos"] h2, html[data-skin="beos"] h3, html[data-skin="beos"] h4 { font-weight:700; }
+html[data-skin="beos"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:3px; border-top:3px solid var(--header-bg); box-shadow:0 1px 3px rgba(0,0,0,0.18); transition:transform 140ms ease, box-shadow 140ms ease; }
+html[data-skin="beos"] .panel-hover:hover { transform:translateY(-2px); box-shadow:0 6px 16px -5px rgba(0,0,0,0.3); }
+html[data-skin="beos"] .chip { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:3px; }
+html[data-skin="beos"] input, html[data-skin="beos"] textarea, html[data-skin="beos"] select { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:3px; }
+html[data-skin="beos"] .btn { background:var(--accent); color:var(--on-accent); border:1px solid var(--border); border-radius:3px; font-weight:600; transition:transform 90ms ease, filter 90ms ease; }
+html[data-skin="beos"] .btn:hover { filter:brightness(1.06); }
+html[data-skin="beos"] .btn:active { transform:translateY(1px); }
+html[data-skin="beos"] .btn-ghost { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:3px; }
+html[data-skin="beos"] ::selection { background:var(--accent); color:var(--on-accent); }
+
+/* ---------- "Archimedes" (RISC OS, 1987) — cream, colourful 3D slabs ---------- */
+html[data-skin="risc"] {
+  --bg:#b4ac9c; --panel:#efeadf; --panel-2:#ddd6c6; --ink:#2a2a2a;
+  --border:#8a8270; --border-hover:#1a6fb0; --header-bg:#d8d0be;
+  --text:#262626; --muted:#5a5444; --accent:#d05a1a; --accent-2:#1a6fb0; --on-accent:#ffffff; --up:#2a7a3a; --down:#c0331a;
+}
+html[data-skin="risc"]:not([data-theme="light"]) {
+  --bg:#211e18; --panel:#2e2a22; --panel-2:#3a352b; --ink:#ece6d8;
+  --border:#564f40; --border-hover:#3a9ae0; --header-bg:#2e2a22;
+  --text:#ffffff; --muted:#ada690; --accent:#ff8a3a; --accent-2:#4aa8ee; --on-accent:#211e18; --up:#5ec97a; --down:#ff6b4a;
+}
+html[data-skin="risc"] body, html[data-skin="risc"] input, html[data-skin="risc"] textarea, html[data-skin="risc"] select, html[data-skin="risc"] button { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+html[data-skin="risc"] h1, html[data-skin="risc"] h2, html[data-skin="risc"] h3, html[data-skin="risc"] h4 { font-weight:700; }
+html[data-skin="risc"] .panel { background:var(--panel); border:2px solid var(--border); border-radius:6px; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.55), 0 2px 4px rgba(0,0,0,0.2); transition:transform 140ms ease, box-shadow 140ms ease; }
+html[data-skin="risc"] .panel-hover:hover { transform:translateY(-2px); border-color:var(--accent); box-shadow:0 6px 16px -5px rgba(0,0,0,0.3); }
+html[data-skin="risc"] .chip { background:var(--panel-2); color:var(--text); border:2px solid var(--border); border-radius:5px; }
+html[data-skin="risc"] input, html[data-skin="risc"] textarea, html[data-skin="risc"] select { background:var(--panel); color:var(--text); border:2px solid var(--border); border-radius:5px; }
+html[data-skin="risc"] .btn { background:var(--accent); color:var(--on-accent); border:2px solid var(--border); border-radius:6px; font-weight:600; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.4); transition:transform 90ms ease, filter 90ms ease; }
+html[data-skin="risc"] .btn:hover { filter:brightness(1.06); }
+html[data-skin="risc"] .btn:active { transform:translateY(1px); }
+html[data-skin="risc"] .btn-ghost { background:var(--panel); color:var(--text); border:2px solid var(--border); border-radius:6px; }
+html[data-skin="risc"] ::selection { background:var(--accent); color:var(--on-accent); }
+
+/* ---------- "Indigo" (SGI IRIX, 1994) — bold saturated indigo + orange ---------- */
+html[data-skin="irix"] {
+  --bg:#c6c8e0; --panel:#ffffff; --panel-2:#e4e6f4; --ink:#1a1e3a;
+  --border:#8a90c0; --border-hover:#3a44a0; --header-bg:#3a44a0;
+  --text:#171a30; --muted:#4a5080; --accent:#3a44c0; --accent-2:#e07a1a; --on-accent:#ffffff; --up:#1e7a4a; --down:#c0331a;
+}
+html[data-skin="irix"]:not([data-theme="light"]) {
+  --bg:#13162a; --panel:#1d2244; --panel-2:#28305a; --ink:#cfd6ff;
+  --border:#3a4280; --border-hover:#7a8aff; --header-bg:#1d2244;
+  --text:#ffffff; --muted:#9aa4de; --accent:#7e8cff; --accent-2:#ff9a3a; --on-accent:#0c0f1f; --up:#5ed18a; --down:#ff7a5a;
+}
+html[data-skin="irix"] body, html[data-skin="irix"] input, html[data-skin="irix"] textarea, html[data-skin="irix"] select, html[data-skin="irix"] button { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+html[data-skin="irix"] h1, html[data-skin="irix"] h2, html[data-skin="irix"] h3, html[data-skin="irix"] h4 { font-weight:800; letter-spacing:-0.01em; }
+html[data-skin="irix"] .panel { background:var(--panel); border:2px solid var(--border); border-radius:0; box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.18), 3px 3px 0 0 rgba(0,0,0,0.25); transition:transform 130ms ease, box-shadow 130ms ease; }
+html[data-skin="irix"] .panel-hover:hover { transform:translate(-1px,-1px); box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.22), 5px 5px 0 0 rgba(0,0,0,0.3); }
+html[data-skin="irix"] .chip { background:var(--panel-2); color:var(--text); border:2px solid var(--border); border-radius:0; }
+html[data-skin="irix"] input, html[data-skin="irix"] textarea, html[data-skin="irix"] select { background:var(--panel); color:var(--text); border:2px solid var(--border); border-radius:0; }
+html[data-skin="irix"] .btn { background:var(--accent); color:var(--on-accent); border:2px solid var(--border); border-radius:0; font-weight:700; box-shadow:2px 2px 0 0 rgba(0,0,0,0.3); transition:transform 90ms ease; }
+html[data-skin="irix"] .btn:active { transform:translate(2px,2px); box-shadow:0 0 0 0; }
+html[data-skin="irix"] .btn-ghost { background:var(--panel); color:var(--text); border:2px solid var(--border); border-radius:0; box-shadow:2px 2px 0 0 rgba(0,0,0,0.2); }
+html[data-skin="irix"] ::selection { background:var(--accent); color:var(--on-accent); }
+
+/* ---------- "Tiles '92" (Windows 3.1) — teal desktop, grey bevels, navy title bars ---------- */
+html[data-skin="win31"] {
+  --bg:#008080; --panel:#c0c0c0; --panel-2:#b4b4b4; --ink:#000000;
+  --border:#808080; --border-hover:#000080; --header-bg:#000080;
+  --text:#000000; --muted:#404040; --accent:#000080; --accent-2:#800000; --on-accent:#ffffff; --up:#0a7a3a; --down:#a01a1a;
+  --bevel-hi:#ffffff; --bevel-lo:#808080;
+}
+html[data-skin="win31"]:not([data-theme="light"]) {
+  --bg:#003838; --panel:#2c2c2c; --panel-2:#383838; --ink:#e6e6e6;
+  --border:#5a5a5a; --border-hover:#7a8aff; --header-bg:#1a1a5a;
+  --text:#ffffff; --muted:#a8a8a8; --accent:#7a8aff; --accent-2:#ff8a8a; --on-accent:#0c0c1f; --up:#5fc98a; --down:#ff7a7a;
+  --bevel-hi:#5a5a5a; --bevel-lo:#000000;
+}
+html[data-skin="win31"] body, html[data-skin="win31"] input, html[data-skin="win31"] textarea, html[data-skin="win31"] select, html[data-skin="win31"] button { font-family:"Tahoma","MS Sans Serif",Geneva,Arial,sans-serif; }
+html[data-skin="win31"] h1, html[data-skin="win31"] h2, html[data-skin="win31"] h3, html[data-skin="win31"] h4 { font-weight:700; }
+html[data-skin="win31"] .panel { background:var(--panel); border:none; border-radius:0; box-shadow: inset -1px -1px 0 0 var(--bevel-lo), inset 1px 1px 0 0 var(--bevel-hi); transition:none; }
+html[data-skin="win31"] .panel-hover:hover { box-shadow: inset -1px -1px 0 0 var(--bevel-lo), inset 1px 1px 0 0 var(--bevel-hi), 0 2px 8px -2px rgba(0,0,0,0.4); }
+html[data-skin="win31"] .chip { background:var(--panel); color:var(--text); border:none; border-radius:0; box-shadow: inset -1px -1px 0 0 var(--bevel-lo), inset 1px 1px 0 0 var(--bevel-hi); }
+html[data-skin="win31"] .chip[style*="--accent)"], html[data-skin="win31"] .btn-ghost[style*="--accent)"] { background:var(--accent) !important; color:#fff !important; box-shadow:none; }
+html[data-skin="win31"] input, html[data-skin="win31"] textarea, html[data-skin="win31"] select { background:#fff; color:#000; border:none; border-radius:0; box-shadow: inset 1px 1px 0 0 var(--bevel-lo); }
+html[data-skin="win31"]:not([data-theme="light"]) input, html[data-skin="win31"]:not([data-theme="light"]) textarea, html[data-skin="win31"]:not([data-theme="light"]) select { background:#1a1a1a; color:#fff; }
+html[data-skin="win31"] .btn, html[data-skin="win31"] .btn-ghost { background:var(--panel); color:var(--text); border:none; border-radius:0; box-shadow: inset -1px -1px 0 0 var(--bevel-lo), inset 1px 1px 0 0 var(--bevel-hi), inset -2px -2px 0 0 #000; }
+html[data-skin="win31"] .btn:active, html[data-skin="win31"] .btn-ghost:active { box-shadow: inset 1px 1px 0 0 var(--bevel-lo), inset -1px -1px 0 0 var(--bevel-hi); }
+html[data-skin="win31"] ::selection { background:var(--accent); color:#fff; }
+
+/* ---------- "Motif" (CDE / Solaris, 1995) — steel-blue chiseled workstation ---------- */
+html[data-skin="cde"] {
+  --bg:#8a98a6; --panel:#aeb9c4; --panel-2:#9ba8b6; --ink:#161c22;
+  --border:#5e6c78; --border-hover:#2a4a6a; --header-bg:#6e7e8e;
+  --text:#141a20; --muted:#3a4650; --accent:#3a5a7a; --accent-2:#7a5a8a; --on-accent:#ffffff; --up:#1e6b3a; --down:#9a2a2a;
+}
+html[data-skin="cde"]:not([data-theme="light"]) {
+  --bg:#1a2128; --panel:#27313a; --panel-2:#323e48; --ink:#d6dee6;
+  --border:#48565f; --border-hover:#6a9ad0; --header-bg:#27313a;
+  --text:#ffffff; --muted:#a2aeb8; --accent:#6a9ad0; --accent-2:#b08ac0; --on-accent:#0e151b; --up:#5fc98a; --down:#ff7a7a;
+}
+html[data-skin="cde"] body, html[data-skin="cde"] input, html[data-skin="cde"] textarea, html[data-skin="cde"] select, html[data-skin="cde"] button { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+html[data-skin="cde"] h1, html[data-skin="cde"] h2, html[data-skin="cde"] h3, html[data-skin="cde"] h4 { font-weight:700; }
+html[data-skin="cde"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:0; box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.28), inset -2px -2px 0 0 rgba(0,0,0,0.3); transition:transform 130ms ease, box-shadow 130ms ease; }
+html[data-skin="cde"] .panel-hover:hover { transform:translateY(-1px); box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.32), inset -2px -2px 0 0 rgba(0,0,0,0.35), 0 4px 12px -4px rgba(0,0,0,0.4); }
+html[data-skin="cde"] .chip { background:var(--panel-2); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.25), inset -1px -1px 0 0 rgba(0,0,0,0.25); }
+html[data-skin="cde"] input, html[data-skin="cde"] textarea, html[data-skin="cde"] select { background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(0,0,0,0.3); }
+html[data-skin="cde"] .btn { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.3), inset -2px -2px 0 0 rgba(0,0,0,0.3); transition:transform 90ms ease; }
+html[data-skin="cde"] .btn:active { box-shadow: inset -2px -2px 0 0 rgba(255,255,255,0.25), inset 2px 2px 0 0 rgba(0,0,0,0.3); }
+html[data-skin="cde"] .btn-ghost { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.25), inset -1px -1px 0 0 rgba(0,0,0,0.25); }
+html[data-skin="cde"] ::selection { background:var(--accent); color:#fff; }

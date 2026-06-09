@@ -8,7 +8,8 @@ export type Skin =
   | "default" | "neo" | "tech" | "punk"
   | "editorial" | "bubblegum" | "pixel" | "deco" | "cyber" | "win95"
   | "amber" | "lcars" | "teletext" | "terminal" | "mac" | "vector"
-  | "fairlight" | "swiss" | "darkside" | "system1" | "system7" | "bitmap";
+  | "fairlight" | "swiss" | "darkside" | "system1" | "system7" | "bitmap"
+  | "next" | "beos" | "risc" | "irix" | "win31" | "cde";
 export type FontSize = "sm" | "md" | "lg" | "xl";
 
 export const SKIN_KEY = "jotter.skin.v1";
@@ -41,6 +42,12 @@ export const SKINS: { id: Skin; name: string; desc: string; swatch: string[]; da
   { id: "system1", name: "Monochrome '84", desc: "Early 1-bit personal computer: stark black & white, square white windows on a grey desktop, crisp system type, hard 1px drop shadows, inverted selection.", swatch: ["#c8c8c8", "#000000", "#ffffff", "#000000"] },
   { id: "system7", name: "Desktop '91", desc: "When desktops got colour: black & white window chrome on a teal desktop, with teal + red accents.", swatch: ["#6d8a96", "#0e8a9c", "#d72a2a", "#000000"] },
   { id: "bitmap", name: "Bitmap", desc: "1-bit dithered art: fine halftone dot desktop, Silkscreen pixel heads, stark high-contrast mono, chunky shadows.", swatch: ["#ffffff", "#000000", "#7a7a7a", "#000000"] },
+  { id: "next", name: "Cube", desc: "Chiseled workstation: grey beveled panels, Helvetica, steel-blue selection. Charcoal at night.", swatch: ["#9a9a9a", "#33558c", "#1c1c1c", "#d6d6d6"] },
+  { id: "beos", name: "Yellow Tab", desc: "Clean late-90s desktop: yellow tab title-bars, white panels, teal accent, friendly sans.", swatch: ["#d4d0c8", "#f4c000", "#1f8a9a", "#1a1a1a"] },
+  { id: "risc", name: "Archimedes", desc: "Cream desktop with colourful 3D slabbed panels: orange + blue accents, rounded bevels.", swatch: ["#b4ac9c", "#d05a1a", "#1a6fb0", "#2a2a2a"] },
+  { id: "irix", name: "Indigo", desc: "Bold workstation: saturated indigo, hard offset shadows, orange highlights, heavy sans.", swatch: ["#13162a", "#7e8cff", "#ff9a3a", "#cfd6ff"], dark: true },
+  { id: "win31", name: "Tiles '92", desc: "Early desktop: teal background, grey 3D-bevelled panels, navy title bars, MS-sans type.", swatch: ["#008080", "#000080", "#c0c0c0", "#000000"] },
+  { id: "cde", name: "Motif", desc: "Steel-blue Unix workstation: chiseled etched panels, grey-blue palette, Helvetica.", swatch: ["#8a98a6", "#3a5a7a", "#7a5a8a", "#161c22"] },
 ];
 
 export const FONT_SIZES: { id: FontSize; label: string }[] = [
