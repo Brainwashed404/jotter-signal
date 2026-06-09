@@ -90,13 +90,16 @@ jobs:
             --endpoint-url "${R2_ENDPOINT}"
           echo "Upload complete"
 
-      # The live site bakes its data at BUILD time, so fresh storage alone isn't
-      # enough — push an empty commit so Vercel rebuilds and picks it up. No "[skip ci]"
-      # (Vercel honours it and would skip the build); this workflow only triggers on
-      # schedule/dispatch, not push, so the commit can't loop back into it.
-      - name: Trigger site rebuild
+      # Commit the freshly-built data INTO the repo so the Vercel build uses it
+      # directly. The build's B2 download (fetch-data.js) 403s once the free-tier
+      # daily cap is hit, falling back to whatever's committed — so committing the
+      # fresh files here is what actually keeps the live site current. The push also
+      # triggers the rebuild. No "[skip ci]" (Vercel honours it); this workflow only
+      # triggers on schedule/dispatch, not push, so the commit can't loop back in.
+      - name: Commit fresh data + trigger site rebuild
         run: |
           git config user.name "jotter-bot"
           git config user.email "actions@github.com"
+          git add -f web/data/signals.jsonl.gz web/data/experts.json || true
           git commit --allow-empty -m "data: scheduled refresh $(date -u +%FT%TZ)"
           git push
