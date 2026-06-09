@@ -1,0 +1,11 @@
+{
+  "_comment": "Controls how emailed newsletters become sources. Each group matches a sender by domain (match_domain, substring of the From address domain) OR by name (match_name, substring of the From display name, case-insensitive). First match wins. id = source id; name = display name; category = 'author' (Experts page) or 'publication' (Publications page). Senders that match nothing become one source per sender (category publication). Bump _v in fetch_newsletters to force a clean re-ingest after editing.",
+  "groups": [
+    { "match_domain": "axios.com", "id": "nl-axios", "name": "Axios", "category": "publication" },
+    { "match_name": "marcus on ai", "id": "nl-garymarcus", "name": "Gary Marcus", "category": "author" },
+    { "match_name": "gary marcus", "id": "nl-garymarcus", "name": "Gary Marcus", "category": "author" },
+    { "match_name": "prof g markets", "id": "nl-profgmarkets", "name": "Prof G Markets", "category": "author" }
+  ],
+  "ignore_domains": ["google.com", "accounts.google.com", "kill-the-newsletter.com"],
+  "ignore_names": []
+}

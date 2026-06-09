@@ -256,7 +256,18 @@ def strip_email_cruft(txt):
     """Drop the standard email chrome: view-in-browser, unsubscribe, preferences,
     copyright/address footers — the lines every newsletter platform injects."""
     lines = [l for l in txt.split("\n") if not _EMAIL_CRUFT.match(l.strip())]
+    # Drop a leading standalone short-number line (e.g. a "96" preheader artifact).
+    while lines and re.fullmatch(r"\s*\d{1,4}\s*", lines[0]):
+        lines = lines[1:]
     return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+# Onboarding/transactional email titles that are never real content (kills welcome,
+# confirmation, "please confirm", security and sign-in mails leaking via any feed).
+JUNK_TITLE = re.compile(
+    r"(please confirm|confirm your (email|subscription|address)|^\s*welcome to\b|"
+    r"thanks? for subscribing|thank you for (subscribing|signing up)|verify your|"
+    r"security alert|new sign-?in|app password|reset your password|"
+    r"free newsletter:\s*please confirm|double opt|confirm now)", re.I)
 
 def strip_digitalnative(txt):
     """Remove Digital Native's recurring masthead/subscribe block at the top of each post.
@@ -498,6 +509,8 @@ def build_rss(ex):
     reddit_titles = set()   # collapse crossposts/repost-attempts that share a title
     for i, it in enumerate(uniq):
         heading = clean(it.get("title", "")) or "Article"
+        if JUNK_TITLE.search(heading):
+            continue  # welcome/confirmation/security onboarding mail — not content
         if ex["id"] == "exponentialview" and re.match(r"\s*live with\b", heading, re.I):
             continue  # drop "Live with …" event/video recordings (low text value)
         html = it.get("content", "") or ""

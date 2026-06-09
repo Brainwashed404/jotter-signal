@@ -2,43 +2,41 @@
 """Ingest newsletters from a dedicated Gmail mailbox via IMAP.
 
 The user subscribes newsletters with one dedicated Gmail account; this reads that
-mailbox (read-only), groups messages by sender, and writes one raw_<id>.jsonl per
-sender plus a newsletters.json manifest. build_dataset then treats each sender as a
-normal `rss` source (one source profile per newsletter sender).
+mailbox (read-only) and turns each into a source. Sender -> source mapping is
+controlled by newsletter_map.json (group several senders into one publication,
+set Experts vs Publications, ignore system senders). Senders that match nothing
+get one source each (category publication).
 
-Credentials (env): GMAIL_USER, GMAIL_APP_PASSWORD (a Google "app password", not the
-account password). Optional: GMAIL_FOLDER (default "INBOX").
+Credentials (env): GMAIL_USER, GMAIL_APP_PASSWORD (a Google "app password").
+Optional: GMAIL_FOLDER (default "INBOX").
 
-Incremental: tracks the highest IMAP UID seen per folder in data/newsletters_state.json,
-so the first run pulls the whole back-catalogue and later runs only fetch new mail.
-Everything lives under data/ so it persists in the engine-data archive between CI runs.
+Junk filter: welcome / confirmation / "please confirm" / security / sign-in mails
+are dropped — they're onboarding noise, not content.
+
+Incremental: tracks the highest IMAP UID per folder in newsletters_state.json.
+Bump SCHEMA_V to force a one-time clean re-ingest (wipes nl-* raw + manifest).
+Everything lives under data/ so it persists in the engine-data archive.
 
 Usage: python3 fetch_newsletters.py
 """
-import email, imaplib, json, os, re, sys
+import email, glob, imaplib, json, os, re
 from email.utils import parseaddr, parsedate_to_datetime
 
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATA = os.path.join(HERE, "data")
 STATE = os.path.join(DATA, "newsletters_state.json")
 MANIFEST = os.path.join(DATA, "newsletters.json")
+MAP = os.path.join(HERE, "newsletter_map.json")
 
-# sender addresses that are generic relays — don't use them to build a homepage URL
-RELAY_DOMAINS = {"substack.com", "mail.beehiiv.com", "beehiiv.com", "mailchimpapp.net",
-                 "mailchi.mp", "ghost.io", "convertkit-mail.com", "convertkit-mail2.com",
-                 "kill-the-newsletter.com", "list-manage.com", "sendgrid.net"}
+SCHEMA_V = 2  # bump to force a clean re-ingest (e.g. after changing grouping logic)
 
-# Senders already covered by a curated source — skip so they don't get a duplicate
-# tile. Ben Evans' newsletter flows into the curated `benedictevans` source via the
-# email->RSS bridge, alongside his essays. Keys are computed source ids ("nl-"+slug).
-IGNORE_SLUGS = {"nl-benedict-evans", "nl-benedicts-newsletter", "nl-ben-evans"}
-
-# Transactional / system senders that aren't newsletters — never make a source.
-SKIP_SENDER_RE = re.compile(
-    r"(no-?reply|do-?not-?reply|mailer-daemon|postmaster|notifications?@|"
-    r"@(accounts\.|mail\.)?google\.com|forwarding-noreply@)", re.I)
-
-# One-time cleanup of source ids created before the filters above existed.
-PURGE_SLUGS = {"nl-google"}
+# Onboarding / transactional mail that is never real content.
+JUNK_SUBJECT = re.compile(
+    r"(please confirm|confirm your (email|subscription|address)|"
+    r"welcome to\b|thanks? for subscribing|thank you for (subscribing|signing up)|"
+    r"verify your|security alert|new sign-?in|signed in|app password|"
+    r"password (was|has been)|reset your password|complete your (sign|subscription)|"
+    r"finish (setting|subscribing)|double opt|confirm now)", re.I)
 
 
 def slug(s):
@@ -56,7 +54,6 @@ def decode_part(part):
 
 
 def get_body(msg):
-    """Prefer the HTML part; fall back to wrapping the plain-text part."""
     html = text = None
     if msg.is_multipart():
         for part in msg.walk():
@@ -92,13 +89,9 @@ def decode_header(raw):
     if not raw:
         return ""
     try:
-        parts = email.header.decode_header(raw)
         out = []
-        for txt, enc in parts:
-            if isinstance(txt, bytes):
-                out.append(txt.decode(enc or "utf-8", errors="replace"))
-            else:
-                out.append(txt)
+        for txt, enc in email.header.decode_header(raw):
+            out.append(txt.decode(enc or "utf-8", errors="replace") if isinstance(txt, bytes) else txt)
         return "".join(out).strip()
     except Exception:
         return str(raw).strip()
@@ -113,6 +106,16 @@ def load_json(path, default):
     return default
 
 
+def classify(name, domain, groups):
+    """Map a sender to (source_id, display_name, category) via newsletter_map.json."""
+    nlow, dlow = (name or "").lower(), (domain or "").lower()
+    for g in groups:
+        md, mn = (g.get("match_domain") or "").lower(), (g.get("match_name") or "").lower()
+        if (md and md in dlow) or (mn and mn in nlow):
+            return g["id"], g.get("name", name), g.get("category", "publication")
+    return "nl-" + slug(name), name, "publication"  # default: one source per sender
+
+
 def main():
     user = os.environ.get("GMAIL_USER")
     pw = os.environ.get("GMAIL_APP_PASSWORD")
@@ -123,17 +126,29 @@ def main():
     os.makedirs(DATA, exist_ok=True)
 
     state = load_json(STATE, {})
+    # One-time clean re-ingest when the schema changes (re-groups + re-filters everything).
+    if state.get("_v") != SCHEMA_V:
+        print(f"[newsletters] schema v{state.get('_v')} -> v{SCHEMA_V}: clean re-ingest")
+        for f in glob.glob(os.path.join(DATA, "raw_nl-*.jsonl")):
+            os.remove(f)
+        if os.path.exists(MANIFEST):
+            os.remove(MANIFEST)
+        state = {"_v": SCHEMA_V}
+
     manifest = load_json(MANIFEST, {})
+    mp = load_json(MAP, {})
+    groups = mp.get("groups", [])
+    ignore_domains = {d.lower() for d in mp.get("ignore_domains", [])}
+    ignore_names = {n.lower() for n in mp.get("ignore_names", [])}
 
     print(f"[newsletters] connecting as {user} (folder {folder})")
     imap = imaplib.IMAP4_SSL("imap.gmail.com")
     imap.login(user, pw)
     imap.select(f'"{folder}"', readonly=True)
 
-    # Reset incremental cursor if the mailbox's UIDVALIDITY changed (UIDs reassigned).
     typ, vdata = imap.status(f'"{folder}"', "(UIDVALIDITY)")
-    uidvalidity = re.search(rb"UIDVALIDITY (\d+)", vdata[0] or b"")
-    uidvalidity = uidvalidity.group(1).decode() if uidvalidity else "0"
+    m = re.search(rb"UIDVALIDITY (\d+)", vdata[0] or b"")
+    uidvalidity = m.group(1).decode() if m else "0"
     fkey = f"{folder}:{uidvalidity}"
     last_uid = int(state.get(fkey, 0))
 
@@ -142,91 +157,72 @@ def main():
     new_uids = [u for u in all_uids if u > last_uid]
     print(f"[newsletters] {len(all_uids)} messages, {len(new_uids)} new since UID {last_uid}")
 
-    by_sender = {}   # slug -> list of new items
-    seen_names = {}  # slug -> display name
+    by_source = {}    # id -> list of items
+    meta = {}         # id -> (display_name, category)
+    dropped = 0
     for u in new_uids:
         typ, mdata = imap.uid("fetch", str(u), "(RFC822)")
         if typ != "OK" or not mdata or not mdata[0]:
             continue
         msg = email.message_from_bytes(mdata[0][1])
         name, addr = parseaddr(msg.get("From", ""))
-        if SKIP_SENDER_RE.search(addr):
-            continue  # transactional/system mail, not a newsletter
         name = decode_header(name) or (addr.split("@")[0] if "@" in addr else "Unknown")
         domain = addr.split("@")[-1].lower() if "@" in addr else ""
-        sid = "nl-" + slug(name)
-        if sid in IGNORE_SLUGS:
-            continue  # handled by a curated source — don't create a duplicate
+        if domain in ignore_domains or any(n in name.lower() for n in ignore_names):
+            continue
         subject = decode_header(msg.get("Subject", "")) or "(no subject)"
+        if JUNK_SUBJECT.search(subject):
+            dropped += 1
+            continue
         try:
             date = parsedate_to_datetime(msg.get("Date", "")).isoformat()
         except Exception:
             date = ""
         if not date:
             continue
+        sid, disp, category = classify(name, domain, groups)
         html = get_body(msg)
         mid = (msg.get("Message-ID") or f"uid-{uidvalidity}-{u}").strip("<> \t")
         link = view_in_browser(html) or f"mid:{mid}"
-        by_sender.setdefault(sid, []).append({
+        by_source.setdefault(sid, []).append({
             "title": subject, "link": link, "date": date,
             "content": html, "categories": [], "message_id": mid,
         })
-        seen_names[sid] = name
-        if domain and domain not in RELAY_DOMAINS and sid not in manifest:
-            manifest.setdefault(sid, {})["_url_hint"] = f"https://{domain}"
+        meta[sid] = (disp, category)
 
     imap.logout()
 
-    # Append-dedupe each sender's new items into its raw file (history accumulates).
     written = 0
-    for sid, items in by_sender.items():
+    for sid, items in by_source.items():
         out = os.path.join(DATA, f"raw_{sid}.jsonl")
-        existing = []
-        if os.path.exists(out):
-            existing = [json.loads(l) for l in open(out) if l.strip()]
+        existing = [json.loads(l) for l in open(out)] if os.path.exists(out) else []
         seen = {it.get("message_id") or it.get("link") for it in existing}
         merged = list(existing)
         for it in items:
             k = it.get("message_id") or it.get("link")
-            if k in seen:
-                continue
-            seen.add(k)
-            merged.append(it)
+            if k not in seen:
+                seen.add(k)
+                merged.append(it)
         merged.sort(key=lambda it: it.get("date", ""), reverse=True)
         with open(out, "w") as f:
             for it in merged:
                 f.write(json.dumps(it) + "\n")
         written += len(items)
-
-        # Register / refresh the source in the manifest.
-        entry = manifest.get(sid, {})
-        url_hint = entry.pop("_url_hint", "") if isinstance(entry, dict) else ""
+        disp, category = meta[sid]
+        prev = manifest.get(sid, {})
         manifest[sid] = {
-            "id": sid,
-            "name": entry.get("name") or seen_names.get(sid, sid),
-            "blurb": entry.get("blurb") or "Newsletter (ingested via email).",
-            "url": entry.get("url") or url_hint or "",
-            "adapter": "rss",
-            "category": entry.get("category", "publication"),
-            "source_kind": "newsletter",
+            "id": sid, "name": prev.get("name") or disp,
+            "blurb": prev.get("blurb") or "Newsletter (ingested via email).",
+            "url": prev.get("url", ""), "adapter": "rss",
+            "category": category, "source_kind": "newsletter",
         }
-
-    # Self-heal: drop sources that should never have existed (curated duplicates +
-    # one-time junk created before the sender filters), deleting their raw files too.
-    for dead in [s for s in manifest if s in IGNORE_SLUGS or s in PURGE_SLUGS]:
-        manifest.pop(dead, None)
-        try:
-            os.remove(os.path.join(DATA, f"raw_{dead}.jsonl"))
-        except FileNotFoundError:
-            pass
-        print(f"[newsletters] pruned stale source {dead}")
 
     if new_uids:
         state[fkey] = max(new_uids)
     json.dump(state, open(STATE, "w"), indent=1)
     json.dump(manifest, open(MANIFEST, "w"), indent=1, ensure_ascii=False)
-    print(f"[newsletters] +{written} new items across {len(by_sender)} sender(s); "
-          f"{len(manifest)} sources total")
+    print(f"[newsletters] +{written} items across {len(by_source)} source(s); "
+          f"{dropped} junk dropped; {len(manifest)} sources total")
 
 
 if __name__ == "__main__":
