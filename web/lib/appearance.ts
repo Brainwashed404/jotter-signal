@@ -9,12 +9,13 @@ export type Skin =
   | "editorial" | "bubblegum" | "pixel" | "deco" | "cyber" | "win95"
   | "amber" | "lcars" | "teletext" | "terminal" | "mac" | "vector"
   | "fairlight" | "swiss" | "darkside" | "system1" | "system7" | "bitmap"
-  | "next" | "beos" | "risc" | "irix" | "win31" | "cde";
+  | "next" | "beos" | "risc" | "irix" | "win31";
 export type FontSize = "sm" | "md" | "lg" | "xl";
 
 export const SKIN_KEY = "jotter.skin.v1";
 export const FONT_KEY = "jotter.fontsize.v1";
 export const SKIN_ORDER_KEY = "jotter.skinorder.v1";
+export const SKIN_FAVS_KEY = "jotter.skinfavs.v1";
 export const APPEARANCE_EVENT = "jotter-appearance";
 
 // Every skin ships a light palette + an accompanying night mode (toggled by the
@@ -47,7 +48,6 @@ export const SKINS: { id: Skin; name: string; desc: string; swatch: string[]; da
   { id: "risc", name: "Archimedes", desc: "Cream desktop with colourful 3D slabbed panels: orange + blue accents, rounded bevels.", swatch: ["#b4ac9c", "#d05a1a", "#1a6fb0", "#2a2a2a"] },
   { id: "irix", name: "Indigo", desc: "Bold workstation: saturated indigo, hard offset shadows, orange highlights, heavy sans.", swatch: ["#13162a", "#7e8cff", "#ff9a3a", "#cfd6ff"], dark: true },
   { id: "win31", name: "Tiles '92", desc: "Early desktop: teal background, grey 3D-bevelled panels, navy title bars, MS-sans type.", swatch: ["#008080", "#000080", "#c0c0c0", "#000000"] },
-  { id: "cde", name: "Motif", desc: "Steel-blue Unix workstation: chiseled etched panels, grey-blue palette, Helvetica.", swatch: ["#8a98a6", "#3a5a7a", "#7a5a8a", "#161c22"] },
 ];
 
 export const FONT_SIZES: { id: FontSize; label: string }[] = [
@@ -84,6 +84,15 @@ export function getSkinOrder(): Skin[] {
   const ordered = saved.filter((id): id is Skin => (valid as string[]).includes(id));
   for (const id of valid) if (!ordered.includes(id)) ordered.push(id);
   return ordered;
+}
+export function getSkinFavs(): Skin[] {
+  let saved: string[] = [];
+  try { saved = JSON.parse(localStorage.getItem(SKIN_FAVS_KEY) || "[]"); } catch {}
+  const valid = SKINS.map((s) => s.id) as string[];
+  return saved.filter((id): id is Skin => valid.includes(id));
+}
+export function setSkinFavs(ids: Skin[]) {
+  try { localStorage.setItem(SKIN_FAVS_KEY, JSON.stringify(ids)); } catch {}
 }
 export function setSkinOrder(ids: Skin[]) {
   try { localStorage.setItem(SKIN_ORDER_KEY, JSON.stringify(ids)); } catch {}

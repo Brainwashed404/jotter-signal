@@ -106,7 +106,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent); }
    square (0) only for the genuinely pixel / terminal / CRT / wireframe skins. */
 .weather-pill { border-radius: 999px; }
 html[data-skin="neo"] .weather-pill, html[data-skin="system7"] .weather-pill, html[data-skin="mac"] .weather-pill, html[data-skin="editorial"] .weather-pill, html[data-skin="deco"] .weather-pill, html[data-skin="swiss"] .weather-pill, html[data-skin="win95"] .weather-pill, html[data-skin="darkside"] .weather-pill, html[data-skin="beos"] .weather-pill, html[data-skin="risc"] .weather-pill { border-radius: 8px; }
-html[data-skin="tech"] .weather-pill, html[data-skin="cyber"] .weather-pill, html[data-skin="punk"] .weather-pill, html[data-skin="pixel"] .weather-pill, html[data-skin="terminal"] .weather-pill, html[data-skin="amber"] .weather-pill, html[data-skin="teletext"] .weather-pill, html[data-skin="fairlight"] .weather-pill, html[data-skin="vector"] .weather-pill, html[data-skin="system1"] .weather-pill, html[data-skin="bitmap"] .weather-pill, html[data-skin="next"] .weather-pill, html[data-skin="irix"] .weather-pill, html[data-skin="win31"] .weather-pill, html[data-skin="cde"] .weather-pill { border-radius: 0; }
+html[data-skin="tech"] .weather-pill, html[data-skin="cyber"] .weather-pill, html[data-skin="punk"] .weather-pill, html[data-skin="pixel"] .weather-pill, html[data-skin="terminal"] .weather-pill, html[data-skin="amber"] .weather-pill, html[data-skin="teletext"] .weather-pill, html[data-skin="fairlight"] .weather-pill, html[data-skin="vector"] .weather-pill, html[data-skin="system1"] .weather-pill, html[data-skin="bitmap"] .weather-pill, html[data-skin="next"] .weather-pill, html[data-skin="irix"] .weather-pill, html[data-skin="win31"] .weather-pill { border-radius: 0; }
 
 /* Hide scrollbar but keep scrollability (radio station list). */
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
@@ -825,7 +825,7 @@ html[data-skin="risc"] ::selection { background:var(--accent); color:var(--on-ac
 /* ---------- "Indigo" (SGI IRIX, 1994) — bold saturated indigo + orange ---------- */
 html[data-skin="irix"] {
   --bg:#c6c8e0; --panel:#ffffff; --panel-2:#e4e6f4; --ink:#1a1e3a;
-  --border:#8a90c0; --border-hover:#3a44a0; --header-bg:#3a44a0;
+  --border:#8a90c0; --border-hover:#3a44a0; --header-bg:#d4d7ee;
   --text:#171a30; --muted:#4a5080; --accent:#3a44c0; --accent-2:#e07a1a; --on-accent:#ffffff; --up:#1e7a4a; --down:#c0331a;
 }
 html[data-skin="irix"]:not([data-theme="light"]) {
@@ -869,24 +869,8 @@ html[data-skin="win31"] .btn, html[data-skin="win31"] .btn-ghost { background:va
 html[data-skin="win31"] .btn:active, html[data-skin="win31"] .btn-ghost:active { box-shadow: inset 1px 1px 0 0 var(--bevel-lo), inset -1px -1px 0 0 var(--bevel-hi); }
 html[data-skin="win31"] ::selection { background:var(--accent); color:#fff; }
 
-/* ---------- "Motif" (CDE / Solaris, 1995) — steel-blue chiseled workstation ---------- */
-html[data-skin="cde"] {
-  --bg:#8a98a6; --panel:#aeb9c4; --panel-2:#9ba8b6; --ink:#161c22;
-  --border:#5e6c78; --border-hover:#2a4a6a; --header-bg:#6e7e8e;
-  --text:#141a20; --muted:#3a4650; --accent:#3a5a7a; --accent-2:#7a5a8a; --on-accent:#ffffff; --up:#1e6b3a; --down:#9a2a2a;
+/* Yellow Tab: keep the yellow nav bar in dark mode too. Scope the header's vars so
+   the bar is yellow with dark text + a light weather-pill (pill uses --panel-2/--text). */
+html[data-skin="beos"]:not([data-theme="light"]) header {
+  --header-bg:#f4c000; --panel-2:#fff7da; --text:#1a1a1a; --muted:#5a4a10; --accent:#8a5a00; --border:#c8a400;
 }
-html[data-skin="cde"]:not([data-theme="light"]) {
-  --bg:#1a2128; --panel:#27313a; --panel-2:#323e48; --ink:#d6dee6;
-  --border:#48565f; --border-hover:#6a9ad0; --header-bg:#27313a;
-  --text:#ffffff; --muted:#a2aeb8; --accent:#6a9ad0; --accent-2:#b08ac0; --on-accent:#0e151b; --up:#5fc98a; --down:#ff7a7a;
-}
-html[data-skin="cde"] body, html[data-skin="cde"] input, html[data-skin="cde"] textarea, html[data-skin="cde"] select, html[data-skin="cde"] button { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
-html[data-skin="cde"] h1, html[data-skin="cde"] h2, html[data-skin="cde"] h3, html[data-skin="cde"] h4 { font-weight:700; }
-html[data-skin="cde"] .panel { background:var(--panel); border:1px solid var(--border); border-radius:0; box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.28), inset -2px -2px 0 0 rgba(0,0,0,0.3); transition:transform 130ms ease, box-shadow 130ms ease; }
-html[data-skin="cde"] .panel-hover:hover { transform:translateY(-1px); box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.32), inset -2px -2px 0 0 rgba(0,0,0,0.35), 0 4px 12px -4px rgba(0,0,0,0.4); }
-html[data-skin="cde"] .chip { background:var(--panel-2); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.25), inset -1px -1px 0 0 rgba(0,0,0,0.25); }
-html[data-skin="cde"] input, html[data-skin="cde"] textarea, html[data-skin="cde"] select { background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(0,0,0,0.3); }
-html[data-skin="cde"] .btn { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 2px 2px 0 0 rgba(255,255,255,0.3), inset -2px -2px 0 0 rgba(0,0,0,0.3); transition:transform 90ms ease; }
-html[data-skin="cde"] .btn:active { box-shadow: inset -2px -2px 0 0 rgba(255,255,255,0.25), inset 2px 2px 0 0 rgba(0,0,0,0.3); }
-html[data-skin="cde"] .btn-ghost { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:0; box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.25), inset -1px -1px 0 0 rgba(0,0,0,0.25); }
-html[data-skin="cde"] ::selection { background:var(--accent); color:#fff; }

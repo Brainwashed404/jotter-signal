@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   SKINS, FONT_SIZES, type Skin, type FontSize,
   getSkin, setSkin, getFontSize, setFontSize, getSkinOrder, setSkinOrder,
+  getSkinFavs, setSkinFavs,
 } from "@/lib/appearance";
 import CollapsibleSection from "@/components/CollapsibleSection";
 
@@ -13,6 +14,7 @@ export default function SettingsPage() {
   const [size, setSizeState] = useState<FontSize>("md");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [order, setOrder] = useState<Skin[]>(SKINS.map((s) => s.id));
+  const [favs, setFavs] = useState<Skin[]>([]);
   const dragId = useRef<Skin | null>(null);
   const [dragging, setDragging] = useState<Skin | null>(null);
 
@@ -21,7 +23,19 @@ export default function SettingsPage() {
     setSizeState(getFontSize());
     setTheme(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark");
     setOrder(getSkinOrder());
+    setFavs(getSkinFavs());
   }, []);
+
+  function toggleFav(e: React.MouseEvent, id: Skin) {
+    e.stopPropagation();
+    setFavs((prev) => {
+      const next = prev.includes(id) ? prev.filter((x) => x !== id) : [id, ...prev];
+      setSkinFavs(next);
+      return next;
+    });
+  }
+  // Starred skins float to the top (keeping their relative order), then the rest.
+  const displayOrder = [...order.filter((id) => favs.includes(id)), ...order.filter((id) => !favs.includes(id))];
 
   function chooseSkin(s: Skin) {
     setSkin(s); setSkinState(s);
@@ -154,10 +168,11 @@ export default function SettingsPage() {
             </div>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {order.map((id) => {
+            {displayOrder.map((id) => {
               const s = SKIN_BY_ID[id];
               if (!s) return null;
               const active = skin === s.id;
+              const faved = favs.includes(s.id);
               return (
                 <button
                   key={s.id}
@@ -177,6 +192,14 @@ export default function SettingsPage() {
                     <span className="font-semibold">{s.name}</span>
                     <span className="flex items-center gap-2">
                       {active && <span className="label" style={{ color: "var(--accent)" }}>Active</span>}
+                      <span
+                        role="button"
+                        aria-label={faved ? "Unstar skin" : "Star skin (pin to top)"}
+                        aria-pressed={faved}
+                        title={faved ? "Starred — pinned to top" : "Star to pin to top"}
+                        onClick={(e) => toggleFav(e, s.id)}
+                        style={{ cursor: "pointer", fontSize: 15, lineHeight: 1, color: faved ? "var(--accent)" : "var(--muted)" }}
+                      >{faved ? "★" : "☆"}</span>
                       <span aria-hidden style={{ color: "var(--muted)", letterSpacing: "-2px", fontSize: 14, lineHeight: 1 }}>⠿</span>
                     </span>
                   </div>

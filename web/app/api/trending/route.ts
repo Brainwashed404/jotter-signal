@@ -490,23 +490,18 @@ export async function GET(request: Request) {
       }
     })
   );
-  // newest first, dedupe near-identical headlines, keep source variety while still hitting ~10.
-  // Per-source cap scales with how many feeds the category has (few feeds → allow more each).
+  // Strictly newest-first by publish time (not grouped/balanced by platform), then
+  // dedupe near-identical headlines. No per-source cap: the 10 most recent unique stories.
   all.sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
-  const perSourceCap = Math.max(2, Math.ceil(10 / feeds.length));
   const seen = new Set<string>();
-  const seenSrc = new Map<string, number>();
   const acceptedKeys: Keys[] = [];   // for content-based near-duplicate clustering
   const data: NewsItem[] = [];
   for (const it of all) {
     const key = it.title.toLowerCase().slice(0, 40);
     if (seen.has(key)) continue;
     seen.add(key);
-    const sc = seenSrc.get(it.source) ?? 0;
-    if (sc >= perSourceCap) continue;
     const keys = storyKeys(it.title);
     if (isDuplicateStory(keys, acceptedKeys)) continue;   // same story, different outlet/headline → skip
-    seenSrc.set(it.source, sc + 1);
     acceptedKeys.push(keys);
     data.push(it);
     if (data.length >= 10) break;
