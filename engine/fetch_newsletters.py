@@ -28,7 +28,7 @@ STATE = os.path.join(DATA, "newsletters_state.json")
 MANIFEST = os.path.join(DATA, "newsletters.json")
 MAP = os.path.join(HERE, "newsletter_map.json")
 
-SCHEMA_V = 2  # bump to force a clean re-ingest (e.g. after changing grouping logic)
+SCHEMA_V = 3  # bump to force a clean re-ingest (e.g. after changing grouping logic)
 
 # Onboarding / transactional mail that is never real content.
 JUNK_SUBJECT = re.compile(
