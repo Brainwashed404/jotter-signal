@@ -71,11 +71,20 @@ def run(expert):
     # Fetch any expert that has a feed — covers adapter "rss" AND "doctorow"
     # (Pluralistic), whose recent posts arrive via RSS even though it's atomised
     # with a custom builder. Naughton has no feed (use fetch_naughton_recent.py).
-    if not expert.get("feed"):
+    # A source can have one primary `feed` plus optional `extra_feeds` (e.g. a
+    # newsletter routed through an email->RSS bridge). All merge into one raw file
+    # so the content sits under a single source profile.
+    feeds = ([expert["feed"]] if expert.get("feed") else []) + list(expert.get("extra_feeds", []))
+    if not feeds:
         return
-    print(f"fetching {expert['id']} <- {expert['feed']}")
-    fresh = [it for it in parse(fetch(expert["feed"])) if it["date"]]
     out = f"data/raw_{expert['id']}.jsonl"
+    fresh = []
+    for furl in feeds:
+        print(f"fetching {expert['id']} <- {furl}")
+        try:
+            fresh += [it for it in parse(fetch(furl)) if it["date"]]
+        except Exception as e:
+            print(f"  ! {furl} failed ({e}) — skipping")
     # Never overwrite good data with an empty/failed parse (transient feed hiccup).
     if not fresh:
         print(f"  0 items — keeping existing {out}")

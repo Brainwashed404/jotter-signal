@@ -9,7 +9,10 @@
     "backfill": "squarespace",
     "squarespace": "https://www.ben-evans.com/benedictevans",
     "cap": 600,
-    "category": "author"
+    "category": "author",
+    "extra_feeds": [
+      "https://kill-the-newsletter.com/feeds/de9e7sny02ui5ayd9ffl.xml"
+    ]
   },
   {
     "id": "bilawalsidhu",
