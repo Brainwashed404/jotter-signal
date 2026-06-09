@@ -21,3 +21,4 @@ web/data/.last_refresh
 # local publish credentials
 engine/.env
 engine-data.tar.gz
+engine/__pycache__/
