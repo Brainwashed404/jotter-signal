@@ -15,7 +15,8 @@ export default function CollapsibleSection({
     <section>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 w-full text-left mb-3"
+        className="flex items-center gap-2 w-full text-left"
+        style={{ marginBottom: open ? "0.75rem" : 0, transition: "margin-bottom 250ms ease" }}
         aria-expanded={open}
       >
         <h2 className="text-lg font-medium">{title}</h2>
@@ -28,7 +29,19 @@ export default function CollapsibleSection({
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </button>
-      {open && children}
+      {/* CSS grid trick: animates height without JS measurement. The outer div
+          transitions grid-template-rows 0fr↔1fr; the inner div clips overflow. */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateRows: open ? "1fr" : "0fr",
+          transition: "grid-template-rows 250ms ease",
+        }}
+      >
+        <div style={{ overflow: "hidden" }}>
+          {children}
+        </div>
+      </div>
     </section>
   );
 }

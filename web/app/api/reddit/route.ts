@@ -1,7 +1,12 @@
-// Runs on Vercel's Edge Network (Cloudflare IPs) rather than AWS Lambda.
-// Reddit and Redlib block AWS datacenter IPs, but Cloudflare edge IPs are
-// widely distributed and not subject to the same blanket blocks.
-export const runtime = "edge";
+// Reddit blocks unauthenticated requests from all cloud/datacenter IPs.
+// The ONLY server-side fix is Reddit's official OAuth2 API — authenticated
+// requests are allowed from any IP. Requires two free env vars:
+//   REDDIT_CLIENT_ID     (shown under the app name at reddit.com/prefs/apps)
+//   REDDIT_CLIENT_SECRET (the secret for that app)
+//
+// If the env vars are absent the endpoint returns empty (tab stays hidden).
+// Set up: reddit.com/prefs/apps → "create another app…" → type = "script",
+// redirect uri = http://localhost:8080 (unused) → note the client_id & secret.
 
 import { NextResponse } from "next/server";
 
@@ -40,16 +45,53 @@ function termOf(title: string): string {
   return title.split(/\s+/).filter((w) => w.length > 3 && !STOP.has(w)).slice(0, 3).join(" ");
 }
 
-// Try Reddit's own JSON API first (edge IPs are Cloudflare, not AWS — different block list).
-async function tryRedditDirect(subreddit: string, sort: string, source: string): Promise<NewsItem[]> {
-  const res = await fetch(`https://www.reddit.com/r/${subreddit}/${sort}.json?limit=25`, {
+// --- Reddit OAuth2 client-credentials flow -----------------------------------
+// Tokens last 1 hour; we cache and reuse until 5 min before expiry.
+const g = globalThis as unknown as {
+  __redditToken?: { value: string; expiry: number };
+  __redditCache?: { at: number; data: NewsItem[] };
+};
+const TTL = 5 * 60 * 1000;
+
+async function getToken(): Promise<string | null> {
+  const id = process.env.REDDIT_CLIENT_ID;
+  const secret = process.env.REDDIT_CLIENT_SECRET;
+  if (!id || !secret) return null;
+
+  // Reuse cached token if still valid (expire 5 min early for safety)
+  if (g.__redditToken && Date.now() < g.__redditToken.expiry) return g.__redditToken.value;
+
+  const creds = Buffer.from(`${id}:${secret}`).toString("base64");
+  const res = await fetch("https://www.reddit.com/api/v1/access_token", {
+    method: "POST",
     headers: {
-      "User-Agent": "Mozilla/5.0 (compatible; jotter-intelligence/1.0)",
-      "Accept": "application/json",
+      "Authorization": `Basic ${creds}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": "jotter-intelligence/1.0 (https://jotter.media)",
     },
-    signal: AbortSignal.timeout(7000),
+    body: "grant_type=client_credentials",
+    signal: AbortSignal.timeout(8000),
   });
-  if (!res.ok) throw new Error(`Reddit direct: ${res.status}`);
+  if (!res.ok) { console.error("[reddit] token fetch failed:", res.status); return null; }
+  const data = await res.json() as { access_token?: string; expires_in?: number };
+  if (!data.access_token) return null;
+  g.__redditToken = { value: data.access_token, expiry: Date.now() + ((data.expires_in ?? 3600) - 300) * 1000 };
+  return g.__redditToken.value;
+}
+
+async function fetchRedditOAuth(subreddit: string, sort: string): Promise<NewsItem[]> {
+  const token = await getToken();
+  if (!token) return [];
+
+  const res = await fetch(`https://oauth.reddit.com/r/${subreddit}/${sort}.json?limit=25&raw_json=1`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "User-Agent": "jotter-intelligence/1.0 (https://jotter.media)",
+    },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) { console.error("[reddit] API fetch failed:", res.status); return []; }
+
   const json = await res.json() as { data?: { children?: { data: { title: string; url: string; permalink: string; is_self: boolean } }[] } };
   const posts = json?.data?.children ?? [];
   const out: NewsItem[] = [];
@@ -61,59 +103,18 @@ async function tryRedditDirect(subreddit: string, sort: string, source: string):
     const key = title.toLowerCase().slice(0, 40);
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push({ title, url, source, term: termOf(title), date: "" });
+    out.push({ title, url, source: "Reddit", term: termOf(title), date: "" });
     if (out.length >= 10) break;
   }
-  if (!out.length) throw new Error("Reddit direct: 0 items");
   return out;
 }
-
-// Fallback: Redlib instances (open-source Reddit front-end, serves standard RSS).
-const REDLIB_HOSTS = ["https://redlib.perennialte.ch", "https://redlib.r4fo.com"];
-async function tryRedlib(subreddit: string, sort: string, source: string): Promise<NewsItem[]> {
-  for (const host of REDLIB_HOSTS) {
-    try {
-      const res = await fetch(`${host}/r/${subreddit}.rss?sort=${sort}`, {
-        headers: { "User-Agent": "Mozilla/5.0 jotter-intelligence/1.0" },
-        signal: AbortSignal.timeout(8000),
-      });
-      if (!res.ok) continue;
-      const xml = await res.text();
-      const blocks = xml.split(/<item[\s>]/i).slice(1);
-      const out: NewsItem[] = [];
-      for (const b of blocks) {
-        const tm = b.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-        if (!tm) continue;
-        const title = decode(tm[1]);
-        if (title.length < 12 || GEAR_RE.test(title)) continue;
-        const linkText = b.match(/<link>([\s\S]*?)<\/link>/i);
-        const linkHref = b.match(/<link[^>]*href="([^"]+)"/i);
-        const url = (linkText?.[1]?.trim()) || (linkHref?.[1]) || "";
-        if (!url) continue;
-        out.push({ title, url, source, term: termOf(title), date: "" });
-        if (out.length >= 10) break;
-      }
-      if (out.length) return out;
-    } catch { /* try next */ }
-  }
-  return [];
-}
-
-const TTL = 5 * 60 * 1000;
-const g = globalThis as unknown as { __redditCache?: { at: number; data: NewsItem[] } };
 
 export async function GET() {
   if (g.__redditCache && Date.now() - g.__redditCache.at < TTL) {
     return NextResponse.json({ topics: g.__redditCache.data });
   }
 
-  let data: NewsItem[] = [];
-  try {
-    data = await tryRedditDirect("news", "rising", "Reddit");
-  } catch {
-    data = await tryRedlib("news", "rising", "Reddit");
-  }
-
+  const data = await fetchRedditOAuth("news", "rising");
   if (data.length) g.__redditCache = { at: Date.now(), data };
   return NextResponse.json({ topics: data });
 }
