@@ -13,7 +13,6 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://feeds.skynews.com/feeds/rss/uk.xml", source: "Sky News" },
     { url: "https://www.independent.co.uk/news/uk/rss", source: "Independent" },
     { url: "https://inews.co.uk/news/feed", source: "i" },
-    { url: "https://theconversation.com/uk/articles.atom", source: "The Conversation" },
   ],
   world: [
     { url: "https://www.theguardian.com/world/rss", source: "Guardian" },
