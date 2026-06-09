@@ -26,6 +26,52 @@ a daily workbench for strategists/insight workers.
   in object storage, fetched in `lib/data.ts`.) Not started — awaiting user's choice of host.
 - **WRITING RULE: never use em dashes** anywhere (copy, blurbs, UI). Use commas/colons/parentheses.
 
+## ⭐ CURRENT DEPLOYMENT & DATA PIPELINE (2026-06; supersedes older "not deployed" notes below)
+**The app IS live: `intelligence.jotter.media` on Vercel** (invite-gated via middleware). Repo auto-deploys on
+push to `main`.
+- **Data is baked at BUILD time, not fetched at runtime.** `web/scripts/fetch-data.js` (prebuild) downloads
+  `signals.jsonl.gz` + `experts.json` from object storage (env `DATA_URL`), and `next.config.ts`
+  `outputFileTracingIncludes` bundles them into the serverless function. `lib/data.ts` reads the local bundled
+  file (zero per-request network). Home page is ISR `export const revalidate = 300` (one render serves everyone).
+  So: **new data only appears after a Vercel rebuild.** A push (even empty commit) triggers one.
+- **Storage = Backblaze B2** (S3-compatible). GitHub secrets are named `R2_*` (legacy) but point at B2
+  (`s3.us-east-005.backblazeb2.com`, bucket `jotter-data`). Files: `signals.jsonl.gz`, `experts.json`,
+  `engine-data.tar.gz` (the raw+archive `engine/data/` dir, so runs are incremental and never re-scrape from zero).
+- **CI: `.github/workflows/refresh.yml` ("Data refresh")** runs every 4h (+ manual `workflow_dispatch`, optional
+  `backfill_ids=a,b,c` for a one-time deep backfill). It restores `engine-data.tar.gz`, runs `refresh_all.py
+  --no-backfill`, uploads the rebuilt data back to B2. Then redeploy Vercel to bake it in.
+- **⚠ THE SUBSTACK IP BLOCK (important).** `*.substack.com` feeds **403 from the CI datacenter IP** (Substack/
+  Cloudflare blocks it). **Custom-domain Substacks are fine** (noahpinion.blog, profgmedia.com, etc.). So every
+  bare-subdomain source (rushkoff, resobscura, rishad, whyisthisinteresting, trendreport, garymarcus) gets **no new
+  posts in CI** — they survive on cached `engine-data` from earlier local runs. NOT a per-publication setting; it's
+  purely the requesting IP (same feed returns 200 from a home/residential IP).
+- **THE FIX = `engine/publish.sh` (local publish / "the blend").** Runs the fetch on the user's machine
+  (residential IP, which Substack allows), rebuilds, uploads to B2, triggers a Vercel rebuild. One command:
+  `bash engine/publish.sh --backfill --ids garymarcus` (blocked sources) or `bash engine/publish.sh` (quick all).
+  Creds live in `engine/.env` (git-ignored; template `engine/.env.example`: `B2_KEY_ID`/`B2_APP_KEY`). Needs the
+  `aws` CLI (script auto-installs via pip). CI + local share `engine-data.tar.gz`, so neither clobbers the other
+  (fetch keeps existing on 403). **Model: CI auto-refreshes everything it can reach; user runs publish.sh for the
+  blocked Substacks.**
+- **Emailed-newsletter pipeline** (`engine/fetch_newsletters.py` + `engine/newsletter_map.json`): reads a dedicated
+  Gmail (`jotterintelligence@gmail.com`) over IMAP (secrets `GMAIL_USER`/`GMAIL_APP_PASSWORD`), one source per
+  sender, mapping/grouping/category via `newsletter_map.json` (domain or name match; `ignore_domains`), junk filter
+  drops welcome/confirm/security mail, `SCHEMA_V` bump forces a clean re-ingest. Writes `data/raw_nl-*.jsonl` +
+  `data/newsletters.json`; `build_dataset.py` loads that manifest alongside `experts.json`. **Use sparingly** —
+  promo-style emails (e.g. Axios) render poorly; substantive post-emails are fine. `fetch_expert.py` also supports
+  `extra_feeds` (a list) merged into one source.
+- **Source changes this session:** added **profgmarkets** (Prof G Markets, custom domain, works in CI) and
+  **garymarcus** (substack subdomain — **local-publish only**). Removed **benedictevans** (too infrequent) and
+  **Axios** (promo emails, purged). ~32 sources now.
+
+## ⭐ TRENDING NEWS — CURRENT STATE (supersedes the In-the-news section below)
+Live tabs: **UK · World · Business · Politics · Tech · Futurism · HN · Guardian · Money · Reuters · BBC · Time Out ·
+Wiki · GitHub · Google**. Changes from the old notes: **Reddit pill REMOVED** (Reddit 403s Vercel's runtime IP; the
+widget fetches live so the local-publish trick does NOT help it — bringing it back needs either Reddit OAuth creds
+`REDDIT_CLIENT_ID`/`REDDIT_CLIENT_SECRET` for a live tab, or baking headlines during publish.sh = stale). **FT → "Money"**
+(id stays `ft`; aggregates Forbes+FT+WSJ+Economist+MarketWatch, 2 each). **HN** tab = `hnrss.org/newest`. **Futurology
+pill → "Futurism"** sourced from `futurism.com/feed` (no longer Reddit). **Wikipedia pill → "Wiki"**. The Verge dropped
+(paywalled); VentureBeat/Digital Trends/404 Media added to Tech. World Cup module on Home is `defaultOpen={false}`.
+
 ## Layout
 ```
 engine/                      Python pipeline (stdlib only; PDF parsing is web-side)
