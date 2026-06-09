@@ -61,6 +61,11 @@ def main():
         run(["python3", "fetch_newsletters.py"])
         print()
 
+    # Refresh the baked Reddit headlines (via rss2json, works from any IP).
+    print("=== fetch_reddit ===")
+    run(["python3", "fetch_reddit.py"])
+    print()
+
     print("=== build_dataset ===")
     run(["python3", "build_dataset.py"])
     print("\nDone. Restart the dev server to reload signals.")

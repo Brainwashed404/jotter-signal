@@ -393,6 +393,29 @@ export function getLatestPerExpert(days = 28): Signal[] {
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
+// Rolling feed for the home page: every expert/publication's posts from the last
+// `days`, newest first. A light per-source cap keeps a high-volume source (e.g.
+// Futurism) from flooding it, so the feed stays varied across sources.
+export function getRecentFeed(days = 7, perSource = 3): Signal[] {
+  const sigs = getSignals();
+  const maxDate = sigs.reduce((m, s) => (s.date > m ? s.date : m), "").slice(0, 10);
+  const d = new Date(maxDate + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() - days);
+  const cutoff = d.toISOString().slice(0, 10);
+  const recent = sigs
+    .filter((s) => s.date.slice(0, 10) >= cutoff)
+    .sort((a, b) => b.date.localeCompare(a.date));
+  const perSrc = new Map<string, number>();
+  const out: Signal[] = [];
+  for (const s of recent) {
+    const n = perSrc.get(s.source_id) ?? 0;
+    if (n >= perSource) continue;
+    perSrc.set(s.source_id, n + 1);
+    out.push(s);
+  }
+  return out;
+}
+
 // Suggested Ask prompts, built from the themes actually active in the archive.
 // Returns a shuffled pool the client samples a few from (and can reshuffle).
 export function suggestedPrompts(limit = 20): string[] {

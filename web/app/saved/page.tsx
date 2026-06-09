@@ -117,7 +117,7 @@ function SavedArticleCard({ item }: { item: SavedItem }) {
   const [note, setNote] = useState(item.note ?? "");
   return (
     <div>
-      <SignalCard s={item.signal} noReadState />
+      <SignalCard s={item.signal} />
       <div className="mt-2 px-1 space-y-2">
         <textarea
           value={note}

@@ -1,4 +1,4 @@
-import { loadData, getLatestPerExpert } from "@/lib/data";
+import { loadData, getRecentFeed } from "@/lib/data";
 import TrendingWidget from "@/components/TrendingWidget";
 import CollapsibleSection from "@/components/CollapsibleSection";
 import LatestInsights from "@/components/LatestInsights";
@@ -10,7 +10,7 @@ export const revalidate = 300; // cache the page for 5 min; Vercel serves all vi
 
 export default async function HomePage() {
   await loadData();
-  const latestPerExpert = getLatestPerExpert(28);
+  const recentFeed = getRecentFeed(7);
 
   return (
     <div className="space-y-8">
@@ -26,11 +26,11 @@ export default async function HomePage() {
         <WorldCupChart />
       </CollapsibleSection>
 
-      <CollapsibleSection title="Latest Expert Insights">
-        {latestPerExpert.length === 0 ? (
-          <div className="label">No expert has posted in the past 4 weeks.</div>
+      <CollapsibleSection title="Latest Insights">
+        {recentFeed.length === 0 ? (
+          <div className="label">No expert has posted in the past 7 days.</div>
         ) : (
-          <LatestInsights signals={latestPerExpert} />
+          <LatestInsights signals={recentFeed} />
         )}
       </CollapsibleSection>
 

@@ -119,6 +119,6 @@ jobs:
         run: |
           git config user.name "jotter-bot"
           git config user.email "actions@github.com"
-          git add -f web/data/signals.jsonl.gz web/data/experts.json || true
+          git add -f web/data/signals.jsonl.gz web/data/experts.json web/lib/reddit-trending.json || true
           git commit --allow-empty -m "data: scheduled refresh $(date -u +%FT%TZ)"
           git push

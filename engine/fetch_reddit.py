@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Fetch Reddit 'rising' headlines for the Trending News widget.
+"""Fetch the Jotter curated multireddit for the Trending News "Reddit" tab.
 
-Reddit blocks datacenter IPs (Vercel runtime AND GitHub CI), so the widget can't
-fetch it live. Instead this runs from a residential IP (your machine, via
-publish.sh) and writes a small baked file the widget serves. Refreshes whenever
-you run publish.sh.
+Reddit blocks direct fetches from cloud IPs, so we relay through rss2json (works
+from any IP — CI included). Writes web/lib/reddit-trending.json, which is committed
+and bundled into the build; /api/trending serves it for the Reddit tab.
 
-Output: web/lib/reddit-trending.json  (committed, bundled into the build)
+Source = the public multireddit:
+  reddit.com/user/fluffy-earth-8062/m/jotter_intelligence/new
 """
-import json, os, re, urllib.request
+import json, os, re, urllib.parse, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "web", "lib", "reddit-trending.json")
-UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+MULTI_RSS = "https://www.reddit.com/user/fluffy-earth-8062/m/jotter_intelligence/new/.rss"
+UA = "Mozilla/5.0 (compatible; jotter-intelligence/1.0)"
 
 STOP = {"The","A","An","How","Why","What","When","Who","Where","New","This","That","Live","Watch",
         "Could","Will","Has","Have","Is","Are","To","In","On","Of","For","And","But","After","Before",
@@ -28,47 +29,41 @@ def term_of(title):
     return " ".join(w for w in title.split() if len(w) > 3 and w not in STOP)[:40]
 
 
-# Reddit's own JSON/RSS blocks most clients. Redlib (open-source Reddit front-end)
-# serves clean RSS and works from a residential IP. Try instances in order.
-REDLIB_HOSTS = ["https://redlib.perennialte.ch", "https://redlib.r4fo.com", "https://redlib.privacyredirect.com"]
-
-
-def fetch(subreddit, sort):
-    for host in REDLIB_HOSTS:
-        try:
-            req = urllib.request.Request(f"{host}/r/{subreddit}.rss?sort={sort}", headers={"User-Agent": UA})
-            with urllib.request.urlopen(req, timeout=20) as r:
-                xml = r.read().decode("utf-8", "replace")
-        except Exception:
+def fetch_items():
+    url = "https://api.rss2json.com/v1/api.json?rss_url=" + urllib.parse.quote(MULTI_RSS, safe="")
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=25) as r:
+        data = json.loads(r.read())
+    if data.get("status") != "ok":
+        return []
+    out, seen = [], set()
+    for it in data.get("items", []):
+        title = re.sub(r"\s+", " ", (it.get("title") or "")).strip()
+        link = (it.get("link") or "").strip()
+        if len(title) < 12 or not link:
             continue
-        out, seen = [], set()
-        for block in re.split(r"<item[\s>]", xml)[1:]:
-            tm = re.search(r"<title>(.*?)</title>", block, re.S)
-            lm = re.search(r"<link>(.*?)</link>", block, re.S)
-            if not tm:
-                continue
-            title = re.sub(r"<!\[CDATA\[|\]\]>", "", tm.group(1)).strip()
-            title = re.sub(r"&amp;", "&", title)
-            if len(title) < 12:
-                continue
-            url = (lm.group(1).strip() if lm else "")
-            key = title.lower()[:40]
-            if key in seen:
-                continue
-            seen.add(key)
-            out.append({"title": title, "url": url, "source": "Reddit", "term": term_of(title), "date": ""})
-            if len(out) >= 10:
-                break
-        if out:
-            return out
-    return []
+        key = title.lower()[:40]
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({"title": title, "url": link, "source": "Reddit", "term": term_of(title), "date": ""})
+        if len(out) >= 10:
+            break
+    return out
 
 
 def main():
-    items = fetch("news", "rising")
+    try:
+        items = fetch_items()
+    except Exception as e:
+        print(f"[reddit] fetch failed ({e}) — keeping existing file")
+        return
+    if not items:
+        print("[reddit] 0 items — keeping existing file")
+        return
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump(items, open(OUT, "w"), indent=1, ensure_ascii=False)
-    print(f"[reddit] wrote {len(items)} headlines -> {os.path.relpath(OUT, HERE)}")
+    print(f"[reddit] wrote {len(items)} headlines from the jotter_intelligence multireddit")
 
 
 if __name__ == "__main__":

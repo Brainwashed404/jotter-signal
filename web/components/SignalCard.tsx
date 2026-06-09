@@ -28,27 +28,15 @@ function renderWithLinks(text: string): ReactNode[] {
   return nodes;
 }
 
-const READ_KEY = "jotter.read.v1";
-function getReadIds(): Set<string> {
-  try { return new Set(JSON.parse(localStorage.getItem(READ_KEY) || "[]")); } catch { return new Set(); }
-}
-function markReadId(id: string) {
-  try { const s = getReadIds(); s.add(id); localStorage.setItem(READ_KEY, JSON.stringify([...s])); } catch {}
-}
-
-export function SignalCard({ s, noReadState = false }: { s: Signal; noReadState?: boolean }) {
+export function SignalCard({ s }: { s: Signal }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const shareRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [read, setRead] = useState(false);
   const [sel, setSel] = useState<{ text: string; top: number; left: number } | null>(null);
   const [flash, setFlash] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
   const { ids } = useSaved();
   const saved = ids.has(s.id);
-
-  // Read-state is suppressed in the Saved section (everything there is obviously already seen).
-  useEffect(() => { if (!noReadState) setRead(getReadIds().has(s.id)); }, [s.id, noReadState]);
 
   // Share this box's content via the OS sheet (email/WhatsApp/etc), or a fallback menu.
   const shareUrl = s.post_url || "";
@@ -132,7 +120,6 @@ export function SignalCard({ s, noReadState = false }: { s: Signal; noReadState?
     setOpen((o) => {
       const next = !o;
       if (next) {
-        if (!noReadState) { markReadId(s.id); setRead(true); }
         setTimeout(() => {
           const el = cardRef.current;
           if (!el) return;
@@ -151,14 +138,6 @@ export function SignalCard({ s, noReadState = false }: { s: Signal; noReadState?
       className={`panel panel-hover p-4 relative${open ? " md:col-span-2" : ""}`}
       style={{ cursor: expandable ? "pointer" : undefined }}
     >
-      {read && !open && !noReadState && (
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ borderRadius: "14px", background: "color-mix(in srgb, var(--bg) 45%, transparent)" }}
-        >
-          <span className="label absolute bottom-2.5 left-2.5" style={{ opacity: 0.5 }}>✓ read</span>
-        </div>
-      )}
       {flash && (
         <div className="absolute top-2 right-2 chip" style={{ color: "var(--up)", borderColor: "var(--up)" }}>
           {flash}
