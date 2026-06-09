@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+// Reddit blocks live fetches from Vercel/CI IPs, so its headlines are baked from a
+// residential IP (engine/fetch_reddit.py, run by publish.sh) into this committed file.
+import redditTrending from "../../../lib/reddit-trending.json";
 
 // Current headlines by category. FREE-TO-READ sources only — no point linking to
 // anything behind a paywall. (Excluded: WIRED, NYT, MIT Tech Review, Economist, 404 Media.)
@@ -72,7 +75,7 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://hnrss.org/newest", source: "HN" },
   ],
 };
-export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "hn", "guardian", "ft", "reuters", "bbc", "timeout", "wikipedia", "github", "google"];
+export const CATEGORY_ORDER = ["uk", "world", "business", "politics", "technology", "futurology", "hn", "guardian", "ft", "reuters", "bbc", "timeout", "reddit", "wikipedia", "github", "google"];
 
 // GitHub trending repos (monthly, English) — scraped from the trending page (no API);
 // repo name + tagline + this-month star gain, ordered by that star volume.
@@ -445,6 +448,11 @@ function parse(xml: string, source: string): NewsItem[] {
 export async function GET(request: Request) {
   const param = new URL(request.url).searchParams.get("category") ?? DEFAULT_CATEGORY;
   if (!g.__news) g.__news = {};
+
+  // Reddit: serve the baked headlines (fetched from a residential IP by publish.sh).
+  if (param === "reddit") {
+    return NextResponse.json({ category: "reddit", categories: CATEGORY_ORDER, topics: redditTrending });
+  }
 
   const CUSTOM: Record<string, () => Promise<NewsItem[]>> = {
     wikipedia: fetchWikipediaTop,

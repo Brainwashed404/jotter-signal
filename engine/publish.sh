@@ -46,6 +46,10 @@ done
 echo "→ fetching + building locally (your IP — Substack works here)…"
 python3 refresh_all.py $BACKFILL_FLAG ${ARGS[@]+"${ARGS[@]}"}
 
+# Refresh the baked Reddit headlines (Reddit blocks Vercel/CI, so it's fetched here).
+echo "→ refreshing Reddit headlines…"
+python3 fetch_reddit.py || echo "  (reddit fetch skipped — keeping existing)"
+
 # --- upload rebuilt data to storage ---
 echo "→ uploading to storage…"
 export AWS_ACCESS_KEY_ID="$B2_KEY_ID" AWS_SECRET_ACCESS_KEY="$B2_APP_KEY"
@@ -59,6 +63,7 @@ aws s3 cp "$ROOT/engine-data.tar.gz" "s3://$BUCKET/engine-data.tar.gz" --endpoin
 # --- trigger the site rebuild ---
 echo "→ triggering site rebuild…"
 cd "$ROOT"
+git add web/lib/reddit-trending.json 2>/dev/null || true
 git commit --allow-empty -m "data: local publish $(date -u +%FT%TZ)" >/dev/null
 git push >/dev/null
 
