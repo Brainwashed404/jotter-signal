@@ -315,15 +315,5 @@
     "adapter": "rss",
     "category": "publication",
     "backfill": "reddit"
-  },
-  {
-    "id": "garymarcus",
-    "name": "Gary Marcus",
-    "blurb": "Cognitive scientist and AI researcher; sceptical analysis of LLM hype, AI reliability, regulation and the road to trustworthy AI. Writes \"Marcus on AI\".",
-    "url": "https://garymarcus.substack.com",
-    "feed": "https://garymarcus.substack.com/feed",
-    "adapter": "rss",
-    "backfill": "substack",
-    "category": "author"
   }
 ]
