@@ -5,7 +5,9 @@ export type DailyItem  = { date: string; dayName: string; dayNum: number; code: 
 export type WeatherData = { tempC: number; code: number; label: string; emoji: string; place: string; hourly: HourlyItem[]; daily: DailyItem[] };
 
 const g = globalThis as unknown as { __weather?: Record<string, { at: number; data: WeatherData }> };
-const TTL = 20 * 60 * 1000;
+// Open-Meteo's `current` block updates every ~15 min; cache 10 min so an open tab
+// reflects real-time changes without hammering the API.
+const TTL = 10 * 60 * 1000;
 
 const WMO: Record<number, [string, string]> = {
   0: ["Clear", "☀️"], 1: ["Mostly clear", "🌤️"], 2: ["Partly cloudy", "⛅"], 3: ["Overcast", "☁️"],
@@ -78,7 +80,10 @@ export async function GET(req: Request) {
     const hPrecip: number[] = j?.hourly?.precipitation_probability ?? [];
     const hMm: number[]     = j?.hourly?.precipitation ?? [];
     const hWind: number[]   = j?.hourly?.wind_speed_10m ?? [];
-    const nowIso = new Date().toISOString().slice(0, 13);
+    // Open-Meteo hourly times are in the location's LOCAL timezone (timezone=auto),
+    // so compare against the API's own local "current.time" (also local), NOT a UTC
+    // now() — otherwise the "NOW" column is off by the UTC offset (e.g. 1h in BST).
+    const nowIso = String(j?.current?.time ?? "").slice(0, 13) || new Date().toISOString().slice(0, 13);
     let startIdx = hTimes.findIndex((t) => t.slice(0, 13) >= nowIso);
     if (startIdx < 0) startIdx = 0;
     const hourly: HourlyItem[] = hTimes.slice(startIdx, startIdx + 24).map((t, i) => {

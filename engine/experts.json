@@ -223,6 +223,16 @@
     "category": "author"
   },
   {
+    "id": "ethanmollick",
+    "name": "Ethan Mollick (One Useful Thing)",
+    "blurb": "Wharton professor on the practical reality of working with AI: hands-on experiments, what LLMs can and can't do, and how organisations should adapt.",
+    "url": "https://www.oneusefulthing.org",
+    "feed": "https://www.oneusefulthing.org/feed",
+    "adapter": "rss",
+    "backfill": "substack",
+    "category": "author"
+  },
+  {
     "id": "rishad",
     "name": "Rishad Tobaccowala",
     "blurb": "Former Publicis strategist writing on the future of work, marketing and human-centred business in the age of AI.",

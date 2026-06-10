@@ -57,11 +57,10 @@ def main():
 
         print()
 
-    # Ingest newsletters from the dedicated Gmail mailbox (skipped if creds absent).
-    if os.environ.get("GMAIL_USER") and os.environ.get("GMAIL_APP_PASSWORD"):
-        print("=== fetch_newsletters ===")
-        run(["python3", "fetch_newsletters.py"])
-        print()
+    # Newsletter ingest (fetch_newsletters.py) is RETIRED: emailed newsletters render
+    # poorly and kept resurrecting removed sources (Benedict Evans). The script and
+    # newsletter_map.json are kept on disk but are no longer called, and build_dataset
+    # no longer loads data/newsletters.json.
 
     # Refresh the baked Reddit headlines (via rss2json, works from any IP).
     print("=== fetch_reddit ===")

@@ -39,16 +39,9 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://www.politico.eu/feed/", source: "Politico" },
     { url: "https://inews.co.uk/news/politics/feed", source: "i" },
   ],
-  // "Money" tab (id kept as `ft` so existing saved pill orders aren't disturbed):
-  // a mix of business/finance outlets. WSJ & Economist are partly paywalled but
-  // included by request.
-  ft: [
-    { url: "https://www.forbes.com/business/feed/", source: "Forbes" },
-    { url: "https://www.ft.com/rss/home/international", source: "FT" },
-    { url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml", source: "WSJ" },
-    { url: "https://www.economist.com/finance-and-economics/rss.xml", source: "Economist" },
-    { url: "https://feeds.marketwatch.com/marketwatch/topstories/", source: "MarketWatch" },
-  ],
+  // NB the "Money" tab (id `ft`) is now a CUSTOM fetcher (fetchMoney) — Yahoo Finance,
+  // Bloomberg, Seeking Alpha, TradingView + a markets headline feed, all via Google
+  // News so they work from datacenter IPs. See fetchMoney below.
   timeout: [
     { url: "https://www.timeout.com/london/feed.rss", source: "Time Out", match: "/news/" },
   ],
@@ -64,7 +57,6 @@ const CATEGORIES: Record<string, Feed[]> = {
     { url: "https://thenextweb.com/feed", source: "The Next Web" },
     { url: "https://restofworld.org/feed/latest/", source: "Rest of World" },
     { url: "https://venturebeat.com/feed/", source: "VentureBeat" },
-    { url: "https://www.digitaltrends.com/feed/", source: "Digital Trends" },
     { url: "https://www.404media.co/feed", source: "404 Media" },
   ],
   hn: [
@@ -194,6 +186,64 @@ async function fetchReuters(): Promise<NewsItem[]> {
   } catch {
     return [];
   }
+}
+
+// "Money": the requested finance sources (Yahoo Finance, Bloomberg, Seeking Alpha,
+// TradingView) all block datacenter IPs and/or have no usable RSS, so each is pulled
+// via a Google News site-search (works from any IP, like Reuters above). Google
+// Finance is a portal with no article feed of its own, so it's represented by a
+// general markets-news search. Results are merged newest-first and deduped.
+const MONEY_SOURCES: { q: string; source: string }[] = [
+  { q: "site:finance.yahoo.com OR site:uk.finance.yahoo.com", source: "Yahoo Finance" },
+  { q: "site:bloomberg.com", source: "Bloomberg" },
+  { q: "site:seekingalpha.com", source: "Seeking Alpha" },
+  { q: "site:tradingview.com/news", source: "TradingView" },
+];
+// Drop portal/listing/ticker noise (Yahoo "Stock Quotes, Charts", TradingView
+// user "Chart Image by …" posts, screener/watchlist pages) — not real articles.
+const MONEY_JUNK = /(chart image|share prices|stock quotes|quotes?,?\s*charts|sector & industry|industry performance|watchlist|screener|^[A-Z0-9]+:[A-Z0-9]+\b)/i;
+async function fetchMoney(): Promise<NewsItem[]> {
+  const lists = await Promise.all(
+    MONEY_SOURCES.map(async ({ q, source }) => {
+      try {
+        const url = `https://news.google.com/rss/search?q=${encodeURIComponent(q + " when:2d")}&hl=en-GB&gl=GB&ceid=GB:en`;
+        const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 jotter-intelligence/1.0" }, signal: AbortSignal.timeout(8000) });
+        if (!res.ok) return [] as NewsItem[];
+        const xml = await res.text();
+        const out: NewsItem[] = [];
+        for (const b of xml.split(/<item>/i).slice(1)) {
+          const tm = b.match(/<title>([\s\S]*?)<\/title>/i);
+          if (!tm) continue;
+          const title = decode(tm[1]).replace(/\s*[-–]\s*[^-–]+$/, "").trim(); // drop trailing " - Publisher"
+          if (title.length < 12 || GEAR_RE.test(title) || MONEY_JUNK.test(title)) continue;
+          const link = (b.match(/<link>([\s\S]*?)<\/link>/i)?.[1] || "").trim();
+          const dm = b.match(/<pubDate>([\s\S]*?)<\/pubDate>/i);
+          if (!link) continue;
+          out.push({ title, url: link, source, term: termOf(title), date: dm ? dm[1].trim() : "" });
+          if (out.length >= 8) break;
+        }
+        return out;
+      } catch {
+        return [] as NewsItem[];
+      }
+    })
+  );
+  // Merge newest-first, dedupe near-identical headlines across sources.
+  const all = lists.flat().sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
+  const seen = new Set<string>();
+  const acceptedKeys: Keys[] = [];
+  const data: NewsItem[] = [];
+  for (const it of all) {
+    const key = it.title.toLowerCase().slice(0, 40);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const keys = storyKeys(it.title);
+    if (isDuplicateStory(keys, acceptedKeys)) continue;
+    acceptedKeys.push(keys);
+    data.push(it);
+    if (data.length >= 10) break;
+  }
+  return data;
 }
 
 // BBC "Most read": scrape the `data-component="mostRead"` ranked list on the News front page.
@@ -457,6 +507,7 @@ export async function GET(request: Request) {
     google: fetchGoogleTrends,
     reuters: fetchReuters,
     bbc: fetchBbcMostRead,
+    ft: fetchMoney,
   };
   if (CUSTOM[param]) {
     const cached = g.__news[param];

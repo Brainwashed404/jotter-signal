@@ -68,7 +68,16 @@ export default function WeatherClock({ activeSection, onToggle, onWeatherData }:
         );
       }
     }
-    return () => { cancelled = true; };
+
+    // Keep an open tab live: re-pull current conditions every 15 min using whatever
+    // coords we have (precise cache or IP fallback).
+    const refresh = setInterval(() => {
+      let c: Geo | null = null;
+      try { c = JSON.parse(localStorage.getItem(GEO_KEY) || "null"); } catch {}
+      fetchWeather(c ? `?lat=${c.lat}&lon=${c.lon}` : "");
+    }, 15 * 60 * 1000);
+
+    return () => { cancelled = true; clearInterval(refresh); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

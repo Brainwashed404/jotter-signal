@@ -69,12 +69,12 @@ push to `main`.
   `data/raw_nl-*.jsonl`+`data/newsletters.json`; `build_dataset` loads the manifest alongside `experts.json`. **Mostly
   unused now** (`groups:[]`; Axios/google/KTN in `ignore_domains`) — promo emails render poorly. `fetch_expert.py`
   also supports `extra_feeds` (list) merged into one source.
-  **⚠ Removing an expert from experts.json does NOT stop their emailed newsletter:** Benedict Evans kept appearing
-  on the live site months after his removal because the Gmail pipeline auto-creates a source per sender (CI-only,
-  Gmail creds absent locally, so local builds looked clean). Fix (2026-06-10): his sender is in `ignore_domains`
-  (`ben-evans.com`) + `ignore_names` (`benedict evans`) in `newsletter_map.json`, and `SCHEMA_V` bumped 3→4 so the
-  next CI run wipes `raw_nl-*` + the manifest and re-ingests without him. To kill any future emailed source: add it
-  to the ignore lists AND bump `SCHEMA_V`, then unsubscribe the Gmail inbox.
+  **⚠⚠ THE NEWSLETTER PIPELINE IS NOW FULLY RETIRED (2026-06-10).** Benedict Evans kept appearing on the live site
+  months after his removal from experts.json because the Gmail pipeline auto-creates a source per sender (CI-only,
+  Gmail creds absent locally, so local builds looked clean). First fix was ignore-list + `SCHEMA_V` 3→4; then the
+  user decided no emailed source is wanted at all, so: `refresh_all.py` no longer calls `fetch_newsletters.py`, and
+  `build_dataset.py` no longer loads `data/newsletters.json`. The scripts + `newsletter_map.json` remain on disk but
+  are dead code; `GMAIL_*` secrets are unused. **experts.json is the ONLY source manifest now.**
 - **Substack embed strip (build_dataset `clean_block`):** Substack tweet/link embeds carry escaped-JSON
   `data-attrs="…"` with raw `>` chars that broke the `<[^>]+>` stripper and leaked JSON (usernames/impressions) into
   the body (e.g. the Gary Marcus piece). Now stripped quote-aware before tag-stripping, like the iframe fix.
@@ -120,6 +120,39 @@ Below `md` the shell reflows; at/above `md` nothing changed. The pieces:
 - **Misc**: `html,body{overflow-x:clip}` ≤767px kills sideways scroll; SignalList's right-hand filter group got
   `flex-wrap max-md:ml-0 max-md:w-full` so the four filter controls wrap instead of clipping. Content grids were
   already responsive (`sm:`/`md:` cols, flex-wrap pills) and needed nothing.
+- **Trending rows ≤md**: category pills are ONE swipeable row (`max-md:flex-nowrap overflow-x-auto`, edge-to-edge
+  via `-mx-4 px-4`; pills `shrink-0 whitespace-nowrap`); each headline clamps to **two lines** (`max-md:line-clamp-2`,
+  desktop keeps `md:truncate`) with the source label moved BENEATH the headline (`block md:hidden`).
+- **CollapsibleSection overflow fix (all breakpoints):** the inner clip div used permanent `overflow:hidden`, which
+  sheared the top border off `.panel-hover` panels when they lifted 2px on hover. Fix: the inner div now has
+  `minWidth:0` + `overflowX:clip` always, and `overflowY` flips to `visible` only once the open animation has
+  settled (a `settled` flag set on `transitionend`, guarded by `e.target===currentTarget` &&
+  `propertyName==="grid-template-rows"`; reset to false on close). **`minWidth:0` is load-bearing:** the section is a
+  CSS grid and the grid item's automatic min-width is `auto`; `overflow:clip` alone does NOT zero it (the box isn't a
+  scroll container), so a wide child like the swipeable trending-pills row blew the whole panel out to ~951px on
+  mobile (which also stopped headlines wrapping). `minWidth:0` clamps the grid track to its container.
+- **World Cup groups fix:** ESPN's standings API nests rows at `children[].standings.entries`; the route only read
+  `group.entries`, so all 12 groups rendered empty. `/api/worldcup` now falls back to `group.standings.entries`.
+  (NB route caches in globalThis — restart dev server after editing it.)
+- **Mobile radio = sheet only, no persistent player (2026-06-10):** the docked mini-player above the tab bar was
+  removed per request. On mobile the radio is shown ONLY via the slide-up sheet, toggled on/off by the header radio
+  button (`jotter-radio-toggle` event). Closing the sheet leaves audio playing (header button lights gold via
+  `jotter-radio-state`) but nothing is docked on the page. (`started` state deleted.)
+- **Trending source changes (2026-06-10):** **Digital Trends removed** from `technology`. **Money (`ft`) is now a
+  CUSTOM fetcher `fetchMoney`** (was a plain RSS list incl. MarketWatch/Forbes/FT/WSJ/Economist — all replaced).
+  It pulls Yahoo Finance, Bloomberg, Seeking Alpha, TradingView (`site:tradingview.com/news`) via Google News RSS
+  site-search (reliable from datacenter IPs, like `fetchReuters`), strips the trailing " - Publisher", merges
+  newest-first + dedupes, and drops portal/chart/ticker noise via `MONEY_JUNK`. **Google Finance was requested but
+  has no article feed of its own (it's a portal), so it is NOT included** — tell the user if they ask; a different
+  quality finance source can fill the 5th slot.
+- **Ethan Mollick added** as an author (`ethanmollick`, One Useful Thing, oneusefulthing.org, rss + substack
+  backfill; 135 signals 2022→). 33 experts / ~25.9k signals now.
+- **Weather (2026-06-10):** the feed was fine — the 23-vs-27 the user saw is a forecaster difference (the app uses
+  Open-Meteo `best_match`, which auto-selects the regional model; BBC uses the Met Office). Forcing `models=ukmo_seamless`
+  was tested and is identical to default here, so not applied. Real fixes: (1) hourly "NOW" `startIdx` compared a UTC
+  `now()` against Open-Meteo's LOCAL-timezone hourly times (off by the UTC offset, e.g. 1h in BST) — now uses
+  `j.current.time`; (2) server cache TTL 20→10 min; (3) WeatherClock refetches every 15 min so an open tab stays live.
+  NB this sandbox's network serves synthetic 2026-dated Open-Meteo data (like Yahoo markets).
 - `.claude/launch.json` (in `~/Claude Code Experiments/`) defines the `jotter-web` preview server
   (`npm run dev --prefix jotter-intelligence/web`, port 3000) for Claude's preview tooling.
 

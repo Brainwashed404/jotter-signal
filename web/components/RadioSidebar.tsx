@@ -39,7 +39,6 @@ function Icon({ name, size = 18 }: { name: "play" | "pause" | "prev" | "next" | 
 export default function RadioSidebar() {
   const [open, setOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false); // mobile bottom sheet
-  const [started, setStarted] = useState(false);     // a station has played this session → show mini-player
   const [current, setCurrent] = useState<Station | null>(null);
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState(false);
@@ -86,7 +85,7 @@ export default function RadioSidebar() {
   const [queue, setQueue] = useState<Station[]>(SORTED);
   function play(s: Station, q?: Station[]) {
     const a = ensureAudio();
-    setCurrent(s); setError(false); setStarted(true);
+    setCurrent(s); setError(false);
     if (q && q.length) setQueue(q);
     a.src = s.url; a.play().catch(() => setError(true));
     try { localStorage.setItem(LAST_STATION_KEY, s.name); } catch {}
@@ -329,25 +328,10 @@ export default function RadioSidebar() {
       </div>
     </aside>
 
-    {/* ── Mobile (≤md): mini-player above the tab bar + a slide-up radio sheet ── */}
+    {/* ── Mobile (≤md): a slide-up radio sheet, toggled ONLY by the header radio
+        button. No persistent on-screen player — closing the sheet leaves the audio
+        playing (header button lights up) but nothing docked on the page. ── */}
     <div className="md:hidden">
-      {/* mini-player: appears once something has played, docks above the tab bar */}
-      {started && !sheetOpen && current && (
-        <div onClick={() => setSheetOpen(true)}
-          className="fixed inset-x-3 z-40 flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-xl cursor-pointer backdrop-blur"
-          style={{ bottom: "calc(3.5rem + env(safe-area-inset-bottom) + 0.5rem)", background: "var(--header-bg)",
-            border: "1px solid var(--border)", boxShadow: "0 6px 20px -6px rgba(0,0,0,0.35)" }}>
-          <div className="min-w-0 flex-1">
-            <div className="text-sm font-medium truncate" style={{ color: "var(--accent)" }}>{current.name}</div>
-            {error && <div className="label" style={{ color: "var(--down)" }}>stream unavailable</div>}
-          </div>
-          <button onClick={(e) => { e.stopPropagation(); step(-1); }} className="w-8 h-8 grid place-items-center shrink-0" style={{ color: "var(--muted)" }}><Icon name="prev" size={16} /></button>
-          <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-9 h-9 rounded-full grid place-items-center shrink-0"
-            style={{ background: "var(--accent)", color: "var(--on-accent)" }}><Icon name={playing ? "pause" : "play"} size={16} /></button>
-          <button onClick={(e) => { e.stopPropagation(); step(1); }} className="w-8 h-8 grid place-items-center shrink-0" style={{ color: "var(--muted)" }}><Icon name="next" size={16} /></button>
-        </div>
-      )}
-
       {/* backdrop */}
       <div onClick={() => setSheetOpen(false)} className="fixed inset-0 z-50 transition-opacity duration-300"
         style={{ background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />

@@ -56,7 +56,8 @@ async function fetchGroups(): Promise<WCGroup[]> {
   const raw: AnyObj[] = j?.standings ?? j?.children ?? [];
 
   return raw.map((group: AnyObj, gi: number) => {
-    const entries: AnyObj[] = group.entries ?? [];
+    // entries live at group.entries OR nested under group.standings.entries (children[] shape)
+    const entries: AnyObj[] = group.entries ?? (group.standings as AnyObj)?.entries ?? [];
     return {
       id: String(group.id ?? gi),
       name: String(group.name ?? group.shortName ?? `Group ${gi + 1}`),

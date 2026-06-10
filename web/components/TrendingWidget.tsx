@@ -95,7 +95,8 @@ export default function TrendingWidget() {
 
   return (
     <div className="panel p-4">
-      <div className="flex flex-wrap gap-1.5 mb-3">
+      {/* ≤md: one swipeable row (like the Markets ticker); ≥md: wrap as before */}
+      <div className="flex flex-wrap gap-1.5 mb-3 max-md:flex-nowrap max-md:overflow-x-auto no-scrollbar max-md:-mx-4 max-md:px-4">
         {order.map((id) => (
           <button
             key={id}
@@ -106,7 +107,7 @@ export default function TrendingWidget() {
             onDragEnd={endDrag}
             onClick={() => choose(id)}
             title="Drag to reorder"
-            className="chip cursor-grab active:cursor-grabbing select-none"
+            className="chip cursor-grab active:cursor-grabbing select-none shrink-0 whitespace-nowrap"
             style={{
               ...(category === id ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}),
               opacity: dragId === id ? 0.4 : 1,
@@ -124,12 +125,17 @@ export default function TrendingWidget() {
       ) : (
         <ul className="divide-y" style={{ borderColor: "var(--border)" }}>
           {topics.map((t, i) => (
-            <li key={i} className="flex items-center gap-2 text-[13px] py-1">
-              <div className="flex-1 min-w-0 truncate">
-                <a href={t.url} target="_blank" rel="noopener" className="hover:underline">{t.title}</a>
-                {t.context && <span className="ml-1.5" style={{ color: "var(--muted)" }}>· {t.context}</span>}
+            <li key={i} className="flex items-center max-md:items-start gap-2 text-[13px] py-1 max-md:py-1.5">
+              {/* ≤md: headline clamps to two lines with the source label beneath it;
+                  ≥md: single truncated line with source + search inline (unchanged) */}
+              <div className="flex-1 min-w-0">
+                <div className="md:truncate max-md:line-clamp-2">
+                  <a href={t.url} target="_blank" rel="noopener" className="hover:underline">{t.title}</a>
+                  {t.context && <span className="ml-1.5" style={{ color: "var(--muted)" }}>· {t.context}</span>}
+                </div>
+                <span className="label block md:hidden mt-0.5">{t.source}</span>
               </div>
-              <span className="label shrink-0">{t.source}</span>
+              <span className="label shrink-0 max-md:hidden">{t.source}</span>
               {/* Search the archive for the WHOLE headline (searchSignals strips stopwords + ranks by
                   overlap), so it brings the wider context, not just the first name in the title. */}
               <Link

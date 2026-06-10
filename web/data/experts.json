@@ -7655,6 +7655,345 @@
   "category": "author"
  },
  {
+  "id": "ethanmollick",
+  "name": "Ethan Mollick (One Useful Thing)",
+  "blurb": "Wharton professor on the practical reality of working with AI: hands-on experiments, what LLMs can and can't do, and how organisations should adapt.",
+  "url": "https://www.oneusefulthing.org",
+  "totals": {
+   "posts": 135,
+   "signals": 135,
+   "date_min": "2022-11-10",
+   "date_max": "2026-06-09"
+  },
+  "signal_types": {
+   "article": 135
+  },
+  "signal_kinds": {
+   "longread": 125,
+   "article": 6,
+   "links": 3,
+   "qanda": 1
+  },
+  "themes": [
+   {
+    "theme": "AI & machine learning",
+    "current": 100.0,
+    "delta": 22.8,
+    "series": {
+     "2022": 56.2,
+     "2023": 98.2,
+     "2024": 100.0,
+     "2025": 100.0,
+     "2026": 100.0
+    }
+   },
+   {
+    "theme": "Platform power / Big Tech",
+    "current": 82.7,
+    "delta": 27.9,
+    "series": {
+     "2022": 50.0,
+     "2023": 59.6,
+     "2024": 83.9,
+     "2025": 86.4,
+     "2026": 77.8
+    }
+   },
+   {
+    "theme": "Economy & markets",
+    "current": 36.6,
+    "delta": 11.4,
+    "series": {
+     "2022": 18.8,
+     "2023": 31.6,
+     "2024": 29.0,
+     "2025": 36.4,
+     "2026": 44.4
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 34.4,
+    "delta": 5.2,
+    "series": {
+     "2022": 25.0,
+     "2023": 33.3,
+     "2024": 29.0,
+     "2025": 40.9,
+     "2026": 33.3
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 29.9,
+    "delta": -28.9,
+    "series": {
+     "2022": 56.2,
+     "2023": 61.4,
+     "2024": 29.0,
+     "2025": 27.3,
+     "2026": 33.3
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 27.3,
+    "delta": 18.0,
+    "series": {
+     "2022": 6.2,
+     "2023": 12.3,
+     "2024": 32.3,
+     "2025": 27.3,
+     "2026": 22.2
+    }
+   },
+   {
+    "theme": "Surveillance & privacy",
+    "current": 14.0,
+    "delta": 5.3,
+    "series": {
+     "2022": 0.0,
+     "2023": 17.5,
+     "2024": 19.4,
+     "2025": 22.7,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 6.7,
+    "delta": 5.0,
+    "series": {
+     "2022": 0.0,
+     "2023": 3.5,
+     "2024": 6.5,
+     "2025": 13.6,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 4.3,
+    "delta": -7.5,
+    "series": {
+     "2022": 6.2,
+     "2023": 17.5,
+     "2024": 12.9,
+     "2025": 0.0,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Crypto / web3",
+    "current": 1.5,
+    "delta": 0.6,
+    "series": {
+     "2022": 0.0,
+     "2023": 1.8,
+     "2024": 0.0,
+     "2025": 4.5,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
+    "current": 1.1,
+    "delta": -0.7,
+    "series": {
+     "2022": 0.0,
+     "2023": 3.5,
+     "2024": 3.2,
+     "2025": 0.0,
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Climate & environment",
+    "current": 1.1,
+    "delta": 0.2,
+    "series": {
+     "2022": 0.0,
+     "2023": 1.8,
+     "2024": 3.2,
+     "2025": 0.0,
+     "2026": 0.0
+    }
+   }
+  ],
+  "years": [
+   "2022",
+   "2023",
+   "2024",
+   "2025",
+   "2026"
+  ],
+  "top_sources_recent": [
+   {
+    "domain": "oneusefulthing.org",
+    "n": 188
+   },
+   {
+    "domain": "twitter.com",
+    "n": 59
+   },
+   {
+    "domain": "arxiv.org",
+    "n": 56
+   },
+   {
+    "domain": "oneusefulthing.substack.com",
+    "n": 52
+   },
+   {
+    "domain": "papers.ssrn.com",
+    "n": 49
+   },
+   {
+    "domain": "x.com",
+    "n": 33
+   },
+   {
+    "domain": "chat.openai.com",
+    "n": 18
+   },
+   {
+    "domain": "researchgate.net",
+    "n": 12
+   },
+   {
+    "domain": "chatgpt.com",
+    "n": 11
+   },
+   {
+    "domain": "openai.com",
+    "n": 11
+   },
+   {
+    "domain": "linkedin.com",
+    "n": 11
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 11
+   },
+   {
+    "domain": "interactive.wharton.upenn.edu",
+    "n": 11
+   },
+   {
+    "domain": "claude.ai",
+    "n": 10
+   },
+   {
+    "domain": "pnas.org",
+    "n": 10
+   },
+   {
+    "domain": "substackcdn.com",
+    "n": 9
+   },
+   {
+    "domain": "moreusefulthings.com",
+    "n": 8
+   },
+   {
+    "domain": "a.co",
+    "n": 8
+   },
+   {
+    "domain": "hbs.edu",
+    "n": 7
+   },
+   {
+    "domain": "penguinrandomhouse.com",
+    "n": 7
+   }
+  ],
+  "top_sources_early": [
+   {
+    "domain": "oneusefulthing.org",
+    "n": 188
+   },
+   {
+    "domain": "twitter.com",
+    "n": 59
+   },
+   {
+    "domain": "arxiv.org",
+    "n": 56
+   },
+   {
+    "domain": "oneusefulthing.substack.com",
+    "n": 52
+   },
+   {
+    "domain": "papers.ssrn.com",
+    "n": 49
+   },
+   {
+    "domain": "x.com",
+    "n": 33
+   },
+   {
+    "domain": "chat.openai.com",
+    "n": 18
+   },
+   {
+    "domain": "researchgate.net",
+    "n": 12
+   },
+   {
+    "domain": "chatgpt.com",
+    "n": 11
+   },
+   {
+    "domain": "openai.com",
+    "n": 11
+   },
+   {
+    "domain": "linkedin.com",
+    "n": 11
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 11
+   },
+   {
+    "domain": "interactive.wharton.upenn.edu",
+    "n": 11
+   },
+   {
+    "domain": "claude.ai",
+    "n": 10
+   },
+   {
+    "domain": "pnas.org",
+    "n": 10
+   },
+   {
+    "domain": "substackcdn.com",
+    "n": 9
+   },
+   {
+    "domain": "moreusefulthings.com",
+    "n": 8
+   },
+   {
+    "domain": "a.co",
+    "n": 8
+   },
+   {
+    "domain": "hbs.edu",
+    "n": 7
+   },
+   {
+    "domain": "penguinrandomhouse.com",
+    "n": 7
+   }
+  ],
+  "category": "author"
+ },
+ {
   "id": "rishad",
   "name": "Rishad Tobaccowala",
   "blurb": "Former Publicis strategist writing on the future of work, marketing and human-centred business in the age of AI.",
@@ -10015,6 +10354,284 @@
    }
   ],
   "category": "publication"
+ },
+ {
+  "id": "profgmarkets",
+  "name": "Prof G Markets",
+  "blurb": "Scott Galloway and Ed Elson on markets, business and the economy: IPOs, big tech, valuations and the forces moving capital.",
+  "url": "https://www.profgmedia.com",
+  "totals": {
+   "posts": 20,
+   "signals": 20,
+   "date_min": "2026-06-03",
+   "date_max": "2026-06-09"
+  },
+  "signal_types": {
+   "article": 20
+  },
+  "signal_kinds": {
+   "article": 13,
+   "longread": 5,
+   "links": 2
+  },
+  "themes": [
+   {
+    "theme": "Economy & markets",
+    "current": 60.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 60.0
+    }
+   },
+   {
+    "theme": "AI & machine learning",
+    "current": 45.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 45.0
+    }
+   },
+   {
+    "theme": "Platform power / Big Tech",
+    "current": 25.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 25.0
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 20.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 20.0
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 15.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 15.0
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 15.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 15.0
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 10.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 10.0
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
+    "current": 5.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 5.0
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 5.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 5.0
+    }
+   },
+   {
+    "theme": "Surveillance & privacy",
+    "current": 5.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 5.0
+    }
+   },
+   {
+    "theme": "Climate & environment",
+    "current": 0.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 0.0
+    }
+   },
+   {
+    "theme": "Crypto / web3",
+    "current": 0.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 0.0
+    }
+   }
+  ],
+  "years": [
+   "2026"
+  ],
+  "top_sources_recent": [
+   {
+    "domain": "profgmedia.com",
+    "n": 26
+   },
+   {
+    "domain": "link",
+    "n": 8
+   },
+   {
+    "domain": "anthropic.com",
+    "n": 2
+   },
+   {
+    "domain": "cnbc.com",
+    "n": 2
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 1
+   },
+   {
+    "domain": "openai.com",
+    "n": 1
+   },
+   {
+    "domain": "reddit.com",
+    "n": 1
+   },
+   {
+    "domain": "foxnews.com",
+    "n": 1
+   },
+   {
+    "domain": "scholars.unh.edu",
+    "n": 1
+   },
+   {
+    "domain": "motherjones.com",
+    "n": 1
+   },
+   {
+    "domain": "wsj.com",
+    "n": 1
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 1
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 1
+   },
+   {
+    "domain": "theconversation.com",
+    "n": 1
+   },
+   {
+    "domain": "tandfonline.com",
+    "n": 1
+   },
+   {
+    "domain": "time.com",
+    "n": 1
+   },
+   {
+    "domain": "businessinsider.com",
+    "n": 1
+   },
+   {
+    "domain": "uk.style.yahoo.com",
+    "n": 1
+   },
+   {
+    "domain": "menshealth.com",
+    "n": 1
+   }
+  ],
+  "top_sources_early": [
+   {
+    "domain": "profgmedia.com",
+    "n": 26
+   },
+   {
+    "domain": "link",
+    "n": 8
+   },
+   {
+    "domain": "anthropic.com",
+    "n": 2
+   },
+   {
+    "domain": "cnbc.com",
+    "n": 2
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 1
+   },
+   {
+    "domain": "openai.com",
+    "n": 1
+   },
+   {
+    "domain": "reddit.com",
+    "n": 1
+   },
+   {
+    "domain": "foxnews.com",
+    "n": 1
+   },
+   {
+    "domain": "scholars.unh.edu",
+    "n": 1
+   },
+   {
+    "domain": "motherjones.com",
+    "n": 1
+   },
+   {
+    "domain": "wsj.com",
+    "n": 1
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 1
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 1
+   },
+   {
+    "domain": "theconversation.com",
+    "n": 1
+   },
+   {
+    "domain": "tandfonline.com",
+    "n": 1
+   },
+   {
+    "domain": "time.com",
+    "n": 1
+   },
+   {
+    "domain": "businessinsider.com",
+    "n": 1
+   },
+   {
+    "domain": "uk.style.yahoo.com",
+    "n": 1
+   },
+   {
+    "domain": "menshealth.com",
+    "n": 1
+   }
+  ],
+  "category": "author"
  },
  {
   "id": "garymarcus",

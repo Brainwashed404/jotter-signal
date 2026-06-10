@@ -607,13 +607,9 @@ def aggregate(ex, sigs):
 # ---------- orchestrate all experts ----------
 ADAPTERS = {"naughton": build_naughton, "doctorow": build_doctorow, "rss": build_rss}
 experts_cfg = json.load(open("experts.json"))
-# Auto-discovered newsletter sources (one per email sender) live in a separate
-# manifest written by fetch_newsletters.py, so curated experts.json stays clean.
-if os.path.exists("data/newsletters.json"):
-    try:
-        experts_cfg += list(json.load(open("data/newsletters.json")).values())
-    except Exception as e:
-        print(f"  ! newsletters.json load failed: {e}")
+# NB the emailed-newsletter pipeline is RETIRED: data/newsletters.json is deliberately
+# NOT loaded any more (it auto-created a source per email sender and kept resurrecting
+# removed sources, e.g. Benedict Evans). experts.json is the only source manifest.
 all_sigs = []
 experts_out = []
 for ex in experts_cfg:
