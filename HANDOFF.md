@@ -69,6 +69,12 @@ push to `main`.
   `data/raw_nl-*.jsonl`+`data/newsletters.json`; `build_dataset` loads the manifest alongside `experts.json`. **Mostly
   unused now** (`groups:[]`; Axios/google/KTN in `ignore_domains`) — promo emails render poorly. `fetch_expert.py`
   also supports `extra_feeds` (list) merged into one source.
+  **⚠ Removing an expert from experts.json does NOT stop their emailed newsletter:** Benedict Evans kept appearing
+  on the live site months after his removal because the Gmail pipeline auto-creates a source per sender (CI-only,
+  Gmail creds absent locally, so local builds looked clean). Fix (2026-06-10): his sender is in `ignore_domains`
+  (`ben-evans.com`) + `ignore_names` (`benedict evans`) in `newsletter_map.json`, and `SCHEMA_V` bumped 3→4 so the
+  next CI run wipes `raw_nl-*` + the manifest and re-ingests without him. To kill any future emailed source: add it
+  to the ignore lists AND bump `SCHEMA_V`, then unsubscribe the Gmail inbox.
 - **Substack embed strip (build_dataset `clean_block`):** Substack tweet/link embeds carry escaped-JSON
   `data-attrs="…"` with raw `>` chars that broke the `<[^>]+>` stripper and leaked JSON (usernames/impressions) into
   the body (e.g. the Gary Marcus piece). Now stripped quote-aware before tag-stripping, like the iframe fix.
@@ -90,6 +96,32 @@ Reddit · Wiki · GitHub · Google**.
 - **Money** (id stays `ft`): Forbes+FT+WSJ+Economist+MarketWatch. **HN** = `hnrss.org/newest`. **Futurism** =
   `futurism.com/feed`. **Wiki** pill. Tech: Verge dropped (paywall), VentureBeat/Digital Trends/404 Media added.
   World Cup home module `defaultOpen={false}`.
+
+## ⭐ MOBILE EXPERIENCE (2026-06-10; everything gated at the `md` 768px breakpoint, desktop untouched)
+Below `md` the shell reflows; at/above `md` nothing changed. The pieces:
+- **Bottom tab bar** (`components/MobileTabBar.tsx`, rendered in `layout.tsx`, `md:hidden`): Home · Feed · Experts ·
+  Publications · Saved as icon+label tabs (same active logic as NavLinks; accent + `color-mix` pill on the active
+  icon; `--header-bg`/`--border` vars so every skin styles it). Safe-area padded. The top NavLinks are wrapped in
+  `hidden md:flex` in AppHeader; `<main>` gets `max-md:pb-32` to clear the fixed bar (+ mini-player).
+- **Radio = bottom sheet on mobile** (all in `RadioSidebar.tsx`; the desktop `<aside>` is `max-md:hidden`, the same
+  component instance renders both UIs so playback/state is shared — the detached `new Audio()` doesn't care which UI
+  is visible). A **radio button in the header** (mobile only, equalizer icon, accent when playing) toggles the sheet
+  via a window event `jotter-radio-toggle`; RadioSidebar broadcasts `jotter-radio-state` ({playing, station}) back.
+  The sheet: grab-handle + transport + now-playing row, genres as flex-wrap chips, station search + Index/Favourites
+  + full list (sheet body is one scroll region), Settings footer. Backdrop + translateY slide-up, `82dvh` max,
+  body scroll locked while open. A **mini-player** (station name + prev/play/next) docks above the tab bar once
+  something has played this session (`started` state, so it survives client-side nav but not a full reload).
+- **Header ≤md**: logo says just "Jotter" ("Intelligence" is `hidden md:inline`); the WeatherClock pill is now
+  visible on mobile in **compact form** (emoji+temp · time; the date segment + its dot are `hidden md:flex`, so the
+  calendar panel is desktop-only). A mobile-only **settings gear** sits right of the ThemeToggle (desktop keeps the
+  gear in the radio sidebar only). Weather panel columns carry a `.hdr-cols` class: a `@media (max-width:767px)`
+  block in globals.css flips the inline grid to a **swipeable flex strip** (`!important`, 3.4rem cols). The world
+  clock shows **4 visible cities** on mobile (useVisibleCols matchMedia hook; 11 on desktop), still London-centred.
+- **Misc**: `html,body{overflow-x:clip}` ≤767px kills sideways scroll; SignalList's right-hand filter group got
+  `flex-wrap max-md:ml-0 max-md:w-full` so the four filter controls wrap instead of clipping. Content grids were
+  already responsive (`sm:`/`md:` cols, flex-wrap pills) and needed nothing.
+- `.claude/launch.json` (in `~/Claude Code Experiments/`) defines the `jotter-web` preview server
+  (`npm run dev --prefix jotter-intelligence/web`, port 3000) for Claude's preview tooling.
 
 ## ⭐ HOME + UI CHANGES THIS SESSION
 - **Home "Latest Insights" = ONE latest post per expert/publication, last 7 days** (`getLatestPerExpert(7)` in

@@ -5,7 +5,10 @@
     "google.com",
     "accounts.google.com",
     "kill-the-newsletter.com",
-    "axios.com"
+    "axios.com",
+    "ben-evans.com"
   ],
-  "ignore_names": []
+  "ignore_names": [
+    "benedict evans"
+  ]
 }
