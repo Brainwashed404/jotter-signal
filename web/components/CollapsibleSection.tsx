@@ -11,14 +11,10 @@ export default function CollapsibleSection({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(defaultOpen);
-  // Overflow must be hidden while the height animates, but once fully open it has
-  // to be visible: panels inside lift 2px on hover, and a permanent clip sheared
-  // their top border off.
-  const [settled, setSettled] = useState(defaultOpen);
   return (
     <section>
       <button
-        onClick={() => setOpen((o) => { if (o) setSettled(false); return !o; })}
+        onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 w-full text-left"
         style={{ marginBottom: open ? "0.75rem" : 0, transition: "margin-bottom 250ms ease" }}
         aria-expanded={open}
@@ -34,26 +30,20 @@ export default function CollapsibleSection({
         </svg>
       </button>
       {/* CSS grid trick: animates height without JS measurement. The outer div
-          transitions grid-template-rows 0fr↔1fr; the inner div clips overflow. */}
+          transitions grid-template-rows 0fr↔1fr; the inner div's `overflow:hidden`
+          makes it a scroll container, which zeroes its automatic min-width AND
+          min-height — so the row collapses to 0 when closed and a wide child (the
+          swipeable trending-pills row) can't blow the panel past its container width.
+          NB do NOT switch this to `overflow:clip`: clip is not a scroll container, so
+          the min sizes stay `auto` and the section won't collapse. */}
       <div
         style={{
           display: "grid",
           gridTemplateRows: open ? "1fr" : "0fr",
           transition: "grid-template-rows 250ms ease",
         }}
-        onTransitionEnd={(e) => {
-          if (e.target === e.currentTarget && e.propertyName === "grid-template-rows" && open) setSettled(true);
-        }}
       >
-        {/* minWidth:0 forces the grid item's automatic minimum to 0 so a wide child
-            (e.g. the swipeable pills row) can't blow the panel past its container
-            width — `overflow-x:clip` is not enough since the box isn't a scroll
-            container. overflow-y only becomes `visible` once the open animation has
-            settled, so a panel's 2px hover lift isn't sheared off the top; during the
-            height animation both axes clip. */}
-        <div style={{ minWidth: 0, overflowX: "clip", overflowY: open && settled ? "visible" : "clip" }}>
-          {children}
-        </div>
+        <div style={{ overflow: "hidden" }}>{children}</div>
       </div>
     </section>
   );

@@ -34,6 +34,14 @@ push to `main`.
   `outputFileTracingIncludes` bundles them into the serverless function. `lib/data.ts` reads the local bundled
   file (zero per-request network). Home page is ISR `export const revalidate = 300` (one render serves everyone).
   So: **new data only appears after a Vercel rebuild.** A push (even empty commit) triggers one.
+  **⚠ DATA PRIORITY (changed 2026-06-10): `fetch-data.js` now PREFERS the committed `web/data/signals.jsonl.gz` +
+  `experts.json` and only downloads from B2 if a healthy committed file is absent.** Previously a successful B2
+  download OVERWROTE the committed file, so stale/capped B2 data repeatedly resurfaced on the live site (Benedict
+  Evans reappearing after removal; Ethan Mollick missing after being added) even when the committed file was clean.
+  The committed file is the source of truth; CI commits a fresh copy every refresh (and local builds can be committed
+  directly), so it's never more than a cycle stale. **To update live data now: rebuild locally → `gzip` →
+  `git add -f web/data/signals.jsonl.gz web/data/experts.json` → push.** B2 still holds the incremental
+  engine-data.tar.gz state, just no longer serves app data.
 - **Storage = Backblaze B2** (S3-compatible). GitHub secrets are named `R2_*` (legacy) but point at B2
   (`s3.us-east-005.backblazeb2.com`, bucket `jotter-data`). Files: `signals.jsonl.gz`, `experts.json`,
   `engine-data.tar.gz` (the raw+archive `engine/data/` dir, so runs are incremental and never re-scrape from zero).
@@ -123,14 +131,17 @@ Below `md` the shell reflows; at/above `md` nothing changed. The pieces:
 - **Trending rows ≤md**: category pills are ONE swipeable row (`max-md:flex-nowrap overflow-x-auto`, edge-to-edge
   via `-mx-4 px-4`; pills `shrink-0 whitespace-nowrap`); each headline clamps to **two lines** (`max-md:line-clamp-2`,
   desktop keeps `md:truncate`) with the source label moved BENEATH the headline (`block md:hidden`).
-- **CollapsibleSection overflow fix (all breakpoints):** the inner clip div used permanent `overflow:hidden`, which
-  sheared the top border off `.panel-hover` panels when they lifted 2px on hover. Fix: the inner div now has
-  `minWidth:0` + `overflowX:clip` always, and `overflowY` flips to `visible` only once the open animation has
-  settled (a `settled` flag set on `transitionend`, guarded by `e.target===currentTarget` &&
-  `propertyName==="grid-template-rows"`; reset to false on close). **`minWidth:0` is load-bearing:** the section is a
-  CSS grid and the grid item's automatic min-width is `auto`; `overflow:clip` alone does NOT zero it (the box isn't a
-  scroll container), so a wide child like the swipeable trending-pills row blew the whole panel out to ~951px on
-  mobile (which also stopped headlines wrapping). `minWidth:0` clamps the grid track to its container.
+- **CollapsibleSection — DO NOT use `overflow:clip` on the inner div (it breaks collapse).** The section animates via
+  the CSS-grid trick (outer `grid-template-rows: 0fr↔1fr`, inner `overflow:hidden`). `overflow:hidden` is REQUIRED:
+  it makes the inner a scroll container, which zeroes its automatic **min-width AND min-height** — so (a) the `0fr`
+  row collapses to 0 height, and (b) a wide child (the swipeable trending-pills row) can't blow the panel past its
+  container width (this is also what lets mobile headlines wrap to 2 lines). A 2026-06-10 attempt to fix the
+  hover-lift clip by switching to `overflow:clip` + `overflowY:visible`/`settled` flag SHIPPED A REGRESSION: `clip`
+  is not a scroll container, so min-height stayed `auto` and **sections stopped collapsing entirely on the live
+  site**. Reverted to plain `overflow:hidden`. The panel hover-lift being clipped at the top is a known minor
+  cosmetic trade-off; if revisited, do it WITHOUT changing the inner overflow (e.g. padding the clip box), and test
+  collapse in a REAL browser (the headless preview has a `grid-template-rows` fr-transition quirk that makes it look
+  stuck open even when the code is correct — verify via `transition:none` forcing or a real browser).
 - **World Cup groups fix:** ESPN's standings API nests rows at `children[].standings.entries`; the route only read
   `group.entries`, so all 12 groups rendered empty. `/api/worldcup` now falls back to `group.standings.entries`.
   (NB route caches in globalThis — restart dev server after editing it.)

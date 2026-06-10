@@ -51,6 +51,24 @@ function download(src, dest) {
 }
 
 (async () => {
+  // The committed data files (web/data/signals.jsonl.gz + experts.json) are the
+  // SOURCE OF TRUTH for the deployed app. The CI "Data refresh" workflow commits a
+  // freshly-rebuilt copy every run (and local builds can be committed directly), so
+  // they're never more than a refresh cycle stale. We deliberately PREFER them over a
+  // remote (B2) download: the B2 free-tier cap / lag repeatedly served stale data
+  // (e.g. a removed source like Benedict Evans reappearing, or a new expert missing),
+  // because a successful B2 download would overwrite the good committed file. Only
+  // fall back to B2 if a healthy committed file is absent.
+  const sigPath = path.join(DATA_DIR, "signals.jsonl.gz");
+  const expPath = path.join(DATA_DIR, "experts.json");
+  const committedOk =
+    fs.existsSync(sigPath) && fs.statSync(sigPath).size > 5 * 1024 * 1024 && fs.existsSync(expPath);
+  if (committedOk) {
+    const mb = (fs.statSync(sigPath).size / 1024 / 1024).toFixed(1);
+    console.log(`[fetch-data] Using committed data (authoritative, ${mb} MB) — skipping remote download`);
+    return;
+  }
+  console.log("[fetch-data] No healthy committed data file — falling back to remote download");
   try {
     await Promise.all([
       download(`${DATA_URL}/signals.jsonl.gz`, path.join(DATA_DIR, "signals.jsonl.gz")),
