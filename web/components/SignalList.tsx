@@ -6,6 +6,61 @@ import { SignalCard } from "@/components/SignalCard";
 export type Tab = { id: string; label: string };
 type Sort = "newest" | "oldest" | "relevance";
 
+// A multi-select dropdown that opens a checkable list (like the All-themes select, but
+// multi). Full-width on mobile, anchored popover on desktop. Replaces the old
+// chip-wrap panels that the user found messy.
+function MultiDropdown({
+  label, options, selected, onToggle, onClear, mono = false,
+}: {
+  label: string;
+  options: { value: string; label: string }[];
+  selected: string[];
+  onToggle: (value: string) => void;
+  onClear: () => void;
+  mono?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+  const active = selected.length > 0;
+  const row = "w-full text-left px-3 py-2 text-sm rounded-md flex items-center gap-2 hover:bg-[var(--panel-2)]";
+  const tick = (on: boolean) => (
+    <span aria-hidden style={{ width: 14, color: "var(--accent)", flexShrink: 0 }}>{on ? "✓" : ""}</span>
+  );
+  return (
+    <div ref={ref} className="relative max-md:w-full">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="btn-ghost text-xs w-full md:w-auto flex items-center justify-between gap-2"
+        style={active ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}
+      >
+        <span>{active ? `${label} (${selected.length})` : label}</span>
+        <span style={{ color: "var(--muted)" }}>{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div className="absolute z-30 mt-1 left-0 right-0 md:right-auto md:min-w-[230px] panel p-1 max-h-72 overflow-y-auto no-scrollbar">
+          <button onClick={onClear} className={row} style={!active ? { color: "var(--accent)" } : {}}>
+            {tick(!active)} <span>All {label.toLowerCase()}</span>
+          </button>
+          {options.map((o) => {
+            const on = selected.includes(o.value);
+            return (
+              <button key={o.value} onClick={() => onToggle(o.value)} className={row} style={on ? { color: "var(--accent)" } : {}}>
+                {tick(on)} <span className={mono ? "mono" : ""}>{o.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function SignalList({
   tabs,
   filterBy = "kind",
@@ -44,9 +99,8 @@ export default function SignalList({
   const [theme, setTheme] = useState(initialTheme);
   const [sort, setSort] = useState<Sort>(initialQuery ? "relevance" : "newest");
   const [years, setYears] = useState<number[]>([]);
-  const [yearsOpen, setYearsOpen] = useState(false);
   const [experts, setExperts] = useState<string[]>(initialExperts);
-  const [expertsOpen, setExpertsOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false); // mobile-only filter drawer
   const [results, setResults] = useState<Signal[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -126,14 +180,6 @@ export default function SignalList({
     setSuggestions(sugSample(6)); // always offer fresh suggestions after a search
   }
 
-  function runSearch(term: string) {
-    setInput(term);
-    committedRef.current = term;
-    setSort("relevance"); sortRef.current = "relevance";
-    fetchPage(true);
-    setSuggestions(sugSample(6));
-  }
-
   function clearSearch() {
     setInput("");
     committedRef.current = "";
@@ -149,6 +195,8 @@ export default function SignalList({
   }
 
   const hasMore = results.length < total;
+  const activeCount = (theme ? 1 : 0) + (experts.length ? 1 : 0) + (years.length ? 1 : 0);
+  const hasControls = tabs.length > 1 || showThemes || showExperts || showYears || showSort;
 
   return (
     <div className="space-y-5">
@@ -177,39 +225,60 @@ export default function SignalList({
         </form>
       )}
 
-      <div className="flex flex-wrap gap-2 items-center">
+      {/* Mobile: a single Filters button reveals the tabs + controls (default view is
+          just the search bar + feed). Desktop shows everything inline as before. */}
+      {hasControls && (
+        <button
+          onClick={() => setFiltersOpen((o) => !o)}
+          aria-expanded={filtersOpen}
+          className="md:hidden btn-ghost text-sm w-full flex items-center justify-center gap-2"
+          style={activeCount ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}
+        >
+          <span>Filters{activeCount ? ` (${activeCount})` : ""}</span>
+          <span style={{ color: "var(--muted)" }}>{filtersOpen ? "▲" : "▼"}</span>
+        </button>
+      )}
+
+      <div className={`flex flex-wrap gap-2 items-center ${filtersOpen ? "" : "max-md:hidden"}`}>
         {tabs.map((t) => (
           <button
             key={t.id}
             onClick={() => setType(t.id)}
-            className="chip"
+            className="chip max-md:flex-1 max-md:text-center"
             style={type === t.id ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
           >
             {t.label}
           </button>
         ))}
-        <div className="ml-auto flex flex-wrap gap-2 items-center max-md:ml-0 max-md:w-full">
+        <div className="ml-auto flex flex-wrap gap-2 items-center max-md:ml-0 max-md:w-full max-md:flex-col max-md:items-stretch">
           {showThemes && (
-            <select value={theme} onChange={(e) => setTheme(e.target.value)} className="btn-ghost text-xs"
+            <select value={theme} onChange={(e) => setTheme(e.target.value)} className="btn-ghost text-xs max-md:w-full"
               style={theme ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
               <option value="">All themes</option>
               {themes.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           )}
           {showExperts && availableExperts.length > 1 && (
-            <button onClick={() => setExpertsOpen((o) => !o)} className="btn-ghost text-xs"
-              style={experts.length ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
-              {experts.length ? `Experts (${experts.length})` : "Select experts"} {expertsOpen ? "▲" : "▼"}
-            </button>
+            <MultiDropdown
+              label="Experts"
+              options={availableExperts.map((e) => ({ value: e.id, label: e.name }))}
+              selected={experts}
+              onToggle={toggleExpert}
+              onClear={() => setExperts([])}
+            />
           )}
           {showYears && availableYears.length > 0 && (
-            <button onClick={() => setYearsOpen((o) => !o)} className="btn-ghost text-xs"
-              style={years.length ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
-              {years.length ? `Years (${years.length})` : "Select years"} {yearsOpen ? "▲" : "▼"}
-            </button>
+            <MultiDropdown
+              label="Years"
+              mono
+              options={availableYears.map((y) => ({ value: String(y), label: String(y) }))}
+              selected={years.map(String)}
+              onToggle={(v) => toggleYear(Number(v))}
+              onClear={() => setYears([])}
+            />
           )}
           {showSort && (
-            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="btn-ghost text-xs">
+            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="btn-ghost text-xs max-md:w-full">
               <option value="newest">Newest first</option>
               <option value="oldest">Oldest first</option>
               <option value="relevance">Most relevant</option>
@@ -217,50 +286,6 @@ export default function SignalList({
           )}
         </div>
       </div>
-
-      {showExperts && expertsOpen && availableExperts.length > 1 && (
-        <div className="panel p-3 flex flex-wrap gap-1.5 items-center">
-          <button
-            onClick={() => setExperts([])}
-            className="chip"
-            style={experts.length === 0 ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
-          >
-            All experts
-          </button>
-          {availableExperts.map((e) => (
-            <button
-              key={e.id}
-              onClick={() => toggleExpert(e.id)}
-              className="chip"
-              style={experts.includes(e.id) ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
-            >
-              {e.name}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {showYears && yearsOpen && availableYears.length > 0 && (
-        <div className="panel p-3 flex flex-wrap gap-1.5 items-center">
-          <button
-            onClick={() => setYears([])}
-            className="chip"
-            style={years.length === 0 ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
-          >
-            All years
-          </button>
-          {availableYears.map((y) => (
-            <button
-              key={y}
-              onClick={() => toggleYear(y)}
-              className="chip mono"
-              style={years.includes(y) ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}
-            >
-              {y}
-            </button>
-          ))}
-        </div>
-      )}
 
       <div className="grid md:grid-cols-2 gap-3">
         {results.map((s) => <SignalCard key={s.id} s={s} />)}

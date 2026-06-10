@@ -41,9 +41,16 @@ export default function CollapsibleSection({
           display: "grid",
           gridTemplateRows: open ? "1fr" : "0fr",
           transition: "grid-template-rows 250ms ease",
+          // pull the grid up by the inner top padding so the header→content gap is
+          // unchanged; the padding only exists to give panel hover-lifts room (below).
+          marginTop: open ? -6 : 0,
         }}
       >
-        <div style={{ overflow: "hidden" }}>{children}</div>
+        {/* overflow:hidden is required for the collapse (see note above). The vertical
+            padding (only when open, so a closed section still collapses to 0) gives
+            `.panel-hover` cards room to lift ~2px on hover without the top border being
+            clipped by this overflow box. */}
+        <div style={{ overflow: "hidden", paddingTop: open ? 6 : 0, paddingBottom: open ? 6 : 0 }}>{children}</div>
       </div>
     </section>
   );

@@ -105,6 +105,38 @@ Reddit · Wiki · GitHub · Google**.
   `futurism.com/feed`. **Wiki** pill. Tech: Verge dropped (paywall), VentureBeat/Digital Trends/404 Media added.
   World Cup home module `defaultOpen={false}`.
 
+## ⭐ SESSION 2026-06-10 (pt2): trending diversity, Met Office weather, mobile filters, LSN/B2
+- **Trending: per-source cap (`pickDiverse` in `api/trending/route.ts`).** Tabs were colonised by one outlet
+  (UK≈all Independent, World≈Independent/AlJazeera, Money≈Bloomberg). `pickDiverse(items, limit, perSource)`
+  dedupes near-identical headlines THEN caps each source (categories `perSource=2`, Money `=3`), topping up from the
+  capped remainder if too few distinct sources. Applied in the generic category path AND `fetchMoney`. Verified: UK
+  now 5 sources ×2, Money = Bloomberg/TradingView/Yahoo/SeekingAlpha.
+- **Weather = Met Office model (user choice).** `api/weather/route.ts` now requests Open-Meteo with
+  `&models=ukmo_seamless` (UK Met Office UKMO Global 10km + UKV 2km) so values track BBC/Met Office, with a fallback
+  to default `best_match` if a point has no UKMO reading. Open-Meteo is just the free delivery pipe. (User explicitly
+  rejected the generic Open-Meteo blend; chose the no-key Met Office model over registering a DataHub key.)
+- **CollapsibleSection collapse fix v2 + hover-lift room.** v1 broke collapse: the grid item needs **`minHeight:0`**
+  (not just minWidth:0) or the 0fr row can't shrink to zero (it stayed 436px). Also moved `setSettled(false)` OUT of
+  the `setOpen` updater (updaters must be pure). And added `paddingTop/Bottom:6px` (only when open) + `marginTop:-6`
+  on the grid wrapper so `.panel-hover` cards (Latest Insights, markets chips) can lift ~2px on hover without the top
+  border being clipped. Verified: collapse 448→0→448; padding 6px when open.
+- **Mobile feed filters (`SignalList.tsx` rewrite).** Default mobile view = search bar + Search + feed only. A
+  **Filters** button (`md:hidden`, shows active count) expands the tabs + controls full-width. **Select experts / Select
+  years are now a `MultiDropdown`** (a checkable list popover, like All-themes), full-width on mobile / anchored on
+  desktop — replaced the messy chip-wrap panels. Desktop layout unchanged (tabs left, controls right, no Filters btn).
+- **Mobile radio genre pills** are now a single horizontal swipe row (like trending pills), not stacked.
+- **⚠ LSN / freshness root cause (the recurring "circles"):** LSN scrape works fine (locally AND from CI). The real
+  problem is the **B2 download cap → CI's engine-data.tar.gz restore 403s → thin (~16k) rebuild → degraded-build guard
+  SKIPS the commit/publish → live frozen** at the last good commit. Last CI data commit was 2026-06-09 14:52 (none
+  since). Two mitigations now in place: (1) `web/scripts/fetch-data.js` **prefers the committed data file** and only
+  falls back to B2 if it's absent (so the Vercel build no longer re-downloads 32MB/deploy from B2 — the single biggest
+  cap drain, which should let the cap recover and CI resume committing); (2) committing fresh LOCAL builds is the
+  reliable update path. **Durable fix still pending: front B2 with Cloudflare (free egress) — user infra task.**
+- **WDIM prototype is LOCAL-ONLY and intentionally NOT committed.** `web/components/WhatDidIMiss.tsx`, `web/lib/wdim.ts`,
+  `web/app/api/wdim/` + the `<WhatDidIMiss/>` line in `web/app/page.tsx` are a working-tree prototype. It self-gates
+  to render nothing when `DATA_URL` is set (production), but per the user it's kept out of git until it's refined.
+  Do NOT commit these until the user says so. See [[jotter-wdim-prototype]].
+
 ## ⭐ MOBILE EXPERIENCE (2026-06-10; everything gated at the `md` 768px breakpoint, desktop untouched)
 Below `md` the shell reflows; at/above `md` nothing changed. The pieces:
 - **Bottom tab bar** (`components/MobileTabBar.tsx`, rendered in `layout.tsx`, `md:hidden`): Home · Feed · Experts ·

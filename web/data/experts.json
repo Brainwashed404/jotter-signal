@@ -9924,74 +9924,74 @@
   "blurb": "The Future Laboratory's daily consumer-culture signals: emerging behaviours, brand moves and stats across sectors.",
   "url": "https://www.lsnglobal.com/daily-signals",
   "totals": {
-   "posts": 18,
-   "signals": 18,
+   "posts": 21,
+   "signals": 21,
    "date_min": "2026-05-29",
-   "date_max": "2026-06-09"
+   "date_max": "2026-06-10"
   },
   "signal_types": {
-   "article": 18
+   "article": 21
   },
   "signal_kinds": {
    "article": 8,
-   "links": 8,
+   "links": 11,
    "data": 2
   },
   "themes": [
    {
-    "theme": "Social media & attention",
-    "current": 27.8,
-    "delta": 0.0,
-    "series": {
-     "2026": 27.8
-    }
-   },
-   {
     "theme": "Economy & markets",
-    "current": 27.8,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 27.8
+     "2026": 33.3
     }
    },
    {
-    "theme": "AI & machine learning",
-    "current": 11.1,
+    "theme": "Social media & attention",
+    "current": 28.6,
     "delta": 0.0,
     "series": {
-     "2026": 11.1
-    }
-   },
-   {
-    "theme": "Surveillance & privacy",
-    "current": 11.1,
-    "delta": 0.0,
-    "series": {
-     "2026": 11.1
+     "2026": 28.6
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 11.1,
+    "current": 14.3,
     "delta": 0.0,
     "series": {
-     "2026": 11.1
+     "2026": 14.3
+    }
+   },
+   {
+    "theme": "AI & machine learning",
+    "current": 9.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 9.5
+    }
+   },
+   {
+    "theme": "Surveillance & privacy",
+    "current": 9.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 9.5
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 5.6,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.6
+     "2026": 4.8
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 5.6,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.6
+     "2026": 4.8
     }
    },
    {
@@ -10041,11 +10041,15 @@
   "top_sources_recent": [
    {
     "domain": "lsnglobal.com",
-    "n": 70
+    "n": 83
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
     "n": 7
+   },
+   {
+    "domain": "pexels.com",
+    "n": 2
    },
    {
     "domain": "tfwa.com",
@@ -10065,21 +10069,21 @@
    },
    {
     "domain": "vogue.co.uk",
-    "n": 1
-   },
-   {
-    "domain": "pexels.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "lsnglobal.com",
-    "n": 70
+    "n": 83
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
     "n": 7
+   },
+   {
+    "domain": "pexels.com",
+    "n": 2
    },
    {
     "domain": "tfwa.com",
@@ -10099,10 +10103,6 @@
    },
    {
     "domain": "vogue.co.uk",
-    "n": 1
-   },
-   {
-    "domain": "pexels.com",
     "n": 1
    }
   ],

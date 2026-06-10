@@ -58,14 +58,23 @@ export async function GET(req: Request) {
   if (cached && Date.now() - cached.at < TTL && cached.data.emoji) return NextResponse.json(cached.data);
 
   try {
-    const u = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    // Forecast comes from the UK MET OFFICE model (UKMO Global 10km + UKV 2km,
+    // `ukmo_seamless`). Open-Meteo is only the free delivery API — the forecaster is
+    // the Met Office, so values line up with BBC/Met Office rather than a blended model.
+    const base = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
       `&current=temperature_2m,weather_code` +
       `&hourly=temperature_2m,weather_code,precipitation_probability,precipitation,wind_speed_10m` +
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max` +
       `&timezone=auto&forecast_days=7`;
-    const res = await fetch(u, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) throw new Error(`open-meteo ${res.status}`);
-    const j = await res.json();
+    let res = await fetch(base + "&models=ukmo_seamless", { signal: AbortSignal.timeout(8000) });
+    let j = res.ok ? await res.json() : null;
+    // Fallback: if the Met Office model has no reading for this point, use Open-Meteo's
+    // auto best-match model so the widget still shows something rather than 0°.
+    if (!j || j?.current?.temperature_2m == null) {
+      res = await fetch(base, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) throw new Error(`open-meteo ${res.status}`);
+      j = await res.json();
+    }
 
     // Current
     const code = Number(j?.current?.weather_code ?? 0);

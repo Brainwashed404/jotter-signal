@@ -228,22 +228,10 @@ async function fetchMoney(): Promise<NewsItem[]> {
       }
     })
   );
-  // Merge newest-first, dedupe near-identical headlines across sources.
+  // Merge newest-first, then dedupe + cap each finance source (≤3) so Bloomberg
+  // doesn't fill the whole Money tab.
   const all = lists.flat().sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
-  const seen = new Set<string>();
-  const acceptedKeys: Keys[] = [];
-  const data: NewsItem[] = [];
-  for (const it of all) {
-    const key = it.title.toLowerCase().slice(0, 40);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    const keys = storyKeys(it.title);
-    if (isDuplicateStory(keys, acceptedKeys)) continue;
-    acceptedKeys.push(keys);
-    data.push(it);
-    if (data.length >= 10) break;
-  }
-  return data;
+  return pickDiverse(all, 10, 3);
 }
 
 // BBC "Most read": scrape the `data-component="mostRead"` ranked list on the News front page.
@@ -438,6 +426,32 @@ function isDuplicateStory(c: Keys, accepted: Keys[]): boolean {
   return false;
 }
 
+// Pick up to `limit` stories with breadth: dedupe near-identical headlines, then cap
+// each source at `perSource` so one outlet can't colonise the feed (UK was nearly all
+// Independent, Money nearly all Bloomberg). Items must already be sorted newest-first.
+// If the cap leaves us short (few distinct sources), top up from the capped remainder.
+function pickDiverse(items: NewsItem[], limit = 10, perSource = 2): NewsItem[] {
+  const seen = new Set<string>();
+  const acceptedKeys: Keys[] = [];
+  const kept: NewsItem[] = [];
+  const overflow: NewsItem[] = [];
+  const perCount = new Map<string, number>();
+  for (const it of items) {
+    const key = it.title.toLowerCase().slice(0, 40);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const keys = storyKeys(it.title);
+    if (isDuplicateStory(keys, acceptedKeys)) continue;
+    acceptedKeys.push(keys);
+    const c = perCount.get(it.source) ?? 0;
+    if (c < perSource) { kept.push(it); perCount.set(it.source, c + 1); }
+    else overflow.push(it);            // same source over its cap → only used to top up
+    if (kept.length >= limit) return kept;
+  }
+  for (const it of overflow) { if (kept.length >= limit) break; kept.push(it); }
+  return kept;
+}
+
 type NewsItem = { title: string; url: string; source: string; term: string; date: string; context?: string };
 type Cache = { at: number; data: NewsItem[] };
 const g = globalThis as unknown as { __news?: Record<string, Cache> };
@@ -541,22 +555,11 @@ export async function GET(request: Request) {
       }
     })
   );
-  // Strictly newest-first by publish time (not grouped/balanced by platform), then
-  // dedupe near-identical headlines. No per-source cap: the 10 most recent unique stories.
+  // Newest-first, then dedupe near-identical headlines AND cap each source (≤2) so a
+  // single outlet can't colonise the tab (UK was nearly all Independent). Falls back to
+  // topping up from the capped remainder if there aren't enough distinct sources.
   all.sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
-  const seen = new Set<string>();
-  const acceptedKeys: Keys[] = [];   // for content-based near-duplicate clustering
-  const data: NewsItem[] = [];
-  for (const it of all) {
-    const key = it.title.toLowerCase().slice(0, 40);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    const keys = storyKeys(it.title);
-    if (isDuplicateStory(keys, acceptedKeys)) continue;   // same story, different outlet/headline → skip
-    acceptedKeys.push(keys);
-    data.push(it);
-    if (data.length >= 10) break;
-  }
+  const data = pickDiverse(all, 10, 2);
   g.__news[category] = { at: Date.now(), data };
   return NextResponse.json({ category, categories: CATEGORY_ORDER, topics: data });
 }

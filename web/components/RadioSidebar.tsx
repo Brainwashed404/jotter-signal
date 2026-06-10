@@ -370,10 +370,11 @@ export default function RadioSidebar() {
         {/* scrollable body: genres as chips, then the station list */}
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3">
           <div className="label mb-2">Genres</div>
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            <button onClick={() => shuffleSource("all")} className="chip" style={activeSrc === "all" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>All</button>
+          {/* one swipeable row (like the trending-news pills), not a stacked block */}
+          <div className="flex flex-nowrap gap-1.5 mb-4 overflow-x-auto no-scrollbar -mx-3 px-3">
+            <button onClick={() => shuffleSource("all")} className="chip shrink-0 whitespace-nowrap" style={activeSrc === "all" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>All</button>
             {genreItems.map((it) => (
-              <button key={it.key} onClick={() => shuffleSource(it.key)} className="chip" style={activeSrc === it.key ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>{it.label}</button>
+              <button key={it.key} onClick={() => shuffleSource(it.key)} className="chip shrink-0 whitespace-nowrap" style={activeSrc === it.key ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>{it.label}</button>
             ))}
           </div>
 
