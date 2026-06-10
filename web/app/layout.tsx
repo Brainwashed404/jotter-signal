@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Fraunces, JetBrains_Mono, Anton, Fredoka, Silkscreen, Poiret_One, Orbitron, Roboto_Mono, Rajdhani, IBM_Plex_Mono, Chakra_Petch, Archivo } from "next/font/google";
 import AppHeader from "@/components/AppHeader";
 import AutoRefresh from "@/components/AutoRefresh";
+import MobileTabBar from "@/components/MobileTabBar";
 import RadioSidebar from "@/components/RadioSidebar";
 import "./globals.css";
 
@@ -47,8 +48,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RadioSidebar />
         <div className="flex-1 min-w-0 flex flex-col min-h-screen">
         <AppHeader />
-        <main className="mx-auto w-full max-w-6xl px-5 py-8 flex-1">{children}</main>
+        {/* extra bottom padding ≤md clears the fixed tab bar + radio mini-player */}
+        <main className="mx-auto w-full max-w-6xl px-5 py-8 flex-1 max-md:pb-32">{children}</main>
         </div>
+        <MobileTabBar />
       </body>
     </html>
   );

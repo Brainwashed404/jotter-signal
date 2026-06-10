@@ -45,8 +45,9 @@ function WeatherPanel({ data }: { data: WeatherData }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: PANEL_H + 40 }}>
-      {/* Grid content — fills available space above footer */}
-      <div style={{ flex: 1, display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 0, minHeight: 0 }}>
+      {/* Grid content — fills available space above footer.
+          ≤md the .hdr-cols rule in globals.css turns this into a swipeable strip. */}
+      <div className="hdr-cols" style={{ flex: 1, display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 0, minHeight: 0 }}>
         {tab === "hourly" && hourly12.map((h, i) => (
           <div key={i} className="flex flex-col items-center justify-between py-2 rounded-lg"
             style={{ background: i === 0 ? "var(--panel-2)" : "transparent" }}>
@@ -97,7 +98,7 @@ function WeatherPanel({ data }: { data: WeatherData }) {
       </div>
 
       {/* Footer: place · tab switcher · full forecast link */}
-      <div className="flex items-center justify-between pt-2 mt-1 gap-3" style={{ borderTop: "1px solid var(--border)" }}>
+      <div className="flex flex-wrap items-center justify-between pt-2 mt-1 gap-x-3 gap-y-1" style={{ borderTop: "1px solid var(--border)" }}>
         <span className="label shrink-0">{place || "Local forecast"}</span>
         <div className="flex items-center gap-1">
           {(["hourly","daily","rain","wind"] as WeatherTab[]).map((t) => (
@@ -229,14 +230,27 @@ const ALL_ZONES = [
   { city: "Sydney",       tz: "Australia/Sydney"               },
   { city: "Auckland",     tz: "Pacific/Auckland"               },
 ];
-const LONDON_IDX   = ALL_ZONES.findIndex((z) => z.home);
-const VISIBLE_COLS = 11; // cities visible at once — tighter columns
+const LONDON_IDX = ALL_ZONES.findIndex((z) => z.home);
 
 type CityWeather = { city: string; tempC: number; emoji: string };
+
+// Cities visible at once: 11 on desktop, 4 on phone-width screens.
+function useVisibleCols() {
+  const [cols, setCols] = useState(11);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const apply = () => setCols(mq.matches ? 4 : 11);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+  return cols;
+}
 
 function TimezonesPanel() {
   const [now, setNow] = useState(new Date());
   const [wx, setWx] = useState<Record<string, CityWeather>>({});
+  const visibleCols = useVisibleCols();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -257,20 +271,20 @@ function TimezonesPanel() {
     return () => { cancelled = true; };
   }, []);
 
-  // Centre London after first paint — use clientWidth (flex cols = 1/VISIBLE_COLS of container)
+  // Centre London after first paint — use clientWidth (flex cols = 1/visibleCols of container)
   useEffect(() => {
     const id = setTimeout(() => {
       const el = scrollRef.current;
       if (!el) return;
-      const colW = el.clientWidth / VISIBLE_COLS;
-      el.scrollLeft = (LONDON_IDX - Math.floor(VISIBLE_COLS / 2)) * colW;
+      const colW = el.clientWidth / visibleCols;
+      el.scrollLeft = (LONDON_IDX - Math.floor(visibleCols / 2)) * colW;
     }, 30);
     return () => clearTimeout(id);
-  }, []);
+  }, [visibleCols]);
 
   const scrollBy = (dir: -1 | 1) => {
     const el = scrollRef.current;
-    if (el) smoothScrollBy(el, dir * (el.clientWidth / VISIBLE_COLS) * 3);
+    if (el) smoothScrollBy(el, dir * (el.clientWidth / visibleCols) * 3);
   };
 
   const londonDate = now.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" });
@@ -292,7 +306,7 @@ function TimezonesPanel() {
             return (
               <div key={city}
                 className="flex flex-col items-center justify-center gap-0.5 rounded-lg py-3 shrink-0"
-                style={{ width: `${100 / VISIBLE_COLS}%`, background: home ? "var(--panel-2)" : "transparent" }}>
+                style={{ width: `${100 / visibleCols}%`, background: home ? "var(--panel-2)" : "transparent" }}>
                 <span style={{ fontSize: 10, letterSpacing: "0.06em", color: home ? "var(--accent)" : "var(--muted)" }}>
                   {city.toUpperCase()}
                 </span>
@@ -320,22 +334,45 @@ function TimezonesPanel() {
 export default function AppHeader() {
   const [section,     setSection]     = useState<Section | null>(null);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [radioOn,     setRadioOn]     = useState(false);
   const toggle = (s: Section) => setSection((cur) => (cur === s ? null : s));
+
+  // Mirror the radio's playing state (RadioSidebar broadcasts it) so the
+  // mobile radio button can show when something is on air.
+  useEffect(() => {
+    const onState = (e: Event) => setRadioOn(Boolean((e as CustomEvent).detail?.playing));
+    window.addEventListener("jotter-radio-state", onState);
+    return () => window.removeEventListener("jotter-radio-state", onState);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur"
       style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}>
       {/* Nav row */}
-      <div className="mx-auto max-w-6xl px-5 h-14 flex items-center justify-between gap-4">
+      <div className="mx-auto max-w-6xl px-5 max-md:px-3 h-14 flex items-center justify-between gap-4 max-md:gap-2">
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <Logo size={26} />
           <span className="font-semibold tracking-tight">Jotter</span>
-          <span className="font-semibold tracking-tight" style={{ color: "var(--muted)" }}>Intelligence</span>
+          <span className="font-semibold tracking-tight hidden md:inline" style={{ color: "var(--muted)" }}>Intelligence</span>
         </Link>
         <WeatherClock activeSection={section} onToggle={toggle} onWeatherData={setWeatherData} />
         <nav className="flex items-center gap-1 shrink-0">
-          <NavLinks />
+          <div className="hidden md:flex items-center gap-1"><NavLinks /></div>
+          {/* mobile-only: radio (opens the bottom sheet) */}
+          <button onClick={() => window.dispatchEvent(new Event("jotter-radio-toggle"))} title="Radio"
+            className="md:hidden w-8 h-8 grid place-items-center rounded-lg"
+            style={{ color: radioOn ? "var(--accent)" : "var(--muted)" }}>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M4 10v4" /><path d="M8 7v10" /><path d="M12 4v16" /><path d="M16 7v10" /><path d="M20 10v4" />
+            </svg>
+          </button>
           <ThemeToggle />
+          {/* mobile-only: settings (lives in the radio sidebar on desktop) */}
+          <Link href="/settings" title="Settings" className="md:hidden w-8 h-8 grid place-items-center rounded-lg" style={{ color: "var(--muted)" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+          </Link>
         </nav>
       </div>
 

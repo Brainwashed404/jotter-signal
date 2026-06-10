@@ -75,10 +75,10 @@ export default function WeatherClock({ activeSection, onToggle, onWeatherData }:
   if (!now) return null;
   const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-  const sectionBtn = (section: Section, content: React.ReactNode) => (
+  const sectionBtn = (section: Section, content: React.ReactNode, cls = "") => (
     <button
       onClick={() => onToggle(section)}
-      className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+      className={`flex items-center gap-1.5 hover:opacity-80 transition-opacity ${cls}`}
       style={{ color: activeSection === section ? "var(--accent)" : "inherit", background: "none", border: "none", padding: 0, cursor: "pointer" }}
     >
       {content}
@@ -86,8 +86,9 @@ export default function WeatherClock({ activeSection, onToggle, onWeatherData }:
   );
 
   return (
+    // ≤md the pill compacts to weather + time (the date segment and its dot are desktop-only).
     <div
-      className="weather-pill hidden md:flex items-center gap-3 text-sm px-3 py-1 select-none"
+      className="weather-pill flex items-center gap-3 max-md:gap-2 text-sm px-3 max-md:px-2.5 py-1 select-none min-w-0"
       style={{
         border: `1px solid ${activeSection ? "var(--accent)" : "var(--border)"}`,
         background: "var(--panel-2)",
@@ -105,8 +106,8 @@ export default function WeatherClock({ activeSection, onToggle, onWeatherData }:
           {dot}
         </>
       )}
-      {sectionBtn("date", <span>{fmtDate(now)}</span>)}
-      {dot}
+      {sectionBtn("date", <span>{fmtDate(now)}</span>, "hidden md:flex")}
+      <span className="hidden md:inline select-none" aria-hidden style={{ color: "var(--border-hover)" }}>·</span>
       {sectionBtn("time", <span className="tabular-nums">{time}</span>)}
     </div>
   );

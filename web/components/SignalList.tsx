@@ -188,7 +188,7 @@ export default function SignalList({
             {t.label}
           </button>
         ))}
-        <div className="ml-auto flex gap-2 items-center">
+        <div className="ml-auto flex flex-wrap gap-2 items-center max-md:ml-0 max-md:w-full">
           {showThemes && (
             <select value={theme} onChange={(e) => setTheme(e.target.value)} className="btn-ghost text-xs"
               style={theme ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>

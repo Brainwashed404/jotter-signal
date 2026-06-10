@@ -38,6 +38,8 @@ function Icon({ name, size = 18 }: { name: "play" | "pause" | "prev" | "next" | 
 
 export default function RadioSidebar() {
   const [open, setOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false); // mobile bottom sheet
+  const [started, setStarted] = useState(false);     // a station has played this session → show mini-player
   const [current, setCurrent] = useState<Station | null>(null);
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState(false);
@@ -84,7 +86,7 @@ export default function RadioSidebar() {
   const [queue, setQueue] = useState<Station[]>(SORTED);
   function play(s: Station, q?: Station[]) {
     const a = ensureAudio();
-    setCurrent(s); setError(false);
+    setCurrent(s); setError(false); setStarted(true);
     if (q && q.length) setQueue(q);
     a.src = s.url; a.play().catch(() => setError(true));
     try { localStorage.setItem(LAST_STATION_KEY, s.name); } catch {}
@@ -172,6 +174,24 @@ export default function RadioSidebar() {
     }
   }, [current, listOpen, view, query]);
 
+  // Mobile wiring: the header radio button toggles the sheet (window event),
+  // and we broadcast playing state back so that button can light up.
+  useEffect(() => {
+    const toggleSheet = () => setSheetOpen((o) => !o);
+    window.addEventListener("jotter-radio-toggle", toggleSheet);
+    return () => window.removeEventListener("jotter-radio-toggle", toggleSheet);
+  }, []);
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("jotter-radio-state", { detail: { playing, station: current?.name ?? null } }));
+  }, [playing, current]);
+  // Lock page scroll behind the open sheet
+  useEffect(() => {
+    if (!sheetOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [sheetOpen]);
+
   const favStations = SORTED.filter((s) => favs.includes(s.name));
   const q = query.trim().toLowerCase();
   // In Index view, a highlighted genre filters the list to that genre; "All" shows everything.
@@ -209,7 +229,8 @@ export default function RadioSidebar() {
   const iconBtn = "w-8 h-8 grid place-items-center rounded-lg";
 
   return (
-    <aside ref={asideRef} className="sticky top-0 h-screen shrink-0 relative overflow-hidden transition-[width] duration-300 ease-in-out"
+    <>
+    <aside ref={asideRef} className="max-md:hidden sticky top-0 h-screen shrink-0 relative overflow-hidden transition-[width] duration-300 ease-in-out"
       style={{ width: open ? 264 : 48, borderRight: "1px solid var(--border)", background: "var(--bg)" }}>
 
       {/* expanded panel (fixed width so it doesn't reflow during the width animation) */}
@@ -307,5 +328,109 @@ export default function RadioSidebar() {
         </Link>
       </div>
     </aside>
+
+    {/* ── Mobile (≤md): mini-player above the tab bar + a slide-up radio sheet ── */}
+    <div className="md:hidden">
+      {/* mini-player: appears once something has played, docks above the tab bar */}
+      {started && !sheetOpen && current && (
+        <div onClick={() => setSheetOpen(true)}
+          className="fixed inset-x-3 z-40 flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-xl cursor-pointer backdrop-blur"
+          style={{ bottom: "calc(3.5rem + env(safe-area-inset-bottom) + 0.5rem)", background: "var(--header-bg)",
+            border: "1px solid var(--border)", boxShadow: "0 6px 20px -6px rgba(0,0,0,0.35)" }}>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-medium truncate" style={{ color: "var(--accent)" }}>{current.name}</div>
+            {error && <div className="label" style={{ color: "var(--down)" }}>stream unavailable</div>}
+          </div>
+          <button onClick={(e) => { e.stopPropagation(); step(-1); }} className="w-8 h-8 grid place-items-center shrink-0" style={{ color: "var(--muted)" }}><Icon name="prev" size={16} /></button>
+          <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-9 h-9 rounded-full grid place-items-center shrink-0"
+            style={{ background: "var(--accent)", color: "var(--on-accent)" }}><Icon name={playing ? "pause" : "play"} size={16} /></button>
+          <button onClick={(e) => { e.stopPropagation(); step(1); }} className="w-8 h-8 grid place-items-center shrink-0" style={{ color: "var(--muted)" }}><Icon name="next" size={16} /></button>
+        </div>
+      )}
+
+      {/* backdrop */}
+      <div onClick={() => setSheetOpen(false)} className="fixed inset-0 z-50 transition-opacity duration-300"
+        style={{ background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />
+
+      {/* bottom sheet */}
+      <div className="fixed inset-x-0 bottom-0 z-[60] flex flex-col"
+        style={{ background: "var(--bg)", border: "1px solid var(--border)", borderBottom: "none",
+          borderRadius: "16px 16px 0 0", maxHeight: "82dvh", paddingBottom: "env(safe-area-inset-bottom)",
+          transform: sheetOpen ? "translateY(0)" : "translateY(102%)", transition: "transform 320ms cubic-bezier(0.4, 0, 0.2, 1)" }}>
+
+        {/* grab handle + transport */}
+        <div className="shrink-0" style={{ background: "var(--header-bg)", borderRadius: "16px 16px 0 0", borderBottom: "1px solid var(--border)" }}>
+          <div onClick={() => setSheetOpen(false)} className="grid place-items-center pt-2 pb-1 cursor-pointer">
+            <div style={{ width: 36, height: 4, borderRadius: 999, background: "var(--border)" }} />
+          </div>
+          <div className="flex items-center gap-1 px-3 pb-2">
+            <button onClick={() => step(-1)} className={iconBtn} title="Previous" style={{ color: "var(--muted)" }}><Icon name="prev" /></button>
+            <button onClick={togglePlay} title={playing ? "Pause" : "Play"} className="w-10 h-10 rounded-full grid place-items-center" style={{ background: "var(--accent)", color: "var(--on-accent)" }}><Icon name={playing ? "pause" : "play"} /></button>
+            <button onClick={() => step(1)} className={iconBtn} title="Next" style={{ color: "var(--muted)" }}><Icon name="next" /></button>
+            <button onClick={toggleShuffle} className={iconBtn} title="Shuffle" style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" /></button>
+            {/* now playing, inline with the transport */}
+            <div className="min-w-0 flex-1 text-right">
+              <div className="text-sm font-medium truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>
+                {current ? current.name : "Pick a genre or station"}
+              </div>
+              {current && (error
+                ? <div className="label" style={{ color: "var(--down)" }}>stream unavailable</div>
+                : current.sourceUrl
+                  ? <a href={current.sourceUrl} target="_blank" rel="noopener" className="label inline-flex items-center gap-1 hover:underline" style={{ color: "var(--accent-2)", textTransform: "none", letterSpacing: 0 }}>{shortUrl(current.sourceUrl)} <Icon name="ext" size={11} /></a>
+                  : null)}
+            </div>
+            {current && <button onClick={() => toggleFav(current.name)} title="Favourite" className="text-lg shrink-0 leading-none pl-1" style={{ color: favs.includes(current.name) ? "var(--accent)" : "var(--muted)" }}>{favs.includes(current.name) ? "★" : "☆"}</button>}
+          </div>
+        </div>
+
+        {/* scrollable body: genres as chips, then the station list */}
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3">
+          <div className="label mb-2">Genres</div>
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            <button onClick={() => shuffleSource("all")} className="chip" style={activeSrc === "all" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>All</button>
+            {genreItems.map((it) => (
+              <button key={it.key} onClick={() => shuffleSource(it.key)} className="chip" style={activeSrc === it.key ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>{it.label}</button>
+            ))}
+          </div>
+
+          <div className="label mb-2">Stations</div>
+          <div className="relative mb-2">
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search stations…" className="w-full px-2.5 py-2 pr-7 text-sm" />
+            {query && <button onClick={() => setQuery("")} title="Clear" className="absolute right-2 top-1/2 -translate-y-1/2 text-sm leading-none" style={{ color: "var(--muted)" }}>✕</button>}
+          </div>
+          <div className="flex gap-1.5 mb-2">
+            <button onClick={() => chooseView("index")} className="chip flex-1" style={view === "index" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>Index</button>
+            <button onClick={() => chooseView("favs")} className="chip flex-1" style={view === "favs" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>Favourites</button>
+          </div>
+          {listed.length === 0 ? (
+            <div className="label px-1 py-1">{q ? "No matches." : view === "favs" ? "No favourites yet — tap ☆ on a station." : "No stations."}</div>
+          ) : (
+            <ul className="space-y-0.5">
+              {listed.map((s) => {
+                const active = current?.name === s.name;
+                return (
+                  <li key={s.name}>
+                    <div className="flex items-center gap-2 rounded-md px-2 py-2 text-sm cursor-pointer" onClick={() => play(s, base)}>
+                      <span className="flex-1 truncate" style={active ? { color: "var(--accent)" } : {}}>{s.name}</span>
+                      {s.sourceUrl && (
+                        <a href={s.sourceUrl} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()} title="Open station website" className="shrink-0" style={{ color: "var(--muted)" }}><Icon name="ext" size={14} /></a>
+                      )}
+                      <button onClick={(e) => { e.stopPropagation(); toggleFav(s.name); }} className="shrink-0 text-base leading-none" style={{ color: favs.includes(s.name) ? "var(--accent)" : "var(--muted)" }}>{favs.includes(s.name) ? "★" : "☆"}</button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        {/* settings footer (mirrors the desktop sidebar) */}
+        <Link href="/settings" onClick={() => setSheetOpen(false)} title="Settings" className="flex items-center gap-2 px-4 h-12 shrink-0"
+          style={{ borderTop: "1px solid var(--border)", color: "var(--muted)" }}>
+          <Icon name="gear" size={17} /><span className="text-sm">Settings</span>
+        </Link>
+      </div>
+    </div>
+    </>
   );
 }

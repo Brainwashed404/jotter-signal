@@ -874,3 +874,17 @@ html[data-skin="win31"] ::selection { background:var(--accent); color:#fff; }
 html[data-skin="beos"]:not([data-theme="light"]) header {
   --header-bg:#f4c000; --panel-2:#fff7da; --text:#1a1a1a; --muted:#5a4a10; --accent:#8a5a00; --border:#c8a400;
 }
+
+/* ── Mobile (≤767px) ───────────────────────────────────────────────────────────
+   Desktop is untouched: the radio sidebar + top NavLinks hide via Tailwind md:
+   variants in the components; navigation moves to the bottom tab bar and the
+   radio becomes a bottom sheet. These rules handle what classes can't. */
+@media (max-width: 767px) {
+  /* never allow sideways page scroll */
+  html, body { overflow-x: clip; }
+  /* header weather panel: the hour/day columns become a swipeable strip
+     instead of squishing into the viewport (inline style sets grid, hence !important) */
+  .hdr-cols { display: flex !important; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .hdr-cols::-webkit-scrollbar { display: none; }
+  .hdr-cols > div { flex: 0 0 3.4rem; }
+}
