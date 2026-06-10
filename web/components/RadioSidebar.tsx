@@ -409,11 +409,7 @@ export default function RadioSidebar() {
           )}
         </div>
 
-        {/* settings footer (mirrors the desktop sidebar) */}
-        <Link href="/settings" onClick={() => setSheetOpen(false)} title="Settings" className="flex items-center gap-2 px-4 h-12 shrink-0"
-          style={{ borderTop: "1px solid var(--border)", color: "var(--muted)" }}>
-          <Icon name="gear" size={17} /><span className="text-sm">Settings</span>
-        </Link>
+        {/* no settings footer on mobile — settings lives in the header gear */}
       </div>
     </div>
     </>

@@ -240,43 +240,6 @@ function GroupsView({ groups }: { groups: WCGroup[] }) {
   );
 }
 
-// ─── Countdown ────────────────────────────────────────────────────────────────
-const KICKOFF = new Date("2026-06-11T00:00:00Z"); // Opening match ~June 11
-
-function Countdown() {
-  const [diff, setDiff] = useState(() => Math.max(0, KICKOFF.getTime() - Date.now()));
-  useEffect(() => {
-    const t = setInterval(() => setDiff(Math.max(0, KICKOFF.getTime() - Date.now())), 1000);
-    return () => clearInterval(t);
-  }, []);
-  if (diff <= 0) return null;
-  const d = Math.floor(diff / 86400000);
-  const h = Math.floor((diff % 86400000) / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  return (
-    <div style={{
-      marginBottom: "1rem", padding: "0.85rem 1rem", borderRadius: 8, textAlign: "center",
-      background: "color-mix(in srgb, var(--accent) 7%, transparent)",
-      border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
-    }}>
-      <div style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent)", marginBottom: "0.5rem" }}>
-        Kickoff in
-      </div>
-      <div style={{ display: "flex", justifyContent: "center", gap: "1.25rem" }}>
-        {([["Days", d], ["Hours", h], ["Mins", m], ["Secs", s]] as [string, number][]).map(([label, val]) => (
-          <div key={label} style={{ textAlign: "center", minWidth: 36 }}>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, fontVariantNumeric: "tabular-nums", lineHeight: 1.1 }}>
-              {String(val).padStart(2, "0")}
-            </div>
-            <div style={{ fontSize: "0.6rem", color: "var(--muted)", letterSpacing: "0.06em", marginTop: 2 }}>{label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function WorldCupChart() {
   const [data, setData] = useState<WCData | null>(null);
@@ -309,12 +272,8 @@ export default function WorldCupChart() {
     return () => clearInterval(t);
   }, [data?.hasLive]);
 
-  const showCountdown = !data || data.groups.every((g) => g.standings.every((s) => s.played === 0));
-
   return (
     <div>
-      {showCountdown && <Countdown />}
-
       {/* Tab bar + status */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
         {(["groups", "bracket"] as const).map((t) => (

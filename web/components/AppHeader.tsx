@@ -356,7 +356,9 @@ export default function AppHeader() {
           <span className="font-semibold tracking-tight hidden md:inline" style={{ color: "var(--muted)" }}>Intelligence</span>
         </Link>
         <WeatherClock activeSection={section} onToggle={toggle} onWeatherData={setWeatherData} />
-        <nav className="flex items-center gap-1 shrink-0">
+        {/* On mobile the weather/time pill is hidden (the phone shows the time, weather
+            is a glance away), so the three controls spread across the freed space. */}
+        <nav className="flex items-center gap-1 shrink-0 max-md:flex-1 max-md:justify-around max-md:gap-0">
           <div className="hidden md:flex items-center gap-1"><NavLinks /></div>
           {/* mobile-only: radio (opens the bottom sheet) */}
           <button onClick={() => window.dispatchEvent(new Event("jotter-radio-toggle"))} title="Radio"

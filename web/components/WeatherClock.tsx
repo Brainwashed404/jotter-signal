@@ -95,9 +95,10 @@ export default function WeatherClock({ activeSection, onToggle, onWeatherData }:
   );
 
   return (
-    // ≤md the pill compacts to weather + time (the date segment and its dot are desktop-only).
+    // Desktop only: on mobile the phone status bar already shows the time and the pill
+    // is dropped so the header's three controls can spread out.
     <div
-      className="weather-pill flex items-center gap-3 max-md:gap-2 text-sm px-3 max-md:px-2.5 py-1 select-none min-w-0"
+      className="weather-pill hidden md:flex items-center gap-3 text-sm px-3 py-1 select-none min-w-0"
       style={{
         border: `1px solid ${activeSection ? "var(--accent)" : "var(--border)"}`,
         background: "var(--panel-2)",

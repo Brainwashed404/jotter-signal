@@ -10,7 +10,7 @@ type Sort = "newest" | "oldest" | "relevance";
 // multi). Full-width on mobile, anchored popover on desktop. Replaces the old
 // chip-wrap panels that the user found messy.
 function MultiDropdown({
-  label, options, selected, onToggle, onClear, mono = false,
+  label, options, selected, onToggle, onClear, mono = false, align = "left",
 }: {
   label: string;
   options: { value: string; label: string }[];
@@ -18,6 +18,7 @@ function MultiDropdown({
   onToggle: (value: string) => void;
   onClear: () => void;
   mono?: boolean;
+  align?: "left" | "right"; // which edge the (wider-than-trigger) list aligns to
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -39,11 +40,11 @@ function MultiDropdown({
         className="btn-ghost text-xs w-full md:w-auto flex items-center justify-between gap-2"
         style={active ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}
       >
-        <span>{active ? `${label} (${selected.length})` : label}</span>
-        <span style={{ color: "var(--muted)" }}>{open ? "▲" : "▼"}</span>
+        <span className="truncate">{active ? `${label} (${selected.length})` : label}</span>
+        <span aria-hidden style={{ color: "var(--muted)", fontSize: 10 }}>{open ? "▲" : "▼"}</span>
       </button>
       {open && (
-        <div className="absolute z-30 mt-1 left-0 right-0 md:right-auto md:min-w-[230px] panel p-1 max-h-72 overflow-y-auto no-scrollbar">
+        <div className={`absolute z-30 mt-1 ${align === "right" ? "right-0" : "left-0"} min-w-[15rem] md:min-w-[230px] panel p-1 max-h-72 overflow-y-auto no-scrollbar`}>
           <button onClick={onClear} className={row} style={!active ? { color: "var(--accent)" } : {}}>
             {tick(!active)} <span>All {label.toLowerCase()}</span>
           </button>
@@ -250,17 +251,24 @@ export default function SignalList({
             {t.label}
           </button>
         ))}
-        <div className="ml-auto flex flex-wrap gap-2 items-center max-md:ml-0 max-md:w-full max-md:flex-col max-md:items-stretch">
+        {/* Controls: inline + right-aligned on desktop; a 2-col grid filling the width
+            on mobile (themes · experts / years · sort). Every control carries the same
+            ▼ chevron (native select arrows are hidden via appearance-none). */}
+        <div className="ml-auto flex flex-wrap gap-2 items-center max-md:ml-0 max-md:w-full max-md:grid max-md:grid-cols-2">
           {showThemes && (
-            <select value={theme} onChange={(e) => setTheme(e.target.value)} className="btn-ghost text-xs max-md:w-full"
-              style={theme ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
-              <option value="">All themes</option>
-              {themes.map((t) => <option key={t} value={t}>{t}</option>)}
-            </select>
+            <div className="relative max-md:w-full">
+              <select value={theme} onChange={(e) => setTheme(e.target.value)} className="btn-ghost text-xs w-full appearance-none pr-7"
+                style={theme ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
+                <option value="">All themes</option>
+                {themes.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+              <span aria-hidden className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--muted)", fontSize: 10 }}>▼</span>
+            </div>
           )}
           {showExperts && availableExperts.length > 1 && (
             <MultiDropdown
               label="Experts"
+              align="right"
               options={availableExperts.map((e) => ({ value: e.id, label: e.name }))}
               selected={experts}
               onToggle={toggleExpert}
@@ -271,6 +279,7 @@ export default function SignalList({
             <MultiDropdown
               label="Years"
               mono
+              align="left"
               options={availableYears.map((y) => ({ value: String(y), label: String(y) }))}
               selected={years.map(String)}
               onToggle={(v) => toggleYear(Number(v))}
@@ -278,11 +287,14 @@ export default function SignalList({
             />
           )}
           {showSort && (
-            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="btn-ghost text-xs max-md:w-full">
-              <option value="newest">Newest first</option>
-              <option value="oldest">Oldest first</option>
-              <option value="relevance">Most relevant</option>
-            </select>
+            <div className="relative max-md:w-full">
+              <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="btn-ghost text-xs w-full appearance-none pr-7">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="relevance">Most relevant</option>
+              </select>
+              <span aria-hidden className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--muted)", fontSize: 10 }}>▼</span>
+            </div>
           )}
         </div>
       </div>

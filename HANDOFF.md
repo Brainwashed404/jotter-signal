@@ -105,6 +105,22 @@ Reddit · Wiki · GitHub · Google**.
   `futurism.com/feed`. **Wiki** pill. Tech: Verge dropped (paywall), VentureBeat/Digital Trends/404 Media added.
   World Cup home module `defaultOpen={false}`.
 
+## ⭐ SESSION 2026-06-10 (pt3): mobile viewport lock + polish
+- **⚠ VIEWPORT META WAS MISSING — this was the big mobile bug.** `app/layout.tsx` now exports
+  `viewport` (`width:device-width, initialScale:1, maximumScale:1, userScalable:false, viewportFit:cover`). Without it
+  mobile browsers assumed a ~980px viewport and shrank the whole desktop layout to fit → the iPhone "off the edge /
+  zoom-out to fit / floating nav bar / tiny text" cluster, AND it masked the text-size `zoom` setting (which works now).
+  Don't remove this. `viewportFit:cover` powers the `env(safe-area-inset-*)` the tab bar uses.
+- **Mobile header:** the weather/time pill is now `hidden md:flex` (desktop-only) — the phone status bar shows the
+  time. The three controls (radio · theme · settings) spread across the freed space (`nav` is
+  `max-md:flex-1 max-md:justify-around`).
+- **Feed filters (mobile):** the 4 controls (All themes · Experts / Years · Newest first) are a 2-col grid filling the
+  width (`max-md:grid max-md:grid-cols-2`), not a stack. All four share ONE ▼ chevron — native `<select>`s use
+  `appearance-none` + an absolute ▼ so they match the `MultiDropdown` triggers. `MultiDropdown` takes `align`
+  ("left"/"right") so its wider-than-cell list opens within the screen (Experts=right, Years=left).
+- **Radio sheet (mobile):** Settings footer removed (settings is the header gear on mobile).
+- **World Cup countdown DELETED** (`Countdown`/`KICKOFF` gone from `WorldCupChart.tsx`); groups/bracket unchanged.
+
 ## ⭐ SESSION 2026-06-10 (pt2): trending diversity, Met Office weather, mobile filters, LSN/B2
 - **Trending: per-source cap (`pickDiverse` in `api/trending/route.ts`).** Tabs were colonised by one outlet
   (UK≈all Independent, World≈Independent/AlJazeera, Money≈Bloomberg). `pickDiverse(items, limit, perSource)`

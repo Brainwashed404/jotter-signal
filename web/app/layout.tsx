@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Fraunces, JetBrains_Mono, Anton, Fredoka, Silkscreen, Poiret_One, Orbitron, Roboto_Mono, Rajdhani, IBM_Plex_Mono, Chakra_Petch, Archivo } from "next/font/google";
 import AppHeader from "@/components/AppHeader";
 import AutoRefresh from "@/components/AutoRefresh";
@@ -33,6 +33,19 @@ var f=localStorage.getItem('jotter.fontsize.v1');if(f&&f!=='md')d.setAttribute('
 export const metadata: Metadata = {
   title: "Jotter Intelligence — Foresight Engine",
   description: "Turning the world's sharpest minds into thought leadership.",
+};
+
+// Lock the layout to the device width. Without this, mobile browsers assume a ~980px
+// viewport and shrink the whole desktop layout to fit (the "zoom out to fit / floating
+// nav / tiny text" bug on iPhone). maximumScale/userScalable stop pinch-zoom from
+// detaching the UI from the screen; viewportFit:cover enables the safe-area insets the
+// bottom tab bar uses.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
