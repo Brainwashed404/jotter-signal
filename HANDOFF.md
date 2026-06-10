@@ -38,39 +38,69 @@ push to `main`.
   (`s3.us-east-005.backblazeb2.com`, bucket `jotter-data`). Files: `signals.jsonl.gz`, `experts.json`,
   `engine-data.tar.gz` (the raw+archive `engine/data/` dir, so runs are incremental and never re-scrape from zero).
 - **CI: `.github/workflows/refresh.yml` ("Data refresh")** runs every 4h (+ manual `workflow_dispatch`, optional
-  `backfill_ids=a,b,c` for a one-time deep backfill). It restores `engine-data.tar.gz`, runs `refresh_all.py
-  --no-backfill`, uploads the rebuilt data back to B2. Then redeploy Vercel to bake it in.
-- **⚠ THE SUBSTACK IP BLOCK (important).** `*.substack.com` feeds **403 from the CI datacenter IP** (Substack/
-  Cloudflare blocks it). **Custom-domain Substacks are fine** (noahpinion.blog, profgmedia.com, etc.). So every
-  bare-subdomain source (rushkoff, resobscura, rishad, whyisthisinteresting, trendreport, garymarcus) gets **no new
-  posts in CI** — they survive on cached `engine-data` from earlier local runs. NOT a per-publication setting; it's
-  purely the requesting IP (same feed returns 200 from a home/residential IP).
-- **THE FIX = `engine/publish.sh` (local publish / "the blend").** Runs the fetch on the user's machine
-  (residential IP, which Substack allows), rebuilds, uploads to B2, triggers a Vercel rebuild. One command:
-  `bash engine/publish.sh --backfill --ids garymarcus` (blocked sources) or `bash engine/publish.sh` (quick all).
-  Creds live in `engine/.env` (git-ignored; template `engine/.env.example`: `B2_KEY_ID`/`B2_APP_KEY`). Needs the
-  `aws` CLI (script auto-installs via pip). CI + local share `engine-data.tar.gz`, so neither clobbers the other
-  (fetch keeps existing on 403). **Model: CI auto-refreshes everything it can reach; user runs publish.sh for the
-  blocked Substacks.**
-- **Emailed-newsletter pipeline** (`engine/fetch_newsletters.py` + `engine/newsletter_map.json`): reads a dedicated
-  Gmail (`jotterintelligence@gmail.com`) over IMAP (secrets `GMAIL_USER`/`GMAIL_APP_PASSWORD`), one source per
-  sender, mapping/grouping/category via `newsletter_map.json` (domain or name match; `ignore_domains`), junk filter
-  drops welcome/confirm/security mail, `SCHEMA_V` bump forces a clean re-ingest. Writes `data/raw_nl-*.jsonl` +
-  `data/newsletters.json`; `build_dataset.py` loads that manifest alongside `experts.json`. **Use sparingly** —
-  promo-style emails (e.g. Axios) render poorly; substantive post-emails are fine. `fetch_expert.py` also supports
-  `extra_feeds` (a list) merged into one source.
-- **Source changes this session:** added **profgmarkets** (Prof G Markets, custom domain, works in CI) and
-  **garymarcus** (substack subdomain — **local-publish only**). Removed **benedictevans** (too infrequent) and
-  **Axios** (promo emails, purged). ~32 sources now.
+  `backfill_ids=a,b,c`). Steps: restore `engine-data.tar.gz` from B2 → `refresh_all.py --no-backfill` → upload data
+  back to B2 → **commit the rebuilt `web/data/signals.jsonl.gz`+`experts.json` into the repo** → push an **empty
+  commit to trigger a Vercel rebuild** (`permissions: contents:write`; **no `[skip ci]`** — Vercel honours it and
+  would skip the build; this workflow only triggers on schedule/dispatch so the bot push can't loop).
+- **⚠⚠ THE REAL BOTTLENECK = Backblaze B2 free 1 GB/day DOWNLOAD cap.** Heavy deploy activity blows it; then the
+  Vercel build's `fetch-data.js` 403s downloading `signals.jsonl.gz` AND the CI `engine-data.tar.gz` restore 403s
+  (rebuilds thin, ~16k vs ~25.8k signals). Mitigations in place: (1) `fetch-data.js` falls back to the **committed**
+  `web/data/signals.jsonl.gz` (force-added to git, tracked despite gitignore) when the download 403s; (2) CI commits
+  fresh data to the repo each run so the build has it without a download; (3) a **degraded-build guard** in
+  refresh.yml skips the publish/commit if the new signal count is far below the committed one (stops a capped thin
+  run clobbering good data). **Net effect when capped: CI can't publish, so the site stays on the last good
+  committed build.** Today's fixes were therefore **built locally and committed directly** (run engine locally →
+  `gzip web/data/signals.jsonl` → `git add -f web/data/signals.jsonl.gz web/data/experts.json` → push).
+  **DURABLE FIX (recommended, not yet done): front B2 with the user's Cloudflare** (Bandwidth-Alliance = free egress
+  + caching → no cap). ~10 min one-time. Until then, treat committing local builds as the reliable update path.
+- **Blocked feeds auto-handled via rss2json.** `*.substack.com` feeds 403 the CI datacenter IP (residential IPs are
+  fine). `fetch_expert.py` now **falls back to `api.rss2json.com`** (a relay whose IP isn't blocked, free, no key)
+  whenever a direct feed fetch fails/empties — so garymarcus, rushkoff, resobscura, rishad, whyisthisinteresting,
+  trendreport refresh in CI automatically (recent ~10/feed with full bodies; deep archive still needs a local run).
+  Custom-domain substacks (noahpinion.blog, profgmedia.com) were never blocked.
+- **`engine/publish.sh` (local "blend")** still exists for a full local fetch+upload+deploy from a residential IP
+  (creds in git-ignored `engine/.env`; template `.env.example`, `B2_KEY_ID`/`B2_APP_KEY`; auto-installs `aws`). It
+  also refreshes the baked Reddit headlines (below). Use it for deep backfills of blocked substacks or when B2 is capped.
+- **LSN has NO feed** — its only data source is `backfill_lsn` (scrapes `lsnglobal.com/daily-signals`, accumulates).
+  `refresh_all.py` now **always runs backfill for feed-less sources** (was skipped on `--no-backfill`, which froze LSN).
+- **Emailed-newsletter pipeline** (`engine/fetch_newsletters.py` + `engine/newsletter_map.json`): dedicated Gmail
+  (`jotterintelligence@gmail.com`) over IMAP (secrets `GMAIL_USER`/`GMAIL_APP_PASSWORD`), one source per sender,
+  grouping/category/ignore via `newsletter_map.json`, junk-subject filter, `SCHEMA_V` bump = clean re-ingest. Writes
+  `data/raw_nl-*.jsonl`+`data/newsletters.json`; `build_dataset` loads the manifest alongside `experts.json`. **Mostly
+  unused now** (`groups:[]`; Axios/google/KTN in `ignore_domains`) — promo emails render poorly. `fetch_expert.py`
+  also supports `extra_feeds` (list) merged into one source.
+- **Substack embed strip (build_dataset `clean_block`):** Substack tweet/link embeds carry escaped-JSON
+  `data-attrs="…"` with raw `>` chars that broke the `<[^>]+>` stripper and leaked JSON (usernames/impressions) into
+  the body (e.g. the Gary Marcus piece). Now stripped quote-aware before tag-stripping, like the iframe fix.
+- **Sources (~31):** added **garymarcus** (Marcus on AI; CI via rss2json) + **profgmarkets** (Prof G Markets, custom
+  domain). Removed **benedictevans** (too infrequent) and **Axios** (promo emails).
 
 ## ⭐ TRENDING NEWS — CURRENT STATE (supersedes the In-the-news section below)
 Live tabs: **UK · World · Business · Politics · Tech · Futurism · HN · Guardian · Money · Reuters · BBC · Time Out ·
-Wiki · GitHub · Google**. Changes from the old notes: **Reddit pill REMOVED** (Reddit 403s Vercel's runtime IP; the
-widget fetches live so the local-publish trick does NOT help it — bringing it back needs either Reddit OAuth creds
-`REDDIT_CLIENT_ID`/`REDDIT_CLIENT_SECRET` for a live tab, or baking headlines during publish.sh = stale). **FT → "Money"**
-(id stays `ft`; aggregates Forbes+FT+WSJ+Economist+MarketWatch, 2 each). **HN** tab = `hnrss.org/newest`. **Futurology
-pill → "Futurism"** sourced from `futurism.com/feed` (no longer Reddit). **Wikipedia pill → "Wiki"**. The Verge dropped
-(paywalled); VentureBeat/Digital Trends/404 Media added to Tech. World Cup module on Home is `defaultOpen={false}`.
+Reddit · Wiki · GitHub · Google**.
+- **Ordering: strict newest-first by publish time** — the per-source cap was removed (it clustered by platform). It's
+  the 10 most-recent unique stories (dedup kept).
+- **Reddit (baked, not live):** Reddit 403s Vercel's runtime IP, so `engine/fetch_reddit.py` fetches the **Jotter
+  curated multireddit** (`reddit.com/user/fluffy-earth-8062/m/jotter_intelligence/new`, via the relay) into the
+  committed `web/lib/reddit-trending.json`; `/api/trending?category=reddit` serves that file. Refreshed by
+  `publish.sh` (or whenever fetch_reddit runs + commits). So Reddit is only as fresh as the last publish.
+- **Business = UK business-section feeds only:** BBC, Guardian (`/uk/business/rss`), City AM (`/category/business/feed/`),
+  Sky News business. (CNBC/NPR removed; **Telegraph has NO working public RSS** — firewalled/dead, even via relay.)
+- **World:** DW + Euronews removed. **UK:** The Conversation removed (arts/academic, not news).
+- **Money** (id stays `ft`): Forbes+FT+WSJ+Economist+MarketWatch. **HN** = `hnrss.org/newest`. **Futurism** =
+  `futurism.com/feed`. **Wiki** pill. Tech: Verge dropped (paywall), VentureBeat/Digital Trends/404 Media added.
+  World Cup home module `defaultOpen={false}`.
+
+## ⭐ HOME + UI CHANGES THIS SESSION
+- **Home "Latest Insights" = ONE latest post per expert/publication, last 7 days** (`getLatestPerExpert(7)` in
+  `lib/data.ts`). Do NOT make this multiple-per-source.
+- **READ state removed** from `SignalCard.tsx` (the dim overlay + "✓ read" label + `jotter.read.v1` logic) — it
+  overlapped confusingly with the kind tags.
+- **Skins: 5 new workstation skins** in `globals.css` + `lib/appearance.ts` SKINS: `next` (Cube/NeXTSTEP), `beos`
+  (Yellow Tab — header vars scoped so its yellow bar persists in dark mode), `risc` (Archimedes), `irix` (Indigo —
+  light-mode header bar lightened so nav text reads), `win31` (Tiles '92). "Motif" (cde) was added then removed.
+  **Star-to-pin-favourites:** `jotter.skinfavs.v1` (`getSkinFavs`/`setSkinFavs`); a ☆/★ on each skin tile in
+  `/settings` floats starred skins to the top of the list.
 
 ## Layout
 ```
