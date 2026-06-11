@@ -11,7 +11,7 @@ on:
         default: ""
 
 permissions:
-  contents: write   # allow the rebuild-trigger step to push an empty commit
+  contents: write
 
 jobs:
   refresh:
@@ -27,28 +27,13 @@ jobs:
         with:
           python-version: "3.11"
 
-      # awscli speaks the S3-compatible R2 API
-      - name: Install AWS CLI
-        run: pip install awscli --quiet
+      - name: Restore engine data from cache
+        uses: actions/cache@v4
+        with:
+          path: engine/data
+          key: engine-data-${{ github.run_id }}
+          restore-keys: engine-data-
 
-      # Download the previous engine/data/ archive so incremental fetch has history
-      - name: Restore engine data from R2
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-        run: |
-          aws s3 cp "s3://${R2_BUCKET}/engine-data.tar.gz" engine-data.tar.gz \
-            --endpoint-url "${R2_ENDPOINT}" 2>/dev/null \
-            && tar xzf engine-data.tar.gz -C engine/ \
-            && echo "Restored existing engine data archive" \
-            || echo "No existing archive — starting fresh (first run or manual reset)"
-
-      # Incremental: fetch latest from all feeds + rebuild signals.jsonl.
-      # --no-backfill skips the deep archive pass. When triggered manually with
-      # backfill_ids set, deep-backfill just those sources once (their archive
-      # file is then persisted in engine-data.tar.gz for all future runs).
       - name: Run refresh
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
@@ -62,63 +47,24 @@ jobs:
             python3 refresh_all.py --no-backfill
           fi
 
-      # Guard: if this build is much smaller than the one already committed, the
-      # engine-data restore probably failed (e.g. B2 cap), so the build is degraded.
-      # Don't publish it — keep the good committed data until a healthy build returns.
       - name: Check build health
         id: health
         run: |
           NEW=$(wc -l < web/data/signals.jsonl)
-          OLD=$(git show HEAD:web/data/signals.jsonl.gz 2>/dev/null | gunzip -c 2>/dev/null | wc -l || echo 0)
-          echo "signals: new=$NEW committed=$OLD"
-          if [ "$OLD" -eq 0 ] || [ "$NEW" -ge "$((OLD * 9 / 10))" ]; then
+          echo "signals: new=$NEW"
+          if [ "$NEW" -ge 3000 ]; then
             echo "ok=true" >> "$GITHUB_OUTPUT"
           else
             echo "ok=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Degraded build ($NEW < 90% of $OLD) — skipping publish to protect committed data"
+            echo "::warning::Degraded build ($NEW signals, minimum 3000) — skipping publish"
           fi
 
-      # Persist updated engine/data/ so next run can be incremental
-      - name: Upload engine data archive to R2
-        if: steps.health.outputs.ok == 'true'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-        run: |
-          tar czf engine-data.tar.gz -C engine data/
-          aws s3 cp engine-data.tar.gz "s3://${R2_BUCKET}/engine-data.tar.gz" \
-            --endpoint-url "${R2_ENDPOINT}"
-
-      # Publish the rebuilt signals for the app to fetch on next cold start.
-      # signals.jsonl is gzipped → signals.jsonl.gz (110 MB → ~31 MB) before upload.
-      - name: Upload signals and experts to R2
-        if: steps.health.outputs.ok == 'true'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-        run: |
-          gzip -kf web/data/signals.jsonl
-          aws s3 cp web/data/signals.jsonl.gz "s3://${R2_BUCKET}/signals.jsonl.gz" \
-            --endpoint-url "${R2_ENDPOINT}"
-          aws s3 cp web/data/experts.json "s3://${R2_BUCKET}/experts.json" \
-            --endpoint-url "${R2_ENDPOINT}"
-          echo "Upload complete"
-
-      # Commit the freshly-built data INTO the repo so the Vercel build uses it
-      # directly. The build's B2 download (fetch-data.js) 403s once the free-tier
-      # daily cap is hit, falling back to whatever's committed — so committing the
-      # fresh files here is what actually keeps the live site current. The push also
-      # triggers the rebuild. No "[skip ci]" (Vercel honours it); this workflow only
-      # triggers on schedule/dispatch, not push, so the commit can't loop back in.
       - name: Commit fresh data + trigger site rebuild
         if: steps.health.outputs.ok == 'true'
         run: |
           git config user.name "jotter-bot"
           git config user.email "actions@github.com"
+          gzip -kf web/data/signals.jsonl
           git add -f web/data/signals.jsonl.gz web/data/experts.json web/lib/reddit-trending.json || true
           git commit --allow-empty -m "data: scheduled refresh $(date -u +%FT%TZ)"
           git push
