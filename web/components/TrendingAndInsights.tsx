@@ -53,7 +53,7 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
         className="flex items-center gap-2 w-full"
         style={{ marginBottom: open ? "0.75rem" : 0, transition: "margin-bottom 250ms ease" }}
       >
-        <h2 className="text-lg font-medium">News &amp; Insights</h2>
+        <h2 className="text-lg font-medium">Latest</h2>
         <div className="flex gap-1 ml-2">
           {(["news", "insights"] as const).map((v) => (
             <button

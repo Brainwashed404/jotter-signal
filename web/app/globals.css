@@ -140,6 +140,22 @@ html[data-skin="amber"] main .text-\[13px\], html[data-skin="teletext"] main .te
 html[data-skin="amber"] main .whitespace-pre-wrap, html[data-skin="teletext"] main .whitespace-pre-wrap, html[data-skin="fairlight"] main .whitespace-pre-wrap { font-size: 15px; line-height: 1.65; }
 html[data-skin="amber"] main .font-medium.leading-snug, html[data-skin="teletext"] main .font-medium.leading-snug, html[data-skin="fairlight"] main .font-medium.leading-snug { font-size: 17px; }
 
+/* Mobile: px-literal Tailwind classes are designed for desktop (13px reads fine on a
+   1440px monitor; it is illegible on a 390px phone). Bump the key sizes up so the app
+   is readable without settings changes, and honour sm/md/lg/xl via targeted rules
+   rather than relying on zoom which is unreliable on locked-viewport mobile WebKit. */
+@media (max-width: 767px) {
+  html:not([data-fontsize="sm"]) main .text-\[13px\] { font-size: 15px; line-height: 1.6; }
+  html:not([data-fontsize="sm"]) main .text-\[12px\] { font-size: 13px; }
+  html:not([data-fontsize="sm"]) main .text-xs        { font-size: 13px; }
+  html[data-fontsize="lg"] main .text-\[13px\] { font-size: 17px; line-height: 1.65; }
+  html[data-fontsize="lg"] main .text-\[12px\] { font-size: 15px; }
+  html[data-fontsize="lg"] main .text-xs        { font-size: 15px; }
+  html[data-fontsize="xl"] main .text-\[13px\] { font-size: 19px; line-height: 1.7; }
+  html[data-fontsize="xl"] main .text-\[12px\] { font-size: 17px; }
+  html[data-fontsize="xl"] main .text-xs        { font-size: 17px; }
+}
+
 /* ============================================================
    ALTERNATIVE SKINS (set via data-skin on <html>).
    Each ships a LIGHT palette (base rule) + a NIGHT mode
@@ -723,8 +739,8 @@ html[data-skin="fairlight"] ::selection { background:var(--accent); color:var(--
 
 /* ---------- Swiss / Bauhaus (International Typographic Style) ---------- */
 html[data-skin="swiss"] {
-  --bg:#f0f0ee; --panel:#ffffff; --panel-2:#e6e6e3; --ink:#0a0a0a;
-  --border:#111111; --border-hover:#c8960a; --header-bg:rgba(240,240,238,0.9);
+  --bg:#fcfdf2; --panel:#ffffff; --panel-2:#eeeee8; --ink:#0a0a0a;
+  --border:#111111; --border-hover:#c8960a; --header-bg:rgba(252,253,242,0.92);
   --text:#0a0a0a; --muted:#6a6a6a; --accent:#c8960a; --accent-2:#c8960a; --up:#1a7a3a; --down:#c2540a;
 }
 html[data-skin="swiss"]:not([data-theme="light"]) {

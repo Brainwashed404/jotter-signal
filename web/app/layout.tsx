@@ -26,7 +26,7 @@ const cyberFont = Orbitron({ subsets: ["latin"], variable: "--font-cyber", displ
 // users who have explicitly chosen dark mode, and applies any saved skin/size overrides.
 const APPEARANCE_INIT = `try{var d=document.documentElement;
 if(localStorage.getItem('jotter.theme.v2')==='dark')d.removeAttribute('data-theme');
-var s=localStorage.getItem('jotter.skin.v1');if(s&&s!=='default')d.setAttribute('data-skin',s);
+var s=localStorage.getItem('jotter.skin.v1');d.setAttribute('data-skin',(s&&s!=='default')?s:'swiss');
 var f=localStorage.getItem('jotter.fontsize.v1');if(f&&f!=='md')d.setAttribute('data-fontsize',f);
 }catch(e){}`;
 

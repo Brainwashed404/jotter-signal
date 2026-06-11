@@ -5,7 +5,7 @@
 // (no flash). Components listen for the "jotter-appearance" event to stay in sync.
 
 export type Skin =
-  | "default" | "neo" | "tech" | "punk"
+  | "swiss" | "neo" | "tech" | "punk"
   | "editorial" | "bubblegum" | "pixel" | "deco" | "cyber" | "win95"
   | "amber" | "lcars" | "teletext" | "terminal" | "mac" | "vector"
   | "fairlight" | "swiss" | "darkside" | "system1" | "system7" | "bitmap"
@@ -21,7 +21,6 @@ export const APPEARANCE_EVENT = "jotter-appearance";
 // Every skin ships a light palette + an accompanying night mode (toggled by the
 // theme switch). Ordered for a 3×3 grid in the settings page.
 export const SKINS: { id: Skin; name: string; desc: string; swatch: string[]; dark?: boolean }[] = [
-  { id: "default", name: "Jotter", desc: "Soft cream, muted gold, rounded panels. The original.", swatch: ["#fcfdf2", "#e3bb4e", "#8acbb0", "#1b1d16"] },
   { id: "neo", name: "Modern Neobrutalism", desc: "Bold geometric type, thick borders, hard offset shadows, high-contrast teal.", swatch: ["#fcfdf2", "#14b8a6", "#000000", "#000000"] },
   { id: "tech", name: "Tech-Minimal", desc: "Monospace throughout, stark thin grid, no shadows, terminal green.", swatch: ["#fcfdf2", "#15803d", "#000000", "#000000"] },
   { id: "punk", name: "Punk Riso", desc: "DIY zine: condensed ransom headings, thick borders, fluoro-pink offset shadows.", swatch: ["#f7f3e8", "#ff48b0", "#000000", "#141414"] },
@@ -38,7 +37,7 @@ export const SKINS: { id: Skin; name: string; desc: string; swatch: string[]; da
   { id: "mac", name: "Return of the Mac", desc: "Black-&-white rounded windows, pinstripe title bars, system sans, inverted selection.", swatch: ["#b8b8b8", "#000000", "#ffffff", "#000088"] },
   { id: "vector", name: "Vector Wireframe", desc: "Neon wireframe: Chakra Petch caps, glowing outline-only panels, transparent fills. Blueprint by day.", swatch: ["#000308", "#34e2e2", "#ff5fa2", "#eef2f8"], dark: true },
   { id: "fairlight", name: "Fairplay", desc: "Green-phosphor music workstation: VT323, scanlines, inverted green header bars, green on black.", swatch: ["#000400", "#2dffa6", "#7affd0", "#0a8a4a"], dark: true },
-  { id: "swiss", name: "Bauhaus", desc: "International Typographic: big Archivo grotesque, hairline rules, stark white, single gold accent.", swatch: ["#f0f0ee", "#c8960a", "#0a0a0a", "#6a6a6a"] },
+  { id: "swiss", name: "Jotter", desc: "Jotter brand skin: bold Archivo grotesque, hairline rules, single gold accent.", swatch: ["#fcfdf2", "#c8960a", "#0a0a0a", "#6a6a6a"] },
   { id: "darkside", name: "Dark Side", desc: "Imperial battle-station HUD: black command console, Sith-red readouts, cold blue data, angular mono caps.", swatch: ["#05060a", "#ff2b2b", "#46b6e6", "#e9ebf2"], dark: true },
   { id: "system1", name: "Monochrome '84", desc: "Early 1-bit personal computer: stark black & white, square white windows on a grey desktop, crisp system type, hard 1px drop shadows, inverted selection.", swatch: ["#c8c8c8", "#000000", "#ffffff", "#000000"] },
   { id: "system7", name: "Desktop '91", desc: "When desktops got colour: black & white window chrome on a teal desktop, with teal + red accents.", swatch: ["#6d8a96", "#0e8a9c", "#d72a2a", "#000000"] },
@@ -60,15 +59,17 @@ export const FONT_SIZES: { id: FontSize; label: string }[] = [
 function root() { return document.documentElement; }
 
 export function getSkin(): Skin {
-  try { return (localStorage.getItem(SKIN_KEY) as Skin) || "default"; } catch { return "default"; }
+  try {
+    const s = localStorage.getItem(SKIN_KEY);
+    return (s && s !== "default") ? (s as Skin) : "swiss";
+  } catch { return "swiss"; }
 }
 export function getFontSize(): FontSize {
   try { return (localStorage.getItem(FONT_KEY) as FontSize) || "md"; } catch { return "md"; }
 }
 
 export function applySkin(s: Skin) {
-  if (s === "default") root().removeAttribute("data-skin");
-  else root().setAttribute("data-skin", s);
+  root().setAttribute("data-skin", s);
 }
 export function applyFontSize(f: FontSize) {
   if (f === "md") root().removeAttribute("data-fontsize");

@@ -10,7 +10,7 @@ import CollapsibleSection from "@/components/CollapsibleSection";
 const SKIN_BY_ID = Object.fromEntries(SKINS.map((s) => [s.id, s]));
 
 export default function SettingsPage() {
-  const [skin, setSkinState] = useState<Skin>("default");
+  const [skin, setSkinState] = useState<Skin>("swiss");
   const [size, setSizeState] = useState<FontSize>("md");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [order, setOrder] = useState<Skin[]>(SKINS.map((s) => s.id));

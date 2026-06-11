@@ -1,15 +1,14 @@
 // "What Did I Miss?" (WDIM) — LOCAL PROTOTYPE, server-only.
 //
-// Synthesises trending business news, market data and curated expert signals
-// into a fixed executive briefing: three sections (Economy, Consumers, Technology),
-// each a 3-5 sentence analytical summary plus three real source documents.
-// UK English, no em dashes, no advice.
+// Produces a structured executive briefing: macro indicator, global
+// developments, expert perspectives, and strategic context directives.
+// Audience-aware (B2B / B2C) and timeframe-aware (day / week / month).
 //
 // Generator order:
-//   1. the `claude` CLI (Claude Code) — uses your existing subscription, no API key
-//   2. an ANTHROPIC_API_KEY, if set in .env.local
+//   1. ANTHROPIC_API_KEY (tool use — guaranteed structured output, preferred)
+//   2. claude CLI (Claude Code) — uses your existing subscription, JSON prompt fallback
 //
-// Returns null if no LLM is available. The route maps null → { available: false }
+// Returns null when no LLM is available. The route maps null to { available: false }
 // so the home module disappears cleanly rather than showing placeholder copy.
 //
 // Gated OFF in production (see app/api/wdim/route.ts).
@@ -19,36 +18,83 @@ import { recentForSynthesis, getSignals } from "./data";
 import type { Signal } from "./types";
 
 export type WdimRange = "day" | "week" | "month";
-export type WdimPiece = { title: string; source: string; focus: string; url?: string };
-export type WdimSection = { data: string; insight: string; pieces: WdimPiece[] };
-export type WdimSections = { economy: WdimSection; consumers: WdimSection; technology: WdimSection };
+export type WdimAudience = "b2b" | "b2c";
+
+export type WdimDevelopment = {
+  headline: string;
+  summary: string;
+  url?: string;
+};
+
+export type WdimExpertPerspective = {
+  thesis: string;
+  source: string;
+  snippet: string;
+  url?: string;
+};
+
+export type WdimDirective = {
+  action: string;
+};
+
+export type WdimBriefing = {
+  macroIndicator: string;
+  developments: WdimDevelopment[];
+  expertPerspectives: WdimExpertPerspective[];
+  directives: WdimDirective[];
+};
+
 export type WdimNews = { title: string; source: string; category?: string; url?: string };
 export type WdimMarket = { name: string; price: number; changePct: number };
 
 export type WdimResult = {
   range: WdimRange;
+  audience: WdimAudience;
   mode: "claude-cli" | "api";
-  sections: WdimSections;
+  briefing: WdimBriefing;
   generatedAt: string;
 };
 
 const RANGE_DAYS: Record<WdimRange, number> = { day: 1, week: 7, month: 30 };
 const RANGE_LABEL: Record<WdimRange, string> = {
-  day: "past day", week: "past week", month: "past month",
-};
-const RANGE_DENSITY: Record<WdimRange, string> = {
-  day: "Synthesise the dominant global corporate narratives of the past 24 hours.",
-  week: "Aggregate structural shifts and macro trajectories from the past seven days.",
-  month: "Identify the longer-term structural shifts and macro trajectories that defined the past month.",
+  day: "past 24 hours",
+  week: "past 7 days",
+  month: "past 30 days",
 };
 
-function snippet(s: Signal, n = 220): string {
+const AUDIENCE_CONTEXT: Record<WdimAudience, {
+  label: string;
+  focus: string;
+  timeframes: Record<WdimRange, string>;
+}> = {
+  b2b: {
+    label: "B2B enterprise professionals",
+    focus: "pipeline velocity, buying committee dynamics, enterprise SaaS procurement, seat-to-usage billing transitions, cloud compute infrastructure costs, software credit billing, corporate headcount restructuring, and data privacy and regional compliance regulations",
+    timeframes: {
+      day: "Immediate 24-hour tactical updates: transport bottlenecks affecting industrial supply chains, corporate seat downsizing announcements, software billing credit updates, enterprise security incidents.",
+      week: "7-day tactical shifts: major platform IPO or valuation news, decline in enterprise lead quality indicators, compute cost surges, automated inbox filtering changes, procurement policy updates.",
+      month: "30-day structural changes: seat-to-usage-based billing transitions across major SaaS vendors, technological labour mobility patterns, data privacy legislation developments, emergence of private peer evaluation directories.",
+    },
+  },
+  b2c: {
+    label: "B2C brand and marketing professionals",
+    focus: "retail conversion rates, digital advertising ROI, third-party cookie deprecation, programmatic tracking efficiency, direct brand equity building, Answer Engine Optimisation (AEO), organic search CTR trends, and migration of audiences to high-trust private communities",
+    timeframes: {
+      day: "Immediate 24-hour tactical updates: global events affecting consumer sentiment, freight cost impacts on retail pricing, e-commerce checkout transaction fee changes, platform algorithm shifts.",
+      week: "7-day tactical shifts: technology valuation swings affecting ad budgets, organic search CTR collapses due to AI-generated summaries, regulatory audits of cookie-tracking pixels, major brand campaign launches.",
+      month: "30-day structural changes: cookieless targeting transitions, mass-market programmatic ROI decline, younger audience migration from search to direct conversational answers, community platform consolidation.",
+    },
+  },
+};
+
+function snippet(s: Signal, n = 200): string {
   const t = (s.text || "")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, "")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(/[#*_>`]/g, "")
     .replace(/\s+/g, " ")
     .trim();
-  return t.length > n ? t.slice(0, n).trimEnd() + "…" : t;
+  return t.length > n ? t.slice(0, n).trimEnd() + "..." : t;
 }
 
 function gather(range: WdimRange): Signal[] {
@@ -57,8 +103,6 @@ function gather(range: WdimRange): Signal[] {
   return recentForSynthesis(days, limit);
 }
 
-// Build a normalised title → article URL lookup from both signals and news items.
-// Used post-generation to attach real URLs to the pieces the model selects.
 function buildUrlMap(items: Signal[], news: WdimNews[]): Map<string, string> {
   const map = new Map<string, string>();
   const norm = (s: string) =>
@@ -72,63 +116,192 @@ function buildUrlMap(items: Signal[], news: WdimNews[]): Map<string, string> {
   return map;
 }
 
-function attachUrls(sections: WdimSections, urlMap: Map<string, string>): WdimSections {
+function attachUrls(briefing: WdimBriefing, urlMap: Map<string, string>): WdimBriefing {
   const norm = (s: string) =>
     s.toLowerCase().trim().replace(/[""'']/g, '"').replace(/\s+/g, " ");
-  const fix = (sec: WdimSection): WdimSection => ({
-    ...sec,
-    pieces: sec.pieces.map((p) => ({ ...p, url: urlMap.get(norm(p.title)) })),
-  });
-  return { economy: fix(sections.economy), consumers: fix(sections.consumers), technology: fix(sections.technology) };
+  return {
+    ...briefing,
+    developments: briefing.developments.map((d) => ({
+      ...d,
+      url: d.url || urlMap.get(norm(d.headline)),
+    })),
+    expertPerspectives: briefing.expertPerspectives.map((p) => ({
+      ...p,
+      url: p.url || urlMap.get(norm(p.thesis)),
+    })),
+  };
 }
 
-function buildPrompt(range: WdimRange, items: Signal[], news: WdimNews[], markets: WdimMarket[]): string {
+// Tool schema for Anthropic API function calling.
+// tool_choice: { type: "tool", name: "generate_briefing" } forces exclusive structured output.
+const GENERATE_BRIEFING_TOOL = {
+  name: "generate_briefing",
+  description: "Generate a structured intelligence briefing with macro indicator, global developments, expert perspectives, and strategic context directives.",
+  input_schema: {
+    type: "object" as const,
+    properties: {
+      macro_indicator: {
+        type: "string",
+        description: "1-2 sentences. Broader macro context: a geopolitical, technological, regulatory, societal or economic development shaping the current environment. Must open with a concrete named development, data point, or actor. A second sentence may add scale or context. UK English, no em dashes.",
+      },
+      developments: {
+        type: "array",
+        description: "Exactly 4 high-density analytical summaries of the most important global developments relevant to the audience. No two items may share the same source publication. Headlines must be copied verbatim from the source material.",
+        minItems: 2,
+        maxItems: 4,
+        items: {
+          type: "object",
+          properties: {
+            headline: {
+              type: "string",
+              description: "Precise headline copied verbatim from NEWS HEADLINES or EXPERT SIGNALS inputs.",
+            },
+            summary: {
+              type: "string",
+              description: "2-3 analytical sentences on why this development matters to the audience. UK English, no em dashes.",
+            },
+            url: {
+              type: "string",
+              description: "Copy the URL verbatim from the source data if provided (the '| URL: ...' field). Omit if not available.",
+            },
+            source: {
+              type: "string",
+              description: "The publication or source name for this development.",
+            },
+          },
+          required: ["headline", "summary"],
+        },
+      },
+      expert_perspectives: {
+        type: "array",
+        description: "4-6 expert perspectives drawn from the EXPERT SIGNALS. Each thesis title must be copied verbatim from the signals so a URL can be attached. Cards link directly to the source Substack publication.",
+        minItems: 2,
+        maxItems: 6,
+        items: {
+          type: "object",
+          properties: {
+            thesis: {
+              type: "string",
+              description: "The expert's central argument or article heading, copied verbatim from EXPERT SIGNALS.",
+            },
+            source: {
+              type: "string",
+              description: "The expert or publication name as it appears in the signal.",
+            },
+            snippet: {
+              type: "string",
+              description: "Factual context note of at most 15 words beyond the thesis title.",
+            },
+            url: {
+              type: "string",
+              description: "Copy the URL verbatim from EXPERT SIGNALS if provided (the '| URL: ...' field). Omit if not available.",
+            },
+          },
+          required: ["thesis", "source", "snippet"],
+        },
+      },
+      directives: {
+        type: "array",
+        description: "2-5 strategic context notes derived from the current developments. Factual observations, not prescriptive instructions. No em dashes.",
+        minItems: 2,
+        maxItems: 5,
+        items: {
+          type: "object",
+          properties: {
+            action: {
+              type: "string",
+              description: "A single strategic context note (1 sentence). Factual, not prescriptive. UK English.",
+            },
+          },
+          required: ["action"],
+        },
+      },
+    },
+    required: ["macro_indicator", "developments", "expert_perspectives", "directives"],
+  },
+};
+
+function buildSystemPrompt(range: WdimRange, audience: WdimAudience): string {
+  const ctx = AUDIENCE_CONTEXT[audience];
+  return [
+    `You are a precise intelligence analyst for Jotter Intelligence, producing structured briefings for ${ctx.label}.`,
+    `Your focus for this audience: ${ctx.focus}.`,
+    `Timeframe context (${RANGE_LABEL[range]}): ${ctx.timeframes[range]}`,
+    ``,
+    `STRICT RULES:`,
+    `- UK English exclusively: per cent, categorise, behaviour, prioritising, whilst, organisation.`,
+    `- NEVER use em dashes (never output: —). Use colons, commas, or parentheses instead.`,
+    `- No advice or prescription. Never write "you should", "watch for", "action required", or "we recommend".`,
+    `- No meta-commentary or filler. Do not reference this briefing, the source list, or the analyst.`,
+    `- macro_indicator must open with a concrete named development, data point, or actor. It describes the broader macro environment (geopolitical, technological, regulatory, societal or economic context), not only financial markets. Do not fabricate statistics or institutions.`,
+    `- development headlines and expert_perspective thesis values must be copied verbatim from the source material provided.`,
+    `- For developments, include no more than one item per source publication. If the same publication appears multiple times, pick the most relevant item only.`,
+    `- Copy URLs verbatim from the source data where provided. Never fabricate or modify URLs.`,
+    `- If source items lack a hard figure for the macro indicator, use the most concrete factual statement present.`,
+  ].join("\n");
+}
+
+function buildUserMessage(
+  range: WdimRange,
+  audience: WdimAudience,
+  items: Signal[],
+  news: WdimNews[],
+  markets: WdimMarket[],
+  custom?: string,
+): string {
   const marketLines = markets
     .map((m) => `- ${m.name}: ${m.price.toLocaleString("en-GB")} (${m.changePct >= 0 ? "+" : ""}${m.changePct.toFixed(2)} per cent)`)
     .join("\n");
   const newsLines = news
-    .map((n) => `- (${n.category || "news"}) "${n.title}" | ${n.source}`)
+    .map((n) => `- (${n.category || "news"}) "${n.title}" | ${n.source}${n.url ? ` | URL: ${n.url}` : ""}`)
     .join("\n");
   const signalLines = items
-    .map((s) => `- [${s.source}] ${s.heading || ""}: ${snippet(s)}`)
+    .map((s) => `- [${s.source}] "${s.heading || ""}" | ${snippet(s)}${s.post_url ? ` | URL: ${s.post_url}` : ""}`)
     .join("\n");
 
-  return [
-    `You are a sharp intelligence analyst producing the "What Did I Miss?" briefing for a time-poor UK business leader, covering the ${RANGE_LABEL[range]}.`,
-    ``,
-    `Return ONLY a JSON object — no prose, no markdown fences — with this exact shape:`,
-    `{`,
-    `  "economy":    { "data": "...", "insight": "...", "pieces": [ {"title":"...","source":"...","focus":"..."}, {"title":"...","source":"...","focus":"..."}, {"title":"...","source":"...","focus":"..."} ] },`,
-    `  "consumers":  { "data": "...", "insight": "...", "pieces": [ ...3 items... ] },`,
-    `  "technology": { "data": "...", "insight": "...", "pieces": [ ...3 items... ] }`,
-    `}`,
-    ``,
-    `RULES:`,
-    `- UK English exclusively: per cent, categorise, behaviour, prioritising, whilst.`,
-    `- NEVER use em dashes. Use colons, semicolons or parentheses instead.`,
-    `- No advice, no prescription: never write "you should", "watch", "action required" or "we recommend".`,
-    `- No meta-commentary, no filler, no references to this briefing, the source list or the analyst.`,
-    `- NEVER count source items or outlets. Never write "X of Y stories", "N articles featured", "led by [outlet]" or anything that describes the data set rather than the world.`,
-    `- "data": 1-2 sentences. Open with a specific, hard data point — an exact number, percentage, price level, named metric or concrete event — drawn from the source items. A second sentence may add a comparison, a named actor or immediate context. Do NOT use vague adjectives ("rapidly growing", "cooling") without an anchoring figure. Do NOT invent statistics, institutions or reports.`,
-    `- "insight": 2-3 sentences. The structural, strategic or market implication. Offer a sharp analytical interpretation: what is this a sign of, what shift does it signal, what is the underlying dynamic or consequence. Be direct and opinionated. Do NOT merely restate the data or describe what happened.`,
-    `- "pieces": EXACTLY three items, each a REAL entry from the SOURCE ITEMS below. Copy title and source verbatim. "focus" is a factual note of at most 15 words adding context beyond the headline.`,
-    `- If items genuinely lack a hard figure for a category, use the most concrete factual statement present; never fabricate one.`,
-    `- ${RANGE_DENSITY[range]}`,
-    ``,
-    `SOURCE ITEMS`,
+  const parts = [
+    `Generate a ${RANGE_LABEL[range]} intelligence briefing for ${AUDIENCE_CONTEXT[audience].label}.`,
     ``,
     `[MARKET INDICES]`,
     marketLines || "(none)",
     ``,
-    `[BUSINESS / MARKET NEWS]`,
+    `[NEWS HEADLINES]`,
     newsLines || "(none)",
     ``,
     `[EXPERT SIGNALS]`,
     signalLines || "(none)",
+  ];
+
+  if (custom && custom.trim()) {
+    parts.push(``, `[ADDITIONAL CONTEXT]`, custom.trim());
+  }
+
+  return parts.join("\n");
+}
+
+// CLI fallback: merge system + user into one prompt with explicit JSON schema.
+function buildCliPrompt(
+  range: WdimRange,
+  audience: WdimAudience,
+  items: Signal[],
+  news: WdimNews[],
+  markets: WdimMarket[],
+  custom?: string,
+): string {
+  const system = buildSystemPrompt(range, audience);
+  const user = buildUserMessage(range, audience, items, news, markets, custom);
+  const schema = `{"macro_indicator":"...","developments":[{"headline":"...","summary":"...","url":"...","source":"..."}],"expert_perspectives":[{"thesis":"...","source":"...","snippet":"...","url":"..."}],"directives":[{"action":"..."}]}`;
+  return [
+    system,
+    ``,
+    `OUTPUT FORMAT: Return ONLY a raw JSON object matching this schema exactly. No markdown fences, no preamble, no postscript:`,
+    schema,
+    ``,
+    user,
   ].join("\n");
 }
 
-function parseSections(raw: string): WdimSections | null {
+function parseBriefingFromJson(raw: string): WdimBriefing | null {
   if (!raw) return null;
   let text = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
   const a = text.indexOf("{");
@@ -137,29 +310,94 @@ function parseSections(raw: string): WdimSections | null {
   text = text.slice(a, b + 1);
   try {
     const o = JSON.parse(text);
-    const ok = (s: unknown): s is WdimSection =>
-      !!s &&
-      typeof (s as WdimSection).data === "string" &&
-      typeof (s as WdimSection).insight === "string" &&
-      Array.isArray((s as WdimSection).pieces);
-    if (ok(o.economy) && ok(o.consumers) && ok(o.technology)) {
-      const clean = (sec: WdimSection): WdimSection => ({
-        data: sec.data.trim(),
-        insight: sec.insight.trim(),
-        pieces: sec.pieces.slice(0, 3).map((p) => ({
-          title: String(p.title || "").trim(),
-          source: String(p.source || "").trim(),
-          focus: String(p.focus || "").trim(),
-        })),
-      });
-      return { economy: clean(o.economy), consumers: clean(o.consumers), technology: clean(o.technology) };
-    }
-  } catch { /* fall through */ }
-  return null;
+    if (
+      typeof o.macro_indicator !== "string" ||
+      !Array.isArray(o.developments) ||
+      !Array.isArray(o.expert_perspectives) ||
+      !Array.isArray(o.directives)
+    ) return null;
+    return normaliseBriefing(o);
+  } catch { return null; }
 }
 
-// 1) Claude Code CLI — uses the user's existing subscription, no API key needed.
-// Defaults to Haiku for speed; override via WDIM_MODEL env var.
+function normaliseBriefing(o: {
+  macro_indicator?: string;
+  developments?: { headline?: string; summary?: string; url?: string; source?: string }[];
+  expert_perspectives?: { thesis?: string; source?: string; snippet?: string; url?: string }[];
+  directives?: { action?: string }[];
+}): WdimBriefing | null {
+  if (!o.macro_indicator || !o.developments || !o.expert_perspectives || !o.directives) return null;
+  const seenSources = new Set<string>();
+  return {
+    macroIndicator: String(o.macro_indicator).trim(),
+    developments: (o.developments)
+      .filter((d) => {
+        if (!d.headline || !d.summary) return false;
+        const src = (d.source || "").toLowerCase().trim();
+        if (src && seenSources.has(src)) return false;
+        if (src) seenSources.add(src);
+        return true;
+      })
+      .slice(0, 4)
+      .map((d) => ({
+        headline: String(d.headline).trim(),
+        summary: String(d.summary).trim(),
+        ...(d.url ? { url: String(d.url).trim() } : {}),
+      })),
+    expertPerspectives: (o.expert_perspectives)
+      .filter((p) => p.thesis && p.source)
+      .slice(0, 6)
+      .map((p) => ({
+        thesis: String(p.thesis).trim(),
+        source: String(p.source).trim(),
+        snippet: String(p.snippet || "").trim(),
+        ...(p.url ? { url: String(p.url).trim() } : {}),
+      })),
+    directives: (o.directives)
+      .filter((d) => d.action)
+      .slice(0, 5)
+      .map((d) => ({ action: String(d.action).trim() })),
+  };
+}
+
+// 1. Anthropic API with tool use (preferred: guaranteed structured output).
+async function tryApiToolUse(systemPrompt: string, userMessage: string): Promise<WdimBriefing | null> {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) return null;
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": key,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: process.env.WDIM_MODEL || "claude-haiku-4-5-20251001",
+        max_tokens: 2048,
+        system: systemPrompt,
+        tools: [GENERATE_BRIEFING_TOOL],
+        tool_choice: { type: "tool", name: "generate_briefing" },
+        messages: [{ role: "user", content: userMessage }],
+      }),
+      signal: AbortSignal.timeout(90_000),
+    });
+    if (!res.ok) return null;
+    const j = await res.json();
+    const toolUse = (j?.content ?? []).find(
+      (b: { type: string }) => b.type === "tool_use",
+    ) as { input?: {
+      macro_indicator?: string;
+      developments?: { headline: string; summary: string }[];
+      expert_perspectives?: { thesis: string; source: string; snippet: string }[];
+      directives?: { action: string }[];
+    } } | undefined;
+    if (!toolUse?.input) return null;
+    return normaliseBriefing(toolUse.input);
+  } catch { return null; }
+}
+
+// 2. Claude Code CLI (uses existing subscription, JSON-prompt fallback).
 function tryClaudeCli(prompt: string): Promise<string | null> {
   const bin = process.env.WDIM_CLAUDE_BIN || "claude";
   const model = process.env.WDIM_MODEL || "claude-haiku-4-5-20251001";
@@ -187,51 +425,38 @@ function tryClaudeCli(prompt: string): Promise<string | null> {
   });
 }
 
-// 2) Anthropic API — if ANTHROPIC_API_KEY is set in .env.local.
-async function tryApi(prompt: string): Promise<string | null> {
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) return null;
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({
-        model: process.env.WDIM_MODEL || "claude-haiku-4-5",
-        max_tokens: 1800,
-        messages: [{ role: "user", content: prompt }],
-      }),
-      signal: AbortSignal.timeout(90_000),
-    });
-    if (!res.ok) return null;
-    const j = await res.json();
-    const text = (j?.content ?? []).map((b: { text?: string }) => b.text || "").join("").trim();
-    return text || null;
-  } catch {
-    return null;
-  }
-}
-
-// Returns null when no LLM is available or when the response can't be parsed.
-// The route maps null → { available: false } so the home module hides cleanly.
 export async function generateWdim(
   range: WdimRange,
+  audience: WdimAudience,
   news: WdimNews[] = [],
   markets: WdimMarket[] = [],
+  custom?: string,
 ): Promise<WdimResult | null> {
   const items = gather(range);
   const urlMap = buildUrlMap(items, news);
-  const prompt = buildPrompt(range, items, news, markets);
 
-  const cli = await tryClaudeCli(prompt);
-  const cliSections = parseSections(cli || "");
-  if (cliSections) {
-    return { range, mode: "claude-cli", sections: attachUrls(cliSections, urlMap), generatedAt: new Date().toISOString() };
+  // API with tool use preferred (eliminates parsing errors).
+  const systemPrompt = buildSystemPrompt(range, audience);
+  const userMessage = buildUserMessage(range, audience, items, news, markets, custom);
+  const apiBriefing = await tryApiToolUse(systemPrompt, userMessage);
+  if (apiBriefing) {
+    return {
+      range, audience, mode: "api",
+      briefing: attachUrls(apiBriefing, urlMap),
+      generatedAt: new Date().toISOString(),
+    };
   }
 
-  const api = await tryApi(prompt);
-  const apiSections = parseSections(api || "");
-  if (apiSections) {
-    return { range, mode: "api", sections: attachUrls(apiSections, urlMap), generatedAt: new Date().toISOString() };
+  // CLI fallback.
+  const cliPrompt = buildCliPrompt(range, audience, items, news, markets, custom);
+  const cliRaw = await tryClaudeCli(cliPrompt);
+  const cliBriefing = parseBriefingFromJson(cliRaw || "");
+  if (cliBriefing) {
+    return {
+      range, audience, mode: "claude-cli",
+      briefing: attachUrls(cliBriefing, urlMap),
+      generatedAt: new Date().toISOString(),
+    };
   }
 
   return null;

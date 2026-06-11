@@ -1,7 +1,37 @@
 import { NextResponse } from "next/server";
+import { spawn } from "child_process";
+import path from "path";
 
-// Data is now refreshed nightly via GitHub Actions (engine/refresh_all.py).
-// This endpoint is kept as a no-op so any cached client references don't 404.
+const g = globalThis as unknown as { __refreshing?: boolean };
+
+function runScript(engineDir: string, args: string[]): Promise<boolean> {
+  return new Promise((resolve) => {
+    const child = spawn("python3", args, { cwd: engineDir, stdio: "pipe" });
+    child.on("close", (code) => resolve(code === 0));
+    child.on("error", () => resolve(false));
+  });
+}
+
 export async function POST() {
-  return NextResponse.json({ refreshed: false, reason: "noop: data refreshed by scheduled action" });
+  // In production, DATA_URL is set and data is refreshed by GitHub Actions.
+  if (process.env.DATA_URL) {
+    return NextResponse.json({ refreshed: false });
+  }
+  // Prevent concurrent refreshes.
+  if (g.__refreshing) {
+    return NextResponse.json({ refreshed: false, reason: "in-progress" });
+  }
+  g.__refreshing = true;
+  try {
+    const engineDir = path.join(process.cwd(), "..", "engine");
+    await runScript(engineDir, ["fetch_naughton_recent.py"]);
+    await runScript(engineDir, ["fetch_expert.py"]);
+    await runScript(engineDir, ["backfill.py", "lsn"]);
+    await runScript(engineDir, ["build_dataset.py"]);
+    return NextResponse.json({ refreshed: true });
+  } catch {
+    return NextResponse.json({ refreshed: false });
+  } finally {
+    g.__refreshing = false;
+  }
 }
