@@ -65,7 +65,9 @@ export async function GET(req: Request) {
     g.__wdim ??= {};
     const cached = g.__wdim[cacheKey];
     if (cached && Date.now() - cached.at < TTL) {
-      return NextResponse.json({ available: true, ...(cached.data as object) });
+      return NextResponse.json({ available: true, ...(cached.data as object) }, {
+        headers: { "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600" },
+      });
     }
   }
 
@@ -80,5 +82,9 @@ export async function GET(req: Request) {
     g.__wdim[cacheKey] = { at: Date.now(), data: result };
   }
 
-  return NextResponse.json({ available: true, ...result });
+  const headers: Record<string, string> = custom
+    ? { "Cache-Control": "no-store" }
+    : { "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600" };
+
+  return NextResponse.json({ available: true, ...result }, { headers });
 }
