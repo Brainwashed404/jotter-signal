@@ -16,15 +16,13 @@ export default async function HomePage() {
     <div className="space-y-8">
       <TrendingAndInsights signals={recentFeed} />
 
-      {/* LOCAL-ONLY prototype: renders nothing on the live site (api/wdim returns
-          available:false when DATA_URL is set). */}
       <WhatDidIMiss />
 
       <CollapsibleSection title="Markets">
         <MarketsSnapshot />
       </CollapsibleSection>
 
-      <CollapsibleSection title="World Cup 2026" defaultOpen={false}>
+      <CollapsibleSection title="World Cup 2026" defaultOpen={true}>
         <WorldCupChart />
       </CollapsibleSection>
 
