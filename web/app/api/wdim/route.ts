@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { generateWdim, wdimReady, type WdimRange, type WdimAudience, type WdimNews, type WdimMarket } from "@/lib/wdim";
+import { loadData } from "@/lib/data";
 
-// LOCAL-ONLY prototype. In production DATA_URL is set, so we return
-// { available: false } and the home module renders nothing.
 const RANGES = ["day", "week", "month"] as const;
 const AUDIENCES = ["b2b", "b2c"] as const;
 const NEWS_CATEGORIES = ["world", "business", "ft", "technology", "uk"] as const;
@@ -46,6 +45,7 @@ async function aggregate(origin: string): Promise<{ news: WdimNews[]; markets: W
 }
 
 export async function GET(req: Request) {
+  await loadData();
   if (!wdimReady()) {
     return NextResponse.json({ available: false });
   }
