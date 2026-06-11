@@ -318,12 +318,14 @@ export default function WhatDidIMiss() {
       const params = new URLSearchParams({ range: rng, audience: aud });
       const res = await fetch(`/api/wdim?${params}`);
       const d: ApiResponse = await res.json();
-      setAvailable(d.available);
-      if (d.available && d.briefing) {
-        setCache((prev) => ({ ...prev, [key]: d.briefing! }));
+      if (d.available) {
+        setAvailable(true);
+        if (d.briefing) setCache((prev) => ({ ...prev, [key]: d.briefing! }));
+      } else if (showSpinner) {
+        setAvailable(false);
       }
     } catch {
-      setAvailable(false);
+      if (showSpinner) setAvailable(false);
     } finally {
       removeLoading(key);
     }
