@@ -7,21 +7,36 @@ import { useSaved, toggleSave, addHighlight } from "@/lib/saved";
 import { themesFor } from "@/lib/themes";
 import { fmtDate } from "@/lib/format";
 
-const LINK = /\[([^\]]+)\]\(([^)]+)\)/g;
-const demd = (t: string) => t.replace(LINK, "$1");
+// Matches both ![alt](url) images and [text](url) links in one pass.
+const INLINE = /(!?)\[([^\]]*)\]\(([^)]+)\)/g;
+const demd = (t: string) =>
+  t.replace(/!\[[^\]]*\]\([^)]+\)/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
-function renderWithLinks(text: string): ReactNode[] {
+// Renders signal body text with inline markdown links and images at their original positions.
+function renderBody(text: string): ReactNode[] {
   const nodes: ReactNode[] = [];
   let last = 0, i = 0, m: RegExpExecArray | null;
-  LINK.lastIndex = 0;
-  while ((m = LINK.exec(text))) {
+  INLINE.lastIndex = 0;
+  while ((m = INLINE.exec(text))) {
     if (m.index > last) nodes.push(text.slice(last, m.index));
-    nodes.push(
-      <a key={i++} href={m[2]} target="_blank" rel="noopener noreferrer"
-        onClick={(e) => e.stopPropagation()} className="underline" style={{ color: "var(--accent-2)" }}>
-        {m[1]}
-      </a>
-    );
+    if (m[1] === "!") {
+      // Inline image — rendered where the author placed it
+      nodes.push(
+        // eslint-disable-next-line @next/next/no-img-element
+        <figure key={i++} className="my-2" style={{ margin: "0.6rem 0" }}>
+          <img src={m[3]} alt={m[2]} loading="lazy"
+            style={{ maxWidth: "100%", height: "auto", borderRadius: 4, display: "block" }} />
+          {m[2] && <figcaption className="text-xs mt-1" style={{ color: "var(--muted)" }}>{m[2]}</figcaption>}
+        </figure>
+      );
+    } else {
+      nodes.push(
+        <a key={i++} href={m[3]} target="_blank" rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()} className="underline" style={{ color: "var(--accent-2)" }}>
+          {m[2]}
+        </a>
+      );
+    }
     last = m.index + m[0].length;
   }
   if (last < text.length) nodes.push(text.slice(last));
@@ -179,23 +194,21 @@ export function SignalCard({ s }: { s: Signal }) {
         className="text-sm leading-relaxed whitespace-pre-wrap"
         style={{ color: "var(--body-text)", overflowWrap: "anywhere", wordBreak: "break-word" }}
       >
-        {open || !long ? renderWithLinks(s.text) : demd(s.text).slice(0, 360) + "…"}
+        {open || !long ? renderBody(s.text) : demd(s.text).slice(0, 360) + "…"}
       </p>
       {expandable && (
         <button onClick={() => setOpen((o) => !o)} className="text-xs mt-1.5" style={{ color: "var(--accent-2)" }}>
-          {open ? "Show less ▲" : long ? "Read full text ▼" : `Show image${s.images!.length > 1 ? "s" : ""} ▼`}
+          {open ? "Show less ▲" : "Read full text ▼"}
         </button>
       )}
 
-      {open && s.images && s.images.length > 0 && (
+      {/* Trailing images fallback — only shown for signals not yet rebuilt with inline images.
+          After running build_dataset.py, images appear inline and this block stays hidden. */}
+      {open && s.images && s.images.length > 0 && !s.text.includes("![") && (
         <div className="mt-3 space-y-2">
           {s.images.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={i}
-              src={src}
-              alt=""
-              loading="lazy"
+            <img key={i} src={src} alt="" loading="lazy"
               className="rounded-lg border w-full h-auto"
               style={{ borderColor: "var(--border)" }}
             />

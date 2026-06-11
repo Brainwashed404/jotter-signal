@@ -29,11 +29,17 @@ a daily workbench for strategists/insight workers.
 ## ⭐ CURRENT DEPLOYMENT & DATA PIPELINE (2026-06; supersedes older "not deployed" notes below)
 **The app IS live: `intelligence.jotter.media` on Vercel** (invite-gated via middleware). Repo auto-deploys on
 push to `main`.
-- **Data is baked at BUILD time, not fetched at runtime.** `web/scripts/fetch-data.js` (prebuild) downloads
-  `signals.jsonl.gz` + `experts.json` from object storage (env `DATA_URL`), and `next.config.ts`
-  `outputFileTracingIncludes` bundles them into the serverless function. `lib/data.ts` reads the local bundled
-  file (zero per-request network). Home page is ISR `export const revalidate = 300` (one render serves everyone).
-  So: **new data only appears after a Vercel rebuild.** A push (even empty commit) triggers one.
+- **Data is baked at BUILD time, not fetched at runtime.** `next.config.ts` `outputFileTracingIncludes` bundles
+  `web/data/signals.jsonl.gz` + `experts.json` into the serverless function; `lib/data.ts` reads the local bundled
+  file (zero per-request network). Home page is ISR `export const revalidate = 300`. **New data only appears after a
+  Vercel rebuild** (a push, even an empty commit, triggers one).
+- **⭐ COMMITTED DATA IS NOW AUTHORITATIVE (2026-06-10).** `web/scripts/fetch-data.js` no longer downloads from B2 by
+  default: if a healthy committed `signals.jsonl.gz` exists (>5 MB) it uses that and **skips the B2 download entirely**;
+  B2 is only a fallback when the committed file is missing. **Why:** a successful B2 download used to OVERWRITE the
+  good committed file with stale/capped data, which is what kept resurrecting removed sources (Benedict Evans) and
+  hiding new ones (Ethan Mollick, today's LSN). The CI "Data refresh" workflow commits a fresh build every run, so the
+  committed file is never more than a cycle stale, and local builds can be committed directly for an instant update.
+  This also removes the ~32 MB-per-deploy B2 download that was the main thing blowing the 1 GB/day cap.
   **⚠ DATA PRIORITY (changed 2026-06-10): `fetch-data.js` now PREFERS the committed `web/data/signals.jsonl.gz` +
   `experts.json` and only downloads from B2 if a healthy committed file is absent.** Previously a successful B2
   download OVERWROTE the committed file, so stale/capped B2 data repeatedly resurfaced on the live site (Benedict
@@ -50,10 +56,14 @@ push to `main`.
   back to B2 → **commit the rebuilt `web/data/signals.jsonl.gz`+`experts.json` into the repo** → push an **empty
   commit to trigger a Vercel rebuild** (`permissions: contents:write`; **no `[skip ci]`** — Vercel honours it and
   would skip the build; this workflow only triggers on schedule/dispatch so the bot push can't loop).
-- **⚠⚠ THE REAL BOTTLENECK = Backblaze B2 free 1 GB/day DOWNLOAD cap.** Heavy deploy activity blows it; then the
-  Vercel build's `fetch-data.js` 403s downloading `signals.jsonl.gz` AND the CI `engine-data.tar.gz` restore 403s
-  (rebuilds thin, ~16k vs ~25.8k signals). Mitigations in place: (1) `fetch-data.js` falls back to the **committed**
-  `web/data/signals.jsonl.gz` (force-added to git, tracked despite gitignore) when the download 403s; (2) CI commits
+- **⚠⚠ THE B2 1 GB/day DOWNLOAD cap — now largely defused (2026-06-10).** `fetch-data.js` no longer downloads from B2
+  on the Vercel build at all when a healthy committed `signals.jsonl.gz` exists (it does); it uses the committed file
+  and skips the download. That removes the ~32 MB-per-deploy hit that was the main cap-blower (see the authoritative-
+  committed-data note up top). The CI `engine-data.tar.gz` restore can still 403 when capped (→ thin ~16k rebuild →
+  degraded-guard skips the commit), so CI freshness still depends on the cap, but the LIVE SITE no longer goes stale
+  from it. Historical context (mitigations) below still applies to CI:
+  (1) `fetch-data.js` uses the **committed** `web/data/signals.jsonl.gz` (force-added to git, tracked despite gitignore);
+  (2) CI commits
   fresh data to the repo each run so the build has it without a download; (3) a **degraded-build guard** in
   refresh.yml skips the publish/commit if the new signal count is far below the committed one (stops a capped thin
   run clobbering good data). **Net effect when capped: CI can't publish, so the site stays on the last good
@@ -71,6 +81,11 @@ push to `main`.
   also refreshes the baked Reddit headlines (below). Use it for deep backfills of blocked substacks or when B2 is capped.
 - **LSN has NO feed** — its only data source is `backfill_lsn` (scrapes `lsnglobal.com/daily-signals`, accumulates).
   `refresh_all.py` now **always runs backfill for feed-less sources** (was skipped on `--no-backfill`, which froze LSN).
+  **⭐ Why LSN looked stuck (2026-06-10):** the scrape works fine (CI got today's 3 signals), but the OVERALL CI build
+  was DEGRADED (16,391 < 90% of 25,778) because the B2 `engine-data.tar.gz` restore was capped → thin rebuild → the
+  degraded-guard SKIPPED the commit, so live froze on the last good commit (no bot commit since 2026-06-09 14:52).
+  Net: LSN (and everything) only refreshes on live when CI commits OR a local build is committed. The committed-data-
+  authoritative change above + dropping the per-deploy B2 download should let the cap recover so CI commits resume.
 - **Emailed-newsletter pipeline** (`engine/fetch_newsletters.py` + `engine/newsletter_map.json`): dedicated Gmail
   (`jotterintelligence@gmail.com`) over IMAP (secrets `GMAIL_USER`/`GMAIL_APP_PASSWORD`), one source per sender,
   grouping/category/ignore via `newsletter_map.json`, junk-subject filter, `SCHEMA_V` bump = clean re-ingest. Writes
@@ -148,10 +163,19 @@ Reddit · Wiki · GitHub · Google**.
   falls back to B2 if it's absent (so the Vercel build no longer re-downloads 32MB/deploy from B2 — the single biggest
   cap drain, which should let the cap recover and CI resume committing); (2) committing fresh LOCAL builds is the
   reliable update path. **Durable fix still pending: front B2 with Cloudflare (free egress) — user infra task.**
-- **WDIM prototype is LOCAL-ONLY and intentionally NOT committed.** `web/components/WhatDidIMiss.tsx`, `web/lib/wdim.ts`,
-  `web/app/api/wdim/` + the `<WhatDidIMiss/>` line in `web/app/page.tsx` are a working-tree prototype. It self-gates
-  to render nothing when `DATA_URL` is set (production), but per the user it's kept out of git until it's refined.
-  Do NOT commit these until the user says so. See [[jotter-wdim-prototype]].
+- **WDIM ("What Did I Miss?") prototype is LOCAL-ONLY and intentionally NOT committed.** `web/components/WhatDidIMiss.tsx`,
+  `web/lib/wdim.ts`, `web/app/api/wdim/` + the `<WhatDidIMiss/>` line in `web/app/page.tsx` are a working-tree prototype.
+  It self-gates to render nothing when `DATA_URL` is set (production). **Do NOT commit until the user says so.**
+  - **Format:** three sections **Economy / Consumers / Technology**; each has `data` (1–2 sentences anchored in a hard
+    figure) + `insight` (2–3 analytical sentences) + **Key Articles** (3 real source docs with links). UK English, NO
+    em dashes, no advice/meta/filler. Three timeframes: **Past Day / Past Week / Past Month** (Past Hour removed).
+    **Auto-expanded** by default (`useState(true)` in WhatDidIMiss.tsx).
+  - **Grounding:** `api/wdim` aggregates trending headlines (world/business/ft/technology/uk) + `/api/markets` indices
+    + `getSignals()` expert signals, and passes them to `generateWdim(range, news, markets)`.
+  - **Requires real LLM — no deterministic fallback.** `generateWdim` tries the `claude` CLI
+    (`claude-haiku-4-5-20251001`, uses the user's Claude subscription) → `ANTHROPIC_API_KEY`. Returns null (→
+    `{available:false}` → component invisible) if neither is available. User has Claude CLI installed and logged in.
+  - See [[jotter-wdim-prototype]] for the full state.
 
 ## ⭐ MOBILE EXPERIENCE (2026-06-10; everything gated at the `md` 768px breakpoint, desktop untouched)
 Below `md` the shell reflows; at/above `md` nothing changed. The pieces:
@@ -206,18 +230,62 @@ Below `md` the shell reflows; at/above `md` nothing changed. The pieces:
   quality finance source can fill the 5th slot.
 - **Ethan Mollick added** as an author (`ethanmollick`, One Useful Thing, oneusefulthing.org, rss + substack
   backfill; 135 signals 2022→). 33 experts / ~25.9k signals now.
-- **Weather (2026-06-10):** the feed was fine — the 23-vs-27 the user saw is a forecaster difference (the app uses
-  Open-Meteo `best_match`, which auto-selects the regional model; BBC uses the Met Office). Forcing `models=ukmo_seamless`
-  was tested and is identical to default here, so not applied. Real fixes: (1) hourly "NOW" `startIdx` compared a UTC
-  `now()` against Open-Meteo's LOCAL-timezone hourly times (off by the UTC offset, e.g. 1h in BST) — now uses
-  `j.current.time`; (2) server cache TTL 20→10 min; (3) WeatherClock refetches every 15 min so an open tab stays live.
-  NB this sandbox's network serves synthetic 2026-dated Open-Meteo data (like Yahoo markets).
+- **Weather (2026-06-10):** the SOURCE is now the Met Office UKMO model (`&models=ukmo_seamless`) — see the
+  "Met Office model" note in the pt2 session above (this earlier note is superseded; a first pass kept `best_match`,
+  then the user asked for Met Office). Other still-valid fixes: (1) hourly "NOW" `startIdx` now uses `j.current.time`
+  (local tz) not a UTC `now()` (was off by the UTC offset, e.g. 1h in BST); (2) server cache TTL 20→10 min;
+  (3) WeatherClock refetches every 15 min so an open tab stays live. NB this sandbox serves synthetic 2026-dated data.
 - `.claude/launch.json` (in `~/Claude Code Experiments/`) defines the `jotter-web` preview server
   (`npm run dev --prefix jotter-intelligence/web`, port 3000) for Claude's preview tooling.
 
+## ⭐ SESSION 2026-06-11: UI overhaul + inline images
+
+### Inline image rendering in the Feed
+- **`engine/build_dataset.py`**: before HTML tag-stripping, `clean_block()` now converts `<figure>/<img>` tags to
+  `![alt](url)` markdown inline using three helpers: `_img_url_ok()` (skips data-URIs, SVGs, CDN thumbs),
+  `_img_tag_to_md()`, `_figure_to_md()`. Images appear at their authored position in the signal text.
+  After rebuild: 5,060 of 26,301 signals carry inline `![` markers.
+- **`web/components/SignalCard.tsx`**: `renderWithLinks()` → `renderBody()`. Combined `INLINE` regex handles
+  both `[text](url)` links AND `![alt](url)` images in one pass. Images render as `<figure><img loading="lazy"/></figure>`
+  at original position. `demd()` strips images from truncated previews. The trailing-images fallback block is now
+  gated on `!s.text.includes("![")` (still works for pre-rebuild signals in the dataset).
+
+### WDIM ("What Did I Miss?") — overhaul in previous session (2026-06-10 evening), finalised here
+- **Deterministic fallback removed entirely.** WDIM now requires the `claude` CLI (using the user's subscription)
+  or `ANTHROPIC_API_KEY`. Returns `{available:false}` (→ invisible) if neither is available.
+  User installed Claude Code CLI (`npm i -g @anthropic-ai/claude-code`) and completed setup. CLI works.
+- **Model: `claude-haiku-4-5-20251001`** for speed. Override via `WDIM_MODEL` env var.
+- **Three timeframes: Past Day / Past Week / Past Month.** "Past Hour" was removed.
+- **WDIM is now auto-expanded** (`useState(true)`) — the brief is visible immediately on page load.
+- **No metadata footer** (sources count + timestamp removed). **Key Articles** box replaces "Key Pieces".
+- **URL attachment**: `buildUrlMap()` builds a `title → post_url` map from signals + news; `attachUrls()`
+  patches piece links after AI parse (more reliable than asking the model to reproduce URLs).
+- **`wdimReady()`** checks `getSignals().length > 0` (NOT `recentForSynthesis` — that caused a false-negative bug).
+- **Background prefetch**: on mount, fetches `day` with spinner, then after 1.5s silently fires `week` + `month`.
+
+### News & Insights — combined module replacing Trending News + Latest Insights
+- **`TrendingAndInsights.tsx`** (new component) replaces the separate `CollapsibleSection title="Trending News"` +
+  `CollapsibleSection title="Latest Insights"` sections on the home page.
+- **Header**: `h2` "News & Insights" + inline toggle pills **[News] [Insights]** + collapse chevron.
+- **News view**: unchanged `TrendingWidget` (category pills, live headlines).
+- **Insights view**: source-filter pills (one per expert/publication, ordered by most recently published,
+  no "All" pill) + a `divide-y` list identical in format to Trending News rows (headline, context snippet,
+  source label, archive-search icon, links to `post_url`).
+  - Pills show **author name only** — the `(blog name)` parenthetical is stripped (`source.replace(/\s*\([^)]*\)\s*$/, "")`).
+  - Source pills use `pb-0.5` (no `-mx-4`) to avoid the `overflow-y:auto` clip that `overflow-x:auto` triggers.
+  - Context snippets strip images by filtering lines starting with `![` before any URL-regex work (avoids CDN
+    `:stripexif():stripicc()` artefacts that contain `)` and break simpler URL-stripping regexes).
+  - **Source label removed from list rows** — it's redundant when the selected pill already identifies the author.
+- **Data**: `page.tsx` now calls `getRecentFeed(365, 10)` — up to 10 per source scanning a full year — so
+  infrequent authors (weekly/bi-weekly) reliably get 10 articles, not 3–4 from the old 30-day window.
+- **`LatestInsights.tsx` is no longer used on the home page** (file still exists; it's still used nowhere —
+  safe to delete later). The standalone Latest Insights CollapsibleSection is gone from `page.tsx`.
+
+---
+
 ## ⭐ HOME + UI CHANGES THIS SESSION
-- **Home "Latest Insights" = ONE latest post per expert/publication, last 7 days** (`getLatestPerExpert(7)` in
-  `lib/data.ts`). Do NOT make this multiple-per-source.
+- **Home "Latest Insights" — replaced by TrendingAndInsights Insights tab** (see session 2026-06-11 above).
+  Old `getLatestPerExpert(7)` pattern is gone; home now uses `getRecentFeed(365, 10)` via `TrendingAndInsights`.
 - **READ state removed** from `SignalCard.tsx` (the dim overlay + "✓ read" label + `jotter.read.v1` logic) — it
   overlapped confusingly with the kind tags.
 - **Skins: 5 new workstation skins** in `globals.css` + `lib/appearance.ts` SKINS: `next` (Cube/NeXTSTEP), `beos`
@@ -242,7 +310,8 @@ web/                         Next.js 16 (App Router, Turbopack, Tailwind v4)
                              + api/ (search, trending, markets, weather, city-weather, upload-pdf, sources, refresh)
                              NO generate/opendata/trends/attention/daily/chat/synthesis (all deleted; app is LLM-free)
   components/                AppHeader (top bar + expandable weather/date/clock panels), WeatherClock, AutoRefresh,
-                             SignalCard, SignalList, TrendingWidget, MarketsSnapshot, CollapsibleSection, LatestInsights,
+                             SignalCard, SignalList, TrendingWidget, TrendingAndInsights (home News+Insights toggle),
+                             MarketsSnapshot, CollapsibleSection, LatestInsights[unused on home — safe to delete],
                              SourcesGrid, SourceProfile, ExpertAdmin, PdfUpload, NavLinks, RadioSidebar, CtaFooter,
                              Logo, ThemeToggle, ThemeHeatmap[parked/unused], ui
                              (deleted: AskPanel, Generator, WeeklySynthesis, DailyIntelligence, OpenDataCard,
@@ -337,7 +406,7 @@ since futurology left, but it remains available.
 - **Nav** (NavLinks, client, usePathname): the active route's pill stays filled (grey `--panel-2` bg, `--text`)
   via `aria-current`. `/` matches exactly; others match prefix. Nav labels: **Home · Feed (→/search) · Experts ·
   Publications · Saved** (the old "Search" was renamed "Feed", URL still `/search`; the "Data" item was removed).
-- `/` Home: **Trending News** (TrendingWidget) · **Markets** (MarketsSnapshot) · **Latest Expert Insights** (1 signal per source, last 4 weeks). CtaFooter.
+- `/` Home: **News & Insights** (TrendingAndInsights — toggle between live Trending News and Latest Insights source-browser) · **What Did I Miss?** (WDIM, local-only, auto-expanded) · **Markets** (MarketsSnapshot, auto-expands first chart) · **World Cup 2026** (collapsed by default) · CtaFooter.
 - `/search` (**nav label: "Feed"**) SignalList: whole-word full-text search, infinite scroll, kind tabs (**Everything / Long Reads / Articles / Q&A / Links / Data** — Quotes tab removed, Q&A added), theme/year/expert filters.
   The "try" suggestion chips **auto-rotate every 8s** (reshuffle on mount + interval; client-only), and the
   **search-box placeholder examples are generated from those rotating suggestions** so they differ each visit

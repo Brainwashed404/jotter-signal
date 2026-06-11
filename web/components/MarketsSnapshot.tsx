@@ -190,7 +190,13 @@ export default function MarketsSnapshot() {
     const load = () =>
       fetch("/api/markets")
         .then((r) => r.json())
-        .then((d) => { if (alive && Array.isArray(d)) setData(d); })
+        .then((d) => {
+          if (alive && Array.isArray(d)) {
+            setData(d);
+            // Auto-expand the first index on initial load; don't override a user selection.
+            setExpanded((prev) => prev ?? d[0]?.name ?? null);
+          }
+        })
         .catch(() => {});
     load();
     const t = setInterval(load, 60_000);
@@ -206,7 +212,7 @@ export default function MarketsSnapshot() {
         {data.map((q) => (
           <button
             key={q.name}
-            onClick={() => setExpanded(expanded === q.name ? null : q.name)}
+            onClick={() => setExpanded(q.name)}
             className="panel panel-hover shrink-0 px-3 py-2 flex items-center gap-2 whitespace-nowrap"
             style={expanded === q.name ? { borderColor: "var(--accent)" } : {}}
           >
@@ -215,7 +221,6 @@ export default function MarketsSnapshot() {
             <span className="mono text-xs font-semibold" style={{ color: q.up ? "var(--up)" : "var(--down)" }}>
               {q.up ? "▲" : "▼"} {Math.abs(q.changePct).toFixed(2)}%
             </span>
-            <span className="label" style={{ fontSize: 10, opacity: 0.6 }}>{expanded === q.name ? "▲" : "▼"}</span>
           </button>
         ))}
       </div>

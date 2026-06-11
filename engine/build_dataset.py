@@ -84,6 +84,35 @@ def _md_links(t):
         return f"[{inner}]({url})"
     return _A.sub(repl, t)
 
+def _img_url_ok(url):
+    low = url.lower()
+    if low.startswith("data:") or low.endswith(".svg"): return False
+    return not any(x in low for x in _IMG_SKIP)
+
+def _img_tag_to_md(m):
+    """Convert a single <img> tag to inline markdown ![alt](url)."""
+    html = m.group(0)
+    src = re.search(r'src=["\']([^"\']+)["\']', html, re.I)
+    if not src: return " "
+    u = src.group(1).strip()
+    if not _img_url_ok(u): return " "
+    if u.startswith("http://"): u = "https://" + u[7:]
+    alt = re.search(r'alt=["\']([^"\']*)["\']', html, re.I)
+    a = (alt.group(1).strip() if alt else "").replace("\n", " ")
+    return f"\n![{a}]({u})\n"
+
+def _figure_to_md(m):
+    """Convert <figure>...<img>...</figure> (with optional figcaption) to markdown."""
+    html = m.group(0)
+    src = re.search(r'<img\b[^>]*?src=["\']([^"\']+)["\']', html, re.I)
+    if not src: return " "
+    u = src.group(1).strip()
+    if not _img_url_ok(u): return " "
+    if u.startswith("http://"): u = "https://" + u[7:]
+    cap = re.search(r'<figcaption[^>]*>([\s\S]*?)</figcaption>', html, re.I)
+    a = re.sub(r'<[^>]+>', '', cap.group(1)).strip().replace("\n", " ") if cap else ""
+    return f"\n![{a}]({u})\n"
+
 def clean_block(htmlfrag):
     """Paragraph-preserving text — mirrors the original post's block structure."""
     t = re.sub(r"<(script|style)\b.*?</\1>", " ", htmlfrag, flags=re.S|re.I)
@@ -97,6 +126,12 @@ def clean_block(htmlfrag):
     # the data-attrs value (incl any '>') is consumed, not leaked.
     t = re.sub(r"""<(div|figure|p)\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-attrs=(?:[^>"']|"[^"]*"|'[^']*')*>[\s\S]*?</\1>""", " ", t, flags=re.I)
     t = re.sub(r"""<[a-z][a-z0-9]*\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-attrs=(?:[^>"']|"[^"]*"|'[^']*')*>""", " ", t, flags=re.I)
+    # Convert <figure>...<img>...</figure> to inline markdown before tag-stripping,
+    # so images stay at their intended position in the text rather than all appearing
+    # at the end. Handle figure first (greedily consumes the wrapper + any figcaption).
+    t = re.sub(r'<figure\b[^>]*>[\s\S]*?</figure>', _figure_to_md, t, flags=re.I)
+    # Convert any remaining standalone <img> tags (outside figures) to inline markdown.
+    t = re.sub(r'<img\b[^>]*/?>',               _img_tag_to_md,  t, flags=re.I)
     t = _md_links(t)
     t = _BR.sub("\n", t)
     t = _BLOCK_END.sub("\n\n", t)
