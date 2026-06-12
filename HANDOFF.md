@@ -311,13 +311,14 @@ web/                         Next.js 16 (App Router, Turbopack, Tailwind v4)
                              NO generate/opendata/trends/attention/daily/chat/synthesis (all deleted; app is LLM-free)
   components/                AppHeader (top bar + expandable weather/date/clock panels), WeatherClock, AutoRefresh,
                              SignalCard, SignalList, TrendingWidget, TrendingAndInsights (home News+Insights toggle),
-                             MarketsSnapshot, CollapsibleSection, LatestInsights[unused on home — safe to delete],
-                             SourcesGrid, SourceProfile, ExpertAdmin, PdfUpload, NavLinks, RadioSidebar, CtaFooter,
-                             Logo, ThemeToggle, ThemeHeatmap[parked/unused], ui
+                             MarketsSnapshot, CollapsibleSection, WhatDidIMiss, WorldCupChart,
+                             SourcesGrid, SourceProfile, ExpertAdmin, NavLinks, MobileTabBar, RadioSidebar, CtaFooter,
+                             Logo, ThemeToggle, ui
                              (deleted: AskPanel, Generator, WeeklySynthesis, DailyIntelligence, OpenDataCard,
-                              OpenDataExplorer, TrendExplorer, ThemeTrendsChart, WeatherIcon)
-  lib/data.ts                server-only: MERGE engine data + uploads store; search; weeklyBriefing;
-                             getLatestPerExpert; themeTrends; suggestedPrompts/Searches; mtime cache
+                              OpenDataExplorer, TrendExplorer, ThemeTrendsChart, WeatherIcon,
+                              LatestInsights, PdfUpload, ThemeHeatmap [cleanup 2026-06-12])
+  lib/data.ts                server-only: MERGE engine data + uploads store; searchSignals; getRecentFeed;
+                             suggestedSearches; recentForSynthesis (WDIM); getOverview; mtime cache
   lib/uploads.ts             server-only: PDF/RSS ingest, profile create/edit/delete, refreshFeeds
   lib/stations.ts            radio master station list (deduped from CSV; SomaFM direct streams resolved)
   lib/{types,saved,themes,format}.ts   (themes.ts mirrors engine theme vocab for TS-side tagging)
@@ -420,9 +421,9 @@ since futurology left, but it remains available.
   `DailyIntelligence` (the last Groq caller), and the API routes `/api/opendata`, `/api/trends`, `/api/attention`,
   `/api/daily`. **Why:** the topic-tracker (expert-mention counting) was judged "useless"; a rebuilt OpenData explorer
   (live tryopendata.ai REST API — public, no key — search 524+ gov datasets, table+chart+export) was prototyped then
-  also scrapped because the user won't spend time digging through datasets. `lib/data.ts` may still contain now-dead
-  `topicTrends()`/`themeHeatmap()`/`themeTrends()` helpers (safe to delete). **The current nav is just
-  Home · Feed · Experts · Publications · Saved.** If a data/insight surface is wanted again, start fresh.
+  also scrapped because the user won't spend time digging through datasets. (The now-dead `topicTrends()`/
+  `themeHeatmap()`/`themeTrends()` helpers were deleted from `lib/data.ts` in the 2026-06-12 cleanup.) **The current
+  nav is just Home · Feed · Experts · Publications · Saved.** If a data/insight surface is wanted again, start fresh.
 - `/sources` **Experts** (authors): a single **Authors** collapsible (grid). `/publications` same (**Publications**).
   The "Add a source"/"Add a publication" PdfUpload modules were removed (PdfUpload.tsx + /api/upload-pdf,
   /api/sources now parked). SourcesGrid sort = **A→Z / Z→A only** (signal-count badges removed from cards;
@@ -758,9 +759,19 @@ expect occasional gaps. **What an agent CAN do:** write the Dockerfile, the cron
 step-by-step deploy guide. **What it CAN'T:** create the host account, enter payment, or change DNS (user-only).
 
 ### Other
-- **Parked/unused** (safe to delete): `components/ThemeHeatmap.tsx`; possibly-dead `topicTrends()`/`themeHeatmap()`/
-  `themeTrends()` helpers in `lib/data.ts` (their UI — the Data section — is gone). `PdfUpload.tsx` + `/api/upload-pdf`
-  + `/api/sources` are still wired for the in-app doc-upload flow (ExpertAdmin), so keep those.
+- **Dead-code cleanup DONE (2026-06-12):** deleted `LatestInsights.tsx`, `PdfUpload.tsx`, `ThemeHeatmap.tsx`
+  (0 imports) and pruned ~500 lines of dead helpers from `lib/data.ts` (`recentSignals`, `weeklySummary`,
+  `weeklyBriefing`, `getLatestPerExpert`, `suggestedPrompts`, `themeTrends`, `topicTrends`, `themeHeatmap`,
+  `latestFeed`, `weeklyThreads` + their types). `lib/data.ts` is now 316 lines. `/api/upload-pdf` + `/api/sources`
+  are KEPT (ExpertAdmin calls them directly for the in-app doc-upload flow). Verified: tsc clean, build green.
+- **`lib/uploads.ts refreshFeeds()` RE-WIRED (2026-06-12):** it had become orphaned (the route only spawned the Python
+  scripts), so in-app uploaded-RSS feeds stopped auto-refreshing. `/api/refresh/route.ts` now calls
+  `await refreshFeeds().catch(() => [])` after the engine build and returns `{ refreshed, feeds }`, restoring the
+  documented behavior. (Dev-only path — production returns early when `DATA_URL` is set.)
+- **Remaining `npm run lint` noise is intentional:** 17 `react-hooks/set-state-in-effect` errors are all mount-time
+  localStorage hydration / clock-tick / prefetch effects (correct patterns, not bugs); Next 16 `next build` doesn't run
+  eslint so they don't block deploy. Left as-is. The build-script `require()` false-positives and unused-var/`_`-omit
+  noise were cleared via `eslint.config.mjs` (ignore `scripts/**`, `ignoreRestSiblings`, `^_` patterns).
 - **Postgres + pgvector migration (gated on infra).** Schema at `web/db/schema.sql`. NOT built: the loader and the
   DB-backed data layer behind a `DATABASE_URL` flag. NB semantic/RAG would re-introduce an embeddings API — keep it
   deterministic-first per the LLM-free goal. Lower priority than deploy.

@@ -65,7 +65,6 @@ export default function RadioSidebar() {
         if (s) setCurrent(s);
       }
     } catch {}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function ensureAudio(): HTMLAudioElement {

@@ -22,8 +22,8 @@ function renderBody(text: string): ReactNode[] {
     if (m[1] === "!") {
       // Inline image — rendered where the author placed it
       nodes.push(
-        // eslint-disable-next-line @next/next/no-img-element
         <figure key={i++} className="my-2" style={{ margin: "0.6rem 0" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={m[3]} alt={m[2]} loading="lazy"
             style={{ maxWidth: "100%", height: "auto", borderRadius: 4, display: "block" }} />
           {m[2] && <figcaption className="text-xs mt-1" style={{ color: "var(--muted)" }}>{m[2]}</figcaption>}

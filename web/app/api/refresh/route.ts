@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { spawn } from "child_process";
 import path from "path";
+import { refreshFeeds } from "@/lib/uploads";
 
 const g = globalThis as unknown as { __refreshing?: boolean };
 
@@ -28,7 +29,9 @@ export async function POST() {
     await runScript(engineDir, ["fetch_expert.py"]);
     await runScript(engineDir, ["backfill.py", "lsn"]);
     await runScript(engineDir, ["build_dataset.py"]);
-    return NextResponse.json({ refreshed: true });
+    // Also refresh any in-app RSS feed sources (the separate uploads store).
+    const feeds = await refreshFeeds().catch(() => []);
+    return NextResponse.json({ refreshed: true, feeds });
   } catch {
     return NextResponse.json({ refreshed: false });
   } finally {

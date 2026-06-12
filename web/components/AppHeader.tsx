@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import NavLinks from "@/components/NavLinks";
 import ThemeToggle from "@/components/ThemeToggle";
-import WeatherClock, { type WeatherData, type HourlyItem, type DailyItem } from "@/components/WeatherClock";
+import WeatherClock, { type WeatherData } from "@/components/WeatherClock";
 
 type Section = "weather" | "date" | "time";
 type WeatherTab = "hourly" | "daily" | "rain" | "wind";
