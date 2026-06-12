@@ -23,12 +23,12 @@ type CacheKey = string; // `${audience}-${range}`
 function ZoneLabel({ children }: { children: React.ReactNode }) {
   return (
     <p style={{
-      fontSize: "10px",
+      fontSize: "11px",
       fontWeight: 600,
-      letterSpacing: "0.09em",
+      letterSpacing: "0.12em",
       textTransform: "uppercase",
       color: "var(--muted)",
-      marginBottom: "10px",
+      marginBottom: "16px",
     }}>{children}</p>
   );
 }
@@ -101,12 +101,12 @@ function ControlPanel({
 function MacroIndicator({ text }: { text: string }) {
   return (
     <div style={{
-      padding: "14px 16px",
+      padding: "20px 22px",
       background: "color-mix(in srgb, var(--accent) 10%, var(--bg))",
       borderLeft: "4px solid var(--accent)",
-      borderRadius: "0 4px 4px 0",
+      borderRadius: "0 6px 6px 0",
     }}>
-      <p className="text-sm leading-relaxed">{text}</p>
+      <p style={{ fontSize: "16px", lineHeight: 1.7 }}>{text}</p>
     </div>
   );
 }
@@ -117,12 +117,12 @@ function DevelopmentsFeed({ developments }: { developments: WdimDevelopment[] })
   return (
     <div style={{
       background: "var(--panel-2)",
-      borderRadius: "6px",
-      padding: "12px 14px",
+      borderRadius: "8px",
+      padding: "8px 22px",
     }}>
       <div className="divide-y" style={{ borderColor: "color-mix(in srgb, var(--border) 60%, transparent)" }}>
         {developments.map((d, i) => (
-          <div key={i} style={{ paddingTop: i === 0 ? 0 : "10px", paddingBottom: "10px" }}>
+          <div key={i} style={{ paddingTop: "18px", paddingBottom: "18px" }}>
             {d.url ? (
               <a
                 href={d.url}
@@ -131,18 +131,18 @@ function DevelopmentsFeed({ developments }: { developments: WdimDevelopment[] })
                 className="hover:underline underline-offset-2"
                 style={{
                   display: "block",
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  lineHeight: "1.4",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  lineHeight: "1.45",
                   color: "var(--text)",
                 }}
               >
                 {d.headline}
               </a>
             ) : (
-              <p style={{ fontSize: "13px", fontWeight: 500, lineHeight: "1.4" }}>{d.headline}</p>
+              <p style={{ fontSize: "16px", fontWeight: 600, lineHeight: "1.45" }}>{d.headline}</p>
             )}
-            <p style={{ fontSize: "13px", marginTop: "4px", lineHeight: "1.55", color: "var(--muted)" }}>
+            <p style={{ fontSize: "15px", marginTop: "8px", lineHeight: "1.65", color: "var(--muted)" }}>
               {d.summary}
             </p>
           </div>
@@ -158,10 +158,10 @@ function PerspectiveCard({ p }: { p: WdimExpertPerspective }) {
   const [hover, setHover] = useState(false);
   const content = (
     <>
-      <p style={{ fontSize: "13px", fontWeight: 500, lineHeight: "1.4", marginBottom: "6px" }}>
+      <p style={{ fontSize: "15px", fontWeight: 600, lineHeight: "1.45", marginBottom: "8px" }}>
         {p.thesis}
       </p>
-      <p style={{ fontSize: "12px", lineHeight: "1.4", color: "var(--muted)" }}>
+      <p style={{ fontSize: "13px", lineHeight: "1.5", color: "var(--muted)" }}>
         {p.source}
         {p.snippet ? <span> · {p.snippet}</span> : null}
       </p>
@@ -169,8 +169,8 @@ function PerspectiveCard({ p }: { p: WdimExpertPerspective }) {
   );
   const style: React.CSSProperties = {
     display: "block",
-    padding: "10px 12px",
-    borderRadius: "4px",
+    padding: "16px 18px",
+    borderRadius: "6px",
     border: "1px solid var(--border)",
     borderTopWidth: "2px",
     borderTopColor: "var(--accent)",
@@ -197,7 +197,7 @@ function PerspectiveCard({ p }: { p: WdimExpertPerspective }) {
 
 function ExpertGrid({ perspectives }: { perspectives: WdimExpertPerspective[] }) {
   return (
-    <div className="grid grid-cols-2 gap-2 max-md:grid-cols-1">
+    <div className="grid grid-cols-2 gap-3.5 max-md:grid-cols-1">
       {perspectives.map((p, i) => <PerspectiveCard key={i} p={p} />)}
     </div>
   );
@@ -213,7 +213,7 @@ function ThoughtStarters({
   onToggle: (action: string) => void;
 }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {directives.map((d, i) => {
         const isChecked = savedIds.has(thoughtStarterId(d.action));
         return (
@@ -226,9 +226,9 @@ function ThoughtStarters({
               textAlign: "left",
               display: "flex",
               alignItems: "flex-start",
-              gap: "10px",
-              padding: "10px 12px",
-              borderRadius: "5px",
+              gap: "14px",
+              padding: "16px 18px",
+              borderRadius: "7px",
               background: isChecked
                 ? "color-mix(in srgb, var(--accent) 8%, var(--bg))"
                 : "transparent",
@@ -239,9 +239,9 @@ function ThoughtStarters({
               cursor: "pointer",
             }}
           >
-            <span style={{ flexShrink: 0, marginTop: "1px", color: isChecked ? "var(--accent)" : "var(--muted)" }}>
+            <span style={{ flexShrink: 0, marginTop: "2px", color: isChecked ? "var(--accent)" : "var(--muted)" }}>
               {isChecked ? (
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <svg width="17" height="17" viewBox="0 0 14 14" fill="none">
                   <rect width="14" height="14" rx="2" fill="var(--accent)" />
                   <path
                     d="M3.5 7l2.5 2.5 4.5-4.5"
@@ -252,14 +252,14 @@ function ThoughtStarters({
                   />
                 </svg>
               ) : (
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2">
+                <svg width="17" height="17" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2">
                   <rect x="0.5" y="0.5" width="13" height="13" rx="1.5" />
                 </svg>
               )}
             </span>
             <span style={{
-              fontSize: "13px",
-              lineHeight: "1.45",
+              fontSize: "15px",
+              lineHeight: "1.6",
               color: isChecked ? "var(--muted)" : "var(--text)",
             }}>
               {d.action}
@@ -275,16 +275,16 @@ function ThoughtStarters({
 
 function BriefingSkeleton() {
   return (
-    <div className="animate-pulse space-y-4">
-      <div style={{ height: "52px", borderRadius: "4px", background: "var(--border)", opacity: 0.35 }} />
-      <div className="space-y-2">
+    <div className="animate-pulse" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div style={{ height: "72px", borderRadius: "6px", background: "var(--border)", opacity: 0.35 }} />
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} style={{ height: "38px", borderRadius: "4px", background: "var(--border)", opacity: 0.25 }} />
+          <div key={i} style={{ height: "60px", borderRadius: "6px", background: "var(--border)", opacity: 0.25 }} />
         ))}
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-3.5">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} style={{ height: "58px", borderRadius: "4px", background: "var(--border)", opacity: 0.22 }} />
+          <div key={i} style={{ height: "76px", borderRadius: "6px", background: "var(--border)", opacity: 0.22 }} />
         ))}
       </div>
       <p className="label animate-pulse" style={{ color: "var(--muted)" }}>synthesising brief...</p>
@@ -407,11 +407,11 @@ export default function WhatDidIMiss() {
             />
 
             {/* Briefing content */}
-            <div style={{ padding: "18px 16px 20px" }}>
+            <div style={{ padding: "26px 24px 30px" }}>
               {isLoading && !briefing ? (
                 <BriefingSkeleton />
               ) : briefing ? (
-                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "34px" }}>
 
                   {/* Zone B: Macro Snapshot */}
                   <div>
