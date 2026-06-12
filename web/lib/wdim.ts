@@ -55,7 +55,6 @@ export type WdimResult = {
   generatedAt: string;
 };
 
-const RANGE_DAYS: Record<WdimRange, number> = { day: 1, week: 7, month: 30 };
 const RANGE_LABEL: Record<WdimRange, string> = {
   day: "past 24 hours",
   week: "past 7 days",
@@ -97,10 +96,19 @@ function snippet(s: Signal, n = 200): string {
   return t.length > n ? t.slice(0, n).trimEnd() + "..." : t;
 }
 
+// Each range draws from a DISJOINT time window so day/week/month briefings can never
+// surface the same signal: day = the last ~2 days, week = 2 to 8 days ago, month = 8
+// to 31 days ago. (Combined with cross-range dedup in the bundle, this guarantees the
+// three timeframes show entirely original material.)
+const RANGE_WINDOW: Record<WdimRange, { days: number; minDays: number; limit: number }> = {
+  day: { days: 2, minDays: 0, limit: 20 },
+  week: { days: 8, minDays: 2, limit: 30 },
+  month: { days: 31, minDays: 8, limit: 40 },
+};
+
 function gather(range: WdimRange): Signal[] {
-  const days = RANGE_DAYS[range];
-  const limit = range === "month" ? 40 : range === "week" ? 30 : 20;
-  return recentForSynthesis(days, limit);
+  const w = RANGE_WINDOW[range];
+  return recentForSynthesis(w.days, w.limit, w.minDays);
 }
 
 function buildUrlMap(items: Signal[], news: WdimNews[]): Map<string, string> {
@@ -174,9 +182,9 @@ const GENERATE_BRIEFING_TOOL = {
       },
       expert_perspectives: {
         type: "array",
-        description: "4-6 expert perspectives drawn from the EXPERT SIGNALS. Each thesis title must be copied verbatim from the signals so a URL can be attached. Cards link directly to the source Substack publication.",
+        description: "Exactly 4 expert perspectives drawn from the EXPERT SIGNALS. Each thesis title must be copied verbatim from the signals so a URL can be attached, and must not duplicate any development headline. Cards link directly to the source Substack publication.",
         minItems: 2,
-        maxItems: 6,
+        maxItems: 4,
         items: {
           type: "object",
           properties: {
@@ -202,15 +210,15 @@ const GENERATE_BRIEFING_TOOL = {
       },
       directives: {
         type: "array",
-        description: "2-5 strategic context notes derived from the current developments. Factual observations, not prescriptive instructions. No em dashes.",
+        description: "3-4 forward-looking talking points (thought starters) that extrapolate the WIDER themes running through this briefing into useful preparation prompts for business leaders. Each connects a macro shift to a concrete consideration for the reader's own organisation. Do not tie a thought starter to a single narrow story: synthesise the broader pattern. This is the only place prescriptive or second-person language is allowed.",
         minItems: 2,
-        maxItems: 5,
+        maxItems: 4,
         items: {
           type: "object",
           properties: {
             action: {
               type: "string",
-              description: "A single strategic context note (1 sentence). Factual, not prescriptive. UK English.",
+              description: "A forward-looking talking point that helps a leader prepare for what is coming. Open by naming the wider shift or theme, then turn it into a concrete consideration or question for the reader's own organisation. One or two sentences; a rhetorical question is encouraged. Example: 'With corporations moving beyond basic enterprise access to AI tools, have you factored a CPU-token budget into your planning yet?' UK English, no em dashes, plain language.",
             },
           },
           required: ["action"],
@@ -221,9 +229,9 @@ const GENERATE_BRIEFING_TOOL = {
   },
 };
 
-function buildSystemPrompt(range: WdimRange, audience: WdimAudience): string {
+function buildSystemPrompt(range: WdimRange, audience: WdimAudience, excludeTitles: string[] = []): string {
   const ctx = AUDIENCE_CONTEXT[audience];
-  return [
+  const lines = [
     `You are a precise intelligence analyst for Jotter Intelligence, producing structured briefings for ${ctx.label}.`,
     `Your focus for this audience: ${ctx.focus}.`,
     `Timeframe context (${RANGE_LABEL[range]}): ${ctx.timeframes[range]}`,
@@ -231,14 +239,23 @@ function buildSystemPrompt(range: WdimRange, audience: WdimAudience): string {
     `STRICT RULES:`,
     `- UK English exclusively: per cent, categorise, behaviour, prioritising, whilst, organisation.`,
     `- NEVER use em dashes (never output: —). Use colons, commas, or parentheses instead.`,
-    `- No advice or prescription. Never write "you should", "watch for", "action required", or "we recommend".`,
+    `- The macro_indicator, developments, and expert_perspectives must be analytical and non-prescriptive: never "you should", "watch for", "we recommend". The DIRECTIVES (thought starters) are the only exception: there, extrapolate the briefing's WIDER themes into forward-looking talking points that help a leader prepare, each linking a macro shift to a concrete consideration for the reader's organisation (a rhetorical question is welcome). Never tie a thought starter to one narrow story.`,
     `- No meta-commentary or filler. Do not reference this briefing, the source list, or the analyst.`,
     `- macro_indicator must open with a concrete named development, data point, or actor. It describes the broader macro environment (geopolitical, technological, regulatory, societal or economic context), not only financial markets. Do not fabricate statistics or institutions.`,
     `- development headlines and expert_perspective thesis values must be copied verbatim from the source material provided.`,
+    `- A development headline and an expert_perspective thesis must never be the same item: never repeat a title across the two zones.`,
     `- For developments, include no more than one item per source publication. If the same publication appears multiple times, pick the most relevant item only.`,
     `- Copy URLs verbatim from the source data where provided. Never fabricate or modify URLs.`,
     `- If source items lack a hard figure for the macro indicator, use the most concrete factual statement present.`,
-  ].join("\n");
+  ];
+  if (excludeTitles.length) {
+    lines.push(
+      ``,
+      `ALREADY SHOWN ELSEWHERE (do NOT reuse these headlines, theses, or their stories — choose entirely different material):`,
+      ...excludeTitles.slice(0, 60).map((t) => `- ${t}`),
+    );
+  }
+  return lines.join("\n");
 }
 
 function buildUserMessage(
@@ -287,8 +304,9 @@ function buildCliPrompt(
   news: WdimNews[],
   markets: WdimMarket[],
   custom?: string,
+  excludeTitles: string[] = [],
 ): string {
-  const system = buildSystemPrompt(range, audience);
+  const system = buildSystemPrompt(range, audience, excludeTitles);
   const user = buildUserMessage(range, audience, items, news, markets, custom);
   const schema = `{"macro_indicator":"...","developments":[{"headline":"...","summary":"...","url":"...","source":"..."}],"expert_perspectives":[{"thesis":"...","source":"...","snippet":"...","url":"..."}],"directives":[{"action":"..."}]}`;
   return [
@@ -346,7 +364,7 @@ function normaliseBriefing(o: {
       })),
     expertPerspectives: (o.expert_perspectives)
       .filter((p) => p.thesis && p.source)
-      .slice(0, 6)
+      .slice(0, 4)
       .map((p) => ({
         thesis: String(p.thesis).trim(),
         source: String(p.source).trim(),
@@ -431,12 +449,13 @@ export async function generateWdim(
   news: WdimNews[] = [],
   markets: WdimMarket[] = [],
   custom?: string,
+  excludeTitles: string[] = [],
 ): Promise<WdimResult | null> {
   const items = gather(range);
   const urlMap = buildUrlMap(items, news);
 
   // API with tool use preferred (eliminates parsing errors).
-  const systemPrompt = buildSystemPrompt(range, audience);
+  const systemPrompt = buildSystemPrompt(range, audience, excludeTitles);
   const userMessage = buildUserMessage(range, audience, items, news, markets, custom);
   const apiBriefing = await tryApiToolUse(systemPrompt, userMessage);
   if (apiBriefing) {
@@ -448,7 +467,7 @@ export async function generateWdim(
   }
 
   // CLI fallback.
-  const cliPrompt = buildCliPrompt(range, audience, items, news, markets, custom);
+  const cliPrompt = buildCliPrompt(range, audience, items, news, markets, custom, excludeTitles);
   const cliRaw = await tryClaudeCli(cliPrompt);
   const cliBriefing = parseBriefingFromJson(cliRaw || "");
   if (cliBriefing) {
@@ -460,6 +479,80 @@ export async function generateWdim(
   }
 
   return null;
+}
+
+// Normalise a title for dedup: lowercase, strip punctuation, collapse whitespace.
+function titleKey(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+// Remove any development headline or expert-perspective thesis whose title has
+// already appeared (in this set or in `seen`). Mutates `seen`. Used to guarantee
+// every story is unique across the day/week/month bundle AND across both zones.
+function dedupeBriefing(b: WdimBriefing, seen: Set<string>): WdimBriefing {
+  const keepUnique = <T extends { headline?: string; thesis?: string }>(
+    arr: T[],
+    pick: (x: T) => string,
+  ): T[] => {
+    const out: T[] = [];
+    for (const it of arr) {
+      const k = titleKey(pick(it));
+      if (!k || seen.has(k)) continue;
+      seen.add(k);
+      out.push(it);
+    }
+    return out;
+  };
+  return {
+    ...b,
+    developments: keepUnique(b.developments, (d) => d.headline),
+    expertPerspectives: keepUnique(b.expertPerspectives, (p) => p.thesis).slice(0, 4),
+  };
+}
+
+/**
+ * Generate a full per-audience bundle (day + week + month) in parallel, then
+ * dedupe across the three so no headline or thesis ever repeats between ranges
+ * or zones. News only feeds the `day` range (it is "now" material); week/month
+ * developments come from their own disjoint signal windows. `excludeTitles`
+ * (the other audience's titles) is passed to every range as a soft exclusion so
+ * the two audiences diverge too.
+ */
+export async function generateWdimBundle(
+  audience: WdimAudience,
+  news: WdimNews[] = [],
+  markets: WdimMarket[] = [],
+  excludeTitles: string[] = [],
+): Promise<Record<WdimRange, WdimResult> | null> {
+  const [day, week, month] = await Promise.all([
+    generateWdim("day", audience, news, markets, undefined, excludeTitles),
+    generateWdim("week", audience, [], markets, undefined, excludeTitles),
+    generateWdim("month", audience, [], markets, undefined, excludeTitles),
+  ]);
+  if (!day && !week && !month) return null;
+
+  // Dedupe in day -> week -> month order so the freshest range keeps a contested
+  // story and the broader ranges fall back to their own distinct material.
+  const seen = new Set<string>(excludeTitles.map(titleKey).filter(Boolean));
+  const out = {} as Record<WdimRange, WdimResult>;
+  for (const r of ["day", "week", "month"] as WdimRange[]) {
+    const res = r === "day" ? day : r === "week" ? week : month;
+    if (!res) continue;
+    out[r] = { ...res, briefing: dedupeBriefing(res.briefing, seen) };
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+// Collect every development headline + perspective thesis from a bundle, for use
+// as the cross-audience exclusion list.
+export function bundleTitles(bundle: Record<string, WdimResult>): string[] {
+  const out: string[] = [];
+  for (const res of Object.values(bundle)) {
+    if (!res?.briefing) continue;
+    for (const d of res.briefing.developments) out.push(d.headline);
+    for (const p of res.briefing.expertPerspectives) out.push(p.thesis);
+  }
+  return out;
 }
 
 export function wdimReady(): boolean {

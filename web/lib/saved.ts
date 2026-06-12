@@ -111,3 +111,40 @@ export function useHighlights() {
   const allTags = Array.from(new Set(items.flatMap((i) => i.tags))).sort();
   return { items, allTags };
 }
+
+/* ---------------- thought starters (ticked WDIM provocations) ---------------- */
+export type ThoughtStarter = {
+  id: string;        // stable key derived from the text, so ticking is idempotent
+  text: string;
+  audience: string;  // "b2b" | "b2c"
+  range: string;     // "day" | "week" | "month"
+  savedAt: number;
+};
+type TsStore = Record<string, ThoughtStarter>;
+const KEY_TS = "jotter.thoughtstarters.v1";
+
+// Stable id from the provocation text (lowercased, alphanumerics only).
+export function thoughtStarterId(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+}
+
+// Tick a provocation -> save it; tick again -> remove. Returns the new saved state.
+export function toggleThoughtStarter(ts: Omit<ThoughtStarter, "id" | "savedAt">): boolean {
+  const store = readKey<TsStore>(KEY_TS, {});
+  const id = thoughtStarterId(ts.text);
+  if (store[id]) { delete store[id]; writeKey(KEY_TS, store); return false; }
+  store[id] = { ...ts, id, savedAt: Date.now() };
+  writeKey(KEY_TS, store);
+  return true;
+}
+export function removeThoughtStarter(id: string) {
+  const store = readKey<TsStore>(KEY_TS, {});
+  delete store[id];
+  writeKey(KEY_TS, store);
+}
+export function useThoughtStarters() {
+  const store = useStore<TsStore>(KEY_TS, {});
+  const items = Object.values(store).sort((a, b) => b.savedAt - a.savedAt);
+  const ids = new Set(Object.keys(store));
+  return { items, ids };
+}

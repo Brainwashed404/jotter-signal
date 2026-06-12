@@ -4,6 +4,7 @@ import { SignalCard } from "@/components/SignalCard";
 import {
   useSaved, setTags, updateSavedNote, type SavedItem,
   useHighlights, updateHighlightNote, setHighlightTags, removeHighlight, type Highlight,
+  useThoughtStarters, removeThoughtStarter, type ThoughtStarter,
 } from "@/lib/saved";
 import { fmtDate } from "@/lib/format";
 import CtaFooter from "@/components/CtaFooter";
@@ -113,6 +114,31 @@ function HighlightCard({ h }: { h: Highlight }) {
   );
 }
 
+function ThoughtStarterCard({ ts }: { ts: ThoughtStarter }) {
+  return (
+    <div className="panel p-4 flex items-start gap-3">
+      <button
+        onClick={() => removeThoughtStarter(ts.id)}
+        title="Saved provocation — click to remove"
+        className="shrink-0 mt-0.5"
+        style={{ color: "var(--accent)" }}
+        aria-label="Remove thought starter"
+      >
+        <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
+          <rect width="14" height="14" rx="2" fill="var(--accent)" />
+          <path d="M3.5 7l2.5 2.5 4.5-4.5" stroke="var(--bg)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <div className="min-w-0">
+        <p className="text-sm leading-snug">{ts.text}</p>
+        <span className="label mt-1 block" style={{ color: "var(--muted)" }}>
+          {ts.audience.toUpperCase()} · {ts.range === "day" ? "Past Day" : ts.range === "week" ? "Past Week" : "Past Month"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function SavedArticleCard({ item }: { item: SavedItem }) {
   const [note, setNote] = useState(item.note ?? "");
   return (
@@ -137,18 +163,21 @@ function SavedArticleCard({ item }: { item: SavedItem }) {
 export default function SavedPage() {
   const { items: entries, allTags: entryTags } = useSaved();
   const { items: highlights, allTags: hiTags } = useHighlights();
-  const [tab, setTab] = useState<"articles" | "highlights">("articles");
+  const { items: thoughtStarters } = useThoughtStarters();
+  const [tab, setTab] = useState<"articles" | "highlights" | "thoughtstarters">("articles");
   const [filter, setFilter] = useState("");
   const [query, setQuery] = useState("");
 
-  const switchTab = (t: "articles" | "highlights") => { setTab(t); setFilter(""); };
-  const tags = tab === "articles" ? entryTags : hiTags;
-  const total = tab === "articles" ? entries.length : highlights.length;
+  const switchTab = (t: typeof tab) => { setTab(t); setFilter(""); };
+  const tags = tab === "articles" ? entryTags : tab === "highlights" ? hiTags : [];
+  const total = tab === "articles" ? entries.length : tab === "highlights" ? highlights.length : thoughtStarters.length;
   const q = query.trim().toLowerCase();
   const matchEntry = (i: SavedItem) => !q || [i.signal.heading, i.signal.text, i.signal.source, ...i.tags, i.note ?? ""].join(" ").toLowerCase().includes(q);
   const matchHi = (h: Highlight) => !q || [h.text, h.signalHeading, h.source, ...h.tags].join(" ").toLowerCase().includes(q);
+  const matchTs = (t: ThoughtStarter) => !q || [t.text, t.audience, t.range].join(" ").toLowerCase().includes(q);
   const shownEntries = entries.filter((i) => (!filter || i.tags.includes(filter)) && matchEntry(i));
   const shownHi = highlights.filter((i) => (!filter || i.tags.includes(filter)) && matchHi(i));
+  const shownTs = thoughtStarters.filter(matchTs);
 
   return (
     <div className="space-y-6">
@@ -163,6 +192,10 @@ export default function SavedPage() {
         <button onClick={() => switchTab("highlights")} className="btn-ghost text-sm"
           style={tab === "highlights" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
           Highlights ({highlights.length})
+        </button>
+        <button onClick={() => switchTab("thoughtstarters")} className="btn-ghost text-sm"
+          style={tab === "thoughtstarters" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
+          Thought Starters ({thoughtStarters.length})
         </button>
         <div className="flex-1 flex justify-end">
           <input
@@ -187,11 +220,19 @@ export default function SavedPage() {
             ))}
           </div>
         )
-      ) : shownHi.length === 0 ? (
-        <Empty icon="✎" text="No highlights yet. Select any text in a signal and click “★ Save highlight”." />
+      ) : tab === "highlights" ? (
+        shownHi.length === 0 ? (
+          <Empty icon="✎" text="No highlights yet. Select any text in a signal and click “★ Save highlight”." />
+        ) : (
+          <div className="grid md:grid-cols-2 gap-3">
+            {shownHi.map((h) => <HighlightCard key={h.id} h={h} />)}
+          </div>
+        )
+      ) : shownTs.length === 0 ? (
+        <Empty icon="✓" text="No thought starters yet. Tick a provocation in What Did I Miss? to save it here." />
       ) : (
         <div className="grid md:grid-cols-2 gap-3">
-          {shownHi.map((h) => <HighlightCard key={h.id} h={h} />)}
+          {shownTs.map((t) => <ThoughtStarterCard key={t.id} ts={t} />)}
         </div>
       )}
 

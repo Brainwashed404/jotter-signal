@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import TrendingWidget from "@/components/TrendingWidget";
+import { usePersistentToggle } from "@/lib/uiState";
 import type { Signal } from "@/lib/types";
 
 // Strips markdown images and links to produce plain text.
@@ -19,7 +20,7 @@ function mdStrip(t: string) {
 }
 
 export default function TrendingAndInsights({ signals }: { signals: Signal[] }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = usePersistentToggle("latest", true);
   const [view, setView] = useState<"news" | "insights">("news");
 
   // Unique sources ordered by most recently published (signals already sorted newest-first).
@@ -51,7 +52,12 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
       {/* Header: title + view toggle pills + collapse chevron */}
       <div
         className="flex items-center gap-2 w-full"
-        style={{ marginBottom: open ? "0.75rem" : 0, transition: "margin-bottom 250ms ease" }}
+        style={{
+          paddingBottom: open ? 0 : "0.6rem",
+          borderBottom: open ? "none" : "3px solid var(--text)",
+          marginBottom: open ? "0.75rem" : 0,
+          transition: "margin-bottom 250ms ease",
+        }}
       >
         <h2 className="text-lg font-medium">Latest</h2>
         <div className="flex gap-1 ml-2">

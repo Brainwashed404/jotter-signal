@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useThoughtStarters, toggleThoughtStarter, thoughtStarterId } from "@/lib/saved";
+import { usePersistentToggle } from "@/lib/uiState";
 
 // Client-side mirrors of the server types (lib/wdim.ts is server-only).
 type WdimAudience = "b2b" | "b2c";
@@ -152,51 +154,51 @@ function DevelopmentsFeed({ developments }: { developments: WdimDevelopment[] })
 
 // ─── Component D: Expert Synthesis Grid ───────────────────────────────────────
 
+function PerspectiveCard({ p }: { p: WdimExpertPerspective }) {
+  const [hover, setHover] = useState(false);
+  const content = (
+    <>
+      <p style={{ fontSize: "13px", fontWeight: 500, lineHeight: "1.4", marginBottom: "6px" }}>
+        {p.thesis}
+      </p>
+      <p style={{ fontSize: "12px", lineHeight: "1.4", color: "var(--muted)" }}>
+        {p.source}
+        {p.snippet ? <span> · {p.snippet}</span> : null}
+      </p>
+    </>
+  );
+  const style: React.CSSProperties = {
+    display: "block",
+    padding: "10px 12px",
+    borderRadius: "4px",
+    border: "1px solid var(--border)",
+    borderTopWidth: "2px",
+    borderTopColor: "var(--accent)",
+    // soft accent wash on hover
+    background: hover ? "color-mix(in srgb, var(--accent) 12%, var(--panel))" : "var(--panel)",
+    transition: "background 150ms ease, border-color 150ms ease",
+    textAlign: "left",
+    textDecoration: "none",
+    color: "inherit",
+    cursor: p.url ? "pointer" : "default",
+  };
+  const handlers = {
+    onMouseEnter: () => setHover(true),
+    onMouseLeave: () => setHover(false),
+  };
+  return p.url ? (
+    <a href={p.url} target="_blank" rel="noopener noreferrer" style={style} {...handlers}>
+      {content}
+    </a>
+  ) : (
+    <div style={style} {...handlers}>{content}</div>
+  );
+}
+
 function ExpertGrid({ perspectives }: { perspectives: WdimExpertPerspective[] }) {
   return (
     <div className="grid grid-cols-2 gap-2 max-md:grid-cols-1">
-      {perspectives.map((p, i) => {
-        const content = (
-          <>
-            <p style={{ fontSize: "13px", fontWeight: 500, lineHeight: "1.4", marginBottom: "6px" }}>
-              {p.thesis}
-            </p>
-            <p style={{ fontSize: "12px", lineHeight: "1.4", color: "var(--muted)" }}>
-              {p.source}
-              {p.snippet ? <span> · {p.snippet}</span> : null}
-            </p>
-          </>
-        );
-        const base: React.CSSProperties = {
-          display: "block",
-          padding: "10px 12px",
-          borderRadius: "4px",
-          border: "1px solid var(--border)",
-          borderTopWidth: "2px",
-          borderTopColor: "var(--accent)",
-          background: "var(--panel)",
-          transition: "border-color 150ms ease, box-shadow 150ms ease",
-          textAlign: "left" as const,
-          textDecoration: "none",
-          color: "inherit",
-        };
-        return p.url ? (
-          <a
-            key={i}
-            href={p.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="panel-hover"
-            style={base}
-          >
-            {content}
-          </a>
-        ) : (
-          <div key={i} style={base}>
-            {content}
-          </div>
-        );
-      })}
+      {perspectives.map((p, i) => <PerspectiveCard key={i} p={p} />)}
     </div>
   );
 }
@@ -204,20 +206,21 @@ function ExpertGrid({ perspectives }: { perspectives: WdimExpertPerspective[] })
 // ─── Component E: Thought Starters ────────────────────────────────────────────
 
 function ThoughtStarters({
-  directives, checked, onToggle,
+  directives, savedIds, onToggle,
 }: {
   directives: WdimDirective[];
-  checked: number[];
-  onToggle: (idx: number) => void;
+  savedIds: Set<string>;
+  onToggle: (action: string) => void;
 }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
       {directives.map((d, i) => {
-        const isChecked = checked.includes(i);
+        const isChecked = savedIds.has(thoughtStarterId(d.action));
         return (
           <button
             key={i}
-            onClick={() => onToggle(i)}
+            onClick={() => onToggle(d.action)}
+            title={isChecked ? "Saved to Thought Starters — tick to remove" : "Tick to save to your Thought Starters"}
             style={{
               width: "100%",
               textAlign: "left",
@@ -292,13 +295,13 @@ function BriefingSkeleton() {
 // ─── Main module ───────────────────────────────────────────────────────────────
 
 export default function WhatDidIMiss() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = usePersistentToggle("wdim", true);
   const [audience, setAudience] = useState<WdimAudience>("b2b");
   const [range, setRange] = useState<WdimRange>("day");
   const [cache, setCache] = useState<Record<CacheKey, WdimBriefing>>({});
   const [loadingKeys, setLoadingKeys] = useState<Set<CacheKey>>(new Set());
   const [available, setAvailable] = useState<boolean | null>(null);
-  const [checkedMap, setCheckedMap] = useState<Record<CacheKey, number[]>>({});
+  const { ids: savedTsIds } = useThoughtStarters();
   const didPrefetch = useRef(false);
 
   const cacheKey: CacheKey = `${audience}-${range}`;
@@ -355,16 +358,9 @@ export default function WhatDidIMiss() {
 
   const briefing = cache[cacheKey];
   const isLoading = loadingKeys.has(cacheKey);
-  const checked = checkedMap[cacheKey] || [];
 
-  const toggleDirective = (idx: number) => {
-    setCheckedMap((prev) => {
-      const current = prev[cacheKey] || [];
-      const next = current.includes(idx)
-        ? current.filter((i) => i !== idx)
-        : [...current, idx];
-      return { ...prev, [cacheKey]: next };
-    });
+  const toggleDirective = (action: string) => {
+    toggleThoughtStarter({ text: action, audience, range });
   };
 
   return (
@@ -373,7 +369,12 @@ export default function WhatDidIMiss() {
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 w-full text-left"
-        style={{ marginBottom: open ? "0.75rem" : 0, transition: "margin-bottom 250ms ease" }}
+        style={{
+          paddingBottom: open ? 0 : "0.6rem",
+          borderBottom: open ? "none" : "3px solid var(--text)",
+          marginBottom: open ? "0.75rem" : 0,
+          transition: "margin-bottom 250ms ease",
+        }}
         aria-expanded={open}
       >
         <h2 className="text-lg font-medium">What Did I Miss?</h2>
@@ -440,7 +441,7 @@ export default function WhatDidIMiss() {
                       <ZoneLabel>Thought Starters</ZoneLabel>
                       <ThoughtStarters
                         directives={briefing.directives}
-                        checked={checked}
+                        savedIds={savedTsIds}
                         onToggle={toggleDirective}
                       />
                     </div>

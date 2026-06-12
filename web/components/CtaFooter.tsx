@@ -1,7 +1,7 @@
 // Closing call-to-action shown at the foot of the finite (non-infinite-scroll) pages.
 export default function CtaFooter() {
   return (
-    <div className="pt-8 mt-4 text-center" style={{ borderTop: "1px solid var(--border)" }}>
+    <div className="pt-8 mt-4 text-center">
       <h3 className="text-lg font-semibold tracking-tight">
         Jotter helps brands turn cultural intelligence into commercial impact
       </h3>

@@ -1,5 +1,6 @@
 "use client";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
+import { usePersistentToggle } from "@/lib/uiState";
 
 export default function CollapsibleSection({
   title,
@@ -10,13 +11,20 @@ export default function CollapsibleSection({
   defaultOpen?: boolean;
   children: ReactNode;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = usePersistentToggle(title, defaultOpen);
   return (
     <section>
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 w-full text-left"
-        style={{ marginBottom: open ? "0.75rem" : 0, transition: "margin-bottom 250ms ease" }}
+        style={{
+          // Single thick rule under the title when collapsed (open sections show
+          // their own content panel's top rule). Keeps sections from floating.
+          paddingBottom: open ? 0 : "0.6rem",
+          borderBottom: open ? "none" : "3px solid var(--text)",
+          marginBottom: open ? "0.75rem" : 0,
+          transition: "margin-bottom 250ms ease",
+        }}
         aria-expanded={open}
       >
         <h2 className="text-lg font-medium">{title}</h2>

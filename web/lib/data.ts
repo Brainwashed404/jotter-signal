@@ -283,17 +283,25 @@ export function suggestedSearches(limit = 24): string[] {
 const demd = (t: string) => t.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
 // Recent substantive signals (essays/articles, not link-dumps) for synthesis.
-export function recentForSynthesis(days = 10, limit = 40): Signal[] {
+// `minDays` sets a lower bound on age (days ago) so callers can take a DISJOINT
+// time slice, e.g. [2,8) days ago: recentForSynthesis(8, n, 2). The upper bound is
+// exclusive so adjacent windows (…,2) and [2,…) never share a day's signals — WDIM
+// uses this to keep its day/week/month briefings drawn from non-overlapping material.
+export function recentForSynthesis(days = 10, limit = 40, minDays = 0): Signal[] {
   const sigs = getSignals();
   const to = sigs.reduce((m, s) => (s.date > m ? s.date : m), "").slice(0, 10);
-  const d = new Date(to + "T00:00:00Z");
-  d.setUTCDate(d.getUTCDate() - days);
-  const from = d.toISOString().slice(0, 10);
+  const mk = (back: number) => {
+    const d = new Date(to + "T00:00:00Z");
+    d.setUTCDate(d.getUTCDate() - back);
+    return d.toISOString().slice(0, 10);
+  };
+  const from = mk(days);           // oldest day included (inclusive)
+  const upper = mk(minDays);       // newest day EXCLUDED when minDays > 0 (exclusive)
   const day = (s: Signal) => s.date.slice(0, 10);
 
   const pool = sigs.filter(
     (s) =>
-      day(s) >= from && day(s) <= to &&
+      day(s) >= from && (minDays > 0 ? day(s) < upper : day(s) <= upper) &&
       (s.kind === "longread" || s.kind === "article" || s.kind === "data") &&
       demd(s.text).length > 280
   );

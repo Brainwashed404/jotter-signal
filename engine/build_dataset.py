@@ -78,6 +78,12 @@ def _md_links(t):
             return inner
         if low.endswith((".jpg", ".jpeg", ".png", ".gif", ".webp")):
             return inner
+        # The link wraps an already-converted inline image (e.g. theoverspill's
+        # <a href="flickr-page"><img></a>). Emit the image markdown directly rather
+        # than nesting it inside a [text](url) link, which would mangle the brackets
+        # (the bracket-strip below turned ![](img) into !(img) -> broken render).
+        if "![" in inner:
+            return inner
         if not inner:
             inner = urlparse(url).netloc.replace("www.", "")
         inner = inner.replace("[", "").replace("]", "")
@@ -125,7 +131,12 @@ def clean_block(htmlfrag):
     # leak the JSON as text. Drop the whole embed block, matching tags quote-aware so
     # the data-attrs value (incl any '>') is consumed, not leaked.
     t = re.sub(r"""<(div|figure|p)\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-attrs=(?:[^>"']|"[^"]*"|'[^']*')*>[\s\S]*?</\1>""", " ", t, flags=re.I)
-    t = re.sub(r"""<[a-z][a-z0-9]*\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-attrs=(?:[^>"']|"[^"]*"|'[^']*')*>""", " ", t, flags=re.I)
+    # Catch-all for any OTHER stray data-attrs opening tag, but NOT <img>: Substack puts
+    # data-attrs on every content <img> too, and stripping those here (before the img->md
+    # conversion below) was dropping legitimate inline images, which then resurfaced
+    # clustered at the bottom of the card via the s.images fallback. <img data-attrs> is
+    # left intact so it converts to inline ![](url) at its authored position.
+    t = re.sub(r"""<(?!img\b)[a-z][a-z0-9]*\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-attrs=(?:[^>"']|"[^"]*"|'[^']*')*>""", " ", t, flags=re.I)
     # Convert <figure>...<img>...</figure> to inline markdown before tag-stripping,
     # so images stay at their intended position in the text rather than all appearing
     # at the end. Handle figure first (greedily consumes the wrapper + any figcaption).
