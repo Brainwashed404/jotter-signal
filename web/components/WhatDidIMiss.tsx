@@ -22,14 +22,17 @@ type CacheKey = string; // `${audience}-${range}`
 
 function ZoneLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{
-      fontSize: "11px",
-      fontWeight: 600,
-      letterSpacing: "0.12em",
-      textTransform: "uppercase",
-      color: "var(--muted)",
-      marginBottom: "16px",
-    }}>{children}</p>
+    <div style={{ display: "flex", alignItems: "center", gap: "9px", marginBottom: "16px" }}>
+      <span style={{ width: "4px", height: "16px", background: "var(--accent)", borderRadius: "2px", flexShrink: 0 }} />
+      <h3 style={{
+        fontSize: "14px",
+        fontWeight: 700,
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
+        color: "var(--text)",
+        margin: 0,
+      }}>{children}</h3>
+    </div>
   );
 }
 

@@ -9,15 +9,29 @@ export type WCStanding = {
 export type WCGroup = { id: string; name: string; standings: WCStanding[] };
 export type WCMatch = {
   id: string; round: string; date: string;
+  label?: string;            // human round/stage label for the fixtures list
   status: "pre" | "in" | "post";
+  statusDetail?: string;     // e.g. "FT", "HT", "67'"
   homeTeam: WCTeam | null; awayTeam: WCTeam | null;
   homeScore: number | null; awayScore: number | null;
   homeWinner: boolean; awayWinner: boolean;
 };
+export type WCStats = {
+  teams: number;
+  matchesPlayed: number;
+  totalMatches: number;
+  goals: number;
+  goalsPerMatch: number;
+  liveNow: number;
+};
+export type WCNews = { title: string; source: string; url: string };
 export type WCData = {
   groups: WCGroup[];
   knockout: { round: string; matches: WCMatch[] }[];
   thirdPlace: WCMatch | null;
+  fixtures: WCMatch[];
+  stats: WCStats;
+  news: WCNews[];
   hasLive: boolean;
   updatedAt: string;
 };
@@ -58,24 +72,28 @@ async function fetchGroups(): Promise<WCGroup[]> {
   return raw.map((group: AnyObj, gi: number) => {
     // entries live at group.entries OR nested under group.standings.entries (children[] shape)
     const entries: AnyObj[] = group.entries ?? (group.standings as AnyObj)?.entries ?? [];
+    const standings = entries.map((entry: AnyObj) => {
+      const team: AnyObj = entry.team ?? {};
+      const stats: { name: string; value: number }[] = entry.stats ?? [];
+      const gf = getStat(stats, "pointsFor");
+      const ga = getStat(stats, "pointsAgainst");
+      return {
+        team: mapTeam(team),
+        played: getStat(stats, "gamesPlayed"),
+        won: getStat(stats, "wins"),
+        drawn: getStat(stats, "ties"),
+        lost: getStat(stats, "losses"),
+        gf, ga, gd: gf - ga,
+        pts: getStat(stats, "points"),
+      };
+    });
+    // Guarantee real-time placing: FIFA tiebreakers (points, then goal difference,
+    // then goals for). ESPN usually pre-sorts, but enforce it so the table is always right.
+    standings.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || a.team.name.localeCompare(b.team.name));
     return {
       id: String(group.id ?? gi),
       name: String(group.name ?? group.shortName ?? `Group ${gi + 1}`),
-      standings: entries.map((entry: AnyObj) => {
-        const team: AnyObj = entry.team ?? {};
-        const stats: { name: string; value: number }[] = entry.stats ?? [];
-        const gf = getStat(stats, "pointsFor");
-        const ga = getStat(stats, "pointsAgainst");
-        return {
-          team: mapTeam(team),
-          played: getStat(stats, "gamesPlayed"),
-          won: getStat(stats, "wins"),
-          drawn: getStat(stats, "ties"),
-          lost: getStat(stats, "losses"),
-          gf, ga, gd: gf - ga,
-          pts: getStat(stats, "points"),
-        };
-      }),
+      standings,
     };
   });
 }
@@ -94,9 +112,11 @@ function normaliseRound(raw: string): string {
   return raw;
 }
 
+// Returns ALL World Cup matches (group + knockout). The caller splits out the
+// knockout rounds for the bracket and uses the full list for the fixtures view.
 async function fetchMatches(): Promise<WCMatch[]> {
   const r = await fetch(
-    "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?limit=200",
+    "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?limit=400",
     { signal: AbortSignal.timeout(8000), headers: { "User-Agent": "Mozilla/5.0" }, cache: "no-store" }
   );
   if (!r.ok) return [];
@@ -112,20 +132,25 @@ async function fetchMatches(): Promise<WCMatch[]> {
       (event.season as AnyObj)?.slug ??
       "Group Stage";
 
-    const normalRound = normaliseRound(roundRaw);
     const isKnockout = KNOCKOUT_KEYWORDS.some((k) => roundRaw.toLowerCase().includes(k));
-    if (!isKnockout) continue;
+    const normalRound = isKnockout ? normaliseRound(roundRaw) : "Group Stage";
+    const groupName = (comp.notes as AnyObj[] | undefined)?.[0]?.headline as string | undefined;
+    const prettySlug = roundRaw.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const label = isKnockout ? normalRound : (groupName || prettySlug || "Group Stage");
 
     const competitors: AnyObj[] = comp.competitors ?? [];
     const home = competitors.find((c: AnyObj) => c.homeAway === "home");
     const away = competitors.find((c: AnyObj) => c.homeAway === "away");
-    const statusState: string = (comp.status as AnyObj)?.type?.state ?? "pre";
+    const status: AnyObj = (comp.status as AnyObj) ?? {};
+    const statusState: string = status?.type?.state ?? "pre";
 
     matches.push({
       id: String(event.id ?? ""),
       round: normalRound,
+      label,
       date: String(event.date ?? ""),
       status: statusState === "in" ? "in" : statusState === "post" ? "post" : "pre",
+      statusDetail: String(status?.type?.shortDetail ?? ""),
       homeTeam: home ? mapTeam(home.team ?? {}) : null,
       awayTeam: away ? mapTeam(away.team ?? {}) : null,
       homeScore: home?.score != null ? Number(home.score) : null,
@@ -137,6 +162,40 @@ async function fetchMatches(): Promise<WCMatch[]> {
   return matches;
 }
 
+// ─── World Cup news (Google News RSS — reliable from datacenter IPs) ─────────────
+function decodeXml(s: string): string {
+  return s
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
+    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&apos;/g, "'")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .trim();
+}
+async function fetchNews(): Promise<WCNews[]> {
+  try {
+    const r = await fetch(
+      "https://news.google.com/rss/search?q=" + encodeURIComponent("FIFA World Cup 2026") + "&hl=en-GB&gl=GB&ceid=GB:en",
+      { signal: AbortSignal.timeout(8000), headers: { "User-Agent": "Mozilla/5.0" }, cache: "no-store" }
+    );
+    if (!r.ok) return [];
+    const xml = await r.text();
+    const out: WCNews[] = [];
+    for (const m of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+      const block = m[1];
+      const rawTitle = decodeXml(block.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "");
+      const url = decodeXml(block.match(/<link>([\s\S]*?)<\/link>/)?.[1] ?? "");
+      if (!rawTitle) continue;
+      // Google News titles end with " - Publisher".
+      const idx = rawTitle.lastIndexOf(" - ");
+      const title = idx > 0 ? rawTitle.slice(0, idx) : rawTitle;
+      const source = idx > 0 ? rawTitle.slice(idx + 3) : "";
+      out.push({ title, source, url });
+      if (out.length >= 6) break;
+    }
+    return out;
+  } catch { return []; }
+}
+
 // ─── Route ────────────────────────────────────────────────────────────────────
 export async function GET() {
   const cached = g.__wc;
@@ -144,22 +203,48 @@ export async function GET() {
   if (cached && Date.now() - cached.at < ttl) return NextResponse.json(cached.data);
 
   try {
-    const [groups, allMatches] = await Promise.all([fetchGroups(), fetchMatches()]);
+    const [groups, allMatches, news] = await Promise.all([fetchGroups(), fetchMatches(), fetchNews()]);
 
-    // Split knockout matches by round
+    // Split knockout matches by round (group-stage matches have round "Group Stage").
     const grouped = new Map<string, WCMatch[]>();
     let thirdPlace: WCMatch | null = null;
     for (const m of allMatches) {
       if (m.round === "3rd Place") { thirdPlace = m; continue; }
-      if (!grouped.has(m.round)) grouped.set(m.round, []);
-      grouped.get(m.round)!.push(m);
+      if (ROUND_ORDER.includes(m.round)) {
+        if (!grouped.has(m.round)) grouped.set(m.round, []);
+        grouped.get(m.round)!.push(m);
+      }
     }
     const knockout = ROUND_ORDER
       .filter((r) => grouped.has(r))
       .map((r) => ({ round: r, matches: grouped.get(r)! }));
 
-    const hasLive = allMatches.some((m) => m.status === "in");
-    const data: WCData = { groups, knockout, thirdPlace, hasLive, updatedAt: new Date().toISOString() };
+    // Fixtures: every match, newest activity first is handled client-side; keep
+    // chronological order here.
+    const fixtures = [...allMatches].sort((a, b) => a.date.localeCompare(b.date));
+
+    // Tournament stats / facts. Group-stage totals come from the cumulative standings
+    // (accurate tournament-wide), knockout from the match list. The 2026 finals are a
+    // fixed 48 teams / 104 matches.
+    const gPlayed = groups.reduce((n, gr) => n + gr.standings.reduce((m, s) => m + s.played, 0), 0) / 2;
+    const gGoals = groups.reduce((n, gr) => n + gr.standings.reduce((m, s) => m + s.gf, 0), 0);
+    const koDone = allMatches.filter((m) => ROUND_ORDER.includes(m.round) && m.status === "post");
+    const koGoals = koDone.reduce((n, m) => n + (m.homeScore ?? 0) + (m.awayScore ?? 0), 0);
+    const matchesPlayed = Math.round(gPlayed) + koDone.length;
+    const goals = gGoals + koGoals;
+    const teams = groups.reduce((n, gr) => n + gr.standings.length, 0) || 48;
+    const liveNow = allMatches.filter((m) => m.status === "in").length;
+    const stats: WCStats = {
+      teams,
+      matchesPlayed,
+      totalMatches: 104,
+      goals,
+      goalsPerMatch: matchesPlayed ? Math.round((goals / matchesPlayed) * 100) / 100 : 0,
+      liveNow,
+    };
+
+    const hasLive = liveNow > 0;
+    const data: WCData = { groups, knockout, thirdPlace, fixtures, stats, news, hasLive, updatedAt: new Date().toISOString() };
     g.__wc = { at: Date.now(), live: hasLive, data };
     return NextResponse.json(data);
   } catch (e) {

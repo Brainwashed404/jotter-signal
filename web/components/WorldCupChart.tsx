@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import type { WCData, WCGroup, WCMatch, WCStanding, WCTeam } from "@/app/api/worldcup/route";
+import type { WCData, WCGroup, WCMatch, WCStanding, WCTeam, WCStats, WCNews } from "@/app/api/worldcup/route";
 
 // ─── Bracket layout constants ─────────────────────────────────────────────────
 const CARD_H = 70;   // px — two 35px team rows
@@ -29,12 +29,42 @@ function cardTop(r: number, i: number): number {
   return i * slotH + (slotH - CARD_H) / 2 + LABEL_H;
 }
 
+// ─── Flag ───────────────────────────────────────────────────────────────────
+function Flag({ team, w = 24 }: { team: WCTeam | null; w?: number }) {
+  const h = Math.round(w * 0.7);
+  if (team?.flag) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={team.flag} alt="" width={w} height={h} style={{ objectFit: "cover", borderRadius: 3, flexShrink: 0, display: "block" }} />;
+  }
+  return <span style={{ width: w, height: h, background: "var(--border)", borderRadius: 3, flexShrink: 0, display: "block" }} />;
+}
+
 // ─── Empty / placeholder match ────────────────────────────────────────────────
 function emptyMatch(round: string, i: number): WCMatch {
   return { id: `tbd-${round}-${i}`, round, date: "", status: "pre", homeTeam: null, awayTeam: null, homeScore: null, awayScore: null, homeWinner: false, awayWinner: false };
 }
 
-// ─── Team row (used inside match card) ───────────────────────────────────────
+// ─── Stats tiles (tournament facts) ───────────────────────────────────────────
+function StatsTiles({ stats }: { stats: WCStats }) {
+  const tiles: { label: string; value: string }[] = [
+    { label: "Teams", value: String(stats.teams) },
+    { label: "Matches played", value: `${stats.matchesPlayed} / ${stats.totalMatches}` },
+    { label: "Goals scored", value: String(stats.goals) },
+    { label: "Goals per match", value: stats.matchesPlayed ? stats.goalsPerMatch.toFixed(2) : "—" },
+  ];
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "0.6rem", marginBottom: "1.1rem" }}>
+      {tiles.map((t) => (
+        <div key={t.label} className="panel" style={{ padding: "0.85rem 1rem" }}>
+          <div style={{ fontSize: "1.6rem", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.02em" }}>{t.value}</div>
+          <div style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: "0.25rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>{t.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Team row (used inside bracket match card) ───────────────────────────────
 function TeamRow({ team, score, winner, live, borderBottom }: {
   team: WCTeam | null; score: number | null; winner: boolean; live: boolean; borderBottom: boolean;
 }) {
@@ -44,20 +74,16 @@ function TeamRow({ team, score, winner, live, borderBottom }: {
       borderBottom: borderBottom ? "1px solid var(--border)" : undefined,
       background: winner ? "color-mix(in srgb, var(--up) 12%, transparent)" : "transparent",
     }}>
-      {team?.flag ? (
-        <img src={team.flag} alt="" width={18} height={13} style={{ objectFit: "cover", borderRadius: 2, flexShrink: 0 }} />
-      ) : (
-        <span style={{ width: 18, height: 13, background: "var(--border)", borderRadius: 2, flexShrink: 0, display: "block" }} />
-      )}
+      <Flag team={team} w={18} />
       <span style={{
-        flex: 1, fontSize: "0.75rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+        flex: 1, fontSize: "0.78rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
         fontWeight: winner ? 600 : 400,
         color: team ? "var(--text)" : "var(--muted)",
       }}>
         {team?.abbr ?? "TBD"}
       </span>
       {(score !== null) && (
-        <span style={{ fontSize: "0.75rem", fontWeight: 700, color: live ? "var(--accent)" : "var(--text)", minWidth: 14, textAlign: "right" }}>
+        <span style={{ fontSize: "0.78rem", fontWeight: 700, color: live ? "var(--accent)" : "var(--text)", minWidth: 14, textAlign: "right" }}>
           {score}
         </span>
       )}
@@ -65,7 +91,7 @@ function TeamRow({ team, score, winner, live, borderBottom }: {
   );
 }
 
-// ─── Match card ────────────────────────────────────────────────────────────────
+// ─── Bracket match card ──────────────────────────────────────────────────────
 function MatchCard({ match, champion }: { match: WCMatch; champion?: boolean }) {
   const live = match.status === "in";
   return (
@@ -84,8 +110,8 @@ function MatchCard({ match, champion }: { match: WCMatch; champion?: boolean }) 
 // ─── Bracket view ─────────────────────────────────────────────────────────────
 function BracketView({ knockout, thirdPlace }: { knockout: WCData["knockout"]; thirdPlace: WCMatch | null }) {
   const roundMap = new Map(knockout.map((r) => [r.round, r.matches]));
+  const anyMatches = knockout.some((r) => r.matches.length);
 
-  // Build padded round data — fill missing matches with TBD placeholders
   const rounds = ROUNDS.map((name, r) => {
     const count = 16 / Math.pow(2, r); // 16, 8, 4, 2, 1
     const existing = roundMap.get(name) ?? [];
@@ -93,7 +119,6 @@ function BracketView({ knockout, thirdPlace }: { knockout: WCData["knockout"]; t
     return { name, r, matches };
   });
 
-  // Build SVG connector lines
   const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
   for (let r = 0; r < ROUNDS.length - 1; r++) {
     const nNext = rounds[r + 1].matches.length;
@@ -104,22 +129,21 @@ function BracketView({ knockout, thirdPlace }: { knockout: WCData["knockout"]; t
       const yTop = midY(r, 2 * j);
       const yBot = midY(r, 2 * j + 1);
       const yCon = midY(r + 1, j);
-      // Horizontal from top match → vertical bar
       lines.push({ x1: xFrom, y1: yTop, x2: xMid, y2: yTop });
-      // Horizontal from bottom match → vertical bar
       lines.push({ x1: xFrom, y1: yBot, x2: xMid, y2: yBot });
-      // Vertical bar connecting the two
       lines.push({ x1: xMid, y1: yTop, x2: xMid, y2: yBot });
-      // Horizontal from midpoint → next round card
       lines.push({ x1: xMid, y1: yCon, x2: xTo, y2: yCon });
     }
   }
 
   return (
     <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "76vh" }}>
+      {!anyMatches && (
+        <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "1rem" }}>
+          The knockout bracket fills in once the group stage finishes.
+        </p>
+      )}
       <div style={{ position: "relative", width: SVG_W, height: SVG_H, minWidth: SVG_W }}>
-
-        {/* Round labels */}
         {rounds.map(({ name, r }) => (
           <div key={name} style={{
             position: "absolute", left: r * COL_W, top: 4, width: CARD_W, textAlign: "center",
@@ -129,15 +153,11 @@ function BracketView({ knockout, thirdPlace }: { knockout: WCData["knockout"]; t
             {ROUND_SHORT[name] ?? name}
           </div>
         ))}
-
-        {/* Connector lines */}
         <svg style={{ position: "absolute", inset: 0, overflow: "visible", pointerEvents: "none" }} width={SVG_W} height={SVG_H}>
           {lines.map((l, i) => (
             <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="var(--border)" strokeWidth={1} />
           ))}
         </svg>
-
-        {/* Match cards */}
         {rounds.map(({ r, matches, name }) =>
           matches.map((match, i) => {
             const isChampion = name === "Final" && match.status === "post" && (match.homeWinner || match.awayWinner);
@@ -149,8 +169,6 @@ function BracketView({ knockout, thirdPlace }: { knockout: WCData["knockout"]; t
           })
         )}
       </div>
-
-      {/* 3rd place match — shown below bracket */}
       {thirdPlace && (
         <div style={{ marginTop: "1.5rem", paddingTop: "1rem", borderTop: "1px solid var(--border)" }}>
           <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "0.5rem" }}>
@@ -163,40 +181,37 @@ function BracketView({ knockout, thirdPlace }: { knockout: WCData["knockout"]; t
   );
 }
 
-// ─── Groups view ──────────────────────────────────────────────────────────────
+// ─── Groups view (larger, readable tables) ────────────────────────────────────
 function StandingRow({ s, pos }: { s: WCStanding; pos: number }) {
-  // Positions 1-2 definitely advance, position 3 might advance (best 8 third-place)
   const bg = pos <= 2
-    ? "color-mix(in srgb, var(--up) 9%, transparent)"
+    ? "color-mix(in srgb, var(--up) 10%, transparent)"
     : pos === 3
-      ? "color-mix(in srgb, var(--accent) 7%, transparent)"
+      ? "color-mix(in srgb, var(--accent) 8%, transparent)"
       : "transparent";
   const gdStr = s.gd > 0 ? `+${s.gd}` : String(s.gd);
+  const num = { padding: "0.55rem 0.3rem", fontSize: "0.85rem", textAlign: "right" as const, color: "var(--muted)" };
   return (
     <tr style={{ borderTop: "1px solid var(--border)", background: bg }}>
-      <td style={{ padding: "0.28rem 0.3rem 0.28rem 0.5rem", color: "var(--muted)", fontSize: "0.65rem", width: 14 }}>{pos}</td>
-      <td style={{ padding: "0.28rem 0.25rem" }}>
-        {s.team.flag
-          ? <img src={s.team.flag} alt="" width={17} height={12} style={{ objectFit: "cover", borderRadius: 2, display: "block" }} />
-          : <span style={{ width: 17, height: 12, background: "var(--border)", borderRadius: 2, display: "block" }} />}
-      </td>
-      <td style={{ padding: "0.28rem 0.4rem 0.28rem 0.3rem", fontSize: "0.77rem", maxWidth: 84, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <td style={{ padding: "0.55rem 0.35rem 0.55rem 0.7rem", color: "var(--muted)", fontSize: "0.8rem", width: 22, fontWeight: 600 }}>{pos}</td>
+      <td style={{ padding: "0.55rem 0.3rem", width: 28 }}><Flag team={s.team} w={24} /></td>
+      <td style={{ padding: "0.55rem 0.5rem 0.55rem 0.35rem", fontSize: "0.95rem", fontWeight: 600, maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {s.team.name}
       </td>
-      <td style={{ padding: "0.28rem 0.25rem", fontSize: "0.72rem", textAlign: "right", color: "var(--muted)" }}>{s.played}</td>
-      <td style={{ padding: "0.28rem 0.25rem", fontSize: "0.72rem", textAlign: "right", color: "var(--muted)" }}>{s.won}</td>
-      <td style={{ padding: "0.28rem 0.25rem", fontSize: "0.72rem", textAlign: "right", color: "var(--muted)" }}>{s.drawn}</td>
-      <td style={{ padding: "0.28rem 0.25rem", fontSize: "0.72rem", textAlign: "right", color: "var(--muted)" }}>{s.lost}</td>
-      <td style={{ padding: "0.28rem 0.25rem", fontSize: "0.72rem", textAlign: "right", color: "var(--muted)" }}>{gdStr}</td>
-      <td style={{ padding: "0.28rem 0.5rem 0.28rem 0.25rem", fontSize: "0.77rem", textAlign: "right", fontWeight: 700 }}>{s.pts}</td>
+      <td style={num}>{s.played}</td>
+      <td style={num}>{s.won}</td>
+      <td style={num}>{s.drawn}</td>
+      <td style={num}>{s.lost}</td>
+      <td style={{ ...num, color: "var(--text)" }}>{gdStr}</td>
+      <td style={{ padding: "0.55rem 0.7rem 0.55rem 0.35rem", fontSize: "0.95rem", textAlign: "right", fontWeight: 800 }}>{s.pts}</td>
     </tr>
   );
 }
 
 function GroupCard({ group }: { group: WCGroup }) {
+  const th = { fontSize: "0.7rem", color: "var(--muted)", fontWeight: 600, textAlign: "right" as const, padding: "0 0.3rem 0.4rem", width: 26 };
   return (
-    <div className="panel" style={{ padding: "0.65rem 0", overflow: "hidden" }}>
-      <div style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent)", padding: "0 0.5rem", marginBottom: "0.35rem" }}>
+    <div className="panel" style={{ padding: "0.9rem 0 0.5rem", overflow: "hidden" }}>
+      <div style={{ fontSize: "0.8rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", padding: "0 0.7rem", marginBottom: "0.5rem" }}>
         {group.name}
       </div>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -204,24 +219,21 @@ function GroupCard({ group }: { group: WCGroup }) {
           <tr>
             <th colSpan={3} />
             {["P", "W", "D", "L", "GD", "Pts"].map((h) => (
-              <th key={h} style={{ fontSize: "0.62rem", color: "var(--muted)", fontWeight: 400, textAlign: "right", padding: "0 0.25rem 0.25rem", width: h === "Pts" ? 28 : 20 }}>
-                {h}
-              </th>
+              <th key={h} style={{ ...th, width: h === "Pts" ? 36 : 26 }}>{h}</th>
             ))}
-            <th style={{ width: 8 }} />
           </tr>
         </thead>
         <tbody>
           {group.standings.map((s, i) => <StandingRow key={s.team.id} s={s} pos={i + 1} />)}
         </tbody>
       </table>
-      <div style={{ fontSize: "0.58rem", color: "var(--muted)", padding: "0.4rem 0.5rem 0", display: "flex", gap: "0.75rem" }}>
-        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: 2, background: "color-mix(in srgb, var(--up) 40%, transparent)" }} />
+      <div style={{ fontSize: "0.68rem", color: "var(--muted)", padding: "0.6rem 0.7rem 0.1rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          <span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 2, background: "color-mix(in srgb, var(--up) 45%, transparent)" }} />
           Advance
         </span>
-        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: 2, background: "color-mix(in srgb, var(--accent) 35%, transparent)" }} />
+        <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          <span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 2, background: "color-mix(in srgb, var(--accent) 40%, transparent)" }} />
           May advance
         </span>
       </div>
@@ -231,11 +243,109 @@ function GroupCard({ group }: { group: WCGroup }) {
 
 function GroupsView({ groups }: { groups: WCGroup[] }) {
   if (!groups.length) {
-    return <div className="label" style={{ color: "var(--muted)" }}>Group data not yet available.</div>;
+    return <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>Group data not yet available.</div>;
   }
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))", gap: "0.75rem" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1rem" }}>
       {groups.map((g) => <GroupCard key={g.id} group={g} />)}
+    </div>
+  );
+}
+
+// ─── Fixtures view (matches grouped by date) ──────────────────────────────────
+function fmtDateHeading(iso: string): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "Date TBC";
+  return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long" });
+}
+function kickoff(iso: string): string {
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? "" : d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+}
+
+function FixtureRow({ m }: { m: WCMatch }) {
+  const live = m.status === "in";
+  const done = m.status === "post";
+  // ESPN returns score 0 (not null) for unplayed matches, so only show a scoreline
+  // once a match is live or finished; upcoming matches show their kickoff time.
+  const hasScore = (live || done) && m.homeScore !== null && m.awayScore !== null;
+  const centre = hasScore
+    ? `${m.homeScore} – ${m.awayScore}`
+    : kickoff(m.date) || "TBC";
+  const statusLabel = live ? (m.statusDetail || "LIVE") : done ? (m.statusDetail || "FT") : (m.label || "");
+  return (
+    <div style={{
+      display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: "0.75rem",
+      padding: "0.7rem 0.9rem", borderTop: "1px solid var(--border)",
+    }}>
+      {/* home */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.55rem", minWidth: 0 }}>
+        <span style={{ fontSize: "0.92rem", fontWeight: m.homeWinner ? 700 : 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", textAlign: "right" }}>
+          {m.homeTeam?.name ?? "TBD"}
+        </span>
+        <Flag team={m.homeTeam} w={24} />
+      </div>
+      {/* score / time */}
+      <div style={{ textAlign: "center", minWidth: 64 }}>
+        <div style={{ fontSize: "1rem", fontWeight: 800, color: live ? "var(--accent)" : "var(--text)", letterSpacing: "0.02em" }}>{centre}</div>
+        <div style={{ fontSize: "0.62rem", color: live ? "var(--accent)" : "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: 2 }}>{statusLabel}</div>
+      </div>
+      {/* away */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", minWidth: 0 }}>
+        <Flag team={m.awayTeam} w={24} />
+        <span style={{ fontSize: "0.92rem", fontWeight: m.awayWinner ? 700 : 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {m.awayTeam?.name ?? "TBD"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function FixturesView({ fixtures }: { fixtures: WCMatch[] }) {
+  if (!fixtures.length) {
+    return <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>No fixtures in the current window.</div>;
+  }
+  // Group by calendar day, keeping chronological order.
+  const byDay = new Map<string, WCMatch[]>();
+  for (const m of fixtures) {
+    const day = (m.date || "").slice(0, 10) || "tbc";
+    if (!byDay.has(day)) byDay.set(day, []);
+    byDay.get(day)!.push(m);
+  }
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.1rem", maxHeight: "70vh", overflowY: "auto" }}>
+      {[...byDay.entries()].map(([day, ms]) => (
+        <div key={day}>
+          <div style={{ fontSize: "0.74rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "0.5rem" }}>
+            {fmtDateHeading(ms[0].date)}
+          </div>
+          <div className="panel" style={{ overflow: "hidden" }}>
+            {ms.map((m, i) => <div key={m.id} style={i === 0 ? { borderTop: "none" } : undefined}><FixtureRow m={m} /></div>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── News ─────────────────────────────────────────────────────────────────────
+function NewsList({ news }: { news: WCNews[] }) {
+  if (!news.length) return null;
+  return (
+    <div style={{ marginTop: "1.6rem" }}>
+      <div style={{ fontSize: "0.74rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "0.7rem" }}>
+        Latest World Cup news
+      </div>
+      <div className="panel divide-y" style={{ borderColor: "color-mix(in srgb, var(--border) 60%, transparent)" }}>
+        {news.map((n, i) => (
+          <a key={i} href={n.url} target="_blank" rel="noopener noreferrer"
+            style={{ display: "block", padding: "0.7rem 0.9rem", textDecoration: "none", color: "inherit" }}
+            className="hover:underline underline-offset-2">
+            <span style={{ fontSize: "0.92rem", fontWeight: 500, lineHeight: 1.4 }}>{n.title}</span>
+            {n.source && <span style={{ fontSize: "0.78rem", color: "var(--muted)", marginLeft: "0.5rem" }}>· {n.source}</span>}
+          </a>
+        ))}
+      </div>
     </div>
   );
 }
@@ -244,7 +354,7 @@ function GroupsView({ groups }: { groups: WCGroup[] }) {
 export default function WorldCupChart() {
   const [data, setData] = useState<WCData | null>(null);
   const [error, setError] = useState(false);
-  const [tab, setTab] = useState<"groups" | "bracket">("groups");
+  const [tab, setTab] = useState<"groups" | "fixtures" | "bracket">("groups");
 
   useEffect(() => {
     let cancelled = false;
@@ -272,27 +382,38 @@ export default function WorldCupChart() {
     return () => clearInterval(t);
   }, [data?.hasLive]);
 
+  const TABS: { id: "groups" | "fixtures" | "bracket"; label: string }[] = [
+    { id: "groups", label: "Group Stage" },
+    { id: "fixtures", label: "Fixtures" },
+    { id: "bracket", label: "Bracket" },
+  ];
+
   return (
     <div>
+      {data && <StatsTiles stats={data.stats} />}
+
       {/* Tab bar + status */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
-        {(["groups", "bracket"] as const).map((t) => (
-          <button key={t} className="chip" onClick={() => setTab(t)}
-            style={tab === t ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
-            {t === "groups" ? "Group Stage" : "Bracket"}
+        {TABS.map((t) => (
+          <button key={t.id} className="chip" onClick={() => setTab(t.id)}
+            style={tab === t.id ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
+            {t.label}
           </button>
         ))}
-        <span style={{ marginLeft: "auto", fontSize: "0.68rem", color: "var(--muted)" }}>
-          {data?.hasLive && <><span style={{ color: "var(--accent)" }}>● Live · </span></>}
+        <span style={{ marginLeft: "auto", fontSize: "0.72rem", color: "var(--muted)" }}>
+          {data?.hasLive && <span style={{ color: "var(--accent)" }}>● Live · </span>}
           {data && <>Updated {new Date(data.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</>}
         </span>
       </div>
 
-      {error && <div className="label" style={{ color: "var(--muted)" }}>World Cup data unavailable right now.</div>}
-      {!data && !error && <div className="label" style={{ color: "var(--muted)" }}>Loading…</div>}
+      {error && <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>World Cup data unavailable right now.</div>}
+      {!data && !error && <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>Loading…</div>}
 
       {data && tab === "groups" && <GroupsView groups={data.groups} />}
+      {data && tab === "fixtures" && <FixturesView fixtures={data.fixtures} />}
       {data && tab === "bracket" && <BracketView knockout={data.knockout} thirdPlace={data.thirdPlace} />}
+
+      {data && <NewsList news={data.news} />}
     </div>
   );
 }
