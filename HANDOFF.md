@@ -26,6 +26,70 @@ a daily workbench for strategists/insight workers.
   in object storage, fetched in `lib/data.ts`.) Not started — awaiting user's choice of host.
 - **WRITING RULE: never use em dashes** anywhere (copy, blurbs, UI). Use commas/colons/parentheses.
 
+## ⭐ SESSION 2026-06-13: WDIM dedup + redesign, World Cup upgrade, dead-code cleanup
+All shipped to production (commits `912f922`, `e89ffbc`, `601db96`).
+
+### Dead-code cleanup (commit 912f922)
+- Deleted unused components `LatestInsights.tsx`, `PdfUpload.tsx`, `ThemeHeatmap.tsx`. Pruned ~500 lines of dead
+  helpers from `lib/data.ts` (819→316): `recentSignals`, `weeklySummary`, `weeklyBriefing`, `getLatestPerExpert`,
+  `suggestedPrompts`, `themeTrends`, `topicTrends`, `themeHeatmap`, `latestFeed`, `weeklyThreads` + their types.
+  `/api/upload-pdf` + `/api/sources` KEPT (ExpertAdmin calls them directly).
+- `refreshFeeds()` re-wired into `/api/refresh` (it had become orphaned; dev-only path, prod returns early on `DATA_URL`).
+- `eslint.config.mjs`: ignore `scripts/**` (CJS build script), add `ignoreRestSiblings` + `^_`. Remaining
+  `npm run lint` errors are all intentional `react-hooks/set-state-in-effect` (mount hydration / clock tick /
+  prefetch); Next 16 `next build` does not run eslint so they don't block deploy.
+
+### ⭐ WDIM ("What Did I Miss?") — DEDUP IS THE BIG CHANGE (commit e89ffbc)
+**Problem:** the same stories repeated across audiences (b2b/b2c) and across time filters (day/week/month).
+**Fix (all in `lib/wdim.ts` + `app/api/wdim/route.ts`):**
+- **Disjoint signal windows per range** via `recentForSynthesis(days, limit, minDays)` (new `minDays` lower bound in
+  `lib/data.ts`): day = last ~2d, week = 2–8d ago, month = 8–31d ago. So no signal can appear in two ranges.
+- **Per-audience bundle**: `generateWdimBundle(audience, news, markets, excludeTitles)` runs all 3 ranges in PARALLEL
+  then `dedupeBriefing` removes any development headline / perspective thesis already seen (day→week→month, across
+  BOTH zones). News only feeds the `day` range (week/month developments come from their windowed signals).
+- **Cross-audience**: the other audience's titles are passed as `excludeTitles` (soft prompt exclusion) so b2b/b2c diverge.
+- **Route** caches per `${aud}-${range}` but generates the whole audience bundle on a miss; an **in-flight lock per
+  audience** (`g.__wdimInflight`) means the client's near-simultaneous day/week/month requests share ONE generation
+  (was 3×). `maxDuration = 60`. Verified: b2b had 0 cross-range dupes (was many). ⚠ Local `claude` CLI flakes on
+  back-to-back parallel batches (contention) — production uses `ANTHROPIC_API_KEY` (handles parallel fine).
+- **Expert perspectives capped at 4** (schema maxItems + `normaliseBriefing` slice).
+- **Thought Starters reworded**: were narrow imperatives, now forward-looking talking points that extrapolate the
+  briefing's WIDER themes into a prep prompt (rhetorical question welcome). The no-advice rule is carved out so ONLY
+  directives may be prescriptive. Ticking a Thought Starter SAVES it to a new **Saved → Thought Starters** tab
+  (`lib/saved.ts` `useThoughtStarters`/`toggleThoughtStarter`, key `jotter.thoughtstarters.v1`; id derived from text).
+- **Readability redesign** (commit 601db96): bigger type throughout (body 13→15px, dev headlines 16px, macro 16px,
+  thought starters 15px), relaxed line-heights, more padding/gaps. **Zone sub-heads** (`ZoneLabel`) are now 14px bold
+  with an accent tick (were faint 11px muted). Expert-perspective cards get a soft accent wash on hover.
+
+### Home section chrome (commit e89ffbc)
+- **Single thick rule fixed under each section title**: header `borderBottom: 3px solid var(--text)` shown ONLY when
+  collapsed (open sections already show their content panel's top rule, so no double line). Touches
+  `CollapsibleSection`, `WhatDidIMiss`, `TrendingAndInsights`.
+- **Collapse state persists** per section in localStorage via `lib/uiState.ts usePersistentToggle(key, default)`
+  (keys: section title, `"wdim"`, `"latest"`; `jotter.collapse.<key>`).
+- **CtaFooter top border removed** (the line above the Jotter CTA).
+
+### Inline images in the Feed (commit e89ffbc)
+- **Root cause of bottom-clustered images:** Substack puts `data-attrs="..."` on every content `<img>`, and
+  `build_dataset.py clean_block` line ~128 (the `<anytag data-attrs>` embed stripper) was deleting those images
+  BEFORE the img→markdown conversion, so they resurfaced via the `s.images` bottom fallback in `SignalCard`.
+  **Fix:** the catch-all now excludes `<img>` (`<(?!img\b)...data-attrs...>`); tweet/link embeds (`<div|figure|p
+  data-attrs>`) are still stripped. Rebuild dropped bottom-clustered images 4189→~1400 and raised inline 5075→7862.
+  Remaining bottom cases are theoverspill / naughton (WordPress, different image structure) — not yet addressed.
+  **Needed a data rebuild + commit of `signals.jsonl.gz`.**
+
+### ⭐ World Cup section redesign (commit 601db96)
+`app/api/worldcup/route.ts` + `components/WorldCupChart.tsx`.
+- **Stats tiles / facts**: teams, matches played / 104, goals, goals-per-match — derived from the cumulative
+  standings (`sum(played)/2`, `sum(gf)`) so they're accurate tournament-wide, not just the scoreboard window.
+- **Standings sorted** by points → goal difference → goals for (guaranteed real-time placing; ESPN order not trusted).
+- **Bigger readable tables**: ~0.95rem team names, 24px flags, larger cells/padding, group cards `minmax(300px)`.
+- **New Fixtures tab**: `fetchMatches` now returns ALL matches (group + knockout) with `label` + `statusDetail`;
+  the view groups them by date with flags, scoreline (live/post) or kickoff time (pre — ESPN returns score 0 not
+  null for unplayed games, so only show a scoreline once live/finished), and FT/live status.
+- **New "Latest World Cup news"** list: `fetchNews()` via Google News RSS (`q=FIFA World Cup 2026`), top 6 with sources.
+- Tabs are now **Group Stage · Fixtures · Bracket**; bracket logic unchanged (shows a "fills in after groups" note when empty).
+
 ## ⭐ CURRENT DEPLOYMENT & DATA PIPELINE (2026-06; supersedes older "not deployed" notes below)
 **The app IS live: `intelligence.jotter.media` on Vercel** (invite-gated via middleware). Repo auto-deploys on
 push to `main`.
