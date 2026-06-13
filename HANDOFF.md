@@ -39,19 +39,31 @@ All shipped to production (commits `912f922`, `e89ffbc`, `601db96`).
   `npm run lint` errors are all intentional `react-hooks/set-state-in-effect` (mount hydration / clock tick /
   prefetch); Next 16 `next build` does not run eslint so they don't block deploy.
 
-### ⭐ WDIM ("What Did I Miss?") — DEDUP IS THE BIG CHANGE (commit e89ffbc)
-**Problem:** the same stories repeated across audiences (b2b/b2c) and across time filters (day/week/month).
-**Fix (all in `lib/wdim.ts` + `app/api/wdim/route.ts`):**
-- **Disjoint signal windows per range** via `recentForSynthesis(days, limit, minDays)` (new `minDays` lower bound in
-  `lib/data.ts`): day = last ~2d, week = 2–8d ago, month = 8–31d ago. So no signal can appear in two ranges.
-- **Per-audience bundle**: `generateWdimBundle(audience, news, markets, excludeTitles)` runs all 3 ranges in PARALLEL
-  then `dedupeBriefing` removes any development headline / perspective thesis already seen (day→week→month, across
-  BOTH zones). News only feeds the `day` range (week/month developments come from their windowed signals).
-- **Cross-audience**: the other audience's titles are passed as `excludeTitles` (soft prompt exclusion) so b2b/b2c diverge.
-- **Route** caches per `${aud}-${range}` but generates the whole audience bundle on a miss; an **in-flight lock per
-  audience** (`g.__wdimInflight`) means the client's near-simultaneous day/week/month requests share ONE generation
-  (was 3×). `maxDuration = 60`. Verified: b2b had 0 cross-range dupes (was many). ⚠ Local `claude` CLI flakes on
-  back-to-back parallel batches (contention) — production uses `ANTHROPIC_API_KEY` (handles parallel fine).
+### ⭐ WDIM ("What Did I Miss?") — UNIQUE PER-AUDIENCE BRIEFS (commits e89ffbc, then 0b4183a)
+**Problem:** the same stories repeated across audiences (b2b/b2c) AND across time filters (day/week/month).
+**Cross-RANGE fix** (e89ffbc): **disjoint signal windows per range** via `recentForSynthesis(days, limit, minDays)`
+(new `minDays` lower bound in `lib/data.ts`): day = last ~2d, week = 2–8d ago, month = 8–31d ago. News only feeds
+the `day` range. Plus `dedupeBriefing` removes any headline/thesis already seen across day→week→month and both zones.
+**Cross-AUDIENCE fix** (0b4183a — the per-audience soft-exclusion in e89ffbc did NOT work: it relied on the per-lambda
+`globalThis` cache, which isn't shared across instances, so b2b/b2c generated independently and both grabbed the
+biggest headlines). **New architecture: ONE dual-audience call per range.** `GENERATE_DUAL_TOOL` returns BOTH the b2b
+and b2c briefs from the SAME material, so the model partitions each story to the audience it best serves (a headline
+can never appear in both). Sharp sector lenses in `AUDIENCE_BRIEF` (enterprise buying/infra/compliance vs
+consumer/brand/ads). `generateWdimMatrix(news, markets)` runs the 3 ranges in parallel (each a dual call), then
+per-audience cross-range dedup. The route generates the **whole 6-config matrix in ONE in-flight pass**
+(`g.__wdimInflight` is now a single promise) and caches all 6. `maxDuration = 120`.
+- **Model is now `claude-sonnet-4-6`** (was haiku) for depth; override via `WDIM_MODEL`. Verified locally: a single
+  dual call gives 0 shared titles and genuinely different sector angles. ⚠ Local `claude` CLI can't run 3 concurrent
+  Sonnet dual-calls (they starve each other and time out) — that's a LOCAL-ONLY limit; production uses the API
+  (`ANTHROPIC_API_KEY`, tool-enforced, no process contention). `generateWdim` (single-audience) is kept for the
+  `?custom=` query path.
+
+### ⭐ CI degraded-build guard is now RELATIVE (commit 0b4183a)
+`refresh.yml` health check skips the publish/commit if the new build is below **90% of the currently committed**
+signal count (absolute floor 3000). Before, the 3000 floor let a capped thin rebuild (e.g. 16k vs 26k) clobber good
+live data — this happened twice on 2026-06-13 (CI committed 16,811 then 16,815). The remedy when CI is degraded is
+still: build locally → `gzip web/data/signals.jsonl > signals.jsonl.gz` → `git add -f` → push. The durable fix
+(Cloudflare-fronting B2 so the engine-data restore stops 403ing) is still the pending infra task.
 - **Expert perspectives capped at 4** (schema maxItems + `normaliseBriefing` slice).
 - **Thought Starters reworded**: were narrow imperatives, now forward-looking talking points that extrapolate the
   briefing's WIDER themes into a prep prompt (rhetorical question welcome). The no-advice rule is carved out so ONLY
