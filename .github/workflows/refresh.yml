@@ -51,12 +51,23 @@ jobs:
         id: health
         run: |
           NEW=$(wc -l < web/data/signals.jsonl)
-          echo "signals: new=$NEW"
-          if [ "$NEW" -ge 3000 ]; then
+          # Compare against the CURRENTLY COMMITTED build (still the old gz at this point;
+          # the commit step below only regenerates it if this check passes).
+          OLD=0
+          if [ -f web/data/signals.jsonl.gz ]; then
+            OLD=$(gzip -dc web/data/signals.jsonl.gz | wc -l)
+          fi
+          # Publish only if the new build is at least 90% of the committed one, with an
+          # absolute floor of 3000 for the first-ever build. A capped run that yields a
+          # thin (e.g. 16k vs 26k) rebuild is rejected so it can't clobber good live data.
+          THRESH=$(( OLD * 90 / 100 ))
+          if [ "$THRESH" -lt 3000 ]; then THRESH=3000; fi
+          echo "signals: new=$NEW committed=$OLD threshold=$THRESH"
+          if [ "$NEW" -ge "$THRESH" ]; then
             echo "ok=true" >> "$GITHUB_OUTPUT"
           else
             echo "ok=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Degraded build ($NEW signals, minimum 3000) — skipping publish"
+            echo "::warning::Degraded build ($NEW signals < threshold $THRESH, 90% of committed $OLD) — skipping publish"
           fi
 
       - name: Commit fresh data + trigger site rebuild

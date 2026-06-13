@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { generateWdim, generateWdimBundle, bundleTitles, wdimReady, type WdimRange, type WdimAudience, type WdimNews, type WdimMarket, type WdimResult } from "@/lib/wdim";
+import { generateWdim, generateWdimMatrix, wdimReady, type WdimRange, type WdimAudience, type WdimNews, type WdimMarket, type WdimResult } from "@/lib/wdim";
 import { loadData } from "@/lib/data";
 
-export const maxDuration = 60; // bundle = 3 parallel Anthropic calls
+export const maxDuration = 120; // matrix = 3 parallel dual-audience calls (Sonnet)
 
 const RANGES = ["day", "week", "month"] as const;
 const AUDIENCES = ["b2b", "b2c"] as const;
@@ -12,9 +12,10 @@ const CAT_LABEL: Record<string, string> = {
 };
 
 type CacheEntry = { at: number; data: unknown };
+type Matrix = Record<WdimAudience, Record<WdimRange, WdimResult>>;
 const g = globalThis as unknown as {
   __wdim?: Record<string, CacheEntry>;
-  __wdimInflight?: Record<string, Promise<Record<WdimRange, WdimResult> | null>>;
+  __wdimInflight?: Promise<Matrix | null>;
 };
 const TTL = 30 * 60 * 1000;
 
@@ -80,39 +81,32 @@ export async function GET(req: Request) {
     return NextResponse.json({ available: true, ...(cached.data as object) }, { headers: { "Cache-Control": EDGE } });
   }
 
-  // Cache miss: generate the WHOLE audience bundle (day + week + month) in one pass
-  // so the three timeframes are deduped against each other, then cache all three.
-  // An in-flight lock per audience means the client's near-simultaneous day/week/month
-  // requests share ONE generation instead of each kicking off its own bundle.
-  g.__wdimInflight ??= {};
-  if (!g.__wdimInflight[audience]) {
-    g.__wdimInflight[audience] = (async () => {
+  // Cache miss: generate the WHOLE matrix (b2b/b2c × day/week/month) in ONE pass so both
+  // audiences are split from the same material (no repeats) and each timeframe is distinct.
+  // A single in-flight lock means every near-simultaneous request shares one generation.
+  if (!g.__wdimInflight) {
+    g.__wdimInflight = (async () => {
       try {
         const { news, markets } = await aggregate(url.origin);
-        // Exclude the other audience's titles (if already generated) so b2b/b2c diverge.
-        const other: WdimAudience = audience === "b2b" ? "b2c" : "b2b";
-        const otherBundle: Record<string, WdimResult> = {};
-        for (const r of RANGES) {
-          const c = g.__wdim![`${other}-${r}`];
-          if (c) otherBundle[r] = c.data as WdimResult;
-        }
-        const bundle = await generateWdimBundle(audience, news, markets, bundleTitles(otherBundle));
-        if (bundle) {
+        const matrix = await generateWdimMatrix(news, markets);
+        if (matrix) {
           const now = Date.now();
-          for (const r of RANGES) {
-            if (bundle[r]) g.__wdim![`${audience}-${r}`] = { at: now, data: bundle[r] };
+          for (const aud of AUDIENCES) {
+            for (const r of RANGES) {
+              if (matrix[aud]?.[r]) g.__wdim![`${aud}-${r}`] = { at: now, data: matrix[aud][r] };
+            }
           }
         }
-        return bundle;
+        return matrix;
       } finally {
-        delete g.__wdimInflight![audience];
+        g.__wdimInflight = undefined;
       }
     })();
   }
 
-  const bundle = await g.__wdimInflight[audience];
-  if (!bundle || !bundle[range]) {
+  const matrix = await g.__wdimInflight;
+  if (!matrix || !matrix[audience]?.[range]) {
     return NextResponse.json({ available: false });
   }
-  return NextResponse.json({ available: true, ...bundle[range] }, { headers: { "Cache-Control": EDGE } });
+  return NextResponse.json({ available: true, ...matrix[audience][range] }, { headers: { "Cache-Control": EDGE } });
 }
