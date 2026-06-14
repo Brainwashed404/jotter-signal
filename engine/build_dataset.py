@@ -455,13 +455,28 @@ def kind_of(txt, signal_type, n_links):
         return "longread"
     return "article"
 
+# Strip pictographic emoji from copy (the studio wants no emojis anywhere on the site).
+# Covers the emoji/symbol/dingbat/flag blocks plus variation selectors and ZWJ; leaves
+# ordinary punctuation, arrows used as link chrome, and the ★/☆ save glyphs (UI-only) alone.
+_EMOJI_RE = re.compile(
+    "[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF"
+    "\U00002300-\U000023FF\U00002B00-\U00002BFF\U0000FE0F\U0000200D]+",
+    flags=re.UNICODE)
+def strip_emoji(text):
+    if not text:
+        return text
+    t = _EMOJI_RE.sub("", text)
+    t = re.sub(r"[ \t]{2,}", " ", t)          # tidy gaps left behind
+    t = re.sub(r"(?m)^[ \t]+", "", t)          # trim leading space on each line
+    return t.strip()
+
 def _sig(sid, pid, date, source, source_id, st, heading, txt, imgs, links, url):
-    t = txt[:12000]
+    t = strip_emoji(txt[:12000])
     return {
         "id": sid, "post_id": pid, "date": date, "year": int(date[:4]),
         "source": source, "source_id": source_id, "type": st,
         "kind": kind_of(t, st, len(links)),
-        "heading": heading, "text": t, "themes": themes_of(t),
+        "heading": strip_emoji(heading), "text": t, "themes": themes_of(t),
         "links": links[:8], "images": imgs, "post_url": url,
     }
 

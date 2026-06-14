@@ -25,6 +25,33 @@ a daily workbench for strategists/insight workers.
   cron running `engine/refresh_all.py`. No env vars needed now (LLM-free). (Alt: Vercel for the app + `signals.jsonl`
   in object storage, fetched in `lib/data.ts`.) Not started — awaiting user's choice of host.
 - **WRITING RULE: never use em dashes** anywhere (copy, blurbs, UI). Use commas/colons/parentheses.
+- **NO EMOJIS anywhere on the site.** Ingested/generated copy is emoji-stripped: `build_dataset.py strip_emoji()`
+  (applied to every signal heading + text in `_sig`), the World Cup route (`stripEmoji` on news title/summary), and
+  WDIM (`clean()` in `normaliseBriefing` + a "Never use emojis" prompt rule). The ★/☆ save glyphs and the weather
+  pill's emoji icons are UI chrome, deliberately kept (the weather widget is an emoji-icon system by prior choice).
+
+## ⭐ SESSION 2026-06-14: content quality, mobile nav/header, World Cup news, no-emoji rule
+All shipped to production.
+- **Prof G (and podcast) filler dropped** (`build_dataset.py`): a global stub rule (paywall/subscribe CTA with <300
+  chars of real body) + a podcast-source rule (paywall OR podcast markers like "joined by / sits down with / REPLAY /
+  this week on" with <1100 chars) gated by a new `"podcast": true` flag on `profgmarkets`. Removes ~19 Prof G
+  episode-intro/teasers + a few empty stubs (rushkoff/trendreport); keeps substantive essays. `_substantive_len`
+  keeps link anchor text so real essays aren't mis-measured as short.
+- **Mobile header / nav**: radio moved to the bottom tab bar (5th slot, where Settings was); **Settings gear is in
+  the header top-right and TOGGLES** (open `/settings`, press again = `router.back()` to close; accent when active);
+  the day/night toggle sits just left of it. Desktop header unchanged.
+- **Publications folded into Experts**: one `/sources` page with an Experts/Publications toggle (`SourcesBrowser`),
+  so Publications has a home on mobile. Removed the Publications nav item; `/publications` redirects to `/sources`;
+  profiles render via `/sources/[id]`. (`/publications/[id]` still resolves for old links.)
+- **Mobile signal card decluttered** (`SignalCard`): meta is one tidy line (date `whitespace-nowrap shrink-0`, source
+  truncates); on mobile the "Share" text chip becomes a compact share icon (`max-md:hidden` text / `md:hidden` icon).
+- **World Cup News is now a TAB** (`WorldCupChart`), placed after Group Stage: Group Stage · News · Fixtures · Bracket.
+  Text is brought in-app (no bounce-out): `fetchNews` switched from Google News to **Guardian football RSS**
+  (`theguardian.com/football/rss`) which carries real article summaries; `htmlToSummary` prefers `<p>` paragraphs and
+  strips nav/kick-off boilerplate; live-blogs ("... – live") are filtered out; each card shows headline + summary +
+  a de-emphasised "source ↗". No inner scrollbar (flows with the page; same for the Fixtures view).
+- **Added expert: Andrey Mir** (`andreymir`, andreymir.com, media ecologist / Postjournalism). `adapter:"rss"`,
+  feed `/feed`; **no backfill** (his WordPress REST API 404s), so it's the ~20 most-recent posts. 34 experts now.
 
 ## ⭐ SESSION 2026-06-13: WDIM dedup + redesign, World Cup upgrade, dead-code cleanup
 All shipped to production (commits `912f922`, `e89ffbc`, `601db96`).

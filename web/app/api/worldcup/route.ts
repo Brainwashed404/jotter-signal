@@ -171,19 +171,28 @@ function decodeXml(s: string): string {
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .trim();
 }
-// Strip HTML to plain text and take the first substantive sentence(s) for an in-app
-// summary (so readers get the story without bouncing out to the publisher).
+// No emojis anywhere on the site: strip pictographic emoji/symbol/flag blocks.
+const EMOJI_RE = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{2300}-\u{23FF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]+/gu;
+function stripEmoji(s: string): string {
+  return s.replace(EMOJI_RE, "").replace(/ {2,}/g, " ").trim();
+}
+
+// Build an in-app summary from a Guardian RSS description. Prefer the <p> paragraphs
+// (the real article lead) and skip <ul>/<li> related-link bullets, kick-off-time lines
+// and nav boilerplate, so readers get the story without bouncing out to the publisher.
 function htmlToSummary(html: string, max = 240): string {
-  let t = decodeXml(html)
-    .replace(/<a\b[^>]*>continue reading[\s\S]*?<\/a>/gi, "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  // Guardian live-blogs lead with nav boilerplate ("News, build-up and reaction from … |
-  // Player guide | Bracketology | Wallchart | Mail us here"); drop it to keep the real lead.
+  const decoded = decodeXml(html);
+  const paras = [...decoded.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)].map((m) => m[1]);
+  const body = paras.length ? paras.join(" ") : decoded;
+  let t = stripEmoji(
+    body.replace(/<a\b[^>]*>continue reading[\s\S]*?<\/a>/gi, "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+  );
   t = t.replace(/news,?\s*build-?up and reaction\b[\s\S]*?(mail us here|wallchart|bracketology|full schedule)/i, "").trim();
   t = t.replace(/\b(player guide|bracketology|wallchart|mail us here|full schedule)\b\s*\|?\s*/gi, "").trim();
-  t = t.replace(/^[|\s·-]+/, "").trim();
+  t = t.replace(/^(kick-?off time[^.|]*[.|]?\s*)/i, "").replace(/^[|\s·-]+/, "").trim();
   if (t.length <= max) return t;
   const cut = t.slice(0, max);
   const lastStop = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "), cut.lastIndexOf("! "));
@@ -202,15 +211,21 @@ async function fetchNews(): Promise<WCNews[]> {
     const all: WCNews[] = [];
     for (const m of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
       const block = m[1];
-      const title = decodeXml(block.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "");
+      const title = stripEmoji(decodeXml(block.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? ""));
       const url = decodeXml(block.match(/<link>([\s\S]*?)<\/link>/)?.[1] ?? "");
       const summary = htmlToSummary(block.match(/<description>([\s\S]*?)<\/description>/)?.[1] ?? "");
       if (!title) continue;
-      all.push({ title, source: "The Guardian", url, summary });
+      // Skip minute-by-minute live blogs (titles end "... – live"); they read as
+      // commentary, not news, and their summaries are kick-off-time boilerplate.
+      const isLiveBlog = /[–-]\s*live\s*$/i.test(title);
+      all.push({ title, source: "The Guardian", url, summary, _live: isLiveBlog } as WCNews & { _live: boolean });
     }
+    const articles = (all as (WCNews & { _live: boolean })[]).filter((n) => !n._live);
+    const pool = articles.length >= 4 ? articles : all;
     // Prefer World-Cup-tagged stories; if there are too few, fall back to general football.
-    const wc = all.filter((n) => /world cup/i.test(n.title) || /world cup/i.test(n.summary || ""));
-    return (wc.length >= 4 ? wc : all).slice(0, 8);
+    const wc = pool.filter((n) => /world cup/i.test(n.title) || /world cup/i.test(n.summary || ""));
+    const chosen = (wc.length >= 4 ? wc : pool).slice(0, 8);
+    return chosen.map(({ title, source, url, summary }) => ({ title, source, url, summary }));
   } catch { return []; }
 }
 

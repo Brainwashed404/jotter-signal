@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import NavLinks from "@/components/NavLinks";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -336,6 +337,12 @@ export default function AppHeader() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const toggle = (s: Section) => setSection((cur) => (cur === s ? null : s));
 
+  // Settings gear is a toggle: open /settings, or press again to close (go back).
+  const router = useRouter();
+  const pathname = usePathname();
+  const onSettings = pathname === "/settings";
+  const toggleSettings = () => { if (onSettings) router.back(); else router.push("/settings"); };
+
   return (
     <header className="sticky top-0 z-50 backdrop-blur"
       style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}>
@@ -352,15 +359,16 @@ export default function AppHeader() {
         <nav className="flex items-center gap-1 shrink-0 max-md:flex-1 max-md:justify-end max-md:gap-2">
           <div className="hidden md:flex items-center gap-1"><NavLinks /></div>
           <ThemeToggle />
-          {/* mobile-only: settings (top right, day/night sits just left of it) */}
-          <Link href="/settings" title="Settings"
+          {/* mobile-only: settings toggle (open, or press again to close) */}
+          <button onClick={toggleSettings} title={onSettings ? "Close settings" : "Settings"}
+            aria-pressed={onSettings}
             className="md:hidden w-8 h-8 grid place-items-center rounded-lg"
-            style={{ color: "var(--muted)" }}>
+            style={{ color: onSettings ? "var(--accent)" : "var(--muted)" }}>
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="3" />
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
             </svg>
-          </Link>
+          </button>
         </nav>
       </div>
 

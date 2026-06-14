@@ -159,15 +159,25 @@ export function SignalCard({ s }: { s: Signal }) {
         </div>
       )}
       <div className="flex items-center gap-2 mb-2">
-        <span className="chip" style={{ color: "var(--accent)", borderColor: "var(--accent)" }}>
+        <span className="chip shrink-0" style={{ color: "var(--accent)", borderColor: "var(--accent)" }}>
           {KIND_LABEL[s.kind] ?? KIND_LABEL[s.type] ?? s.kind}
         </span>
-        <span className="mono text-xs" style={{ color: "var(--muted)" }}>{fmtDate(s.date)}</span>
-        <Link href={`/sources/${s.source_id}`} className="mono text-xs hover:underline" style={{ color: "var(--muted)" }}>
-          · {sourceLabel}
-        </Link>
-        <div ref={shareRef} className="ml-auto relative">
-          <button onClick={onShare} className="chip" title="Share">Share</button>
+        {/* date + source on one tidy line (date never wraps; source truncates) */}
+        <div className="flex items-center gap-1.5 min-w-0 flex-1">
+          <span className="mono text-xs shrink-0 whitespace-nowrap" style={{ color: "var(--muted)" }}>{fmtDate(s.date)}</span>
+          <Link href={`/sources/${s.source_id}`} className="mono text-xs truncate hover:underline" style={{ color: "var(--muted)" }}>
+            · {sourceLabel}
+          </Link>
+        </div>
+        <div ref={shareRef} className="relative shrink-0">
+          {/* desktop: text chip; mobile: compact icon (declutters the card) */}
+          <button onClick={onShare} className="chip max-md:hidden" title="Share">Share</button>
+          <button onClick={onShare} className="md:hidden w-7 h-7 grid place-items-center rounded-md" title="Share" style={{ color: "var(--muted)" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+              <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" /><line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
+            </svg>
+          </button>
           {shareOpen && (
             <div className="absolute right-0 top-full mt-1 z-20 panel p-1 flex flex-col text-sm min-w-[140px]"
               onClick={(e) => e.stopPropagation()} style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}>

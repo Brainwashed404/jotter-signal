@@ -86,6 +86,12 @@ const AUDIENCE_CONTEXT: Record<WdimAudience, {
   },
 };
 
+// No emojis anywhere on the site: strip pictographic emoji from generated copy.
+const EMOJI_RE = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{2300}-\u{23FF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]+/gu;
+function clean(s: unknown): string {
+  return String(s ?? "").replace(EMOJI_RE, "").replace(/ {2,}/g, " ").trim();
+}
+
 function snippet(s: Signal, n = 200): string {
   const t = (s.text || "")
     .replace(/!\[[^\]]*\]\([^)]+\)/g, "")
@@ -226,7 +232,7 @@ function buildSystemPrompt(range: WdimRange, audience: WdimAudience, excludeTitl
     ``,
     `STRICT RULES:`,
     `- UK English exclusively: per cent, categorise, behaviour, prioritising, whilst, organisation.`,
-    `- NEVER use em dashes (never output: —). Use colons, commas, or parentheses instead.`,
+    `- NEVER use em dashes (never output: —). Use colons, commas, or parentheses instead. Never use emojis.`,
     `- The macro_indicator, developments, and expert_perspectives must be analytical and non-prescriptive: never "you should", "watch for", "we recommend". The DIRECTIVES (thought starters) are the only exception: there, extrapolate the briefing's WIDER themes into forward-looking talking points that help a leader prepare, each linking a macro shift to a concrete consideration for the reader's organisation (a rhetorical question is welcome). Never tie a thought starter to one narrow story.`,
     `- No meta-commentary or filler. Do not reference this briefing, the source list, or the analyst.`,
     `- macro_indicator must open with a concrete named development, data point, or actor. It describes the broader macro environment (geopolitical, technological, regulatory, societal or economic context), not only financial markets. Do not fabricate statistics or institutions.`,
@@ -335,7 +341,7 @@ function normaliseBriefing(o: {
   if (!o.macro_indicator || !o.developments || !o.expert_perspectives || !o.directives) return null;
   const seenSources = new Set<string>();
   return {
-    macroIndicator: String(o.macro_indicator).trim(),
+    macroIndicator: clean(o.macro_indicator),
     developments: (o.developments)
       .filter((d) => {
         if (!d.headline || !d.summary) return false;
@@ -346,23 +352,23 @@ function normaliseBriefing(o: {
       })
       .slice(0, 4)
       .map((d) => ({
-        headline: String(d.headline).trim(),
-        summary: String(d.summary).trim(),
+        headline: clean(d.headline),
+        summary: clean(d.summary),
         ...(d.url ? { url: String(d.url).trim() } : {}),
       })),
     expertPerspectives: (o.expert_perspectives)
       .filter((p) => p.thesis && p.source)
       .slice(0, 4)
       .map((p) => ({
-        thesis: String(p.thesis).trim(),
-        source: String(p.source).trim(),
-        snippet: String(p.snippet || "").trim(),
+        thesis: clean(p.thesis),
+        source: clean(p.source),
+        snippet: clean(p.snippet),
         ...(p.url ? { url: String(p.url).trim() } : {}),
       })),
     directives: (o.directives)
       .filter((d) => d.action)
       .slice(0, 5)
-      .map((d) => ({ action: String(d.action).trim() })),
+      .map((d) => ({ action: clean(d.action) })),
   };
 }
 
@@ -529,7 +535,7 @@ function buildDualSystemPrompt(range: WdimRange): string {
     ``,
     `STRICT RULES (apply to BOTH briefs):`,
     `- UK English exclusively: per cent, categorise, behaviour, prioritising, whilst, organisation.`,
-    `- NEVER use em dashes (never output a long dash). Use colons, commas, or parentheses instead.`,
+    `- NEVER use em dashes (never output a long dash). Use colons, commas, or parentheses instead. Never use emojis.`,
     `- macro_indicator, developments and expert_perspectives must be analytical and non-prescriptive (never "you should", "we recommend"). The DIRECTIVES (thought starters) are the only place for forward-looking, second-person prompts.`,
     `- development headlines and expert_perspective thesis values must be copied VERBATIM from the source material provided. Never invent a headline.`,
     `- A development headline and an expert_perspective thesis must never be the same item.`,

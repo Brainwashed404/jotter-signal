@@ -313,7 +313,7 @@ function FixturesView({ fixtures }: { fixtures: WCMatch[] }) {
     byDay.get(day)!.push(m);
   }
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.1rem", maxHeight: "70vh", overflowY: "auto" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
       {[...byDay.entries()].map(([day, ms]) => (
         <div key={day}>
           <div style={{ fontSize: "0.74rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "0.5rem" }}>
@@ -334,7 +334,7 @@ function NewsView({ news }: { news: WCNews[] }) {
     return <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>No World Cup news right now.</div>;
   }
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", maxHeight: "70vh", overflowY: "auto" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
       {news.map((n, i) => (
         <div key={i} className="panel" style={{ padding: "1rem 1.1rem" }}>
           <div style={{ fontSize: "1rem", fontWeight: 600, lineHeight: 1.4, marginBottom: n.summary ? "0.5rem" : 0 }}>
