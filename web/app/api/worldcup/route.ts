@@ -24,7 +24,7 @@ export type WCStats = {
   goalsPerMatch: number;
   liveNow: number;
 };
-export type WCNews = { title: string; source: string; url: string };
+export type WCNews = { title: string; source: string; url: string; summary?: string };
 export type WCData = {
   groups: WCGroup[];
   knockout: { round: string; matches: WCMatch[] }[];
@@ -171,28 +171,46 @@ function decodeXml(s: string): string {
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .trim();
 }
+// Strip HTML to plain text and take the first substantive sentence(s) for an in-app
+// summary (so readers get the story without bouncing out to the publisher).
+function htmlToSummary(html: string, max = 240): string {
+  let t = decodeXml(html)
+    .replace(/<a\b[^>]*>continue reading[\s\S]*?<\/a>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Guardian live-blogs lead with nav boilerplate ("News, build-up and reaction from … |
+  // Player guide | Bracketology | Wallchart | Mail us here"); drop it to keep the real lead.
+  t = t.replace(/news,?\s*build-?up and reaction\b[\s\S]*?(mail us here|wallchart|bracketology|full schedule)/i, "").trim();
+  t = t.replace(/\b(player guide|bracketology|wallchart|mail us here|full schedule)\b\s*\|?\s*/gi, "").trim();
+  t = t.replace(/^[|\s·-]+/, "").trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const lastStop = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "), cut.lastIndexOf("! "));
+  return (lastStop > 80 ? cut.slice(0, lastStop + 1) : cut.trimEnd() + "…");
+}
+
 async function fetchNews(): Promise<WCNews[]> {
   try {
-    const r = await fetch(
-      "https://news.google.com/rss/search?q=" + encodeURIComponent("FIFA World Cup 2026") + "&hl=en-GB&gl=GB&ceid=GB:en",
-      { signal: AbortSignal.timeout(8000), headers: { "User-Agent": "Mozilla/5.0" }, cache: "no-store" }
-    );
+    // Guardian football RSS carries real article summaries (unlike Google News), and
+    // tags World Cup pieces "World Cup 2026: ...", so we get in-app readable text.
+    const r = await fetch("https://www.theguardian.com/football/rss", {
+      signal: AbortSignal.timeout(8000), headers: { "User-Agent": "Mozilla/5.0" }, cache: "no-store",
+    });
     if (!r.ok) return [];
     const xml = await r.text();
-    const out: WCNews[] = [];
+    const all: WCNews[] = [];
     for (const m of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
       const block = m[1];
-      const rawTitle = decodeXml(block.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "");
+      const title = decodeXml(block.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "");
       const url = decodeXml(block.match(/<link>([\s\S]*?)<\/link>/)?.[1] ?? "");
-      if (!rawTitle) continue;
-      // Google News titles end with " - Publisher".
-      const idx = rawTitle.lastIndexOf(" - ");
-      const title = idx > 0 ? rawTitle.slice(0, idx) : rawTitle;
-      const source = idx > 0 ? rawTitle.slice(idx + 3) : "";
-      out.push({ title, source, url });
-      if (out.length >= 6) break;
+      const summary = htmlToSummary(block.match(/<description>([\s\S]*?)<\/description>/)?.[1] ?? "");
+      if (!title) continue;
+      all.push({ title, source: "The Guardian", url, summary });
     }
-    return out;
+    // Prefer World-Cup-tagged stories; if there are too few, fall back to general football.
+    const wc = all.filter((n) => /world cup/i.test(n.title) || /world cup/i.test(n.summary || ""));
+    return (wc.length >= 4 ? wc : all).slice(0, 8);
   } catch { return []; }
 }
 

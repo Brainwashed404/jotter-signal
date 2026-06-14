@@ -331,5 +331,14 @@
     "adapter": "rss",
     "backfill": "substack",
     "category": "author"
+  },
+  {
+    "id": "andreymir",
+    "name": "Andrey Mir",
+    "blurb": "Media ecologist and author of \"Postjournalism\". On McLuhan, the transformation of news media, and what AI means for writing, reading and human cognition.",
+    "url": "https://www.andreymir.com",
+    "feed": "https://www.andreymir.com/feed",
+    "adapter": "rss",
+    "category": "author"
   }
 ]

@@ -328,24 +328,31 @@ function FixturesView({ fixtures }: { fixtures: WCMatch[] }) {
   );
 }
 
-// ─── News ─────────────────────────────────────────────────────────────────────
-function NewsList({ news }: { news: WCNews[] }) {
-  if (!news.length) return null;
+// ─── News (read in-app: headline + summary, no bounce-out) ────────────────────
+function NewsView({ news }: { news: WCNews[] }) {
+  if (!news.length) {
+    return <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>No World Cup news right now.</div>;
+  }
   return (
-    <div style={{ marginTop: "1.6rem" }}>
-      <div style={{ fontSize: "0.74rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "0.7rem" }}>
-        Latest World Cup news
-      </div>
-      <div className="panel divide-y" style={{ borderColor: "color-mix(in srgb, var(--border) 60%, transparent)" }}>
-        {news.map((n, i) => (
-          <a key={i} href={n.url} target="_blank" rel="noopener noreferrer"
-            style={{ display: "block", padding: "0.7rem 0.9rem", textDecoration: "none", color: "inherit" }}
-            className="hover:underline underline-offset-2">
-            <span style={{ fontSize: "0.92rem", fontWeight: 500, lineHeight: 1.4 }}>{n.title}</span>
-            {n.source && <span style={{ fontSize: "0.78rem", color: "var(--muted)", marginLeft: "0.5rem" }}>· {n.source}</span>}
-          </a>
-        ))}
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", maxHeight: "70vh", overflowY: "auto" }}>
+      {news.map((n, i) => (
+        <div key={i} className="panel" style={{ padding: "1rem 1.1rem" }}>
+          <div style={{ fontSize: "1rem", fontWeight: 600, lineHeight: 1.4, marginBottom: n.summary ? "0.5rem" : 0 }}>
+            {n.title}
+          </div>
+          {n.summary && (
+            <p style={{ fontSize: "0.92rem", lineHeight: 1.6, color: "var(--muted)" }}>{n.summary}</p>
+          )}
+          <div style={{ marginTop: "0.6rem", fontSize: "0.74rem", color: "var(--muted)", display: "flex", gap: "0.6rem", alignItems: "center" }}>
+            <span>{n.source}</span>
+            {n.url && (
+              <a href={n.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>
+                source ↗
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -354,7 +361,7 @@ function NewsList({ news }: { news: WCNews[] }) {
 export default function WorldCupChart() {
   const [data, setData] = useState<WCData | null>(null);
   const [error, setError] = useState(false);
-  const [tab, setTab] = useState<"groups" | "fixtures" | "bracket">("groups");
+  const [tab, setTab] = useState<"groups" | "news" | "fixtures" | "bracket">("groups");
 
   useEffect(() => {
     let cancelled = false;
@@ -382,8 +389,9 @@ export default function WorldCupChart() {
     return () => clearInterval(t);
   }, [data?.hasLive]);
 
-  const TABS: { id: "groups" | "fixtures" | "bracket"; label: string }[] = [
+  const TABS: { id: "groups" | "news" | "fixtures" | "bracket"; label: string }[] = [
     { id: "groups", label: "Group Stage" },
+    { id: "news", label: "News" },
     { id: "fixtures", label: "Fixtures" },
     { id: "bracket", label: "Bracket" },
   ];
@@ -410,10 +418,9 @@ export default function WorldCupChart() {
       {!data && !error && <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>Loading…</div>}
 
       {data && tab === "groups" && <GroupsView groups={data.groups} />}
+      {data && tab === "news" && <NewsView news={data.news} />}
       {data && tab === "fixtures" && <FixturesView fixtures={data.fixtures} />}
       {data && tab === "bracket" && <BracketView knockout={data.knockout} thirdPlace={data.thirdPlace} />}
-
-      {data && <NewsList news={data.news} />}
     </div>
   );
 }
