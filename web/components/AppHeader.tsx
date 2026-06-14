@@ -334,16 +334,7 @@ function TimezonesPanel() {
 export default function AppHeader() {
   const [section,     setSection]     = useState<Section | null>(null);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [radioOn,     setRadioOn]     = useState(false);
   const toggle = (s: Section) => setSection((cur) => (cur === s ? null : s));
-
-  // Mirror the radio's playing state (RadioSidebar broadcasts it) so the
-  // mobile radio button can show when something is on air.
-  useEffect(() => {
-    const onState = (e: Event) => setRadioOn(Boolean((e as CustomEvent).detail?.playing));
-    window.addEventListener("jotter-radio-state", onState);
-    return () => window.removeEventListener("jotter-radio-state", onState);
-  }, []);
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur"
@@ -358,17 +349,18 @@ export default function AppHeader() {
         <WeatherClock activeSection={section} onToggle={toggle} onWeatherData={setWeatherData} />
         {/* On mobile the weather/time pill is hidden (the phone shows the time, weather
             is a glance away), so the three controls spread across the freed space. */}
-        <nav className="flex items-center gap-1 shrink-0 max-md:flex-1 max-md:justify-around max-md:gap-0">
+        <nav className="flex items-center gap-1 shrink-0 max-md:flex-1 max-md:justify-end max-md:gap-2">
           <div className="hidden md:flex items-center gap-1"><NavLinks /></div>
-          {/* mobile-only: radio (opens the bottom sheet) */}
-          <button onClick={() => window.dispatchEvent(new Event("jotter-radio-toggle"))} title="Radio"
-            className="md:hidden w-8 h-8 grid place-items-center rounded-lg"
-            style={{ color: radioOn ? "var(--accent)" : "var(--muted)" }}>
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M4 10v4" /><path d="M8 7v10" /><path d="M12 4v16" /><path d="M16 7v10" /><path d="M20 10v4" />
-            </svg>
-          </button>
           <ThemeToggle />
+          {/* mobile-only: settings (top right, day/night sits just left of it) */}
+          <Link href="/settings" title="Settings"
+            className="md:hidden w-8 h-8 grid place-items-center rounded-lg"
+            style={{ color: "var(--muted)" }}>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+          </Link>
         </nav>
       </div>
 

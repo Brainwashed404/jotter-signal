@@ -656,11 +656,48 @@ experts_cfg = json.load(open("experts.json"))
 # NB the emailed-newsletter pipeline is RETIRED: data/newsletters.json is deliberately
 # NOT loaded any more (it auto-created a source per email sender and kept resurrecting
 # removed sources, e.g. Benedict Evans). experts.json is the only source manifest.
+# ---------- low-value / filler filter ----------
+# Drops paywall teasers ("exclusively for X+ subscribers", "Looking for the full
+# version?") and, for sources flagged "podcast": true, the episode-intro stubs that
+# are just a description of a podcast/video episode (e.g. Prof G Markets). Keeps any
+# post with real substantive body.
+_PAYWALL_RE = re.compile(
+    r"(exclusively for|listen ad-free|ad-free, exclusively|full version\?|"
+    r"paid subscribers? (get|can|only)|only on substack|become a [^.]{0,40}subscriber|"
+    r"unlimited[, ]+ad-free access|for (paid|premium) subscribers|join us!)", re.I)
+_PODCAST_RE = re.compile(
+    r"\b(joined by|sits down with|joins (scott|ed|the show|us|him|her)|in this episode|"
+    r"on (this|the) (episode|show)|replay:|live from|this week on)\b", re.I)
+
+def _substantive_len(text):
+    """Length of the real body: drop images, keep link anchor text, drop CTA lines."""
+    t = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", text)
+    t = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", t)
+    keep = [ln for ln in t.splitlines() if not _PAYWALL_RE.search(ln)]
+    return len(re.sub(r"\s+", " ", " ".join(keep)).strip())
+
+def _is_filler(s, ex):
+    t = s.get("text", "") or ""
+    body = _substantive_len(t)
+    # Global: a near-empty post that is just a subscribe/paywall teaser.
+    if _PAYWALL_RE.search(t) and body < 300:
+        return True
+    # Podcast/video feeds (e.g. Prof G Markets): episode-intro stubs with no real essay.
+    if ex.get("podcast") and (_PAYWALL_RE.search(t) or _PODCAST_RE.search(t)) and body < 1100:
+        return True
+    return False
+
 all_sigs = []
 experts_out = []
 for ex in experts_cfg:
     fn = ADAPTERS.get(ex.get("adapter"))
     sigs = fn(ex) if fn else []
+    if sigs:
+        kept = [s for s in sigs if not _is_filler(s, ex)]
+        dropped = len(sigs) - len(kept)
+        if dropped:
+            print(f"  {ex['id']}: dropped {dropped} filler/teaser signal(s)")
+        sigs = kept
     if not sigs:
         print(f"  {ex['id']}: 0 signals"); continue
     cat = ex.get("category", "author")   # stamp author|publication so cards can hide author blog names

@@ -319,7 +319,8 @@
     "feed": "https://www.profgmedia.com/feed",
     "adapter": "rss",
     "backfill": "substack",
-    "category": "author"
+    "category": "author",
+    "podcast": true
   },
   {
     "id": "garymarcus",
