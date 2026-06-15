@@ -193,6 +193,7 @@ async function fetchReuters(): Promise<NewsItem[]> {
 // via a Google News site-search (works from any IP, like Reuters above). Google
 // Finance is a portal with no article feed of its own, so it's represented by a
 // general markets-news search. Results are merged newest-first and deduped.
+const PAYWALL_SOURCES = new Set<string>(["Bloomberg", "Seeking Alpha"]);
 const MONEY_SOURCES: { q: string; source: string }[] = [
   { q: "site:finance.yahoo.com OR site:uk.finance.yahoo.com", source: "Yahoo Finance" },
   { q: "site:bloomberg.com", source: "Bloomberg" },
@@ -219,7 +220,7 @@ async function fetchMoney(): Promise<NewsItem[]> {
           const link = (b.match(/<link>([\s\S]*?)<\/link>/i)?.[1] || "").trim();
           const dm = b.match(/<pubDate>([\s\S]*?)<\/pubDate>/i);
           if (!link) continue;
-          out.push({ title, url: link, source, term: termOf(title), date: dm ? dm[1].trim() : "" });
+          out.push({ title, url: link, source, term: termOf(title), date: dm ? dm[1].trim() : "", ...(PAYWALL_SOURCES.has(source) ? { paywall: true } : {}) });
           if (out.length >= 8) break;
         }
         return out;
@@ -452,7 +453,7 @@ function pickDiverse(items: NewsItem[], limit = 10, perSource = 2): NewsItem[] {
   return kept;
 }
 
-type NewsItem = { title: string; url: string; source: string; term: string; date: string; context?: string };
+type NewsItem = { title: string; url: string; source: string; term: string; date: string; context?: string; description?: string; paywall?: boolean };
 type Cache = { at: number; data: NewsItem[] };
 const g = globalThis as unknown as { __news?: Record<string, Cache> };
 const TTL = 5 * 60 * 1000;
@@ -470,6 +471,18 @@ function decode(s: string) {
     .replace(/<[^>]*>/g, " ")   // drop any embedded HTML tags
     .replace(/&[a-z]+;/gi, " ") // unknown named entities → space
     .replace(/\s+/g, " ").trim();
+}
+
+// Short excerpt from an RSS <description> or <summary>. Returns undefined if the
+// text is too short, is just a URL (e.g. HN), looks like HN metadata, or echoes the title.
+function trimDesc(raw: string, title?: string): string | undefined {
+  const text = decode(raw).replace(/\s+/g, " ").trim();
+  if (text.length < 30) return undefined;
+  if (/^https?:\/\/\S+$/.test(text)) return undefined;
+  if (/^(article url|comments url|points:|author:)/i.test(text)) return undefined;
+  if (title && text.toLowerCase().startsWith(title.toLowerCase().slice(0, 40))) return undefined;
+  if (text.length <= 130) return text;
+  return text.slice(0, 130).replace(/\s+\S*$/, "") + "…";
 }
 
 // salient search phrase from a headline: first proper-noun phrase, else key words
@@ -500,7 +513,10 @@ function parse(xml: string, source: string): NewsItem[] {
     if (url && GEAR_URL_RE.test(url)) continue;
     const dm = b.match(/<(?:pubDate|published|updated|dc:date)>([\s\S]*?)<\/(?:pubDate|published|updated|dc:date)>/i);
     const date = dm ? dm[1].trim() : "";
-    out.push({ title, url, source, term: termOf(title), date });
+    const descM = b.match(/<description>([\s\S]*?)<\/description>/i)
+      || b.match(/<summary[^>]*>([\s\S]*?)<\/summary>/i);
+    const description = descM ? trimDesc(descM[1], title) : undefined;
+    out.push({ title, url, source, term: termOf(title), date, ...(description ? { description } : {}) });
   }
   return out;
 }

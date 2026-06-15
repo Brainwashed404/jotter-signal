@@ -267,7 +267,7 @@ export default function SignalList({
           )}
           {showExperts && availableExperts.length > 1 && (
             <MultiDropdown
-              label="Experts"
+              label="Sources"
               align="right"
               options={availableExperts.map((e) => ({ value: e.id, label: e.name }))}
               selected={experts}

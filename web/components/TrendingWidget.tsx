@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-type Topic = { title: string; url: string; source: string; term: string; context?: string };
+type Topic = { title: string; url: string; source: string; term: string; context?: string; description?: string; paywall?: boolean };
 
 const CATEGORIES = [
   { id: "uk", label: "UK" },
@@ -125,17 +125,30 @@ export default function TrendingWidget() {
       ) : (
         <ul className="divide-y" style={{ borderColor: "var(--border)" }}>
           {topics.map((t, i) => (
-            <li key={i} className="flex items-center max-md:items-start gap-2 text-[13px] py-1 max-md:py-1.5">
-              {/* ≤md: headline clamps to two lines with the source label beneath it;
-                  ≥md: single truncated line with source + search inline (unchanged) */}
+            <li key={i} className="flex items-start gap-2 text-[13px] py-1.5">
+              {/* ≤md: headline 2 lines + source beneath;
+                  ≥md: headline + description line below, source + paywall badge inline */}
               <div className="flex-1 min-w-0">
                 <div className="md:truncate max-md:line-clamp-2">
                   <a href={t.url} target="_blank" rel="noopener" className="hover:underline">{t.title}</a>
                   {t.context && <span className="ml-1.5" style={{ color: "var(--muted)" }}>· {t.context}</span>}
                 </div>
-                <span className="label block md:hidden mt-0.5">{t.source}</span>
+                {t.description && (
+                  <p className="text-[12px] leading-snug mt-0.5 line-clamp-2 max-md:hidden" style={{ color: "var(--muted)" }}>
+                    {t.description}
+                  </p>
+                )}
+                <div className="flex items-center gap-1.5 md:hidden mt-0.5">
+                  <span className="label">{t.source}</span>
+                  {t.paywall && <span className="label opacity-60">£</span>}
+                </div>
               </div>
-              <span className="label shrink-0 max-md:hidden">{t.source}</span>
+              <div className="flex items-center gap-1 shrink-0 max-md:hidden">
+                {t.paywall && (
+                  <span className="text-[11px] opacity-50" style={{ color: "var(--muted)" }}>£</span>
+                )}
+                <span className="label">{t.source}</span>
+              </div>
               {/* Search the archive for the WHOLE headline (searchSignals strips stopwords + ranks by
                   overlap), so it brings the wider context, not just the first name in the title. */}
               <Link
