@@ -79,6 +79,9 @@ export function SignalCard({ s }: { s: Signal }) {
   const expandable = long || hasImages;
   // Cards show the author's name only (strip the "(Blog)" suffix); publications keep their full name.
   const sourceLabel = s.category === "publication" ? s.source : s.source.replace(/\s*\([^)]*\)\s*$/, "");
+  // Lead thumbnail — first inline image in text, or first attachment image
+  const firstInlineImg = s.text.match(/!\[[^\]]*\]\(([^)]+)\)/)?.[1];
+  const thumbnail = firstInlineImg || s.images?.[0];
 
   // close the share menu only when clicking outside it
   useEffect(() => {
@@ -197,20 +200,32 @@ export function SignalCard({ s }: { s: Signal }) {
         </button>
       </div>
 
-      <div className="font-medium leading-snug mb-1">{s.heading}</div>
+      <div className={thumbnail && !open ? "flex gap-3 items-start" : undefined}>
+        <div className={thumbnail && !open ? "flex-1 min-w-0" : undefined}>
+          <div className="font-medium leading-snug mb-1">{s.heading}</div>
 
-      <p
-        onMouseUp={onMouseUp}
-        className="text-sm leading-relaxed whitespace-pre-wrap"
-        style={{ color: "var(--body-text)", overflowWrap: "anywhere", wordBreak: "break-word" }}
-      >
-        {open || !long ? renderBody(s.text) : demd(s.text).slice(0, 360) + "…"}
-      </p>
-      {expandable && (
-        <button onClick={() => setOpen((o) => !o)} className="text-xs mt-1.5" style={{ color: "var(--accent-2)" }}>
-          {open ? "Show less ▲" : "Read full text ▼"}
-        </button>
-      )}
+          <p
+            onMouseUp={onMouseUp}
+            className="text-sm leading-relaxed whitespace-pre-wrap"
+            style={{ color: "var(--body-text)", overflowWrap: "anywhere", wordBreak: "break-word" }}
+          >
+            {open || !long ? renderBody(s.text) : demd(s.text).slice(0, 360) + "…"}
+          </p>
+          {expandable && (
+            <button onClick={() => setOpen((o) => !o)} className="text-xs mt-1.5" style={{ color: "var(--accent-2)" }}>
+              {open ? "Show less ▲" : "Read full text ▼"}
+            </button>
+          )}
+        </div>
+        {thumbnail && !open && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={thumbnail} alt="" loading="lazy"
+            className="shrink-0 rounded object-cover"
+            style={{ width: 64, height: 64, border: "1px solid var(--border)" }}
+          />
+        )}
+      </div>
 
       {/* Trailing images fallback — only shown for signals not yet rebuilt with inline images.
           After running build_dataset.py, images appear inline and this block stays hidden. */}

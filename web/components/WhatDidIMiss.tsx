@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useThoughtStarters, toggleThoughtStarter, thoughtStarterId } from "@/lib/saved";
 import { usePersistentToggle } from "@/lib/uiState";
+import { ChatPanel } from "@/components/ChatPanel";
 
 // Client-side mirrors of the server types (lib/wdim.ts is server-only).
 type WdimAudience = "b2b" | "b2c";
@@ -209,69 +210,103 @@ function ExpertGrid({ perspectives }: { perspectives: WdimExpertPerspective[] })
 // ─── Component E: Thought Starters ────────────────────────────────────────────
 
 function ThoughtStarters({
-  directives, savedIds, onToggle,
+  directives, savedIds, onToggle, onLaunch,
 }: {
   directives: WdimDirective[];
   savedIds: Set<string>;
   onToggle: (action: string) => void;
+  onLaunch: (action: string) => void;
 }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {directives.map((d, i) => {
-        const isChecked = savedIds.has(thoughtStarterId(d.action));
+        const isSaved = savedIds.has(thoughtStarterId(d.action));
         return (
-          <button
+          <div
             key={i}
-            onClick={() => onToggle(d.action)}
-            title={isChecked ? "Saved to Thought Starters — tick to remove" : "Tick to save to your Thought Starters"}
             style={{
-              width: "100%",
-              textAlign: "left",
               display: "flex",
               alignItems: "flex-start",
-              gap: "14px",
+              gap: "12px",
               padding: "16px 18px",
               borderRadius: "7px",
-              background: isChecked
+              background: isSaved
                 ? "color-mix(in srgb, var(--accent) 8%, var(--bg))"
                 : "transparent",
-              border: `1px solid ${isChecked
+              border: `1px solid ${isSaved
                 ? "color-mix(in srgb, var(--accent) 28%, var(--border))"
                 : "var(--border)"}`,
               transition: "background 200ms ease, border-color 200ms ease",
-              cursor: "pointer",
             }}
           >
-            <span style={{ flexShrink: 0, marginTop: "2px", color: isChecked ? "var(--accent)" : "var(--muted)" }}>
-              {isChecked ? (
-                <svg width="17" height="17" viewBox="0 0 14 14" fill="none">
-                  <rect width="14" height="14" rx="2" fill="var(--accent)" />
-                  <path
-                    d="M3.5 7l2.5 2.5 4.5-4.5"
-                    stroke="var(--bg)"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+            {/* Main body — click to launch chat */}
+            <button
+              onClick={() => onLaunch(d.action)}
+              style={{
+                flex: 1,
+                textAlign: "left",
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                fontSize: "15px",
+                lineHeight: "1.6",
+                color: "var(--text)",
+              }}
+              title="Explore this in the intelligence chat"
+            >
+              {d.action}
+            </button>
+            {/* Save / unsave bookmark */}
+            <button
+              onClick={() => onToggle(d.action)}
+              title={isSaved ? "Saved — click to remove" : "Save to Thought Starters"}
+              style={{
+                flexShrink: 0,
+                marginTop: "2px",
+                background: "none",
+                border: "none",
+                padding: "2px",
+                cursor: "pointer",
+                color: isSaved ? "var(--accent)" : "var(--muted)",
+                lineHeight: 1,
+              }}
+            >
+              {isSaved ? (
+                <svg width="16" height="16" viewBox="0 0 14 14" fill="var(--accent)" stroke="none">
+                  <path d="M2 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v11l-5-3-5 3V2z" />
                 </svg>
               ) : (
-                <svg width="17" height="17" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2">
-                  <rect x="0.5" y="0.5" width="13" height="13" rx="1.5" />
+                <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+                  <path d="M2 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v11l-5-3-5 3V2z" />
                 </svg>
               )}
-            </span>
-            <span style={{
-              fontSize: "15px",
-              lineHeight: "1.6",
-              color: isChecked ? "var(--muted)" : "var(--text)",
-            }}>
-              {d.action}
-            </span>
-          </button>
+            </button>
+          </div>
         );
       })}
     </div>
   );
+}
+
+// ─── Chat context builder ──────────────────────────────────────────────────────
+
+function buildContext(briefing: WdimBriefing, audience: WdimAudience, range: WdimRange): string {
+  const horizon = range === "day" ? "past day" : range === "week" ? "past week" : "past month";
+  const aud = audience === "b2b" ? "business / strategic" : "consumer / lifestyle";
+  const lines: string[] = [
+    `Intelligence briefing — ${aud} lens, ${horizon}`,
+    "",
+    `Macro context: ${briefing.macroIndicator}`,
+    "",
+    "Key developments:",
+    ...briefing.developments.map((d) => `- ${d.headline}: ${d.summary}`),
+  ];
+  if (briefing.expertPerspectives.length) {
+    lines.push("", "Expert perspectives:");
+    briefing.expertPerspectives.forEach((p) => lines.push(`- ${p.thesis} (${p.source})`));
+  }
+  return lines.join("\n");
 }
 
 // ─── Loading skeleton ──────────────────────────────────────────────────────────
@@ -306,6 +341,7 @@ export default function WhatDidIMiss() {
   const [available, setAvailable] = useState<boolean | null>(null);
   const { ids: savedTsIds } = useThoughtStarters();
   const didPrefetch = useRef(false);
+  const [chatStarter, setChatStarter] = useState<string | null>(null);
 
   const cacheKey: CacheKey = `${audience}-${range}`;
 
@@ -364,6 +400,10 @@ export default function WhatDidIMiss() {
 
   const toggleDirective = (action: string) => {
     toggleThoughtStarter({ text: action, audience, range });
+  };
+
+  const launchChat = (action: string) => {
+    setChatStarter(action);
   };
 
   return (
@@ -446,6 +486,7 @@ export default function WhatDidIMiss() {
                         directives={briefing.directives}
                         savedIds={savedTsIds}
                         onToggle={toggleDirective}
+                        onLaunch={launchChat}
                       />
                     </div>
                   )}
@@ -460,6 +501,14 @@ export default function WhatDidIMiss() {
           </div>
         </div>
       </div>
+
+      {chatStarter && briefing && (
+        <ChatPanel
+          starter={chatStarter}
+          context={buildContext(briefing, audience, range)}
+          onClose={() => setChatStarter(null)}
+        />
+      )}
     </section>
   );
 }
