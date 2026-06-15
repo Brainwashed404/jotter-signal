@@ -1,8 +1,18 @@
 // Master internet-radio station list (from JOTTER RADIO STATION LIST CSV), deduped by name.
 // SomaFM streams resolved to direct mounts via somafm.com playlists.
+// BBC stations use MPEG-DASH (.mpd) streams, handled by dashjs in the player.
 export type Station = { name: string; url: string; genre: string; desc: string; sourceUrl: string };
 
 export const STATIONS: Station[] = [
+  // ── BBC Radio (DASH streams) ────────────────────────────────────────────
+  { name: "BBC Radio 1",       url: "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/pc_hd_abr_v2/aks/bbc_radio_one.mpd",        genre: "BBC RADIO", desc: "New music, pop, dance and live events",         sourceUrl: "https://www.bbc.co.uk/radio1" },
+  { name: "BBC Radio 2",       url: "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/pc_hd_abr_v2/aks/bbc_radio_two.mpd",        genre: "BBC RADIO", desc: "Pop, rock, country and soul for grown-ups",    sourceUrl: "https://www.bbc.co.uk/radio2" },
+  { name: "BBC Radio 3",       url: "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/pc_hd_abr_v2/aks/bbc_radio_three.mpd",      genre: "BBC RADIO", desc: "Classical music, jazz, world and arts",        sourceUrl: "https://www.bbc.co.uk/radio3" },
+  { name: "BBC Radio 4 FM",    url: "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/pc_hd_abr_v2/aks/bbc_radio_fourfm.mpd",     genre: "BBC RADIO", desc: "News, current affairs, drama and comedy",     sourceUrl: "https://www.bbc.co.uk/radio4" },
+  { name: "BBC Radio 5 Live",  url: "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/pc_hd_abr_v2/aks/bbc_radio_five_live.mpd",  genre: "BBC RADIO", desc: "Live sport and rolling news",                 sourceUrl: "https://www.bbc.co.uk/radio5live" },
+  { name: "BBC 6 Music",       url: "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/pc_hd_abr_v2/aks/bbc_6music.mpd",           genre: "BBC RADIO", desc: "Alternative, indie and electronic music",     sourceUrl: "https://www.bbc.co.uk/6music" },
+  { name: "BBC World Service", url: "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/pc_hd_abr_v2/aks/bbc_world_service.mpd",    genre: "BBC RADIO", desc: "Global news and analysis in English",         sourceUrl: "https://www.bbc.co.uk/worldservice" },
+  // ── All other stations ─────────────────────────────────────────────────
   {
     "name": "20FT Radio",
     "url": "https://20ft-radio.radiocult.fm/stream",

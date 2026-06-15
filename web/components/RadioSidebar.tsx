@@ -50,9 +50,12 @@ export default function RadioSidebar() {
   const [query, setQuery] = useState("");
   const [favs, setFavs] = useState<string[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dashRef = useRef<any>(null);
 
   useEffect(() => { try { setFavs(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); } catch {} }, []);
   useEffect(() => { try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch {} }, [favs]);
+  useEffect(() => () => { destroyDash(); }, []);
 
   // Restore last station + genre on mount (don't auto-play — browser blocks without user gesture)
   useEffect(() => {
@@ -82,11 +85,27 @@ export default function RadioSidebar() {
   // Choosing a genre / favourites / a list row sets the queue, so next & prev
   // stay within that context.
   const [queue, setQueue] = useState<Station[]>(SORTED);
+  function destroyDash() {
+    if (dashRef.current) { try { dashRef.current.destroy(); } catch {} dashRef.current = null; }
+  }
   function play(s: Station, q?: Station[]) {
     const a = ensureAudio();
     setCurrent(s); setError(false);
     if (q && q.length) setQueue(q);
-    a.src = s.url; a.play().catch(() => setError(true));
+    destroyDash();
+    if (s.url.endsWith(".mpd")) {
+      // MPEG-DASH stream — load dashjs lazily so it doesn't bloat non-DASH sessions
+      import("dashjs").then((mod) => {
+        a.src = ""; a.load(); // reset element before handing to dashjs
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const player = (mod.MediaPlayer as any)().create();
+        player.initialize(a, s.url, true);
+        player.on("error", () => { setError(true); setPlaying(false); });
+        dashRef.current = player;
+      }).catch(() => setError(true));
+    } else {
+      a.src = s.url; a.play().catch(() => setError(true));
+    }
     try { localStorage.setItem(LAST_STATION_KEY, s.name); } catch {}
   }
   function shuffleSource(src: string) {
@@ -338,7 +357,7 @@ export default function RadioSidebar() {
       {/* sheet — slides up from behind the nav bar to the header; nav bar (z-70) stays in front */}
       <div className="fixed inset-x-0 z-[60] flex flex-col"
         style={{ top: "56px", bottom: "calc(56px + env(safe-area-inset-bottom))",
-          background: "var(--bg)", border: "1px solid var(--border)", borderBottom: "none",
+          background: "var(--bg)", borderTop: "1px solid var(--border)",
           transform: sheetOpen ? "translateY(0)" : "translateY(100%)", transition: "transform 320ms cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
         {/* big transport controls — play perfectly centred, shuffle pinned far right */}
