@@ -335,30 +335,26 @@ export default function RadioSidebar() {
       <div onClick={() => setSheetOpen(false)} className="fixed inset-x-0 top-0 z-50 transition-opacity duration-300"
         style={{ bottom: "calc(56px + env(safe-area-inset-bottom))", background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />
 
-      {/* bottom sheet — fixed height between the header (56px) and the tab bar */}
+      {/* bottom sheet — fixed height between the header (56px) and the tab bar, flush to the header */}
       <div className="fixed inset-x-0 z-[60] flex flex-col"
         style={{ top: "56px", bottom: "calc(56px + env(safe-area-inset-bottom))",
-          background: "var(--bg)", border: "1px solid var(--border)", borderBottom: "none",
-          borderRadius: "16px 16px 0 0",
+          background: "var(--bg)", borderLeft: "1px solid var(--border)", borderRight: "1px solid var(--border)",
           transform: sheetOpen ? "translateY(0)" : "translateY(102%)", transition: "transform 320ms cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
-        {/* grab handle */}
-        <div onClick={() => setSheetOpen(false)} className="grid place-items-center pt-2.5 pb-1 cursor-pointer shrink-0"
-          style={{ background: "var(--header-bg)", borderRadius: "16px 16px 0 0" }}>
-          <div style={{ width: 36, height: 4, borderRadius: 999, background: "var(--border)" }} />
-        </div>
-
-        {/* big transport controls — centred, own row */}
-        <div className="flex items-center justify-center gap-6 px-6 py-5 shrink-0"
+        {/* big transport controls — play perfectly centred, shuffle pinned far right */}
+        <div className="relative flex items-center justify-center px-4 py-5 shrink-0"
           style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}>
-          <button onClick={() => step(-1)} title="Previous" style={{ color: "var(--muted)" }}><Icon name="prev" size={28} /></button>
-          <button onClick={togglePlay} title={playing ? "Pause" : "Play"}
-            className="w-16 h-16 rounded-full grid place-items-center shrink-0"
-            style={{ background: "var(--accent)", color: "var(--on-accent)" }}>
-            <Icon name={playing ? "pause" : "play"} size={28} />
-          </button>
-          <button onClick={() => step(1)} title="Next" style={{ color: "var(--muted)" }}><Icon name="next" size={28} /></button>
-          <button onClick={toggleShuffle} title="Shuffle" style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" size={22} /></button>
+          <div className="flex items-center gap-8">
+            <button onClick={() => step(-1)} title="Previous" style={{ color: "var(--muted)" }}><Icon name="prev" size={28} /></button>
+            <button onClick={togglePlay} title={playing ? "Pause" : "Play"}
+              className="w-16 h-16 rounded-full grid place-items-center shrink-0"
+              style={{ background: "var(--accent)", color: "var(--on-accent)" }}>
+              <Icon name={playing ? "pause" : "play"} size={28} />
+            </button>
+            <button onClick={() => step(1)} title="Next" style={{ color: "var(--muted)" }}><Icon name="next" size={28} /></button>
+          </div>
+          <button onClick={toggleShuffle} title="Shuffle" className="absolute right-4"
+            style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" size={22} /></button>
         </div>
 
         {/* station info — below the controls */}
