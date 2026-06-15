@@ -150,7 +150,7 @@ export function SignalCard({ s }: { s: Signal }) {
     <div
       ref={cardRef}
       onClick={onCardClick}
-      className={`panel panel-hover p-4 relative${open ? " md:col-span-2" : ""}`}
+      className={`panel panel-hover p-4 relative min-w-0${open ? " md:col-span-2" : ""}`}
       style={{ cursor: expandable ? "pointer" : undefined }}
     >
       {flash && (

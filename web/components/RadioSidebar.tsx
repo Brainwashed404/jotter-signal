@@ -364,7 +364,7 @@ export default function RadioSidebar() {
         style={{ top: "56px", background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />
 
       {/* sheet — slides up from behind the nav bar to the header; nav bar (z-70) stays in front */}
-      <div className="fixed inset-x-0 z-[60] flex flex-col"
+      <div className="fixed inset-x-0 z-[60] flex flex-col overflow-hidden"
         style={{ top: "56px", bottom: "calc(56px + env(safe-area-inset-bottom))",
           background: "var(--bg)", borderTop: "1px solid var(--border)",
           transform: sheetOpen ? "translateY(0)" : "translateY(100%)", transition: "transform 320ms cubic-bezier(0.4, 0, 0.2, 1)" }}>
