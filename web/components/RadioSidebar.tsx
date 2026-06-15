@@ -331,15 +331,15 @@ export default function RadioSidebar() {
         button. No persistent on-screen player — closing the sheet leaves the audio
         playing (header button lights up) but nothing docked on the page. ── */}
     <div className="md:hidden">
-      {/* backdrop — constrained to above the tab bar so the nav stays tappable */}
-      <div onClick={() => setSheetOpen(false)} className="fixed inset-x-0 top-0 z-50 transition-opacity duration-300"
-        style={{ bottom: "calc(56px + env(safe-area-inset-bottom))", background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />
+      {/* backdrop — below header (top:56px) and nav bar (z-70 stays in front) */}
+      <div onClick={() => setSheetOpen(false)} className="fixed inset-x-0 bottom-0 z-[55] transition-opacity duration-300"
+        style={{ top: "56px", background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />
 
-      {/* bottom sheet — fixed height between the header (56px) and the tab bar, flush to the header */}
+      {/* sheet — slides up from behind the nav bar to the header; nav bar (z-70) stays in front */}
       <div className="fixed inset-x-0 z-[60] flex flex-col"
         style={{ top: "56px", bottom: "calc(56px + env(safe-area-inset-bottom))",
-          background: "var(--bg)", borderLeft: "1px solid var(--border)", borderRight: "1px solid var(--border)",
-          transform: sheetOpen ? "translateY(0)" : "translateY(102%)", transition: "transform 320ms cubic-bezier(0.4, 0, 0.2, 1)" }}>
+          background: "var(--bg)", border: "1px solid var(--border)", borderBottom: "none",
+          transform: sheetOpen ? "translateY(0)" : "translateY(100%)", transition: "transform 320ms cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
         {/* big transport controls — play perfectly centred, shuffle pinned far right */}
         <div className="relative flex items-center justify-center px-4 py-5 shrink-0"

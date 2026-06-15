@@ -37,7 +37,7 @@ export default function MobileTabBar() {
   }, []);
 
   return (
-    <nav className="md:hidden fixed inset-x-0 bottom-0 z-50 backdrop-blur"
+    <nav className="md:hidden fixed inset-x-0 bottom-0 z-[70] backdrop-blur"
       style={{ background: "var(--header-bg)", borderTop: "1px solid var(--border)", paddingBottom: "env(safe-area-inset-bottom)" }}>
       <div className="grid grid-cols-5 h-14"> {/* Home · Feed · Experts · Saved · Radio */}
         {TABS.map((t) => {
