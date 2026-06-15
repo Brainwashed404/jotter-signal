@@ -331,38 +331,66 @@ export default function RadioSidebar() {
         button. No persistent on-screen player — closing the sheet leaves the audio
         playing (header button lights up) but nothing docked on the page. ── */}
     <div className="md:hidden">
-      {/* backdrop */}
-      <div onClick={() => setSheetOpen(false)} className="fixed inset-0 z-50 transition-opacity duration-300"
-        style={{ background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />
+      {/* backdrop — constrained to above the tab bar so the nav stays tappable */}
+      <div onClick={() => setSheetOpen(false)} className="fixed inset-x-0 top-0 z-50 transition-opacity duration-300"
+        style={{ bottom: "calc(56px + env(safe-area-inset-bottom))", background: "rgba(0,0,0,0.45)", opacity: sheetOpen ? 1 : 0, pointerEvents: sheetOpen ? "auto" : "none" }} />
 
-      {/* bottom sheet */}
-      <div className="fixed inset-x-0 bottom-0 z-[60] flex flex-col"
-        style={{ background: "var(--bg)", border: "1px solid var(--border)", borderBottom: "none",
-          borderRadius: "16px 16px 0 0", maxHeight: "82dvh", paddingBottom: "env(safe-area-inset-bottom)",
+      {/* bottom sheet — fixed height between the header (56px) and the tab bar */}
+      <div className="fixed inset-x-0 z-[60] flex flex-col"
+        style={{ top: "56px", bottom: "calc(56px + env(safe-area-inset-bottom))",
+          background: "var(--bg)", border: "1px solid var(--border)", borderBottom: "none",
+          borderRadius: "16px 16px 0 0",
           transform: sheetOpen ? "translateY(0)" : "translateY(102%)", transition: "transform 320ms cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
-        {/* grab handle + transport */}
-        <div className="shrink-0" style={{ background: "var(--header-bg)", borderRadius: "16px 16px 0 0", borderBottom: "1px solid var(--border)" }}>
-          <div onClick={() => setSheetOpen(false)} className="grid place-items-center pt-2 pb-1 cursor-pointer">
-            <div style={{ width: 36, height: 4, borderRadius: 999, background: "var(--border)" }} />
-          </div>
-          <div className="flex items-center gap-1 px-3 pb-2">
-            <button onClick={() => step(-1)} className={iconBtn} title="Previous" style={{ color: "var(--muted)" }}><Icon name="prev" /></button>
-            <button onClick={togglePlay} title={playing ? "Pause" : "Play"} className="w-10 h-10 rounded-full grid place-items-center" style={{ background: "var(--accent)", color: "var(--on-accent)" }}><Icon name={playing ? "pause" : "play"} /></button>
-            <button onClick={() => step(1)} className={iconBtn} title="Next" style={{ color: "var(--muted)" }}><Icon name="next" /></button>
-            <button onClick={toggleShuffle} className={iconBtn} title="Shuffle" style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" /></button>
-            {/* now playing, inline with the transport */}
-            <div className="min-w-0 flex-1 text-right">
-              <div className="text-sm font-medium truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>
+        {/* grab handle */}
+        <div onClick={() => setSheetOpen(false)} className="grid place-items-center pt-2.5 pb-1 cursor-pointer shrink-0"
+          style={{ background: "var(--header-bg)", borderRadius: "16px 16px 0 0" }}>
+          <div style={{ width: 36, height: 4, borderRadius: 999, background: "var(--border)" }} />
+        </div>
+
+        {/* big transport controls — centred, own row */}
+        <div className="flex items-center justify-center gap-6 px-6 py-5 shrink-0"
+          style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}>
+          <button onClick={() => step(-1)} title="Previous" style={{ color: "var(--muted)" }}><Icon name="prev" size={28} /></button>
+          <button onClick={togglePlay} title={playing ? "Pause" : "Play"}
+            className="w-16 h-16 rounded-full grid place-items-center shrink-0"
+            style={{ background: "var(--accent)", color: "var(--on-accent)" }}>
+            <Icon name={playing ? "pause" : "play"} size={28} />
+          </button>
+          <button onClick={() => step(1)} title="Next" style={{ color: "var(--muted)" }}><Icon name="next" size={28} /></button>
+          <button onClick={toggleShuffle} title="Shuffle" style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" size={22} /></button>
+        </div>
+
+        {/* station info — below the controls */}
+        <div className="px-4 py-3 shrink-0" style={{ borderBottom: "1px solid var(--border)" }}>
+          <div className="flex items-start gap-3">
+            <div className="min-w-0 flex-1">
+              <div className="text-base font-medium leading-snug truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>
                 {current ? current.name : "Pick a genre or station"}
               </div>
               {current && (error
-                ? <div className="label" style={{ color: "var(--down)" }}>stream unavailable</div>
-                : current.sourceUrl
-                  ? <a href={current.sourceUrl} target="_blank" rel="noopener" className="label inline-flex items-center gap-1 hover:underline" style={{ color: "var(--accent-2)", textTransform: "none", letterSpacing: 0 }}>{shortUrl(current.sourceUrl)} <Icon name="ext" size={11} /></a>
-                  : null)}
+                ? <div className="label mt-1" style={{ color: "var(--down)" }}>stream unavailable</div>
+                : <div className="mt-1 flex items-center gap-1.5 flex-wrap" style={{ fontSize: "0.75rem", color: "var(--accent-2)" }}>
+                    <span>{sentence(current.genre)}</span>
+                    {current.sourceUrl && (
+                      <>
+                        <span style={{ color: "var(--border)" }}>·</span>
+                        <a href={current.sourceUrl} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-0.5 hover:underline">
+                          {shortUrl(current.sourceUrl)} <Icon name="ext" size={11} />
+                        </a>
+                      </>
+                    )}
+                  </div>
+              )}
             </div>
-            {current && <button onClick={() => toggleFav(current.name)} title="Favourite" className="text-lg shrink-0 leading-none pl-1" style={{ color: favs.includes(current.name) ? "var(--accent)" : "var(--muted)" }}>{favs.includes(current.name) ? "★" : "☆"}</button>}
+            {current && (
+              <button onClick={() => toggleFav(current.name)} title="Favourite"
+                className="text-xl shrink-0 leading-none"
+                style={{ color: favs.includes(current.name) ? "var(--accent)" : "var(--muted)" }}>
+                {favs.includes(current.name) ? "★" : "☆"}
+              </button>
+            )}
           </div>
         </div>
 
