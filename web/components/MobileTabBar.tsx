@@ -44,6 +44,7 @@ export default function MobileTabBar() {
           const active = isActive(t.href);
           return (
             <Link key={t.href} href={t.href} aria-current={active ? "page" : undefined}
+              onClick={() => window.dispatchEvent(new Event("jotter-radio-close"))}
               className="flex flex-col items-center justify-center gap-0.5"
               style={{ color: active ? "var(--accent)" : "var(--muted)" }}>
               <span className="grid place-items-center rounded-full px-3 py-0.5"

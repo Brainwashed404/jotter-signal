@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { STATIONS, GENRES, type Station } from "@/lib/stations";
 
 const FAV_KEY          = "jotter.radio.favs";
@@ -94,9 +95,8 @@ export default function RadioSidebar() {
     if (q && q.length) setQueue(q);
     destroyDash();
     if (s.url.endsWith(".mpd")) {
-      // MPEG-DASH stream — load dashjs lazily so it doesn't bloat non-DASH sessions
       import("dashjs").then((mod) => {
-        a.src = ""; a.load(); // reset element before handing to dashjs
+        a.src = ""; a.load();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const player = (mod.MediaPlayer as any)().create();
         player.initialize(a, s.url, true);
@@ -198,6 +198,15 @@ export default function RadioSidebar() {
     window.addEventListener("jotter-radio-toggle", toggleSheet);
     return () => window.removeEventListener("jotter-radio-toggle", toggleSheet);
   }, []);
+  // Close the sheet whenever a nav event fires (from MobileTabBar or header links).
+  useEffect(() => {
+    const close = () => setSheetOpen(false);
+    window.addEventListener("jotter-radio-close", close);
+    return () => window.removeEventListener("jotter-radio-close", close);
+  }, []);
+  // Also close on pathname changes (catches Settings gear and any Link navigation).
+  const pathname = usePathname();
+  useEffect(() => { setSheetOpen(false); }, [pathname]);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("jotter-radio-state", { detail: { playing, station: current?.name ?? null } }));
   }, [playing, current]);
