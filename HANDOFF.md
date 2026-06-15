@@ -30,6 +30,36 @@ a daily workbench for strategists/insight workers.
   WDIM (`clean()` in `normaliseBriefing` + a "Never use emojis" prompt rule). The ★/☆ save glyphs and the weather
   pill's emoji icons are UI chrome, deliberately kept (the weather widget is an emoji-icon system by prior choice).
 
+## ⭐ SESSION 2026-06-15: BBC removal, radio auto-close, mobile overflow fix, V1 snapshot, V2 branch
+
+### Branch strategy
+- **`main` = V1 production** — `intelligence.jotter.media` deploys from here. Never break this.
+- **`v1` tag** = permanent named snapshot of V1 before V2 work begins (rollback target).
+- **`v2` branch** = active V2 development (Vercel auto-deploys to a preview URL). Start all V2 work here.
+  Merge `main → v2` periodically to keep V2 current. When V2 is ready to ship, merge `v2 → main`.
+
+### BBC Radio stations removed
+All 7 BBC Radio stations removed from `web/lib/stations.ts` (streams at `a.files.bbci.co.uk` were dead).
+A proxy via BBC Media Selector API was attempted but streams still failed. BBC-specific code in RadioSidebar
+also removed (genre display alias, DASH player BBC path). Generic `.mpd` DASH support was kept in case any
+non-BBC station uses it. `GENRES` is auto-derived from `STATIONS`, so the BBC genre pill disappeared automatically.
+
+### Radio sheet auto-close on nav
+RadioSidebar now closes the mobile sheet on two triggers:
+1. **`jotter-radio-close` window event** — dispatched by `onClick` on every non-radio `<Link>` in `MobileTabBar`.
+2. **`usePathname()` watcher** — closes on any pathname change (catches the Settings gear and any `<Link>` navigation).
+
+### Mobile card overflow bug — fixed
+**Root cause:** CSS Grid items default to `min-width: auto`, which lets their minimum content size inflate the grid
+column past the container width. The `SignalCard` flex header row (kind chip + date + share button) had a min-content
+size of ~487px, so each card rendered at 519px on a 375px viewport — causing `body.scrollWidth` = 539.
+
+**Fix:** added `min-w-0` to the root `<div>` in `SignalCard.tsx` (the grid item). This constrains the card to
+its grid column. `body.scrollWidth` is now 375px, equal to the viewport. Cards are 335px as expected.
+
+Note: `overflow-hidden` was also added to the RadioSidebar mobile sheet div to prevent its genre chip row
+from contributing to body scroll width (a separate, smaller overflow source).
+
 ## ⭐ SESSION 2026-06-14: content quality, mobile nav/header, World Cup news, no-emoji rule
 All shipped to production.
 - **Prof G (and podcast) filler dropped** (`build_dataset.py`): a global stub rule (paywall/subscribe CTA with <300
@@ -840,26 +870,14 @@ Server cache 5 min/category; **client polls every 2 min** so it stays fresh.
 
 ## OUTSTANDING / FUTURE
 
-### >>> NEXT UP: DEPLOY to jotter.media (user is starting this in a new chat) <<<
-**Verdict: viable, nothing fundamental blocks it.** The app is LLM-free → no API keys / no per-user cost. But it
-**cannot** go on Vercel/Netlify as-is — it needs an **always-on host** for three architectural reasons:
-1. `web/data/signals.jsonl` is **~110 MB and changes daily** → over GitHub's 100 MB limit, can't be committed.
-   It must be **generated on the server** by the Python engine (onto a persistent disk).
-2. The **Python engine must run on a schedule** to refresh → host must run **both Node + Python + cron**.
-3. The app **writes to the filesystem** (data file + uploads store) and **loads the 110 MB file into memory**
-   (`lib/data.ts` cache) → needs a **persistent disk** and **~1 GB RAM**. Serverless is the wrong shape.
+### >>> NEXT UP: V2 (work on `v2` branch — do NOT touch `main`) <<<
+Beta feedback drove a planned V2 redesign. Branch strategy: `main` = V1 production, `v2` = active development,
+`v1` tag = rollback point. Always develop V2 on the `v2` branch and merge `main → v2` to stay current.
+V2 work is TBD — share beta feedback at the start of the new chat to define priorities.
 
-**THE ONE REQUIRED CODE CHANGE BEFORE LAUNCH:** today `AutoRefresh` (in `layout.tsx`) hits `/api/refresh` — which
-runs the **full Python engine — on EVERY page load**. Fine for one local user; on a public site it would hammer the
-sources (Reddit/Substack/Yahoo) from one datacenter IP and get rate-limited/blocked. **Replace it with a scheduled
-cron** (hourly/nightly `engine/refresh_all.py`) and remove/disable the per-load trigger.
-
-**Recommended path (~$5–20/mo), Railway easiest:** Dockerfile with `node`+`python3` → mount a **volume** at
-`web/data/` → `next build` → `next start` → a **nightly cron** runs `engine/refresh_all.py` on the volume → point
-**jotter.media** DNS at the host. First deploy runs a full scrape (10–30 min) to seed the volume; nightly is incremental.
-**Honest caveats:** some live data (Reddit, Yahoo, GDELT-class) is flakier from a cloud IP — caching mitigates it,
-expect occasional gaps. **What an agent CAN do:** write the Dockerfile, the cron, the per-load-refresh removal, a
-step-by-step deploy guide. **What it CAN'T:** create the host account, enter payment, or change DNS (user-only).
+### Durable infra fix (pending)
+**Front B2 with Cloudflare** (Bandwidth-Alliance = free egress + caching → no 1 GB/day download cap).
+~10 min one-time. Until then, treat committing local builds as the reliable update path when CI is capped.
 
 ### Other
 - **Dead-code cleanup DONE (2026-06-12):** deleted `LatestInsights.tsx`, `PdfUpload.tsx`, `ThemeHeatmap.tsx`
