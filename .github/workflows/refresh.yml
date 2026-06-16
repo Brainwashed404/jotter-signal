@@ -28,11 +28,12 @@ jobs:
           python-version: "3.11"
 
       - name: Restore engine data from cache
-        uses: actions/cache@v4
+        id: cache-restore
+        uses: actions/cache/restore@v4
         with:
           path: engine/data
-          key: engine-data-${{ github.run_id }}
-          restore-keys: engine-data-
+          key: engine-data-healthy-${{ github.run_id }}
+          restore-keys: engine-data-healthy-
 
       - name: Run refresh
         env:
@@ -69,6 +70,13 @@ jobs:
             echo "ok=false" >> "$GITHUB_OUTPUT"
             echo "::warning::Degraded build ($NEW signals < threshold $THRESH, 90% of committed $OLD) — skipping publish"
           fi
+
+      - name: Save engine data cache (healthy builds only)
+        if: steps.health.outputs.ok == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: engine/data
+          key: engine-data-healthy-${{ github.run_id }}
 
       - name: Commit fresh data + trigger site rebuild
         if: steps.health.outputs.ok == 'true'
