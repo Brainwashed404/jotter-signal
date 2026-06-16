@@ -62,7 +62,7 @@ jobs:
           # absolute floor of 3000 for the first-ever build. A capped run that yields a
           # thin (e.g. 16k vs 26k) rebuild is rejected so it can't clobber good live data.
           THRESH=$(( OLD * 90 / 100 ))
-          if [ "$THRESH" -lt 3000 ]; then THRESH=3000; fi
+          if [ "$THRESH" -lt 15000 ]; then THRESH=15000; fi
           echo "signals: new=$NEW committed=$OLD threshold=$THRESH"
           if [ "$NEW" -ge "$THRESH" ]; then
             echo "ok=true" >> "$GITHUB_OUTPUT"
