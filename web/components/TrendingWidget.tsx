@@ -32,6 +32,13 @@ export default function TrendingWidget() {
   const [order, setOrder] = useState<string[]>(CATEGORIES.map((c) => c.id));
   const [dragId, setDragId] = useState<string | null>(null); // for the drag visual
   const dragIdRef = useRef<string | null>(null);             // for reorder logic (synchronous)
+
+  // Touch drag state for mobile pill reorder
+  const touchSrc = useRef<string | null>(null);
+  const touchOver = useRef<string | null>(null);
+  const touchDidDrag = useRef(false);
+  const touchOrigin = useRef<{ x: number; y: number } | null>(null);
+  const suppressNextClick = useRef(false);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [cache, setCache] = useState<Record<string, Topic[]>>({});
@@ -62,6 +69,37 @@ export default function TrendingWidget() {
   // Drag a pill onto another to reorder; persisted so the layout sticks.
   const startDrag = (id: string) => { dragIdRef.current = id; setDragId(id); };
   const endDrag = () => { dragIdRef.current = null; setDragId(null); };
+
+  // Touch drag handlers for mobile pill reorder (HTML5 drag events don't fire on touch).
+  function onPillTouchStart(e: React.TouchEvent, id: string) {
+    touchSrc.current = id;
+    touchOver.current = null;
+    touchDidDrag.current = false;
+    touchOrigin.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }
+  function onPillTouchMove(e: React.TouchEvent) {
+    if (!touchSrc.current || !touchOrigin.current) return;
+    const t = e.touches[0];
+    const moved = Math.abs(t.clientX - touchOrigin.current.x) > 10 || Math.abs(t.clientY - touchOrigin.current.y) > 10;
+    if (!moved) return;
+    touchDidDrag.current = true;
+    if (dragId !== touchSrc.current) setDragId(touchSrc.current);
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    const pill = el?.closest("[data-pill-id]") as HTMLElement | null;
+    touchOver.current = pill?.dataset.pillId ?? null;
+  }
+  function onPillTouchEnd() {
+    if (touchDidDrag.current && touchSrc.current && touchOver.current && touchOver.current !== touchSrc.current) {
+      dragIdRef.current = touchSrc.current;
+      dropOn(touchOver.current);
+      suppressNextClick.current = true;
+    }
+    touchSrc.current = null;
+    touchOver.current = null;
+    touchDidDrag.current = false;
+    setDragId(null);
+  }
+
   const dropOn = (targetId: string) => {
     const from = dragIdRef.current;
     if (!from || from === targetId) return;
@@ -100,12 +138,19 @@ export default function TrendingWidget() {
         {order.map((id) => (
           <button
             key={id}
+            data-pill-id={id}
             draggable
             onDragStart={() => startDrag(id)}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => { e.preventDefault(); dropOn(id); }}
             onDragEnd={endDrag}
-            onClick={() => choose(id)}
+            onTouchStart={(e) => onPillTouchStart(e, id)}
+            onTouchMove={onPillTouchMove}
+            onTouchEnd={onPillTouchEnd}
+            onClick={() => {
+              if (suppressNextClick.current) { suppressNextClick.current = false; return; }
+              choose(id);
+            }}
             title="Drag to reorder"
             className="chip cursor-grab active:cursor-grabbing select-none shrink-0 whitespace-nowrap"
             style={{
@@ -125,7 +170,7 @@ export default function TrendingWidget() {
       ) : (
         <ul className="divide-y" style={{ borderColor: "var(--border)" }}>
           {topics.map((t, i) => (
-            <li key={i} className="flex items-center max-md:items-start gap-2 text-[13px] py-1 max-md:py-1.5">
+            <li key={i} className={`flex items-center max-md:items-start gap-2 text-[13px] py-1 max-md:py-1.5${i >= 5 ? " max-md:hidden" : ""}`}>
               {/* ≤md: headline clamps to two lines with the source label beneath it;
                   ≥md: single truncated line with source + search inline (unchanged) */}
               <div className="flex-1 min-w-0">

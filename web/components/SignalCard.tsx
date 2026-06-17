@@ -201,6 +201,7 @@ export function SignalCard({ s }: { s: Signal }) {
 
       <p
         onMouseUp={onMouseUp}
+        onTouchEnd={onMouseUp}
         className="text-sm leading-relaxed whitespace-pre-wrap"
         style={{ color: "var(--body-text)", overflowWrap: "anywhere", wordBreak: "break-word" }}
       >

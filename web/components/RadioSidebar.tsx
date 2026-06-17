@@ -210,13 +210,9 @@ export default function RadioSidebar() {
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("jotter-radio-state", { detail: { playing, station: current?.name ?? null } }));
   }, [playing, current]);
-  // Lock page scroll behind the open sheet
-  useEffect(() => {
-    if (!sheetOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, [sheetOpen]);
+  // Note: no body overflow lock here — the sheet uses overflow-hidden + overscroll-contain
+  // internally, which is sufficient. Setting overflow:hidden on body makes sticky headers
+  // disappear on iOS Safari by collapsing the scroll container.
 
   const favStations = SORTED.filter((s) => favs.includes(s.name));
   const q = query.trim().toLowerCase();
