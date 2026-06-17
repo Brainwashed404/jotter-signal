@@ -58,17 +58,19 @@ jobs:
           if [ -f web/data/signals.jsonl.gz ]; then
             OLD=$(gzip -dc web/data/signals.jsonl.gz | wc -l)
           fi
-          # Publish only if the new build is at least 90% of the committed one, with an
-          # absolute floor of 3000 for the first-ever build. A capped run that yields a
-          # thin (e.g. 16k vs 26k) rebuild is rejected so it can't clobber good live data.
-          THRESH=$(( OLD * 90 / 100 ))
-          if [ "$THRESH" -lt 15000 ]; then THRESH=15000; fi
+          # Publish only if the new build exceeds the absolute floor.
+          # Previously used OLD*90/100 relative guard, but that caused a permanent lockout
+          # when the engine cache was lost: thin builds (~16k) failed the 90%-of-26k check,
+          # so the cache was never saved, so every subsequent run was also thin. Fixed by
+          # using a fixed floor only — 15000 is still protective against a catastrophic empty
+          # build while accepting the realistic cache-miss baseline of ~16k.
+          THRESH=15000
           echo "signals: new=$NEW committed=$OLD threshold=$THRESH"
           if [ "$NEW" -ge "$THRESH" ]; then
             echo "ok=true" >> "$GITHUB_OUTPUT"
           else
             echo "ok=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Degraded build ($NEW signals < threshold $THRESH, 90% of committed $OLD) — skipping publish"
+            echo "::warning::Degraded build ($NEW signals < threshold $THRESH) — skipping publish"
           fi
 
       - name: Save engine data cache (healthy builds only)

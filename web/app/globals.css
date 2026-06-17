@@ -166,12 +166,15 @@ html[data-skin="amber"] main .font-medium.leading-snug, html[data-skin="teletext
   html:not([data-fontsize="sm"]) main .text-\[13px\] { font-size: 15px; line-height: 1.6; }
   html:not([data-fontsize="sm"]) main .text-\[12px\] { font-size: 13px; }
   html:not([data-fontsize="sm"]) main .text-xs        { font-size: 13px; }
+  html:not([data-fontsize="sm"]) main .text-sm        { font-size: 16px; line-height: 1.65; }
   html[data-fontsize="lg"] main .text-\[13px\] { font-size: 17px; line-height: 1.65; }
   html[data-fontsize="lg"] main .text-\[12px\] { font-size: 15px; }
   html[data-fontsize="lg"] main .text-xs        { font-size: 15px; }
+  html[data-fontsize="lg"] main .text-sm        { font-size: 18px; line-height: 1.7; }
   html[data-fontsize="xl"] main .text-\[13px\] { font-size: 19px; line-height: 1.7; }
   html[data-fontsize="xl"] main .text-\[12px\] { font-size: 17px; }
   html[data-fontsize="xl"] main .text-xs        { font-size: 17px; }
+  html[data-fontsize="xl"] main .text-sm        { font-size: 20px; line-height: 1.75; }
 }
 
 /* ============================================================

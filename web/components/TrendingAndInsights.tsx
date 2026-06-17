@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import TrendingWidget from "@/components/TrendingWidget";
 import { usePersistentToggle } from "@/lib/uiState";
@@ -40,6 +40,19 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
 
   // Default to the most recently published source (first in the list).
   const [source, setSource] = useState<string>(() => signals[0]?.source_id ?? "");
+
+  // Swipe left/right to step through Insights sources on mobile.
+  const swipeX = useRef<number | null>(null);
+  function onSwipeStart(e: React.TouchEvent) { swipeX.current = e.touches[0].clientX; }
+  function onSwipeEnd(e: React.TouchEvent) {
+    if (swipeX.current === null) return;
+    const dx = e.changedTouches[0].clientX - swipeX.current;
+    swipeX.current = null;
+    if (Math.abs(dx) < 40) return;
+    const idx = sources.findIndex((s) => s.id === source);
+    if (dx < 0 && idx < sources.length - 1) setSource(sources[idx + 1].id); // swipe left → next
+    if (dx > 0 && idx > 0) setSource(sources[idx - 1].id);                  // swipe right → prev
+  }
 
   // Signals for the selected source (up to 10, already limited by getRecentFeed).
   const visible = useMemo(
@@ -107,7 +120,7 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
           {view === "news" ? (
             <TrendingWidget />
           ) : (
-            <div className="panel p-4">
+            <div className="panel p-4" onTouchStart={onSwipeStart} onTouchEnd={onSwipeEnd}>
               {/* Source pills — ordered by most recently published, no "All" */}
               <div className="flex gap-1.5 mb-3 flex-nowrap overflow-x-auto no-scrollbar pb-0.5">
                 {sources.map((src) => (
