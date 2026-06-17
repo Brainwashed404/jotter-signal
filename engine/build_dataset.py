@@ -702,6 +702,24 @@ def _is_filler(s, ex):
         return True
     return False
 
+# ---------- recency cap ----------
+# This is a TRENDING engine, not a deep archive: keep only each source's most-recent
+# MAX_POSTS_PER_SOURCE posts (with all their atoms). It bounds the dataset (~5k signals
+# vs ~26k), makes every CI build the same size regardless of how much archive survived
+# the run, and so removes the thin-build → degraded-publish failure mode that used to
+# freeze the live feed for days. Atoms are grouped by post_id (shared across a post's
+# sections); posts are ranked by their most-recent atom date.
+MAX_POSTS_PER_SOURCE = 200
+
+def cap_recent_posts(sigs, n=MAX_POSTS_PER_SOURCE):
+    latest = {}
+    for s in sigs:
+        pid = s["post_id"]
+        if pid not in latest or s["date"] > latest[pid]:
+            latest[pid] = s["date"]
+    keep = set(sorted(latest, key=lambda p: latest[p], reverse=True)[:n])
+    return [s for s in sigs if s["post_id"] in keep]
+
 all_sigs = []
 experts_out = []
 for ex in experts_cfg:
@@ -715,6 +733,10 @@ for ex in experts_cfg:
         sigs = kept
     if not sigs:
         print(f"  {ex['id']}: 0 signals"); continue
+    capped = cap_recent_posts(sigs)
+    if len(capped) != len(sigs):
+        print(f"  {ex['id']}: capped {len(sigs)} -> {len(capped)} signals (last {MAX_POSTS_PER_SOURCE} posts)")
+    sigs = capped
     cat = ex.get("category", "author")   # stamp author|publication so cards can hide author blog names
     for s in sigs:
         s["category"] = cat

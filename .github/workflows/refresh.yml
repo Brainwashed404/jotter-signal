@@ -27,6 +27,11 @@ jobs:
         with:
           python-version: "3.11"
 
+      # The GitHub Actions cache just speeds up incremental fetches (raw_*.jsonl). It is no
+      # longer load-bearing: build_dataset.py caps each source to its last 200 posts (~5k
+      # signals total), so a cold cache only means a slightly thinner recent set, never a
+      # rejected build. No durable-archive restore is needed — there is no deep archive to
+      # preserve any more (this is a trending engine, not a deep archive).
       - name: Restore engine data from cache
         id: cache-restore
         uses: actions/cache/restore@v4
@@ -34,31 +39,6 @@ jobs:
           path: engine/data
           key: engine-data-healthy-${{ github.run_id }}
           restore-keys: engine-data-healthy-
-
-      # DURABLE FALLBACK: if the GitHub Actions cache was evicted (7-day TTL, or never
-      # re-saved after a run of thin builds) the archive is gone and a cold rebuild loses
-      # Naughton's ~16k-post archive (26k -> ~16k thin build) — this is what made the feed
-      # go stale for days, repeatedly. publish.sh already uploads the full engine/data dir
-      # as engine-data.tar.gz to object storage; this restores it so a cache miss can self-
-      # heal. A capped/403 download must NOT fail the run — the floor guard below still
-      # publishes the cold build, so the feed updates regardless.
-      - name: Restore engine data from object storage (fallback on cache miss)
-        if: hashFiles('engine/data/posts_full.jsonl') == ''
-        continue-on-error: true
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-        run: |
-          echo "GitHub cache miss — restoring durable engine-data.tar.gz from object storage…"
-          python3 -m pip install --quiet awscli
-          if aws s3 cp "s3://${R2_BUCKET}/engine-data.tar.gz" engine-data.tar.gz --endpoint-url "$R2_ENDPOINT"; then
-            tar xzf engine-data.tar.gz -C engine
-            echo "✓ Restored engine archive ($(ls -1 engine/data | wc -l | tr -d ' ') files) from object storage."
-          else
-            echo "::warning::Object-storage restore failed (download cap / 403) — proceeding with cold build; the floor guard will still publish it."
-          fi
 
       - name: Run refresh
         env:
@@ -77,25 +57,18 @@ jobs:
         id: health
         run: |
           NEW=$(wc -l < web/data/signals.jsonl)
-          # Compare against the CURRENTLY COMMITTED build (still the old gz at this point;
-          # the commit step below only regenerates it if this check passes).
-          OLD=0
-          if [ -f web/data/signals.jsonl.gz ]; then
-            OLD=$(gzip -dc web/data/signals.jsonl.gz | wc -l)
-          fi
-          # Publish only if the new build exceeds the absolute floor.
-          # Previously used OLD*90/100 relative guard, but that caused a permanent lockout
-          # when the engine cache was lost: thin builds (~16k) failed the 90%-of-26k check,
-          # so the cache was never saved, so every subsequent run was also thin. Fixed by
-          # using a fixed floor only — 15000 is still protective against a catastrophic empty
-          # build while accepting the realistic cache-miss baseline of ~16k.
-          THRESH=15000
-          echo "signals: new=$NEW committed=$OLD threshold=$THRESH"
+          # build_dataset.py caps every source to its last 200 posts, so a healthy build is
+          # ~5k signals and is the SAME size whether or not the cache was warm. The only thing
+          # left to guard against is a catastrophically broken run (fetch infra down → near-empty
+          # build) clobbering good data; a floor of 1000 catches that while letting every normal
+          # capped build publish. A transient thin run self-corrects on the next 4-hourly run.
+          THRESH=1000
+          echo "signals: new=$NEW threshold=$THRESH"
           if [ "$NEW" -ge "$THRESH" ]; then
             echo "ok=true" >> "$GITHUB_OUTPUT"
           else
             echo "ok=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Degraded build ($NEW signals < threshold $THRESH) — skipping publish"
+            echo "::warning::Catastrophic build ($NEW signals < floor $THRESH) — skipping publish, keeping last good data"
           fi
 
       - name: Save engine data cache (healthy builds only)
