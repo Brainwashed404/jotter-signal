@@ -170,9 +170,9 @@ export function SignalCard({ s }: { s: Signal }) {
           </Link>
         </div>
         <div ref={shareRef} className="relative shrink-0">
-          {/* desktop: text chip; mobile: compact icon (declutters the card) */}
-          <button onClick={onShare} className="chip max-md:hidden" title="Share">Share</button>
-          <button onClick={onShare} className="md:hidden w-7 h-7 grid place-items-center rounded-md" title="Share" style={{ color: "var(--muted)" }}>
+          {/* one compact share icon at every width — declutters the header and avoids the
+              .chip-vs-hidden layer clash that left the old text chip stuck on screen */}
+          <button onClick={onShare} className="w-7 h-7 grid place-items-center rounded-md hover:bg-[var(--panel-2)]" title="Share" style={{ color: "var(--muted)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
               <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" /><line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
@@ -233,7 +233,7 @@ export function SignalCard({ s }: { s: Signal }) {
             {"↗︎"} {l.anchor ? l.anchor.slice(0, 28) : l.domain}
           </a>
         ))}
-        <a href={s.post_url} target="_blank" rel="noopener noreferrer" className="chip ml-auto">
+        <a href={s.post_url} target="_blank" rel="noopener noreferrer" className="chip md:ml-auto">
           original post
         </a>
       </div>

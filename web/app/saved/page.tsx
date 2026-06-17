@@ -181,31 +181,27 @@ export default function SavedPage() {
 
   return (
     <div className="space-y-6">
-      {/* sticky, centred tab switcher + search */}
-      <div className="sticky z-40 -mx-5 px-5 py-3 flex items-center gap-2 backdrop-blur"
+      {/* sticky tab switcher + search — a light pill row on mobile (was three chunky
+          full-width boxes), inline with the search on desktop */}
+      <div className="sticky z-40 -mx-5 px-5 py-3 flex flex-col gap-2 md:flex-row md:items-center backdrop-blur"
         style={{ top: "3.5rem", background: "var(--header-bg)" }}>
-        <div className="flex-1" />
-        <button onClick={() => switchTab("articles")} className="btn-ghost text-sm"
-          style={tab === "articles" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
-          Articles ({entries.length})
-        </button>
-        <button onClick={() => switchTab("highlights")} className="btn-ghost text-sm"
-          style={tab === "highlights" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
-          Highlights ({highlights.length})
-        </button>
-        <button onClick={() => switchTab("thoughtstarters")} className="btn-ghost text-sm"
-          style={tab === "thoughtstarters" ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}>
-          Thought Starters ({thoughtStarters.length})
-        </button>
-        <div className="flex-1 flex justify-end">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search saved…"
-            className="text-sm px-3 py-1.5 rounded-lg border bg-transparent w-44 max-w-[40vw] outline-none"
-            style={{ borderColor: "var(--border)" }}
-          />
+        <div className="flex gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1">
+          {([["articles", "Articles", entries.length],
+             ["highlights", "Highlights", highlights.length],
+             ["thoughtstarters", "Thought Starters", thoughtStarters.length]] as const).map(([id, label, count]) => (
+            <button key={id} onClick={() => switchTab(id)} className="chip shrink-0 whitespace-nowrap"
+              style={tab === id ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
+              {label}<span className="ml-1.5" style={{ opacity: 0.55 }}>{count}</span>
+            </button>
+          ))}
         </div>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search saved…"
+          className="text-sm px-3 py-1.5 rounded-lg border bg-transparent outline-none w-full md:ml-auto md:w-48"
+          style={{ borderColor: "var(--border)" }}
+        />
       </div>
 
       <TagFilter tags={tags} value={filter} onChange={setFilter} total={total} />

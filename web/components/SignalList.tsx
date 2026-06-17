@@ -208,7 +208,7 @@ export default function SignalList({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={suggestions.length ? `Search the signal: e.g. ${suggestions.slice(0, 3).join(", ")}…` : "Search the signal…"}
-              className="w-full px-4 py-3 pr-10 text-sm"
+              className="w-full px-4 py-2.5 pr-10 text-sm"
             />
             {input && (
               <button
@@ -232,11 +232,14 @@ export default function SignalList({
         <button
           onClick={() => setFiltersOpen((o) => !o)}
           aria-expanded={filtersOpen}
-          className="md:hidden btn-ghost text-sm w-full flex items-center justify-center gap-2"
-          style={activeCount ? { borderColor: "var(--accent)", color: "var(--accent)" } : {}}
+          className="md:hidden text-sm w-full flex items-center gap-2 px-1 py-1"
+          style={{ color: activeCount ? "var(--accent)" : "var(--muted)" }}
         >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6" /><line x1="7" y1="12" x2="17" y2="12" /><line x1="10" y1="18" x2="14" y2="18" />
+          </svg>
           <span>Filters{activeCount ? ` (${activeCount})` : ""}</span>
-          <span style={{ color: "var(--muted)" }}>{filtersOpen ? "▲" : "▼"}</span>
+          <span className="ml-auto">{filtersOpen ? "▲" : "▼"}</span>
         </button>
       )}
 
