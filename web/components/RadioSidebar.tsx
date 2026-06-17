@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SwipeView } from "@/components/SwipeView";
 import { STATIONS, GENRES, type Station } from "@/lib/stations";
 
 const FAV_KEY          = "jotter.radio.favs";
@@ -253,20 +254,13 @@ export default function RadioSidebar() {
   // Swipe left/right across the mobile now-playing area to step through genres
   // (mirrors tapping a genre chip — shuffleSource plays a random station from it).
   const genreOrder = ["all", ...genreItems.map((it) => it.key)];
+  const genreIdx = genreOrder.indexOf(activeSrc || "all");
+  const [genreSlideDir, setGenreSlideDir] = useState(1);
   function stepGenre(dir: 1 | -1) {
-    const i = genreOrder.indexOf(activeSrc || "all");
-    const next = genreOrder[((i < 0 ? 0 : i) + dir + genreOrder.length) % genreOrder.length];
-    shuffleSource(next);
+    const i = genreIdx < 0 ? 0 : genreIdx;
+    setGenreSlideDir(dir);
+    shuffleSource(genreOrder[(i + dir + genreOrder.length) % genreOrder.length]);
   }
-  const genreSwipeX = useRef<number | null>(null);
-  const onGenreSwipeStart = (e: React.TouchEvent) => { genreSwipeX.current = e.touches[0].clientX; };
-  const onGenreSwipeEnd = (e: React.TouchEvent) => {
-    if (genreSwipeX.current === null) return;
-    const dx = e.changedTouches[0].clientX - genreSwipeX.current;
-    genreSwipeX.current = null;
-    if (Math.abs(dx) < 40) return;
-    stepGenre(dx < 0 ? 1 : -1); // swipe left → next genre, right → previous
-  };
 
   return (
     <>
@@ -399,9 +393,10 @@ export default function RadioSidebar() {
             style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" size={22} /></button>
         </div>
 
-        {/* station info — below the controls; swipe L/R here to change genre */}
-        <div className="px-4 py-3 shrink-0" style={{ borderBottom: "1px solid var(--border)" }}
-          onTouchStart={onGenreSwipeStart} onTouchEnd={onGenreSwipeEnd}>
+        {/* station info — below the controls; swipe L/R here to step through genres */}
+        <SwipeView pageKey={current?.name ?? "none"} dir={genreSlideDir} hasPrev hasNext
+          onPrev={() => stepGenre(-1)} onNext={() => stepGenre(1)} className="shrink-0">
+        <div className="px-4 py-3" style={{ borderBottom: "1px solid var(--border)" }}>
           <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">
               <div className="text-base font-medium leading-snug truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>
@@ -432,6 +427,7 @@ export default function RadioSidebar() {
             )}
           </div>
         </div>
+        </SwipeView>
 
         {/* scrollable body: genres as chips, then the station list */}
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3">

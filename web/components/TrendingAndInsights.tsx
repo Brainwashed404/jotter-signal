@@ -1,7 +1,8 @@
 "use client";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import TrendingWidget from "@/components/TrendingWidget";
+import { SwipeView } from "@/components/SwipeView";
 import { usePersistentToggle } from "@/lib/uiState";
 import type { Signal } from "@/lib/types";
 
@@ -41,18 +42,13 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
   // Default to the most recently published source (first in the list).
   const [source, setSource] = useState<string>(() => signals[0]?.source_id ?? "");
 
-  // Swipe left/right to step through Insights sources on mobile.
-  const swipeX = useRef<number | null>(null);
-  function onSwipeStart(e: React.TouchEvent) { swipeX.current = e.touches[0].clientX; }
-  function onSwipeEnd(e: React.TouchEvent) {
-    if (swipeX.current === null) return;
-    const dx = e.changedTouches[0].clientX - swipeX.current;
-    swipeX.current = null;
-    if (Math.abs(dx) < 40) return;
-    const idx = sources.findIndex((s) => s.id === source);
-    if (dx < 0 && idx < sources.length - 1) setSource(sources[idx + 1].id); // swipe left → next
-    if (dx > 0 && idx > 0) setSource(sources[idx - 1].id);                  // swipe right → prev
-  }
+  // Swipe / tap to step through Insights sources, with a directional slide-in.
+  const [slideDir, setSlideDir] = useState(1);
+  const idx = sources.findIndex((s) => s.id === source);
+  const goToSource = (id: string) => {
+    setSlideDir(sources.findIndex((s) => s.id === id) >= idx ? 1 : -1);
+    setSource(id);
+  };
 
   // Signals for the selected source — top 5 latest only.
   const visible = useMemo(
@@ -120,13 +116,13 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
           {view === "news" ? (
             <TrendingWidget />
           ) : (
-            <div className="panel p-4" onTouchStart={onSwipeStart} onTouchEnd={onSwipeEnd}>
+            <div className="panel p-4">
               {/* Source pills — ordered by most recently published, no "All" */}
               <div className="flex gap-1.5 mb-3 flex-nowrap overflow-x-auto no-scrollbar pb-0.5">
                 {sources.map((src) => (
                   <button
                     key={src.id}
-                    onClick={() => setSource(src.id)}
+                    onClick={() => goToSource(src.id)}
                     className="chip shrink-0 whitespace-nowrap"
                     style={
                       source === src.id
@@ -139,6 +135,14 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
                 ))}
               </div>
 
+              <SwipeView
+                pageKey={source}
+                dir={slideDir}
+                hasPrev={idx > 0}
+                hasNext={idx < sources.length - 1}
+                onPrev={() => { if (idx > 0) goToSource(sources[idx - 1].id); }}
+                onNext={() => { if (idx < sources.length - 1) goToSource(sources[idx + 1].id); }}
+              >
               {visible.length === 0 ? (
                 <div className="label py-1">No recent articles.</div>
               ) : (
@@ -189,6 +193,7 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
                   })}
                 </ul>
               )}
+              </SwipeView>
             </div>
           )}
         </div>

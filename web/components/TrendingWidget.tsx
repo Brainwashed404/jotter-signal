@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { SwipeView } from "@/components/SwipeView";
 
 type Topic = { title: string; url: string; source: string; term: string; context?: string };
 
@@ -60,8 +61,13 @@ export default function TrendingWidget() {
     } catch { /* ignore */ }
   }, []);
 
+  // Direction of the last category change, so the slide-in animation comes from the
+  // correct side whether you swiped or tapped a pill.
+  const [slideDir, setSlideDir] = useState(1);
+
   // Persist + switch when a pill is chosen.
   const choose = (id: string) => {
+    setSlideDir(order.indexOf(id) >= order.indexOf(category) ? 1 : -1);
     setCategory(id);
     try { localStorage.setItem(CAT_KEY, id); } catch { /* ignore */ }
   };
@@ -163,6 +169,14 @@ export default function TrendingWidget() {
         ))}
       </div>
 
+      <SwipeView
+        pageKey={category}
+        dir={slideDir}
+        hasPrev={order.indexOf(category) > 0}
+        hasNext={order.indexOf(category) < order.length - 1}
+        onPrev={() => { const i = order.indexOf(category); if (i > 0) { setSlideDir(-1); choose(order[i - 1]); } }}
+        onNext={() => { const i = order.indexOf(category); if (i < order.length - 1) { setSlideDir(1); choose(order[i + 1]); } }}
+      >
       {loading ? (
         <div className="label animate-pulse py-1">loading headlines…</div>
       ) : topics.length === 0 ? (
@@ -199,6 +213,7 @@ export default function TrendingWidget() {
           ))}
         </ul>
       )}
+      </SwipeView>
     </div>
   );
 }
