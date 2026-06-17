@@ -230,7 +230,7 @@ export function SignalCard({ s }: { s: Signal }) {
       <div className="flex flex-wrap items-center gap-1.5 mt-3">
         {(open ? s.links : s.links.slice(0, 2)).map((l, i) => (
           <a key={i} href={l.url} target="_blank" rel="noopener noreferrer" className="chip" style={{ color: "var(--accent-2)" }}>
-            ↗ {l.anchor ? l.anchor.slice(0, 28) : l.domain}
+            {"↗︎"} {l.anchor ? l.anchor.slice(0, 28) : l.domain}
           </a>
         ))}
         <a href={s.post_url} target="_blank" rel="noopener noreferrer" className="chip ml-auto">

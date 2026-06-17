@@ -110,7 +110,7 @@ function WeatherPanel({ data }: { data: WeatherData }) {
         </div>
         <a href="https://www.bbc.co.uk/weather/2643743" target="_blank" rel="noopener noreferrer"
           className="label hover:underline shrink-0" style={{ color: "var(--accent-2)", textTransform: "none", letterSpacing: 0 }}>
-          Full forecast ↗
+          Full forecast ↗︎
         </a>
       </div>
     </div>

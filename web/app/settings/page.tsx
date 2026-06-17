@@ -94,7 +94,7 @@ export default function SettingsPage() {
               We help brands turn cultural intelligence into commercial impact.
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
-              <a href="https://jotter.media" target="_blank" rel="noopener noreferrer" className="btn">Visit jotter.media ↗</a>
+              <a href="https://jotter.media" target="_blank" rel="noopener noreferrer" className="btn">Visit jotter.media ↗︎</a>
               <a href="mailto:studio@jotter.media" className="btn-ghost">Email studio@jotter.media</a>
             </div>
           </div>

@@ -250,6 +250,24 @@ export default function RadioSidebar() {
 
   const iconBtn = "w-8 h-8 grid place-items-center rounded-lg";
 
+  // Swipe left/right across the mobile now-playing area to step through genres
+  // (mirrors tapping a genre chip — shuffleSource plays a random station from it).
+  const genreOrder = ["all", ...genreItems.map((it) => it.key)];
+  function stepGenre(dir: 1 | -1) {
+    const i = genreOrder.indexOf(activeSrc || "all");
+    const next = genreOrder[((i < 0 ? 0 : i) + dir + genreOrder.length) % genreOrder.length];
+    shuffleSource(next);
+  }
+  const genreSwipeX = useRef<number | null>(null);
+  const onGenreSwipeStart = (e: React.TouchEvent) => { genreSwipeX.current = e.touches[0].clientX; };
+  const onGenreSwipeEnd = (e: React.TouchEvent) => {
+    if (genreSwipeX.current === null) return;
+    const dx = e.changedTouches[0].clientX - genreSwipeX.current;
+    genreSwipeX.current = null;
+    if (Math.abs(dx) < 40) return;
+    stepGenre(dx < 0 ? 1 : -1); // swipe left → next genre, right → previous
+  };
+
   return (
     <>
     <aside ref={asideRef} className="max-md:hidden sticky top-0 h-screen shrink-0 relative overflow-hidden transition-[width] duration-300 ease-in-out"
@@ -381,8 +399,9 @@ export default function RadioSidebar() {
             style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" size={22} /></button>
         </div>
 
-        {/* station info — below the controls */}
-        <div className="px-4 py-3 shrink-0" style={{ borderBottom: "1px solid var(--border)" }}>
+        {/* station info — below the controls; swipe L/R here to change genre */}
+        <div className="px-4 py-3 shrink-0" style={{ borderBottom: "1px solid var(--border)" }}
+          onTouchStart={onGenreSwipeStart} onTouchEnd={onGenreSwipeEnd}>
           <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">
               <div className="text-base font-medium leading-snug truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>

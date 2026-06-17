@@ -35,6 +35,31 @@ jobs:
           key: engine-data-healthy-${{ github.run_id }}
           restore-keys: engine-data-healthy-
 
+      # DURABLE FALLBACK: if the GitHub Actions cache was evicted (7-day TTL, or never
+      # re-saved after a run of thin builds) the archive is gone and a cold rebuild loses
+      # Naughton's ~16k-post archive (26k -> ~16k thin build) — this is what made the feed
+      # go stale for days, repeatedly. publish.sh already uploads the full engine/data dir
+      # as engine-data.tar.gz to object storage; this restores it so a cache miss can self-
+      # heal. A capped/403 download must NOT fail the run — the floor guard below still
+      # publishes the cold build, so the feed updates regardless.
+      - name: Restore engine data from object storage (fallback on cache miss)
+        if: hashFiles('engine/data/posts_full.jsonl') == ''
+        continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          echo "GitHub cache miss — restoring durable engine-data.tar.gz from object storage…"
+          python3 -m pip install --quiet awscli
+          if aws s3 cp "s3://${R2_BUCKET}/engine-data.tar.gz" engine-data.tar.gz --endpoint-url "$R2_ENDPOINT"; then
+            tar xzf engine-data.tar.gz -C engine
+            echo "✓ Restored engine archive ($(ls -1 engine/data | wc -l | tr -d ' ') files) from object storage."
+          else
+            echo "::warning::Object-storage restore failed (download cap / 403) — proceeding with cold build; the floor guard will still publish it."
+          fi
+
       - name: Run refresh
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}

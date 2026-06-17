@@ -54,9 +54,9 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
     if (dx > 0 && idx > 0) setSource(sources[idx - 1].id);                  // swipe right → prev
   }
 
-  // Signals for the selected source (up to 10, already limited by getRecentFeed).
+  // Signals for the selected source — top 5 latest only.
   const visible = useMemo(
-    () => signals.filter((s) => s.source_id === source),
+    () => signals.filter((s) => s.source_id === source).slice(0, 5),
     [signals, source],
   );
 

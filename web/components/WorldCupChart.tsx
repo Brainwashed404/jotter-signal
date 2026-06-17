@@ -347,7 +347,7 @@ function NewsView({ news }: { news: WCNews[] }) {
             <span>{n.source}</span>
             {n.url && (
               <a href={n.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>
-                source ↗
+                source ↗︎
               </a>
             )}
           </div>

@@ -38,7 +38,7 @@ export default async function SourceProfile({
         <div className="flex items-center gap-3 mt-2">
           {r.url && (
             <a href={r.url} target="_blank" rel="noopener" className="text-sm" style={{ color: "var(--accent-2)" }}>
-              {r.url.replace(/^https?:\/\//, "")} ↗
+              {r.url.replace(/^https?:\/\//, "")} ↗︎
             </a>
           )}
           <span className="label">
