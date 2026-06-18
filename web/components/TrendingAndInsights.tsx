@@ -56,9 +56,9 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
     centerActivePill(pillsRef.current, (el) => el.dataset.srcId === source);
   }, [source]);
 
-  // Signals for the selected source — top 5 latest only.
+  // Signals for the selected source — up to 10 (desktop); mobile hides past 5 via CSS below.
   const visible = useMemo(
-    () => signals.filter((s) => s.source_id === source).slice(0, 5),
+    () => signals.filter((s) => s.source_id === source).slice(0, 10),
     [signals, source],
   );
 
@@ -160,7 +160,7 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
                     return (
                       <li
                         key={i}
-                        className="flex items-center max-md:items-start gap-2 text-[13px] py-1 max-md:py-1.5"
+                        className={`flex items-center max-md:items-start gap-2 text-[13px] py-1 max-md:py-1.5${i >= 5 ? " max-md:hidden" : ""}`}
                       >
                         <div className="flex-1 min-w-0">
                           <div className="md:truncate max-md:line-clamp-2">

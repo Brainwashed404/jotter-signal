@@ -18,12 +18,12 @@ export default async function HomePage() {
 
       <WhatDidIMiss />
 
-      <CollapsibleSection title="Markets">
-        <MarketsSnapshot />
-      </CollapsibleSection>
-
       <CollapsibleSection title="World Cup 2026" defaultOpen={true}>
         <WorldCupChart />
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Markets">
+        <MarketsSnapshot />
       </CollapsibleSection>
 
       <CtaFooter />

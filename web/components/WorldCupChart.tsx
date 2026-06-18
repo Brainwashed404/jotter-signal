@@ -264,7 +264,7 @@ function kickoff(iso: string): string {
   return isNaN(d.getTime()) ? "" : d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 }
 
-function FixtureRow({ m }: { m: WCMatch }) {
+function FixtureRow({ m, first }: { m: WCMatch; first?: boolean }) {
   const live = m.status === "in";
   const done = m.status === "post";
   // ESPN returns score 0 (not null) for unplayed matches, so only show a scoreline
@@ -275,29 +275,41 @@ function FixtureRow({ m }: { m: WCMatch }) {
     : kickoff(m.date) || "TBC";
   const statusLabel = live ? (m.statusDetail || "LIVE") : done ? (m.statusDetail || "FT") : (m.label || "");
   return (
-    <div style={{
-      display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: "0.75rem",
-      padding: "0.7rem 0.9rem", borderTop: "1px solid var(--border)",
-    }}>
-      {/* home */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.55rem", minWidth: 0 }}>
-        <span style={{ fontSize: "0.92rem", fontWeight: m.homeWinner ? 700 : 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", textAlign: "right" }}>
-          {m.homeTeam?.name ?? "TBD"}
-        </span>
-        <Flag team={m.homeTeam} w={24} />
+    <div style={{ borderTop: first ? "none" : "1px solid var(--border)" }}>
+      <div style={{
+        display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: "0.75rem",
+        padding: "0.7rem 0.9rem",
+      }}>
+        {/* home */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.55rem", minWidth: 0 }}>
+          <span style={{ fontSize: "0.92rem", fontWeight: m.homeWinner ? 700 : 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", textAlign: "right" }}>
+            {m.homeTeam?.name ?? "TBD"}
+          </span>
+          <Flag team={m.homeTeam} w={24} />
+        </div>
+        {/* score / time */}
+        <div style={{ textAlign: "center", minWidth: 64 }}>
+          <div style={{ fontSize: "1rem", fontWeight: 800, color: live ? "var(--accent)" : "var(--text)", letterSpacing: "0.02em" }}>{centre}</div>
+          <div style={{ fontSize: "0.62rem", color: live ? "var(--accent)" : "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: 2 }}>{statusLabel}</div>
+        </div>
+        {/* away */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", minWidth: 0 }}>
+          <Flag team={m.awayTeam} w={24} />
+          <span style={{ fontSize: "0.92rem", fontWeight: m.awayWinner ? 700 : 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {m.awayTeam?.name ?? "TBD"}
+          </span>
+        </div>
       </div>
-      {/* score / time */}
-      <div style={{ textAlign: "center", minWidth: 64 }}>
-        <div style={{ fontSize: "1rem", fontWeight: 800, color: live ? "var(--accent)" : "var(--text)", letterSpacing: "0.02em" }}>{centre}</div>
-        <div style={{ fontSize: "0.62rem", color: live ? "var(--accent)" : "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: 2 }}>{statusLabel}</div>
-      </div>
-      {/* away */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", minWidth: 0 }}>
-        <Flag team={m.awayTeam} w={24} />
-        <span style={{ fontSize: "0.92rem", fontWeight: m.awayWinner ? 700 : 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {m.awayTeam?.name ?? "TBD"}
-        </span>
-      </div>
+      {/* pre-match 3-way odds (1 = home win, X = draw, 2 = away win) */}
+      {m.status === "pre" && m.odds && (
+        <div style={{ display: "flex", justifyContent: "center", gap: "0.4rem", padding: "0 0.9rem 0.6rem", marginTop: "-0.15rem", flexWrap: "wrap" }}>
+          {([["1", m.odds.home], ["X", m.odds.draw], ["2", m.odds.away]] as const).map(([k, v]) => (
+            <span key={k} style={{ fontSize: "0.68rem", color: "var(--muted)", border: "1px solid var(--border)", borderRadius: 4, padding: "1px 7px", whiteSpace: "nowrap" }}>
+              <span style={{ opacity: 0.65 }}>{k}</span> <span style={{ fontWeight: 600, color: "var(--text)" }}>{v}</span>
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -321,7 +333,7 @@ function FixturesView({ fixtures }: { fixtures: WCMatch[] }) {
             {fmtDateHeading(ms[0].date)}
           </div>
           <div className="panel" style={{ overflow: "hidden" }}>
-            {ms.map((m, i) => <div key={m.id} style={i === 0 ? { borderTop: "none" } : undefined}><FixtureRow m={m} /></div>)}
+            {ms.map((m, i) => <FixtureRow key={m.id} m={m} first={i === 0} />)}
           </div>
         </div>
       ))}

@@ -7,6 +7,7 @@ export type WCStanding = {
   gf: number; ga: number; gd: number; pts: number;
 };
 export type WCGroup = { id: string; name: string; standings: WCStanding[] };
+export type WCOdds = { home: string; draw: string; away: string };
 export type WCMatch = {
   id: string; round: string; date: string;
   label?: string;            // human round/stage label for the fixtures list
@@ -15,6 +16,7 @@ export type WCMatch = {
   homeTeam: WCTeam | null; awayTeam: WCTeam | null;
   homeScore: number | null; awayScore: number | null;
   homeWinner: boolean; awayWinner: boolean;
+  odds?: WCOdds;             // 3-way moneyline for upcoming matches (home / draw / away)
 };
 export type WCStats = {
   teams: number;
@@ -53,8 +55,23 @@ function mapTeam(team: AnyObj): WCTeam {
     id: String(team.id ?? ""),
     name: String(team.displayName ?? team.name ?? "TBD"),
     abbr: String(team.abbreviation ?? "???"),
-    flag: (team.logos as { href: string }[] | undefined)?.[0]?.href ?? "",
+    // standings endpoint uses logos[]; the scoreboard endpoint uses a single logo string.
+    flag: (team.logos as { href: string }[] | undefined)?.[0]?.href ?? String(team.logo ?? ""),
   };
+}
+// ESPN American-odds: numbers come as "+155"/"-180" strings (or a bare number for draw).
+function fmtOdds(v: unknown): string | null {
+  if (v == null || v === "") return null;
+  const s = typeof v === "number" ? (v > 0 ? `+${v}` : `${v}`) : String(v);
+  return /^[+-]/.test(s) ? s : `+${s}`;
+}
+function mapOdds(comp: AnyObj): WCOdds | undefined {
+  const o: AnyObj | undefined = (comp.odds as AnyObj[] | undefined)?.[0];
+  if (!o) return undefined;
+  const home = fmtOdds(o.moneyline?.home?.close?.odds ?? o.moneyline?.home?.open?.odds);
+  const away = fmtOdds(o.moneyline?.away?.close?.odds ?? o.moneyline?.away?.open?.odds);
+  const draw = fmtOdds(o.drawOdds?.moneyLine);
+  return home && away && draw ? { home, draw, away } : undefined;
 }
 
 // ─── Fetchers ─────────────────────────────────────────────────────────────────
@@ -115,8 +132,11 @@ function normaliseRound(raw: string): string {
 // Returns ALL World Cup matches (group + knockout). The caller splits out the
 // knockout rounds for the bracket and uses the full list for the fixtures view.
 async function fetchMatches(): Promise<WCMatch[]> {
+  // The default scoreboard only returns the CURRENT date window (~today's 4 matches), which
+  // is why the fixtures list was never complete. Querying the full tournament date range
+  // returns all 104 matches (group + knockout) with team flags and pre-match odds.
   const r = await fetch(
-    "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?limit=400",
+    "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=400",
     { signal: AbortSignal.timeout(8000), headers: { "User-Agent": "Mozilla/5.0" }, cache: "no-store" }
   );
   if (!r.ok) return [];
@@ -157,6 +177,7 @@ async function fetchMatches(): Promise<WCMatch[]> {
       awayScore: away?.score != null ? Number(away.score) : null,
       homeWinner: Boolean(home?.winner),
       awayWinner: Boolean(away?.winner),
+      odds: statusState === "pre" ? mapOdds(comp) : undefined,
     });
   }
   return matches;
@@ -199,34 +220,54 @@ function htmlToSummary(html: string, max = 240): string {
   return (lastStop > 80 ? cut.slice(0, lastStop + 1) : cut.trimEnd() + "…");
 }
 
-async function fetchNews(): Promise<WCNews[]> {
+// Pull World-Cup items from one football RSS feed. All three carry real article
+// summaries (unlike Google News), so the story reads in-app without bouncing out.
+const NEWS_FEEDS: { url: string; source: string }[] = [
+  { url: "https://www.theguardian.com/football/rss", source: "The Guardian" },
+  { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", source: "BBC Sport" },
+  { url: "https://www.espn.com/espn/rss/soccer/news", source: "ESPN" },
+];
+
+async function fetchFeed(feed: { url: string; source: string }): Promise<WCNews[]> {
   try {
-    // Guardian football RSS carries real article summaries (unlike Google News), and
-    // tags World Cup pieces "World Cup 2026: ...", so we get in-app readable text.
-    const r = await fetch("https://www.theguardian.com/football/rss", {
+    const r = await fetch(feed.url, {
       signal: AbortSignal.timeout(8000), headers: { "User-Agent": "Mozilla/5.0" }, cache: "no-store",
     });
     if (!r.ok) return [];
     const xml = await r.text();
-    const all: WCNews[] = [];
+    const out: WCNews[] = [];
     for (const m of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
       const block = m[1];
       const title = stripEmoji(decodeXml(block.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? ""));
       const url = decodeXml(block.match(/<link>([\s\S]*?)<\/link>/)?.[1] ?? "");
       const summary = htmlToSummary(block.match(/<description>([\s\S]*?)<\/description>/)?.[1] ?? "");
-      if (!title) continue;
-      // Skip minute-by-minute live blogs (titles end "... – live"); they read as
-      // commentary, not news, and their summaries are kick-off-time boilerplate.
-      const isLiveBlog = /[–-]\s*live\s*$/i.test(title);
-      all.push({ title, source: "The Guardian", url, summary, _live: isLiveBlog } as WCNews & { _live: boolean });
+      if (!title || !url) continue;
+      if (/[–-]\s*live\s*$/i.test(title)) continue;                       // skip live blogs
+      if (!/world cup/i.test(title) && !/world cup/i.test(summary)) continue; // World Cup only
+      out.push({ title, source: feed.source, url, summary });
     }
-    const articles = (all as (WCNews & { _live: boolean })[]).filter((n) => !n._live);
-    const pool = articles.length >= 4 ? articles : all;
-    // Prefer World-Cup-tagged stories; if there are too few, fall back to general football.
-    const wc = pool.filter((n) => /world cup/i.test(n.title) || /world cup/i.test(n.summary || ""));
-    const chosen = (wc.length >= 4 ? wc : pool).slice(0, 8);
-    return chosen.map(({ title, source, url, summary }) => ({ title, source, url, summary }));
+    return out;
   } catch { return []; }
+}
+
+async function fetchNews(): Promise<WCNews[]> {
+  const perSource = await Promise.all(NEWS_FEEDS.map(fetchFeed));
+  // Dedupe across sources by a loose title key (Guardian wins ties, it's first).
+  const seen = new Set<string>();
+  const key = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const cleaned = perSource.map((list) =>
+    list.filter((n) => { const k = key(n.title); if (seen.has(k)) return false; seen.add(k); return true; }),
+  );
+  // Round-robin interleave so the list isn't dominated by one publication.
+  const out: WCNews[] = [];
+  for (let i = 0; out.length < 9; i++) {
+    let progressed = false;
+    for (const list of cleaned) {
+      if (list[i]) { out.push(list[i]); progressed = true; if (out.length >= 9) break; }
+    }
+    if (!progressed) break;
+  }
+  return out;
 }
 
 // ─── Route ────────────────────────────────────────────────────────────────────
