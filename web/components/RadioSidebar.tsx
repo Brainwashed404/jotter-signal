@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SwipeView } from "@/components/SwipeView";
+import { SwipeView, centerActivePill } from "@/components/SwipeView";
 import { STATIONS, GENRES, type Station } from "@/lib/stations";
 
 const FAV_KEY          = "jotter.radio.favs";
@@ -261,6 +261,11 @@ export default function RadioSidebar() {
     setGenreSlideDir(dir);
     shuffleSource(genreOrder[(i + dir + genreOrder.length) % genreOrder.length]);
   }
+  // Keep the active genre chip scrolled into view as you swipe/tap through genres.
+  const genrePillsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    centerActivePill(genrePillsRef.current, (el) => el.dataset.genre === (activeSrc || "all"));
+  }, [activeSrc]);
 
   return (
     <>
@@ -396,8 +401,9 @@ export default function RadioSidebar() {
         {/* station info — below the controls; swipe L/R here to step through genres */}
         <SwipeView pageKey={current?.name ?? "none"} dir={genreSlideDir} hasPrev hasNext
           onPrev={() => stepGenre(-1)} onNext={() => stepGenre(1)} className="shrink-0">
-        <div className="px-4 py-3" style={{ borderBottom: "1px solid var(--border)" }}>
-          <div className="flex items-start gap-3">
+        <div className="px-3 py-3.5 flex items-center gap-2" style={{ borderBottom: "1px solid var(--border)" }}>
+          <span aria-hidden className="shrink-0" style={{ color: "var(--muted)", opacity: 0.4 }}><Icon name="chevL" size={18} /></span>
+          <div className="flex items-start gap-3 flex-1 min-w-0">
             <div className="min-w-0 flex-1">
               <div className="text-base font-medium leading-snug truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>
                 {current ? current.name : "Pick a genre or station"}
@@ -426,6 +432,7 @@ export default function RadioSidebar() {
               </button>
             )}
           </div>
+          <span aria-hidden className="shrink-0" style={{ color: "var(--muted)", opacity: 0.4 }}><Icon name="chevR" size={18} /></span>
         </div>
         </SwipeView>
 
@@ -433,10 +440,10 @@ export default function RadioSidebar() {
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3">
           <div className="label mb-2">Genres</div>
           {/* one swipeable row (like the trending-news pills), not a stacked block */}
-          <div className="flex flex-nowrap gap-1.5 mb-4 overflow-x-auto no-scrollbar -mx-3 px-3">
-            <button onClick={() => shuffleSource("all")} className="chip shrink-0 whitespace-nowrap" style={activeSrc === "all" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>All</button>
+          <div ref={genrePillsRef} className="flex flex-nowrap gap-1.5 mb-4 overflow-x-auto no-scrollbar -mx-3 px-3">
+            <button data-genre="all" onClick={() => shuffleSource("all")} className="chip shrink-0 whitespace-nowrap" style={activeSrc === "all" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>All</button>
             {genreItems.map((it) => (
-              <button key={it.key} onClick={() => shuffleSource(it.key)} className="chip shrink-0 whitespace-nowrap" style={activeSrc === it.key ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>{it.label}</button>
+              <button key={it.key} data-genre={it.key} onClick={() => shuffleSource(it.key)} className="chip shrink-0 whitespace-nowrap" style={activeSrc === it.key ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>{it.label}</button>
             ))}
           </div>
 

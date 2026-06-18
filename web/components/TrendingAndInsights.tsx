@@ -1,8 +1,8 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import TrendingWidget from "@/components/TrendingWidget";
-import { SwipeView } from "@/components/SwipeView";
+import { SwipeView, centerActivePill } from "@/components/SwipeView";
 import { usePersistentToggle } from "@/lib/uiState";
 import type { Signal } from "@/lib/types";
 
@@ -49,6 +49,12 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
     setSlideDir(sources.findIndex((s) => s.id === id) >= idx ? 1 : -1);
     setSource(id);
   };
+
+  // Keep the active source pill scrolled into view as you swipe/tap through pages.
+  const pillsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    centerActivePill(pillsRef.current, (el) => el.dataset.srcId === source);
+  }, [source]);
 
   // Signals for the selected source — top 5 latest only.
   const visible = useMemo(
@@ -118,10 +124,11 @@ export default function TrendingAndInsights({ signals }: { signals: Signal[] }) 
           ) : (
             <div className="panel p-4">
               {/* Source pills — ordered by most recently published, no "All" */}
-              <div className="flex gap-1.5 mb-3 flex-nowrap overflow-x-auto no-scrollbar pb-0.5">
+              <div ref={pillsRef} className="flex gap-1.5 mb-3 flex-nowrap overflow-x-auto no-scrollbar pb-0.5">
                 {sources.map((src) => (
                   <button
                     key={src.id}
+                    data-src-id={src.id}
                     onClick={() => goToSource(src.id)}
                     className="chip shrink-0 whitespace-nowrap"
                     style={

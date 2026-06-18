@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { SwipeView } from "@/components/SwipeView";
+import { SwipeView, centerActivePill } from "@/components/SwipeView";
 
 type Topic = { title: string; url: string; source: string; term: string; context?: string };
 
@@ -64,6 +64,12 @@ export default function TrendingWidget() {
   // Direction of the last category change, so the slide-in animation comes from the
   // correct side whether you swiped or tapped a pill.
   const [slideDir, setSlideDir] = useState(1);
+
+  // Keep the active category pill scrolled into view as you swipe/tap through pages.
+  const pillsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    centerActivePill(pillsRef.current, (el) => el.dataset.pillId === category);
+  }, [category, order]);
 
   // Persist + switch when a pill is chosen.
   const choose = (id: string) => {
@@ -140,7 +146,7 @@ export default function TrendingWidget() {
   return (
     <div className="panel p-4">
       {/* ≤md: one swipeable row (like the Markets ticker); ≥md: wrap as before */}
-      <div className="flex flex-wrap gap-1.5 mb-3 max-md:flex-nowrap max-md:overflow-x-auto no-scrollbar max-md:-mx-4 max-md:px-4">
+      <div ref={pillsRef} className="flex flex-wrap gap-1.5 mb-3 max-md:flex-nowrap max-md:overflow-x-auto no-scrollbar max-md:-mx-4 max-md:px-4">
         {order.map((id) => (
           <button
             key={id}

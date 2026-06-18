@@ -126,8 +126,10 @@ html[data-skin="tech"] .weather-pill, html[data-skin="cyber"] .weather-pill, htm
 }
 
 /* Swipe page change (SwipeView): new content slides in from the swipe direction. */
-@keyframes jslide-next { from { opacity: 0; transform: translateX(40px);  } to { opacity: 1; transform: translateX(0); } }
-@keyframes jslide-prev { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+/* Full-width directional slide for SwipeView (news/insights/radio paging). The new
+   section sweeps in from the side it came from; the overflow-hidden wrapper clips it. */
+@keyframes jslide-next { from { transform: translateX(100%);  } to { transform: translateX(0); } }
+@keyframes jslide-prev { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 a[href="/settings"]:hover .gear-icon { animation: gear-spin 650ms cubic-bezier(0.4, 0, 0.2, 1); transform-origin: center; }
 
 /* ============================================================

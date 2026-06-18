@@ -2,6 +2,21 @@
 import { useRef, useState, type ReactNode } from "react";
 
 /**
+ * Smooth-scroll the active pill to the centre of its horizontal strip, so the pill
+ * row "follows" a swipe/tap and you can always see which page you're on. Uses bounding
+ * rects (robust regardless of the container's positioning) and only the strip scrolls.
+ */
+export function centerActivePill(container: HTMLElement | null, predicate: (el: HTMLElement) => boolean) {
+  if (!container) return;
+  const el = ([...container.children] as HTMLElement[]).find(predicate);
+  if (!el) return;
+  const cRect = container.getBoundingClientRect();
+  const eRect = el.getBoundingClientRect();
+  const delta = eRect.left - cRect.left - (container.clientWidth - eRect.width) / 2;
+  container.scrollTo({ left: container.scrollLeft + delta, behavior: "smooth" });
+}
+
+/**
  * Horizontal swipe between "pages" of content (news categories, insight sources,
  * radio genres). Gives live drag feedback as the finger moves and a directional
  * slide-in whenever the page changes — including when changed externally, e.g. by
@@ -25,6 +40,7 @@ export function SwipeView({
 }) {
   const [dx, setDx] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [committing, setCommitting] = useState(false); // page just changed → let the slide-in carry the motion, don't spring back
   const start = useRef<{ x: number; y: number } | null>(null);
   const axis = useRef<"x" | "y" | null>(null);
   const dxRef = useRef(0); // live delta for the release decision (state can be stale on a fast flick)
@@ -34,6 +50,7 @@ export function SwipeView({
     start.current = { x: t.clientX, y: t.clientY };
     axis.current = null;
     dxRef.current = 0;
+    setCommitting(false);
   }
   function onTouchMove(e: React.TouchEvent) {
     if (!start.current) return;
@@ -59,11 +76,11 @@ export function SwipeView({
     axis.current = null;
     dxRef.current = 0;
     setDragging(false);
-    setDx(0);
-    if (!wasX) return;
-    const THRESHOLD = 50;
-    if (mx <= -THRESHOLD && hasNext) onNext();
-    else if (mx >= THRESHOLD && hasPrev) onPrev();
+    if (!wasX) { setDx(0); return; }
+    const THRESHOLD = 45;
+    if (mx <= -THRESHOLD && hasNext) { setCommitting(true); setDx(0); onNext(); }   // page change → keyframe slides the new section in
+    else if (mx >= THRESHOLD && hasPrev) { setCommitting(true); setDx(0); onPrev(); }
+    else setDx(0); // not far enough → spring back to centre
   }
 
   return (
@@ -74,8 +91,10 @@ export function SwipeView({
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      <div style={{ transform: `translateX(${dx}px)`, transition: dragging ? "none" : "transform 220ms cubic-bezier(0.22,1,0.36,1)" }}>
-        <div key={pageKey} style={{ animation: `jslide-${dir >= 0 ? "next" : "prev"} 280ms cubic-bezier(0.4,0,0.2,1)` }}>
+      {/* outer = live finger-follow; inner (keyed) = the directional slide-in on a page change.
+          On a committed change we kill the outer transition so only the slide-in shows (no double motion). */}
+      <div style={{ transform: `translateX(${dx}px)`, transition: dragging || committing ? "none" : "transform 200ms cubic-bezier(0.22,1,0.36,1)" }}>
+        <div key={pageKey} style={{ animation: `jslide-${dir >= 0 ? "next" : "prev"} 300ms cubic-bezier(0.22,0.61,0.36,1)`, willChange: "transform" }}>
           {children}
         </div>
       </div>
