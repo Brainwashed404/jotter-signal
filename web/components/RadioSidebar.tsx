@@ -54,6 +54,13 @@ export default function RadioSidebar() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dashRef = useRef<any>(null);
+  // Dead-stream resilience: when a station was reached by *browsing* (shuffle / next / genre),
+  // a failed stream auto-advances to the next one instead of stranding on "unavailable".
+  // Explicit row taps don't auto-skip (we respect the user's specific choice). Capped so a
+  // run of dead streams can't loop forever.
+  const autoSkipRef = useRef(false);
+  const skipCountRef = useRef(0);
+  const onErrorRef = useRef<() => void>(() => {});
 
   useEffect(() => { try { setFavs(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); } catch {} }, []);
   useEffect(() => { try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch {} }, [favs]);
@@ -76,9 +83,9 @@ export default function RadioSidebar() {
     if (!audioRef.current) {
       const a = new Audio();
       a.preload = "none";
-      a.addEventListener("playing", () => { setPlaying(true); setError(false); });
+      a.addEventListener("playing", () => { setPlaying(true); setError(false); skipCountRef.current = 0; });
       a.addEventListener("pause", () => setPlaying(false));
-      a.addEventListener("error", () => { setError(true); setPlaying(false); });
+      a.addEventListener("error", () => onErrorRef.current());
       audioRef.current = a;
     }
     return audioRef.current;
@@ -90,7 +97,8 @@ export default function RadioSidebar() {
   function destroyDash() {
     if (dashRef.current) { try { dashRef.current.destroy(); } catch {} dashRef.current = null; }
   }
-  function play(s: Station, q?: Station[]) {
+  function play(s: Station, q?: Station[], auto = false) {
+    autoSkipRef.current = auto;
     const a = ensureAudio();
     setCurrent(s); setError(false);
     if (q && q.length) setQueue(q);
@@ -114,11 +122,11 @@ export default function RadioSidebar() {
     try { localStorage.setItem(LAST_SRC_KEY, src); } catch {};
     setView(src === "favs" ? "favs" : "index"); // a genre/all selection drives the Index list
     const list = src === "all" ? SORTED : src === "favs" ? SORTED.filter((s) => favs.includes(s.name)) : SORTED.filter((s) => s.genre === src);
-    if (list.length) play(list[Math.floor(Math.random() * list.length)], list);
+    if (list.length) play(list[Math.floor(Math.random() * list.length)], list, true);
   }
   function toggleShuffle() {
     const n = !shuffleOn; setShuffleOn(n);
-    if (n) { const list = queue.length ? queue : SORTED; if (list.length) play(list[Math.floor(Math.random() * list.length)], list); }
+    if (n) { const list = queue.length ? queue : SORTED; if (list.length) play(list[Math.floor(Math.random() * list.length)], list, true); }
   }
   // Switching Index/Favourites also sets the playback context the transport walks.
   function chooseView(v: "index" | "favs") {
@@ -128,11 +136,11 @@ export default function RadioSidebar() {
   }
   function step(dir: 1 | -1) {
     const list = queue.length ? queue : SORTED;
-    if (shuffleOn) { play(list[Math.floor(Math.random() * list.length)], list); return; }
-    if (!current) { play(list[0], list); return; }
+    if (shuffleOn) { play(list[Math.floor(Math.random() * list.length)], list, true); return; }
+    if (!current) { play(list[0], list, true); return; }
     let i = list.findIndex((s) => s.name === current.name);
     i = i < 0 ? 0 : (i + dir + list.length) % list.length;
-    play(list[i], list);
+    play(list[i], list, true);
   }
   function togglePlay() {
     const a = audioRef.current;
@@ -141,6 +149,19 @@ export default function RadioSidebar() {
     if (a.paused) a.play().catch(() => setError(true)); else a.pause();
   }
   const toggleFav = (name: string) => setFavs((f) => (f.includes(name) ? f.filter((x) => x !== name) : [...f, name]));
+
+  // Stream-error handler (kept fresh so the once-bound <audio> listener calls current logic).
+  // Auto-advance past dead/geo-blocked/rate-limited streams when browsing; only surface
+  // "unavailable" for an explicit pick or after too many consecutive failures.
+  onErrorRef.current = () => {
+    if (autoSkipRef.current && skipCountRef.current < 8) {
+      skipCountRef.current++;
+      step(1); // walks the queue (random when shuffle is on); keeps the auto-skip flag set
+    } else {
+      skipCountRef.current = 0;
+      setError(true); setPlaying(false);
+    }
+  };
 
   // Media keys via the Media Session API (kept fresh via a ref).
   const fns = useRef({ togglePlay, step, pause: () => audioRef.current?.pause() });
@@ -401,8 +422,10 @@ export default function RadioSidebar() {
         {/* station info — below the controls; swipe L/R here to step through genres */}
         <SwipeView pageKey={current?.name ?? "none"} dir={genreSlideDir} hasPrev hasNext
           onPrev={() => stepGenre(-1)} onNext={() => stepGenre(1)} className="shrink-0">
-        <div className="px-3 py-3.5 flex items-center gap-2" style={{ borderBottom: "1px solid var(--border)" }}>
-          <span aria-hidden className="shrink-0" style={{ color: "var(--muted)", opacity: 0.4 }}><Icon name="chevL" size={18} /></span>
+        <div className="px-2 py-3.5 flex items-center gap-1" style={{ borderBottom: "1px solid var(--border)" }}>
+          <button onClick={() => stepGenre(-1)} title="Previous genre" aria-label="Previous genre"
+            className="shrink-0 w-9 h-9 grid place-items-center rounded-lg active:bg-[var(--panel-2)]"
+            style={{ color: "var(--muted)" }}><Icon name="chevL" size={22} /></button>
           <div className="flex items-start gap-3 flex-1 min-w-0">
             <div className="min-w-0 flex-1">
               <div className="text-base font-medium leading-snug truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>
@@ -432,7 +455,9 @@ export default function RadioSidebar() {
               </button>
             )}
           </div>
-          <span aria-hidden className="shrink-0" style={{ color: "var(--muted)", opacity: 0.4 }}><Icon name="chevR" size={18} /></span>
+          <button onClick={() => stepGenre(1)} title="Next genre" aria-label="Next genre"
+            className="shrink-0 w-9 h-9 grid place-items-center rounded-lg active:bg-[var(--panel-2)]"
+            style={{ color: "var(--muted)" }}><Icon name="chevR" size={22} /></button>
         </div>
         </SwipeView>
 

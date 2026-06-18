@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { SwipeView, centerActivePill } from "@/components/SwipeView";
 import type { WCData, WCGroup, WCMatch, WCStanding, WCTeam, WCStats, WCNews } from "@/app/api/worldcup/route";
 
 // ─── Bracket layout constants ─────────────────────────────────────────────────
@@ -358,10 +359,14 @@ function NewsView({ news }: { news: WCNews[] }) {
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
+type WCTab = "groups" | "stats" | "news" | "fixtures" | "bracket";
+
 export default function WorldCupChart() {
   const [data, setData] = useState<WCData | null>(null);
   const [error, setError] = useState(false);
-  const [tab, setTab] = useState<"groups" | "news" | "fixtures" | "bracket">("groups");
+  const [tab, setTab] = useState<WCTab>("groups");
+  const [slideDir, setSlideDir] = useState(1);
+  const pillsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -389,26 +394,36 @@ export default function WorldCupChart() {
     return () => clearInterval(t);
   }, [data?.hasLive]);
 
-  const TABS: { id: "groups" | "news" | "fixtures" | "bracket"; label: string }[] = [
+  const TABS: { id: WCTab; label: string }[] = [
     { id: "groups", label: "Group Stage" },
+    { id: "stats", label: "Stats" },
     { id: "news", label: "News" },
     { id: "fixtures", label: "Fixtures" },
     { id: "bracket", label: "Bracket" },
   ];
+  const tabIdx = TABS.findIndex((t) => t.id === tab);
+
+  // Switch tab with a directional slide (whether swiped or tapped).
+  const goToTab = (id: WCTab) => {
+    setSlideDir(TABS.findIndex((t) => t.id === id) >= tabIdx ? 1 : -1);
+    setTab(id);
+  };
+  // Keep the active tab pill scrolled into view as you swipe/tap through tabs.
+  useEffect(() => {
+    centerActivePill(pillsRef.current, (el) => el.dataset.wcTab === tab);
+  }, [tab]);
 
   return (
     <div>
-      {data && <StatsTiles stats={data.stats} />}
-
-      {/* Tab bar + status */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+      {/* Tab bar + status — Stats now lives in its own pill, not as an always-on header */}
+      <div ref={pillsRef} style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", overflowX: "auto" }} className="no-scrollbar">
         {TABS.map((t) => (
-          <button key={t.id} className="chip" onClick={() => setTab(t.id)}
+          <button key={t.id} data-wc-tab={t.id} className="chip shrink-0 whitespace-nowrap" onClick={() => goToTab(t.id)}
             style={tab === t.id ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>
             {t.label}
           </button>
         ))}
-        <span style={{ marginLeft: "auto", fontSize: "0.72rem", color: "var(--muted)" }}>
+        <span style={{ marginLeft: "auto", fontSize: "0.72rem", color: "var(--muted)", whiteSpace: "nowrap" }} className="shrink-0 pl-2">
           {data?.hasLive && <span style={{ color: "var(--accent)" }}>● Live · </span>}
           {data && <>Updated {new Date(data.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</>}
         </span>
@@ -417,10 +432,22 @@ export default function WorldCupChart() {
       {error && <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>World Cup data unavailable right now.</div>}
       {!data && !error && <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>Loading…</div>}
 
-      {data && tab === "groups" && <GroupsView groups={data.groups} />}
-      {data && tab === "news" && <NewsView news={data.news} />}
-      {data && tab === "fixtures" && <FixturesView fixtures={data.fixtures} />}
-      {data && tab === "bracket" && <BracketView knockout={data.knockout} thirdPlace={data.thirdPlace} />}
+      {data && (
+        <SwipeView
+          pageKey={tab}
+          dir={slideDir}
+          hasPrev={tabIdx > 0}
+          hasNext={tabIdx < TABS.length - 1}
+          onPrev={() => { if (tabIdx > 0) goToTab(TABS[tabIdx - 1].id); }}
+          onNext={() => { if (tabIdx < TABS.length - 1) goToTab(TABS[tabIdx + 1].id); }}
+        >
+          {tab === "groups" && <GroupsView groups={data.groups} />}
+          {tab === "stats" && <StatsTiles stats={data.stats} />}
+          {tab === "news" && <NewsView news={data.news} />}
+          {tab === "fixtures" && <FixturesView fixtures={data.fixtures} />}
+          {tab === "bracket" && <BracketView knockout={data.knockout} thirdPlace={data.thirdPlace} />}
+        </SwipeView>
+      )}
     </div>
   );
 }

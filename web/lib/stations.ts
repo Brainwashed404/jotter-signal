@@ -25,13 +25,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://en.wikipedia.org/wiki/Al_Green"
   },
   {
-    "name": "All Underground Hip Hop Radio",
-    "url": "https://n10.radiojar.com/c1912tk5rtzuv",
-    "genre": "HIP HOP + RNB",
-    "desc": "Tru Underground Hip Hop from the 90s to the Present",
-    "sourceUrl": "https://musizman46.wixsite.com/allundergroundhiphop"
-  },
-  {
     "name": "Aretha Franklin Radio",
     "url": "https://streaming.exclusive.radio/er/arethafranklin/icecast.audio",
     "genre": "LEGENDS",

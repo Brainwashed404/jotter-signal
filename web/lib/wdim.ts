@@ -332,6 +332,15 @@ function parseBriefingFromJson(raw: string): WdimBriefing | null {
   } catch { return null; }
 }
 
+// Sources removed from the studio that must NEVER be attributed in a briefing — even when a
+// curated expert quotes or links them, the model otherwise lifts the name out of the source
+// text and resurrects them as a voice. Matched (substring, case-insensitive) on the `source`.
+const BLOCKED_SOURCES = ["benedict evans", "ben evans", "ben-evans", "benedictevans"];
+function isBlockedSource(src?: string): boolean {
+  const s = (src || "").toLowerCase();
+  return BLOCKED_SOURCES.some((b) => s.includes(b));
+}
+
 function normaliseBriefing(o: {
   macro_indicator?: string;
   developments?: { headline?: string; summary?: string; url?: string; source?: string }[];
@@ -345,6 +354,7 @@ function normaliseBriefing(o: {
     developments: (o.developments)
       .filter((d) => {
         if (!d.headline || !d.summary) return false;
+        if (isBlockedSource(d.source)) return false;
         const src = (d.source || "").toLowerCase().trim();
         if (src && seenSources.has(src)) return false;
         if (src) seenSources.add(src);
@@ -357,7 +367,7 @@ function normaliseBriefing(o: {
         ...(d.url ? { url: String(d.url).trim() } : {}),
       })),
     expertPerspectives: (o.expert_perspectives)
-      .filter((p) => p.thesis && p.source)
+      .filter((p) => p.thesis && p.source && !isBlockedSource(p.source))
       .slice(0, 4)
       .map((p) => ({
         thesis: clean(p.thesis),
