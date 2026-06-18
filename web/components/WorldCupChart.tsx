@@ -315,12 +315,14 @@ function FixtureRow({ m, first }: { m: WCMatch; first?: boolean }) {
 }
 
 function FixturesView({ fixtures }: { fixtures: WCMatch[] }) {
-  if (!fixtures.length) {
-    return <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>No fixtures in the current window.</div>;
+  // Only upcoming (and currently-live) matches — drop games that have already finished.
+  const upcoming = fixtures.filter((m) => m.status !== "post");
+  if (!upcoming.length) {
+    return <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>No upcoming fixtures.</div>;
   }
   // Group by calendar day, keeping chronological order.
   const byDay = new Map<string, WCMatch[]>();
-  for (const m of fixtures) {
+  for (const m of upcoming) {
     const day = (m.date || "").slice(0, 10) || "tbc";
     if (!byDay.has(day)) byDay.set(day, []);
     byDay.get(day)!.push(m);
