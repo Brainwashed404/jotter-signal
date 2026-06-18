@@ -610,115 +610,115 @@
   "blurb": "Author and activist; writes Pluralistic on monopoly, platform power and 'enshittification' (a term he coined).",
   "url": "https://pluralistic.net",
   "totals": {
-   "posts": 31,
-   "signals": 93,
+   "posts": 32,
+   "signals": 96,
    "date_min": "2026-05-02",
-   "date_max": "2026-06-17"
+   "date_max": "2026-06-18"
   },
   "signal_types": {
-   "article": 93
+   "article": 96
   },
   "signal_kinds": {
+   "longread": 27,
+   "links": 62,
    "article": 6,
-   "links": 60,
-   "longread": 26,
    "quote": 1
   },
   "themes": [
    {
     "theme": "Platform power / Big Tech",
-    "current": 96.8,
+    "current": 96.9,
     "delta": 0.0,
     "series": {
-     "2026": 96.8
+     "2026": 96.9
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 77.4,
+    "current": 78.1,
     "delta": 0.0,
     "series": {
-     "2026": 77.4
+     "2026": 78.1
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 74.2,
+    "current": 75.0,
     "delta": 0.0,
     "series": {
-     "2026": 74.2
+     "2026": 75.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 71.0,
+    "current": 71.9,
     "delta": 0.0,
     "series": {
-     "2026": 71.0
+     "2026": 71.9
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 71.0,
+    "current": 71.9,
     "delta": 0.0,
     "series": {
-     "2026": 71.0
+     "2026": 71.9
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 61.3,
+    "current": 59.4,
     "delta": 0.0,
     "series": {
-     "2026": 61.3
+     "2026": 59.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 51.6,
+    "current": 50.0,
     "delta": 0.0,
     "series": {
-     "2026": 51.6
+     "2026": 50.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 51.6,
+    "current": 50.0,
     "delta": 0.0,
     "series": {
-     "2026": 51.6
+     "2026": 50.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 41.9,
+    "current": 43.8,
     "delta": 0.0,
     "series": {
-     "2026": 41.9
+     "2026": 43.8
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 38.7,
+    "current": 37.5,
     "delta": 0.0,
     "series": {
-     "2026": 38.7
+     "2026": 37.5
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 29.0,
+    "current": 28.1,
     "delta": 0.0,
     "series": {
-     "2026": 29.0
+     "2026": 28.1
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 9.7,
+    "current": 12.5,
     "delta": 0.0,
     "series": {
-     "2026": 9.7
+     "2026": 12.5
     }
    }
   ],
@@ -728,11 +728,11 @@
   "top_sources_recent": [
    {
     "domain": "web.archive.org",
-    "n": 139
+    "n": 144
    },
    {
     "domain": "pluralistic.net",
-    "n": 93
+    "n": 100
    },
    {
     "domain": "memex.craphound.com",
@@ -747,6 +747,10 @@
     "n": 10
    },
    {
+    "domain": "theverge.com",
+    "n": 8
+   },
+   {
     "domain": "eff.org",
     "n": 8
    },
@@ -759,12 +763,16 @@
     "n": 7
    },
    {
-    "domain": "theverge.com",
-    "n": 7
-   },
-   {
     "domain": "news.bbc.co.uk",
     "n": 6
+   },
+   {
+    "domain": "flickr.com",
+    "n": 5
+   },
+   {
+    "domain": "jacobin.com",
+    "n": 4
    },
    {
     "domain": "us.macmillan.com",
@@ -776,10 +784,6 @@
    },
    {
     "domain": "prospect.org",
-    "n": 4
-   },
-   {
-    "domain": "flickr.com",
     "n": 4
    },
    {
@@ -800,21 +804,17 @@
    },
    {
     "domain": "loweringthebar.net",
-    "n": 3
-   },
-   {
-    "domain": "penguinrandomhouse.com",
     "n": 3
    }
   ],
   "top_sources_early": [
    {
     "domain": "web.archive.org",
-    "n": 139
+    "n": 144
    },
    {
     "domain": "pluralistic.net",
-    "n": 93
+    "n": 100
    },
    {
     "domain": "memex.craphound.com",
@@ -829,6 +829,10 @@
     "n": 10
    },
    {
+    "domain": "theverge.com",
+    "n": 8
+   },
+   {
     "domain": "eff.org",
     "n": 8
    },
@@ -841,12 +845,16 @@
     "n": 7
    },
    {
-    "domain": "theverge.com",
-    "n": 7
-   },
-   {
     "domain": "news.bbc.co.uk",
     "n": 6
+   },
+   {
+    "domain": "flickr.com",
+    "n": 5
+   },
+   {
+    "domain": "jacobin.com",
+    "n": 4
    },
    {
     "domain": "us.macmillan.com",
@@ -858,10 +866,6 @@
    },
    {
     "domain": "prospect.org",
-    "n": 4
-   },
-   {
-    "domain": "flickr.com",
     "n": 4
    },
    {
@@ -882,10 +886,6 @@
    },
    {
     "domain": "loweringthebar.net",
-    "n": 3
-   },
-   {
-    "domain": "penguinrandomhouse.com",
     "n": 3
    }
   ],
@@ -3813,34 +3813,34 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 93,
-   "signals": 93,
+   "posts": 97,
+   "signals": 97,
    "date_min": "2026-06-07",
    "date_max": "2026-06-18"
   },
   "signal_types": {
-   "article": 93
+   "article": 97
   },
   "signal_kinds": {
-   "links": 52,
-   "article": 40,
-   "longread": 1
+   "links": 55,
+   "longread": 2,
+   "article": 40
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 64.5,
+    "current": 64.9,
     "delta": 0.0,
     "series": {
-     "2026": 64.5
+     "2026": 64.9
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 35.5,
+    "current": 35.1,
     "delta": 0.0,
     "series": {
-     "2026": 35.5
+     "2026": 35.1
     }
    },
    {
@@ -3853,74 +3853,74 @@
    },
    {
     "theme": "Economy & markets",
-    "current": 22.6,
+    "current": 22.7,
     "delta": 0.0,
     "series": {
-     "2026": 22.6
+     "2026": 22.7
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 18.3,
+    "current": 18.6,
     "delta": 0.0,
     "series": {
-     "2026": 18.3
+     "2026": 18.6
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 15.1,
+    "current": 15.5,
     "delta": 0.0,
     "series": {
-     "2026": 15.1
+     "2026": 15.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 12.9,
+    "current": 13.4,
     "delta": 0.0,
     "series": {
-     "2026": 12.9
+     "2026": 13.4
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 12.9,
+    "current": 12.4,
     "delta": 0.0,
     "series": {
-     "2026": 12.9
+     "2026": 12.4
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 9.7,
+    "current": 9.3,
     "delta": 0.0,
     "series": {
-     "2026": 9.7
+     "2026": 9.3
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 5.4,
+    "current": 5.2,
     "delta": 0.0,
     "series": {
-     "2026": 5.4
-    }
-   },
-   {
-    "theme": "Crypto / web3",
-    "current": 3.2,
-    "delta": 0.0,
-    "series": {
-     "2026": 3.2
+     "2026": 5.2
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 1.1,
+    "current": 3.1,
     "delta": 0.0,
     "series": {
-     "2026": 1.1
+     "2026": 3.1
+    }
+   },
+   {
+    "theme": "Crypto / web3",
+    "current": 3.1,
+    "delta": 0.0,
+    "series": {
+     "2026": 3.1
     }
    }
   ],
@@ -3930,7 +3930,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 313
+    "n": 326
    },
    {
     "domain": "x.com",
@@ -3938,7 +3938,7 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 25
+    "n": 26
    },
    {
     "domain": "theguardian.com",
@@ -3957,16 +3957,28 @@
     "n": 11
    },
    {
-    "domain": "t.co",
-    "n": 8
+    "domain": "wsj.com",
+    "n": 9
    },
    {
-    "domain": "wsj.com",
+    "domain": "t.co",
     "n": 8
    },
    {
     "domain": "bbc.com",
     "n": 7
+   },
+   {
+    "domain": "bloomberg.com",
+    "n": 6
+   },
+   {
+    "domain": "reddit.com",
+    "n": 6
+   },
+   {
+    "domain": "scp-wiki.wikidot.com",
+    "n": 6
    },
    {
     "domain": "finance.yahoo.com",
@@ -3981,11 +3993,7 @@
     "n": 5
    },
    {
-    "domain": "bloomberg.com",
-    "n": 4
-   },
-   {
-    "domain": "reddit.com",
+    "domain": "techcrunch.com",
     "n": 4
    },
    {
@@ -3999,20 +4007,12 @@
    {
     "domain": "scientificamerican.com",
     "n": 4
-   },
-   {
-    "domain": "newscientist.com",
-    "n": 4
-   },
-   {
-    "domain": "espn.com",
-    "n": 3
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 313
+    "n": 326
    },
    {
     "domain": "x.com",
@@ -4020,7 +4020,7 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 25
+    "n": 26
    },
    {
     "domain": "theguardian.com",
@@ -4039,16 +4039,28 @@
     "n": 11
    },
    {
-    "domain": "t.co",
-    "n": 8
+    "domain": "wsj.com",
+    "n": 9
    },
    {
-    "domain": "wsj.com",
+    "domain": "t.co",
     "n": 8
    },
    {
     "domain": "bbc.com",
     "n": 7
+   },
+   {
+    "domain": "bloomberg.com",
+    "n": 6
+   },
+   {
+    "domain": "reddit.com",
+    "n": 6
+   },
+   {
+    "domain": "scp-wiki.wikidot.com",
+    "n": 6
    },
    {
     "domain": "finance.yahoo.com",
@@ -4063,11 +4075,7 @@
     "n": 5
    },
    {
-    "domain": "bloomberg.com",
-    "n": 4
-   },
-   {
-    "domain": "reddit.com",
+    "domain": "techcrunch.com",
     "n": 4
    },
    {
@@ -4081,14 +4089,6 @@
    {
     "domain": "scientificamerican.com",
     "n": 4
-   },
-   {
-    "domain": "newscientist.com",
-    "n": 4
-   },
-   {
-    "domain": "espn.com",
-    "n": 3
    }
   ],
   "category": "publication"
