@@ -61,8 +61,13 @@ function download(src, dest) {
   // fall back to B2 if a healthy committed file is absent.
   const sigPath = path.join(DATA_DIR, "signals.jsonl.gz");
   const expPath = path.join(DATA_DIR, "experts.json");
+  // Health floor must sit BELOW the real committed size or the build silently falls back to
+  // stale B2 data. The 200-post recency cap dropped the committed gz from ~26 MB to ~2.3 MB,
+  // which slipped under the old 5 MB floor — so every deploy was downloading stale B2 data
+  // (old 26k build, removed sources like Benedict Evans resurfacing). 1 MB cleanly passes a
+  // healthy capped build (~2.3 MB) while still rejecting a broken/empty gz (<100 KB).
   const committedOk =
-    fs.existsSync(sigPath) && fs.statSync(sigPath).size > 5 * 1024 * 1024 && fs.existsSync(expPath);
+    fs.existsSync(sigPath) && fs.statSync(sigPath).size > 1 * 1024 * 1024 && fs.existsSync(expPath);
   if (committedOk) {
     const mb = (fs.statSync(sigPath).size / 1024 / 1024).toFixed(1);
     console.log(`[fetch-data] Using committed data (authoritative, ${mb} MB) — skipping remote download`);

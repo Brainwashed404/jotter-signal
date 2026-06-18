@@ -18,20 +18,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://funky.radio/discofunk_modernsoul_boogie/"
   },
   {
-    "name": "Al Green Radio",
-    "url": "https://streaming.exclusive.radio/er/algreen/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Al Green All The Time",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Al_Green"
-  },
-  {
-    "name": "Aretha Franklin Radio",
-    "url": "https://streaming.exclusive.radio/er/arethafranklin/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Aretha Franklin All The Time",
-    "sourceUrl": "https://www.arethafranklin.net/"
-  },
-  {
     "name": "B4B Radio Disco Funk",
     "url": "https://eu10.fastcast4u.com:8120/;",
     "genre": "DISCO + FUNK",
@@ -60,90 +46,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.bassdrive.com/"
   },
   {
-    "name": "Beach Boys Radio",
-    "url": "https://streaming.exclusive.radio/er/beachboys/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Beach Boys All The Time",
-    "sourceUrl": "https://thebeachboys.com/"
-  },
-  {
-    "name": "Beastie Boys Radio",
-    "url": "https://streaming.exclusive.radio/er/beastieboys/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Beastie Boys All The Time",
-    "sourceUrl": "https://beastieboys.com/"
-  },
-  {
-    "name": "Beethoven Radio",
-    "url": "https://beethoven-one.stream.laut.fm/beethoven-one",
-    "genre": "LEGENDS",
-    "desc": "All Beethoven All The Time",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Ludwig_van_Beethoven"
-  },
-  {
-    "name": "Bill Evans Radio",
-    "url": "https://nl4.mystreaming.net/uber/jjrbillevans/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Bill Evans All the Time",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Bill_Evans"
-  },
-  {
-    "name": "Bill Withers Radio",
-    "url": "https://streaming.exclusive.radio/er/billwithers/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Bill Withers All The Time",
-    "sourceUrl": "https://billwithers.com/"
-  },
-  {
-    "name": "Black Sabbath Radio",
-    "url": "https://streaming.exclusive.radio/er/blacksabbath/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Black Sabbath All The Time",
-    "sourceUrl": "https://www.blacksabbath.com/"
-  },
-  {
-    "name": "Black Uhuru Radio",
-    "url": "https://streaming.exclusive.radio/er/blackuhuru/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Black Uhuru All The Time",
-    "sourceUrl": "https://blackuhuruofficial.com/"
-  },
-  {
-    "name": "Blur Radio",
-    "url": "https://streaming.exclusive.radio/er/blur/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Blur All The Time",
-    "sourceUrl": "https://www.blur.co.uk/"
-  },
-  {
-    "name": "Bo Diddley Radio",
-    "url": "https://streaming.exclusive.radio/er/bodiddley/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Bo Diddley All The Time",
-    "sourceUrl": "https://www.bodiddley.com/"
-  },
-  {
-    "name": "Bob Dylan Radio",
-    "url": "https://streaming.exclusive.radio/er/bobdylan/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Bob Dylan All The Time",
-    "sourceUrl": "https://www.bobdylan.com/"
-  },
-  {
-    "name": "Bob Marley Radio",
-    "url": "https://streaming.exclusive.radio/er/bobmarley/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Bob Marley All The Time",
-    "sourceUrl": "https://www.bobmarley.com/"
-  },
-  {
-    "name": "Booker T & The MG's Radio",
-    "url": "https://3.mystreaming.net/er/bookert/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Booker T & The MG's All The Time",
-    "sourceUrl": "https://bookert.com/"
-  },
-  {
     "name": "Boss Radio 66",
     "url": "https://stream.rcast.net/261426",
     "genre": "SOUL + OLDIES",
@@ -151,25 +53,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.bossradio66.com/"
   },
   {
-    "name": "Brahms Radio",
-    "url": "https://streams.calmradio.com:7128/stream",
-    "genre": "LEGENDS",
-    "desc": "All Brahms All The Time",
-    "sourceUrl": "https://www.brahms-institut.de/"
-  },
-  {
     "name": "BROKEN BEATS",
     "url": "https://brokenbeats.net/stream/aac",
     "genre": "DNB + JUNGLE + RAVE",
     "desc": "Atmospheric drum n bass web radio since 2016",
     "sourceUrl": "https://brokenbeats.net/"
-  },
-  {
-    "name": "Burning Spear Radio",
-    "url": "https://streaming.exclusive.radio/er/burningspear/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Burning Spear All The Time",
-    "sourceUrl": "https://www.burningspearwebsite.com/"
   },
   {
     "name": "Café del Mar Calm",
@@ -193,53 +81,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://cafedelmar.com/radio"
   },
   {
-    "name": "Carly Simon Radio",
-    "url": "https://streaming.exclusive.radio/er/carlysimon/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Carly Simon All The Time",
-    "sourceUrl": "https://www.carlysimon.com/"
-  },
-  {
-    "name": "Carole King Radio",
-    "url": "https://streaming.exclusive.radio/er/caroleking/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Carole King All The Time",
-    "sourceUrl": "https://www.caroleking.com/"
-  },
-  {
-    "name": "Carpenters Radio",
-    "url": "https://streaming.exclusive.radio/er/carpenters/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Carpenters All The Time",
-    "sourceUrl": "https://www.carpentersofficial.com/"
-  },
-  {
     "name": "Cashmere Radio",
     "url": "https://cashmereradio.out.airtime.pro:8000/cashmereradio_b",
     "genre": "ECLECTIC ELECTRIC",
     "desc": "Berlin-based not-for-profit community station",
     "sourceUrl": "https://cashmereradio.com"
-  },
-  {
-    "name": "Charlie Parker Radio",
-    "url": "https://streaming.exclusive.radio/er/charlieparker/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Charlie Parker All The Time",
-    "sourceUrl": "https://charlieparkermusic.com/"
-  },
-  {
-    "name": "Chic Radio",
-    "url": "https://streaming.exclusive.radio/er/chic/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Chic All The Time",
-    "sourceUrl": "https://www.nilerodgers.com/"
-  },
-  {
-    "name": "Chuck Berry Radio",
-    "url": "https://streaming.exclusive.radio/er/chuckberry/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Chuck Berry All The Time",
-    "sourceUrl": "https://www.chuckberry.com/"
   },
   {
     "name": "Concertzender Baroque",
@@ -263,34 +109,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://cosmicfuzzfm.com/"
   },
   {
-    "name": "Count Basie Radio",
-    "url": "https://nl4.mystreaming.net/uber/jjrcountbasie/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Count Basie All The Time",
-    "sourceUrl": "https://thebasie.org/"
-  },
-  {
-    "name": "Cream Radio",
-    "url": "https://streaming.exclusive.radio/er/cream/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Cream All The Time",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Cream_(band)"
-  },
-  {
-    "name": "Creedence Clearwater Revival Radio",
-    "url": "https://nl4.mystreaming.net/er/creedence/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All CCR All The Time",
-    "sourceUrl": "https://ccr.concord.com/"
-  },
-  {
-    "name": "Crosby Stills Nash & Young Radio",
-    "url": "https://nl4.mystreaming.net/er/csny/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All CSNY All The Time",
-    "sourceUrl": "https://www.crosbystillsnash.com/"
-  },
-  {
     "name": "Cybernetic Broadcasting System",
     "url": "https://radio.intergalactic.fm/1A",
     "genre": "ECLECTIC ELECTRIC",
@@ -298,53 +116,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.intergalactic.fm/channels/cybernetic-broadcasting-system"
   },
   {
-    "name": "Daft Punk Radio",
-    "url": "https://streaming.exclusive.radio/er/daftpunk/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Daft Punk All The Time",
-    "sourceUrl": "https://daftpunk.com/"
-  },
-  {
     "name": "Dance Groove Radio",
     "url": "https://s13.streamingcloud.online/stream/dancegrooveradio",
     "genre": "DISCO + FUNK",
     "desc": "The Internet's #1 80s Funk Soul & Boogie Station",
     "sourceUrl": "https://dancegrooveradio.com/"
-  },
-  {
-    "name": "Dave Brubeck Radio",
-    "url": "https://streaming.exclusive.radio/er/davebrubeck/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Dave Brubeck All The Time",
-    "sourceUrl": "https://davebrubeck.com/"
-  },
-  {
-    "name": "David Bowie Radio",
-    "url": "https://streaming.exclusive.radio/er/davidbowie/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All David Bowie All The Time",
-    "sourceUrl": "https://www.davidbowie.com/"
-  },
-  {
-    "name": "Debussy Radio",
-    "url": "https://streams.calmradio.com:10228/;",
-    "genre": "LEGENDS",
-    "desc": "All Debussy All The Time",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Claude_Debussy"
-  },
-  {
-    "name": "Depeche Mode Radio",
-    "url": "https://streaming.exclusive.radio/er/depechemode/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Depeche Mode All The Time",
-    "sourceUrl": "https://www.depechemode.com/"
-  },
-  {
-    "name": "Diana Ross Radio",
-    "url": "https://streaming.exclusive.radio/er/dianaross/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Diana Ross All The Time",
-    "sourceUrl": "https://www.dianaross.com/"
   },
   {
     "name": "Dilema Radio",
@@ -382,13 +158,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.dinamo.fm/content/4/channels/"
   },
   {
-    "name": "Dire Straits Radio",
-    "url": "https://streaming.exclusive.radio/er/direstraits/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Dire Straits All The Time",
-    "sourceUrl": "https://www.direstraits.com/"
-  },
-  {
     "name": "Disco Fetish",
     "url": "https://radio.intergalactic.fm/2A",
     "genre": "DISCO + FUNK",
@@ -424,25 +193,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://doyou.world/"
   },
   {
-    "name": "Dolly Parton Radio",
-    "url": "https://streaming.exclusive.radio/er/dollyparton/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Dolly Parton All The Time",
-    "sourceUrl": "https://dollyparton.com/"
-  },
-  {
     "name": "Dr Dick's Dub Shack",
     "url": "https://streamer.radio.co/s0635c8b0d/listen",
     "genre": "DUB + REGGAE",
     "desc": "Bermuda-based broadcast playing all species of dub",
     "sourceUrl": "https://drdicksdubshack.com/"
-  },
-  {
-    "name": "Dr. Dre Radio",
-    "url": "https://streaming.exclusive.radio/er/drdre/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Dr. Dre All The Time",
-    "sourceUrl": "https://www.drdre.com/"
   },
   {
     "name": "Dublab",
@@ -459,74 +214,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.dubsideradio.com/"
   },
   {
-    "name": "Duke Ellington Radio",
-    "url": "https://streaming.exclusive.radio/er/dukeellington/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Duke Ellington All The Time",
-    "sourceUrl": "https://www.dukeellington.com/"
-  },
-  {
-    "name": "Eagles Radio",
-    "url": "https://streaming.exclusive.radio/er/eagles/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Eagles All The Time",
-    "sourceUrl": "https://eagles.com/"
-  },
-  {
-    "name": "Earth Wind & Fire Radio",
-    "url": "https://nl4.mystreaming.net/er/earthwindandfire/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Earth Wind & Fire All The Time",
-    "sourceUrl": "https://www.earthwindandfire.com/"
-  },
-  {
     "name": "EHFM",
     "url": "https://ehfm.out.airtime.pro:8000/ehfm_a",
     "genre": "ECLECTIC ELECTRIC",
     "desc": "Community radio showcasing the sounds of Scotland's capital",
     "sourceUrl": "https://ehfm.live"
-  },
-  {
-    "name": "Electric Light Orchestra Radio",
-    "url": "https://streaming.exclusive.radio/er/elo/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All ELO All The Time",
-    "sourceUrl": "https://jefflynneselo.com/"
-  },
-  {
-    "name": "Elton John Radio",
-    "url": "https://streaming.exclusive.radio/er/eltonjohn/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Elton John All The Time",
-    "sourceUrl": "https://www.eltonjohn.com/"
-  },
-  {
-    "name": "Elvis Presley Radio",
-    "url": "https://streaming.exclusive.radio/er/elvispresley/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Elvis Presley All The Time",
-    "sourceUrl": "https://www.elvisthemusic.com/"
-  },
-  {
-    "name": "Eric Clapton Radio",
-    "url": "https://streaming.exclusive.radio/er/ericclapton/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Eric Clapton All The Time",
-    "sourceUrl": "https://ericclapton.com/"
-  },
-  {
-    "name": "Fleetwood Mac Radio",
-    "url": "https://streaming.exclusive.radio/er/fleetwoodmac/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Fleetwood Mac All The Time",
-    "sourceUrl": "https://www.fleetwoodmacofficial.com/"
-  },
-  {
-    "name": "Frank Sinatra Radio",
-    "url": "https://streaming.exclusive.radio/er/franksinatra/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Frank Sinatra All The Time",
-    "sourceUrl": "https://www.sinatra.com/"
   },
   {
     "name": "Freeq Radio",
@@ -543,53 +235,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://funky.radio/"
   },
   {
-    "name": "Genesis Radio",
-    "url": "https://streaming.exclusive.radio/er/genesis/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Genesis All The Time",
-    "sourceUrl": "https://www.genesis-music.com/"
-  },
-  {
-    "name": "George Benson Radio",
-    "url": "https://streaming.exclusive.radio/er/georgebenson/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All George Benson All The Time",
-    "sourceUrl": "https://www.georgebenson.com/"
-  },
-  {
-    "name": "George Michael Radio",
-    "url": "https://streaming.exclusive.radio/er/georgemichael/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All George Michael All The Time",
-    "sourceUrl": "https://www.georgemichael.com/"
-  },
-  {
-    "name": "Glenn Miller Radio",
-    "url": "https://streaming.exclusive.radio/er/glennmiller/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Glenn Miller All The Time",
-    "sourceUrl": "https://glennmillerorchestra.com/"
-  },
-  {
     "name": "Global Funk Radio",
     "url": "https://securestreams2.autopo.st:1148/stream",
     "genre": "DISCO + FUNK",
     "desc": "Electro Breaks Hip Hop Disco DnB Miami Bass and more",
     "sourceUrl": "https://www.globalfunkradio.com/"
-  },
-  {
-    "name": "Grateful Dead Radio",
-    "url": "https://streaming.exclusive.radio/er/gratefuldead/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Grateful Dead All The Time",
-    "sourceUrl": "https://www.dead.net/"
-  },
-  {
-    "name": "Green Day Radio",
-    "url": "https://streaming.exclusive.radio/er/greenday/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Green Day All The Time",
-    "sourceUrl": "https://greenday.com/"
   },
   {
     "name": "Groovy Reflections Radio",
@@ -599,32 +249,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.groovyreflectionsradio.com/"
   },
   {
-    "name": "Guns N' Roses Radio",
-    "url": "https://streaming.exclusive.radio/er/gunsnroses/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Guns N' Roses All The Time",
-    "sourceUrl": "https://www.gunsnroses.com/"
-  },
-  {
-    "name": "Hank Williams Radio",
-    "url": "https://streaming.exclusive.radio/er/hankwilliams/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Hank Williams All The Time",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Hank_Williams"
-  },
-  {
     "name": "Heady.FM",
     "url": "https://c22.radioboss.fm:18364/stream",
     "genre": "ECLECTIC ELECTRIC",
     "desc": "Transmissions from beyond",
     "sourceUrl": "https://heady.fm"
-  },
-  {
-    "name": "Herbie Hancock Radio",
-    "url": "https://streaming.exclusive.radio/er/herbiehancock/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Herbie Hancock All The Time",
-    "sourceUrl": "https://www.herbiehancock.com/"
   },
   {
     "name": "Illsoundvibe",
@@ -641,104 +270,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.itchradio.com/"
   },
   {
-    "name": "Jack Johnson Radio",
-    "url": "https://streaming.exclusive.radio/er/jackjohnson/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Jack Johnson All The Time",
-    "sourceUrl": "https://jackjohnsonmusic.com/"
-  },
-  {
-    "name": "James Brown Radio",
-    "url": "https://streaming.exclusive.radio/er/jamesbrown/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All James Brown All The Time",
-    "sourceUrl": "https://jamesbrown.com/"
-  },
-  {
-    "name": "James Taylor Radio",
-    "url": "https://streaming.exclusive.radio/er/jamestaylor/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All James Taylor All The Time",
-    "sourceUrl": "https://www.jamestaylor.com/"
-  },
-  {
-    "name": "Janet Jackson Radio",
-    "url": "https://streaming.exclusive.radio/er/janetjackson/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Janet Jackson All The Time",
-    "sourceUrl": "https://www.janetjackson.com/"
-  },
-  {
-    "name": "Jefferson Airplane Radio",
-    "url": "https://streaming.exclusive.radio/er/jeffersonairplane/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Jefferson Airplane All The Time",
-    "sourceUrl": "https://www.jeffersonairplane.com/"
-  },
-  {
-    "name": "Jerry Lee Lewis Radio",
-    "url": "https://streaming.exclusive.radio/er/jerryleelewis/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Jerry Lee Lewis All The Time",
-    "sourceUrl": "https://jerryleelewis.com/"
-  },
-  {
-    "name": "Jimi Hendrix Radio",
-    "url": "https://nl4.mystreaming.net/er/hendrix/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Jimi All The Time",
-    "sourceUrl": "https://www.jimihendrix.com/"
-  },
-  {
-    "name": "Jimmy Cliff Radio",
-    "url": "https://streaming.exclusive.radio/er/jimmycliff/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Jimmy Cliff All The Time",
-    "sourceUrl": "https://www.jimmycliff.com/"
-  },
-  {
-    "name": "Johnny Cash Radio",
-    "url": "https://streaming.exclusive.radio/er/johnnycash/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Johnny Cash All The Time",
-    "sourceUrl": "https://www.johnnycash.com/"
-  },
-  {
-    "name": "Johnny Mathis Radio",
-    "url": "https://streaming.exclusive.radio/er/johnnymathis/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Johnny Mathis All The Time",
-    "sourceUrl": "https://johnnymathis.com/"
-  },
-  {
-    "name": "Joni Mitchell Radio",
-    "url": "https://streaming.exclusive.radio/er/jonimitchell/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Joni Mitchell All The Time",
-    "sourceUrl": "https://jonimitchell.com/"
-  },
-  {
-    "name": "Kanye West Radio",
-    "url": "https://streaming.exclusive.radio/er/kanyewest/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Kanye West All The Time",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Kanye_West"
-  },
-  {
-    "name": "Kate Bush Radio",
-    "url": "https://streaming.exclusive.radio/er/katebush/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Kate Bush All The Time",
-    "sourceUrl": "https://www.katebush.com/"
-  },
-  {
-    "name": "Kendrick Lamar Radio",
-    "url": "https://streaming.exclusive.radio/er/kendricklamar/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Kendrick Lamar All The Time",
-    "sourceUrl": "https://www.oklama.com/"
-  },
-  {
     "name": "Kiosk Radio",
     "url": "https://kioskradiobxl.out.airtime.pro/kioskradiobxl_b",
     "genre": "ECLECTIC ELECTRIC",
@@ -753,13 +284,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.jazz24.org/"
   },
   {
-    "name": "Kraftwerk Radio",
-    "url": "https://streaming.exclusive.radio/er/kraftwerk/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Kraftwerk All The Time",
-    "sourceUrl": "https://kraftwerk.com/"
-  },
-  {
     "name": "KXLU",
     "url": "https://kxlu.streamguys1.com/klmu",
     "genre": "ECLECTIC ELECTRIC",
@@ -772,20 +296,6 @@ export const STATIONS: Station[] = [
     "genre": "ECLECTIC ELECTRIC",
     "desc": "Iconic movie and TV quotes and music",
     "sourceUrl": "https://radioducinema.com/"
-  },
-  {
-    "name": "Lana Del Rey Radio",
-    "url": "https://streaming.exclusive.radio/er/lanadelrey/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Lana Del Rey All The Time",
-    "sourceUrl": "https://lanadelrey.com/"
-  },
-  {
-    "name": "Led Zeppelin Radio",
-    "url": "https://streaming.exclusive.radio/er/ledzeppelin/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Led Zeppelin All The Time",
-    "sourceUrl": "https://www.ledzeppelin.com/"
   },
   {
     "name": "Loose FM",
@@ -809,55 +319,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://lyl.live"
   },
   {
-    "name": "Lynyrd Skynyrd Radio",
-    "url": "https://streaming.exclusive.radio/er/lynyrdskynyrd/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Lynyrd Skynyrd All The Time",
-    "sourceUrl": "https://lynyrdskynyrd.com/"
-  },
-  {
-    "name": "Madonna Radio",
-    "url": "https://streaming.exclusive.radio/er/madonna/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Madonna All The Time",
-    "sourceUrl": "https://www.madonna.com/"
-  },
-  {
-    "name": "Mariah Carey Radio",
-    "url": "https://streaming.exclusive.radio/er/mariahcarey/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Mariah Carey All The Time",
-    "sourceUrl": "https://mariahcarey.com/"
-  },
-  {
-    "name": "Marvin Gaye Radio",
-    "url": "https://streaming.exclusive.radio/er/marvingaye/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Marvin Gaye All The Time",
-    "sourceUrl": "https://www.marvingaye.net/"
-  },
-  {
-    "name": "Metallica Radio",
-    "url": "https://streaming.exclusive.radio/er/metallica/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Metallica All The Time",
-    "sourceUrl": "https://www.metallica.com/"
-  },
-  {
-    "name": "Michael Jackson Radio",
-    "url": "https://streaming.exclusive.radio/er/michaeljackson/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Michael Jackson All The Time",
-    "sourceUrl": "https://www.michaeljackson.com/"
-  },
-  {
-    "name": "Miles Davis Radio",
-    "url": "https://streaming.exclusive.radio/er/milesdavis/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Miles Davis All The Time",
-    "sourceUrl": "https://www.milesdavis.com/"
-  },
-  {
     "name": "Move Da House",
     "url": "https://uk7.internet-radio.com/proxy/movedahouse?mp=/;",
     "genre": "HOUSE + UKG",
@@ -872,13 +333,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.musicboxradio.co.uk/"
   },
   {
-    "name": "Nat King Cole Radio",
-    "url": "https://streaming.exclusive.radio/er/natkingcole/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Nat King Cole All The Time",
-    "sourceUrl": "https://natkingcole.com/"
-  },
-  {
     "name": "Nature Radio",
     "url": "https://ec3.yesstreaming.net:3545/stream",
     "genre": "AMBIENT + CHILLOUT",
@@ -891,20 +345,6 @@ export const STATIONS: Station[] = [
     "genre": "ECLECTIC ELECTRIC",
     "desc": "Broadcasting live from a converted shipping container atop Netil Market",
     "sourceUrl": "https://netilradio.com/"
-  },
-  {
-    "name": "New Order Radio",
-    "url": "https://streaming.exclusive.radio/er/neworder/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All New Order All The Time",
-    "sourceUrl": "https://www.neworder.com/"
-  },
-  {
-    "name": "Nirvana Radio",
-    "url": "https://streaming.exclusive.radio/er/nirvana/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Nirvana All The Time",
-    "sourceUrl": "https://www.nirvana.com/"
   },
   {
     "name": "NOODS",
@@ -1047,13 +487,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.nts.live/infinite-mixtapes/the-tube"
   },
   {
-    "name": "Oasis Radio",
-    "url": "https://streaming.exclusive.radio/er/oasis/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Oasis All The Time",
-    "sourceUrl": "https://oasisinet.com/"
-  },
-  {
     "name": "Old Skool Anthems",
     "url": "https://osa.radioca.st/autodj",
     "genre": "DNB + JUNGLE + RAVE",
@@ -1082,20 +515,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://openlab.fm/"
   },
   {
-    "name": "Otis Redding Radio",
-    "url": "https://streaming.exclusive.radio/er/otisredding/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Otis Redding All The Time",
-    "sourceUrl": "https://otisredding.com/"
-  },
-  {
-    "name": "Phil Collins Radio",
-    "url": "https://streaming.exclusive.radio/er/philcollins/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Phil Collins All The Time",
-    "sourceUrl": "https://philcollins.com/"
-  },
-  {
     "name": "Pigpen Radio",
     "url": "https://azuracast.spollin.net:8000/radio.mp3",
     "genre": "DUB + REGGAE",
@@ -1103,32 +522,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://pigpenradio.org/"
   },
   {
-    "name": "Pink Floyd Radio",
-    "url": "https://streaming.exclusive.radio/er/pinkfloyd/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Pink Floyd All The Time",
-    "sourceUrl": "https://www.pinkfloyd.com/"
-  },
-  {
-    "name": "Pixies Radio",
-    "url": "https://streaming.exclusive.radio/er/pixies/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Pixies All The Time",
-    "sourceUrl": "https://www.pixiesmusic.com/"
-  },
-  {
     "name": "Planet Pootwaddle",
     "url": "https://ppw.streamguys1.com/sgplayer-mp3",
     "genre": "ROCK + INDIE",
     "desc": "A healthy dose of classic rock",
     "sourceUrl": "https://planetpootwaddle.com/"
-  },
-  {
-    "name": "Prince Radio",
-    "url": "https://streaming.exclusive.radio/er/prince/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Prince All The Time",
-    "sourceUrl": "https://www.prince.com/"
   },
   {
     "name": "Psychedelic Jukebox",
@@ -1150,20 +548,6 @@ export const STATIONS: Station[] = [
     "genre": "HOUSE + UKG",
     "desc": "Underground House UK Garage Jungle Drum & Bass",
     "sourceUrl": "https://www.purefmuk.com/"
-  },
-  {
-    "name": "Queen Radio",
-    "url": "https://streaming.exclusive.radio/er/queen/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Queen All The Time",
-    "sourceUrl": "https://www.queenonline.com/"
-  },
-  {
-    "name": "R.E.M. Radio",
-    "url": "https://streaming.exclusive.radio/er/rem/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All R.E.M. All The Time",
-    "sourceUrl": "https://remhq.com/"
   },
   {
     "name": "Radio Azathoth Revival",
@@ -1199,34 +583,6 @@ export const STATIONS: Station[] = [
     "genre": "JAZZ + EXOTICA",
     "desc": "Smooth jazz soul and blues standards",
     "sourceUrl": "https://radioswissjazz.ch"
-  },
-  {
-    "name": "Radiohead Radio",
-    "url": "https://streaming.exclusive.radio/er/radiohead/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Radiohead All The Time",
-    "sourceUrl": "https://www.radiohead.com/"
-  },
-  {
-    "name": "Ramones Radio",
-    "url": "https://streaming.exclusive.radio/er/ramones/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Ramones All The Time",
-    "sourceUrl": "https://www.ramones.com/"
-  },
-  {
-    "name": "Ray Charles Radio",
-    "url": "https://streaming.exclusive.radio/er/raycharles/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Ray Charles All The Time",
-    "sourceUrl": "https://raycharles.com/"
-  },
-  {
-    "name": "Red Hot Chili Peppers Radio",
-    "url": "https://streaming.exclusive.radio/er/chilipeppers/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Red Hot Chili Peppers All The Time",
-    "sourceUrl": "https://redhotchilipeppers.com/"
   },
   {
     "name": "Reggae Arte",
@@ -1290,27 +646,6 @@ export const STATIONS: Station[] = [
     "genre": "ECLECTIC ELECTRIC",
     "desc": "Quality selectors radio reinvented. Anti algorithm",
     "sourceUrl": "https://www.rovr.live/"
-  },
-  {
-    "name": "Sade Radio",
-    "url": "https://streaming.exclusive.radio/er/sade/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Sade All The Time",
-    "sourceUrl": "https://www.sade.com/"
-  },
-  {
-    "name": "Sam Cooke Radio",
-    "url": "https://streaming.exclusive.radio/er/samcooke/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Sam Cooke All The Time",
-    "sourceUrl": "https://www.officialsamcooke.com/"
-  },
-  {
-    "name": "Santana Radio",
-    "url": "https://streaming.exclusive.radio/er/santana/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Santana All The Time",
-    "sourceUrl": "https://www.santana.com/"
   },
   {
     "name": "Scratch Vision",
@@ -1453,32 +788,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://soulradio.us/"
   },
   {
-    "name": "Steely Dan Radio",
-    "url": "https://streaming.exclusive.radio/er/steelydan/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Steely Dan All The Time",
-    "sourceUrl": "https://steelydanofficial.com/"
-  },
-  {
     "name": "Stegi Radio",
     "url": "https://movementathens.out.airtime.pro/movementathens_a",
     "genre": "ECLECTIC ELECTRIC",
     "desc": "Based in Athens but looking beyond geographical borders",
     "sourceUrl": "https://stegi.radio/"
-  },
-  {
-    "name": "Steve Miller Band Radio",
-    "url": "https://streaming.exclusive.radio/er/stevemillerband/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Steve Miller Band All The Time",
-    "sourceUrl": "https://www.stevemillerband.com/"
-  },
-  {
-    "name": "Stevie Wonder Radio",
-    "url": "https://streaming.exclusive.radio/er/steviewonder/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Stevie Wonder All The Time",
-    "sourceUrl": "https://www.steviewonder.net/"
   },
   {
     "name": "Sub FM",
@@ -1493,62 +807,6 @@ export const STATIONS: Station[] = [
     "genre": "HOUSE + UKG",
     "desc": "Connecting London's grassroots bass music scene",
     "sourceUrl": "https://www.subtleradio.com/"
-  },
-  {
-    "name": "Supertramp Radio",
-    "url": "https://streaming.exclusive.radio/er/supertramp/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Supertramp All The Time",
-    "sourceUrl": "https://supertramp.com/"
-  },
-  {
-    "name": "T. Rex Radio",
-    "url": "https://streaming.exclusive.radio/er/trex/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All T. Rex All The Time",
-    "sourceUrl": "https://www.t-rex.co.uk/"
-  },
-  {
-    "name": "Talking Heads Radio",
-    "url": "https://streaming.exclusive.radio/er/talkingheads/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Talking Heads All The Time",
-    "sourceUrl": "https://talkingheadsofficial.com/"
-  },
-  {
-    "name": "The Beatles Radio",
-    "url": "https://streaming.exclusive.radio/er/beatles/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "The biggest band the world has ever seen",
-    "sourceUrl": "https://www.thebeatles.com/"
-  },
-  {
-    "name": "The Clash Radio",
-    "url": "https://nl4.mystreaming.net/er/theclash/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All The Clash All The Time",
-    "sourceUrl": "https://www.theclash.com/"
-  },
-  {
-    "name": "The Cure Radio",
-    "url": "https://streaming.exclusive.radio/er/thecure/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All The Cure All The Time",
-    "sourceUrl": "https://www.thecure.com/"
-  },
-  {
-    "name": "The Doobie Brothers Radio",
-    "url": "https://streaming.exclusive.radio/er/doobiebrothers/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Doobie Brothers All The Time",
-    "sourceUrl": "https://thedoobiebrothers.com/"
-  },
-  {
-    "name": "The Doors Radio",
-    "url": "https://nl4.mystreaming.net/er/doors/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All The Doors All The Time",
-    "sourceUrl": "https://thedoors.com/"
   },
   {
     "name": "The Dragon 90.9",
@@ -1579,13 +837,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://live365.com/station/THE-JAZZ-STATION-a74112"
   },
   {
-    "name": "The Kinks Radio",
-    "url": "https://3.mystreaming.net/er/thekinks/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All The Kinks All The Time",
-    "sourceUrl": "https://thekinks.info/"
-  },
-  {
     "name": "The Lot Radio",
     "url": "https://streaming.brol.tech/rtfmlounge",
     "genre": "ECLECTIC ELECTRIC",
@@ -1593,46 +844,11 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://www.thelotradio.com/"
   },
   {
-    "name": "The Police Radio",
-    "url": "https://streaming.exclusive.radio/er/police/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All The Police All The Time",
-    "sourceUrl": "https://thepolice.com/"
-  },
-  {
-    "name": "The Rolling Stones Radio",
-    "url": "https://streaming.exclusive.radio/er/rollingstones/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Rolling Stones All The Time",
-    "sourceUrl": "https://rollingstones.com/"
-  },
-  {
-    "name": "The Smiths Radio",
-    "url": "https://streaming.exclusive.radio/er/thesmiths/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All The Smiths All The Time",
-    "sourceUrl": "https://www.officialsmiths.co.uk/"
-  },
-  {
     "name": "The Summit",
     "url": "https://securestreams2.autopo.st:1194/wapshq",
     "genre": "ROCK + INDIE",
     "desc": "Musically Adventurous Indie and Alt Sounds from Akron",
     "sourceUrl": "https://thesummit.fm/"
-  },
-  {
-    "name": "The Velvet Underground Radio",
-    "url": "https://streaming.exclusive.radio/er/velvetunderground/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Velvet Underground All The Time",
-    "sourceUrl": "https://www.velvetundergroundmusic.com/"
-  },
-  {
-    "name": "The Yardbirds Radio",
-    "url": "https://nl4.mystreaming.net/er/theyardbirds/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All The Yardbirds All The Time",
-    "sourceUrl": "https://www.theyardbirds.com/"
   },
   {
     "name": "UKG Radio",
@@ -1698,20 +914,6 @@ export const STATIONS: Station[] = [
     "sourceUrl": "https://wfmu.org/rocknsoul"
   },
   {
-    "name": "Wham! Radio",
-    "url": "https://streaming.exclusive.radio/er/wham/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Wham! All The Time",
-    "sourceUrl": "https://wham.world/"
-  },
-  {
-    "name": "Willie Nelson Radio",
-    "url": "https://streaming.exclusive.radio/er/willienelson/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All Willie Nelson All The Time",
-    "sourceUrl": "https://willienelson.com/"
-  },
-  {
     "name": "Worldwide FM",
     "url": "https://worldwide-fm.radiocult.fm/stream",
     "genre": "ECLECTIC ELECTRIC",
@@ -1731,13 +933,6 @@ export const STATIONS: Station[] = [
     "genre": "CLASSICAL",
     "desc": "Minneapolis's Best Classical Music station",
     "sourceUrl": "https://www.yourclassical.org/"
-  },
-  {
-    "name": "ZZ Top Radio",
-    "url": "https://streaming.exclusive.radio/er/zztop/icecast.audio",
-    "genre": "LEGENDS",
-    "desc": "All ZZ Top All The Time",
-    "sourceUrl": "https://www.zztop.com/"
   }
 ];
 

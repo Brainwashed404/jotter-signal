@@ -277,10 +277,18 @@ export default function RadioSidebar() {
   const genreOrder = ["all", ...genreItems.map((it) => it.key)];
   const genreIdx = genreOrder.indexOf(activeSrc || "all");
   const [genreSlideDir, setGenreSlideDir] = useState(1);
+  // Swiping the station list browses genres: filter the list + transport queue to the next
+  // genre WITHOUT auto-playing (so a flick through genres doesn't churn streams). Tap a
+  // station to play. Tapping a genre chip still plays (shuffleSource), as before.
   function stepGenre(dir: 1 | -1) {
     const i = genreIdx < 0 ? 0 : genreIdx;
+    const next = genreOrder[(i + dir + genreOrder.length) % genreOrder.length];
     setGenreSlideDir(dir);
-    shuffleSource(genreOrder[(i + dir + genreOrder.length) % genreOrder.length]);
+    setActiveSrc(next);
+    try { localStorage.setItem(LAST_SRC_KEY, next); } catch {}
+    setView(next === "favs" ? "favs" : "index");
+    const list = next === "all" ? SORTED : next === "favs" ? SORTED.filter((s) => favs.includes(s.name)) : SORTED.filter((s) => s.genre === next);
+    setQueue(list);
   }
   // Keep the active genre chip scrolled into view as you swipe/tap through genres.
   const genrePillsRef = useRef<HTMLDivElement>(null);
@@ -419,14 +427,9 @@ export default function RadioSidebar() {
             style={{ color: shuffleOn ? "var(--accent)" : "var(--muted)" }}><Icon name="shuffle" size={22} /></button>
         </div>
 
-        {/* station info — below the controls; swipe L/R here to step through genres */}
-        <SwipeView pageKey={current?.name ?? "none"} dir={genreSlideDir} hasPrev hasNext
-          onPrev={() => stepGenre(-1)} onNext={() => stepGenre(1)} className="shrink-0">
-        <div className="px-2 py-3.5 flex items-center gap-1" style={{ borderBottom: "1px solid var(--border)" }}>
-          <button onClick={() => stepGenre(-1)} title="Previous genre" aria-label="Previous genre"
-            className="shrink-0 w-9 h-9 grid place-items-center rounded-lg active:bg-[var(--panel-2)]"
-            style={{ color: "var(--muted)" }}><Icon name="chevL" size={22} /></button>
-          <div className="flex items-start gap-3 flex-1 min-w-0">
+        {/* station info — below the controls */}
+        <div className="px-4 py-3.5 shrink-0" style={{ borderBottom: "1px solid var(--border)" }}>
+          <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">
               <div className="text-base font-medium leading-snug truncate" style={current ? { color: "var(--accent)" } : { color: "var(--muted)" }}>
                 {current ? current.name : "Pick a genre or station"}
@@ -455,11 +458,7 @@ export default function RadioSidebar() {
               </button>
             )}
           </div>
-          <button onClick={() => stepGenre(1)} title="Next genre" aria-label="Next genre"
-            className="shrink-0 w-9 h-9 grid place-items-center rounded-lg active:bg-[var(--panel-2)]"
-            style={{ color: "var(--muted)" }}><Icon name="chevR" size={22} /></button>
         </div>
-        </SwipeView>
 
         {/* scrollable body: genres as chips, then the station list */}
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3">
@@ -481,8 +480,11 @@ export default function RadioSidebar() {
             <button onClick={() => chooseView("index")} className="chip flex-1" style={view === "index" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>Index</button>
             <button onClick={() => chooseView("favs")} className="chip flex-1" style={view === "favs" ? { color: "var(--accent)", borderColor: "var(--accent)" } : {}}>Favourites</button>
           </div>
+          {/* Swipe the station list left/right to move through genres (vertical scroll still works) */}
+          <SwipeView pageKey={`${view}:${activeSrc}`} dir={genreSlideDir} hasPrev hasNext
+            onPrev={() => stepGenre(-1)} onNext={() => stepGenre(1)}>
           {listed.length === 0 ? (
-            <div className="label px-1 py-1">{q ? "No matches." : view === "favs" ? "No favourites yet — tap ☆ on a station." : "No stations."}</div>
+            <div className="label px-1 py-6 text-center">{q ? "No matches." : view === "favs" ? "No favourites yet — tap ☆ on a station." : "No stations."}</div>
           ) : (
             <ul className="space-y-0.5">
               {listed.map((s) => {
@@ -501,6 +503,7 @@ export default function RadioSidebar() {
               })}
             </ul>
           )}
+          </SwipeView>
         </div>
 
         {/* no settings footer on mobile — settings lives in the header gear */}

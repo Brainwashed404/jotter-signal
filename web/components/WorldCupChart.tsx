@@ -396,10 +396,10 @@ export default function WorldCupChart() {
 
   const TABS: { id: WCTab; label: string }[] = [
     { id: "groups", label: "Group Stage" },
-    { id: "stats", label: "Stats" },
     { id: "news", label: "News" },
     { id: "fixtures", label: "Fixtures" },
     { id: "bracket", label: "Bracket" },
+    { id: "stats", label: "Stats" },
   ];
   const tabIdx = TABS.findIndex((t) => t.id === tab);
 
