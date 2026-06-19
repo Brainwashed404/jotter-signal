@@ -610,115 +610,115 @@
   "blurb": "Author and activist; writes Pluralistic on monopoly, platform power and 'enshittification' (a term he coined).",
   "url": "https://pluralistic.net",
   "totals": {
-   "posts": 32,
-   "signals": 96,
+   "posts": 33,
+   "signals": 99,
    "date_min": "2026-05-02",
-   "date_max": "2026-06-18"
+   "date_max": "2026-06-19"
   },
   "signal_types": {
-   "article": 96
+   "article": 99
   },
   "signal_kinds": {
-   "longread": 27,
-   "links": 62,
+   "longread": 28,
+   "links": 64,
    "article": 6,
    "quote": 1
   },
   "themes": [
    {
     "theme": "Platform power / Big Tech",
-    "current": 96.9,
+    "current": 97.0,
     "delta": 0.0,
     "series": {
-     "2026": 96.9
+     "2026": 97.0
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 78.1,
+    "current": 78.8,
     "delta": 0.0,
     "series": {
-     "2026": 78.1
+     "2026": 78.8
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 71.9,
+    "current": 72.7,
     "delta": 0.0,
     "series": {
-     "2026": 71.9
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 71.9,
-    "delta": 0.0,
-    "series": {
-     "2026": 71.9
+     "2026": 72.7
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 71.9,
+    "current": 72.7,
     "delta": 0.0,
     "series": {
-     "2026": 71.9
+     "2026": 72.7
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 69.7,
+    "delta": 0.0,
+    "series": {
+     "2026": 69.7
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 59.4,
+    "current": 57.6,
     "delta": 0.0,
     "series": {
-     "2026": 59.4
-    }
-   },
-   {
-    "theme": "Democracy & disinformation",
-    "current": 50.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 50.0
+     "2026": 57.6
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 50.0,
+    "current": 51.5,
     "delta": 0.0,
     "series": {
-     "2026": 50.0
+     "2026": 51.5
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
+    "current": 48.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 48.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 43.8,
+    "current": 42.4,
     "delta": 0.0,
     "series": {
-     "2026": 43.8
+     "2026": 42.4
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 37.5,
+    "current": 36.4,
     "delta": 0.0,
     "series": {
-     "2026": 37.5
+     "2026": 36.4
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 28.1,
+    "current": 27.3,
     "delta": 0.0,
     "series": {
-     "2026": 28.1
+     "2026": 27.3
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 12.5,
+    "current": 12.1,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 12.1
     }
    }
   ],
@@ -728,11 +728,11 @@
   "top_sources_recent": [
    {
     "domain": "web.archive.org",
-    "n": 144
+    "n": 151
    },
    {
     "domain": "pluralistic.net",
-    "n": 100
+    "n": 104
    },
    {
     "domain": "memex.craphound.com",
@@ -747,11 +747,11 @@
     "n": 10
    },
    {
-    "domain": "theverge.com",
-    "n": 8
+    "domain": "eff.org",
+    "n": 9
    },
    {
-    "domain": "eff.org",
+    "domain": "theverge.com",
     "n": 8
    },
    {
@@ -810,11 +810,11 @@
   "top_sources_early": [
    {
     "domain": "web.archive.org",
-    "n": 144
+    "n": 151
    },
    {
     "domain": "pluralistic.net",
-    "n": 100
+    "n": 104
    },
    {
     "domain": "memex.craphound.com",
@@ -829,11 +829,11 @@
     "n": 10
    },
    {
-    "domain": "theverge.com",
-    "n": 8
+    "domain": "eff.org",
+    "n": 9
    },
    {
-    "domain": "eff.org",
+    "domain": "theverge.com",
     "n": 8
    },
    {
