@@ -3824,8 +3824,8 @@
   },
   "signal_kinds": {
    "article": 46,
-   "links": 58,
-   "longread": 2
+   "links": 57,
+   "longread": 3
   },
   "themes": [
    {
@@ -3994,10 +3994,6 @@
     "n": 5
    },
    {
-    "domain": "pmc.ncbi.nlm.nih.gov",
-    "n": 4
-   },
-   {
     "domain": "bsky.app",
     "n": 4
    },
@@ -4007,6 +4003,10 @@
    },
    {
     "domain": "techcrunch.com",
+    "n": 4
+   },
+   {
+    "domain": "axios.com",
     "n": 4
    }
   ],
@@ -4076,10 +4076,6 @@
     "n": 5
    },
    {
-    "domain": "pmc.ncbi.nlm.nih.gov",
-    "n": 4
-   },
-   {
     "domain": "bsky.app",
     "n": 4
    },
@@ -4089,6 +4085,10 @@
    },
    {
     "domain": "techcrunch.com",
+    "n": 4
+   },
+   {
+    "domain": "axios.com",
     "n": 4
    }
   ],
