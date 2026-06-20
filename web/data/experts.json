@@ -3814,26 +3814,26 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 106,
-   "signals": 106,
+   "posts": 109,
+   "signals": 109,
    "date_min": "2026-06-07",
-   "date_max": "2026-06-19"
+   "date_max": "2026-06-20"
   },
   "signal_types": {
-   "article": 106
+   "article": 109
   },
   "signal_kinds": {
-   "article": 46,
-   "links": 57,
+   "links": 58,
+   "article": 48,
    "longread": 3
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 63.2,
+    "current": 63.3,
     "delta": 0.0,
     "series": {
-     "2026": 63.2
+     "2026": 63.3
     }
    },
    {
@@ -3846,74 +3846,74 @@
    },
    {
     "theme": "Media & journalism",
-    "current": 27.4,
+    "current": 27.5,
     "delta": 0.0,
     "series": {
-     "2026": 27.4
+     "2026": 27.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 21.7,
+    "current": 21.1,
     "delta": 0.0,
     "series": {
-     "2026": 21.7
+     "2026": 21.1
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 19.8,
+    "current": 20.2,
     "delta": 0.0,
     "series": {
-     "2026": 19.8
+     "2026": 20.2
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 15.1,
+    "current": 15.6,
     "delta": 0.0,
     "series": {
-     "2026": 15.1
+     "2026": 15.6
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 14.2,
+    "current": 14.7,
     "delta": 0.0,
     "series": {
-     "2026": 14.2
+     "2026": 14.7
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 12.3,
+    "current": 13.8,
     "delta": 0.0,
     "series": {
-     "2026": 12.3
+     "2026": 13.8
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 8.5,
+    "current": 8.3,
     "delta": 0.0,
     "series": {
-     "2026": 8.5
+     "2026": 8.3
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 6.6,
+    "current": 6.4,
     "delta": 0.0,
     "series": {
-     "2026": 6.6
+     "2026": 6.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 2.8,
+    "current": 3.7,
     "delta": 0.0,
     "series": {
-     "2026": 2.8
+     "2026": 3.7
     }
    },
    {
@@ -3931,7 +3931,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 359
+    "n": 370
    },
    {
     "domain": "x.com",
@@ -3943,7 +3943,7 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 18
+    "n": 19
    },
    {
     "domain": "wired.com",
@@ -3954,16 +3954,16 @@
     "n": 13
    },
    {
+    "domain": "reuters.com",
+    "n": 12
+   },
+   {
     "domain": "wsj.com",
     "n": 11
    },
    {
-    "domain": "reuters.com",
-    "n": 11
-   },
-   {
     "domain": "bbc.com",
-    "n": 8
+    "n": 10
    },
    {
     "domain": "t.co",
@@ -3986,16 +3986,16 @@
     "n": 6
    },
    {
+    "domain": "bsky.app",
+    "n": 5
+   },
+   {
     "domain": "finance.yahoo.com",
     "n": 5
    },
    {
     "domain": "fortune.com",
     "n": 5
-   },
-   {
-    "domain": "bsky.app",
-    "n": 4
    },
    {
     "domain": "arstechnica.com",
@@ -4013,7 +4013,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 359
+    "n": 370
    },
    {
     "domain": "x.com",
@@ -4025,7 +4025,7 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 18
+    "n": 19
    },
    {
     "domain": "wired.com",
@@ -4036,16 +4036,16 @@
     "n": 13
    },
    {
+    "domain": "reuters.com",
+    "n": 12
+   },
+   {
     "domain": "wsj.com",
     "n": 11
    },
    {
-    "domain": "reuters.com",
-    "n": 11
-   },
-   {
     "domain": "bbc.com",
-    "n": 8
+    "n": 10
    },
    {
     "domain": "t.co",
@@ -4068,16 +4068,16 @@
     "n": 6
    },
    {
+    "domain": "bsky.app",
+    "n": 5
+   },
+   {
     "domain": "finance.yahoo.com",
     "n": 5
    },
    {
     "domain": "fortune.com",
     "n": 5
-   },
-   {
-    "domain": "bsky.app",
-    "n": 4
    },
    {
     "domain": "arstechnica.com",
