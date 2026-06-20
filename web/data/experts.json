@@ -1806,27 +1806,19 @@
   "blurb": "Economics and other interesting stuff.",
   "url": "https://www.noahpinion.blog",
   "totals": {
-   "posts": 21,
-   "signals": 21,
+   "posts": 22,
+   "signals": 22,
    "date_min": "2026-05-11",
-   "date_max": "2026-06-19"
+   "date_max": "2026-06-20"
   },
   "signal_types": {
-   "article": 21
+   "article": 22
   },
   "signal_kinds": {
-   "longread": 10,
+   "longread": 11,
    "links": 11
   },
   "themes": [
-   {
-    "theme": "Economy & markets",
-    "current": 100.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 100.0
-    }
-   },
    {
     "theme": "Media & journalism",
     "current": 100.0,
@@ -1836,75 +1828,83 @@
     }
    },
    {
-    "theme": "AI & machine learning",
-    "current": 71.4,
+    "theme": "Economy & markets",
+    "current": 95.5,
     "delta": 0.0,
     "series": {
-     "2026": 71.4
+     "2026": 95.5
+    }
+   },
+   {
+    "theme": "AI & machine learning",
+    "current": 68.2,
+    "delta": 0.0,
+    "series": {
+     "2026": 68.2
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 61.9,
+    "current": 59.1,
     "delta": 0.0,
     "series": {
-     "2026": 61.9
+     "2026": 59.1
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 52.4,
+    "current": 54.5,
     "delta": 0.0,
     "series": {
-     "2026": 52.4
+     "2026": 54.5
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 47.6,
+    "current": 45.5,
     "delta": 0.0,
     "series": {
-     "2026": 47.6
-    }
-   },
-   {
-    "theme": "Social media & attention",
-    "current": 28.6,
-    "delta": 0.0,
-    "series": {
-     "2026": 28.6
-    }
-   },
-   {
-    "theme": "Labour & automation",
-    "current": 28.6,
-    "delta": 0.0,
-    "series": {
-     "2026": 28.6
+     "2026": 45.5
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 23.8,
+    "current": 27.3,
     "delta": 0.0,
     "series": {
-     "2026": 23.8
+     "2026": 27.3
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 27.3,
+    "delta": 0.0,
+    "series": {
+     "2026": 27.3
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 27.3,
+    "delta": 0.0,
+    "series": {
+     "2026": 27.3
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 14.3,
+    "current": 13.6,
     "delta": 0.0,
     "series": {
-     "2026": 14.3
+     "2026": 13.6
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 4.8,
+    "current": 4.5,
     "delta": 0.0,
     "series": {
-     "2026": 4.8
+     "2026": 4.5
     }
    },
    {
@@ -1922,7 +1922,7 @@
   "top_sources_recent": [
    {
     "domain": "noahpinion.blog",
-    "n": 32
+    "n": 34
    },
    {
     "domain": "unsplash.com",
@@ -1945,11 +1945,11 @@
     "n": 5
    },
    {
-    "domain": "reuters.com",
-    "n": 3
+    "domain": "nytimes.com",
+    "n": 4
    },
    {
-    "domain": "nytimes.com",
+    "domain": "reuters.com",
     "n": 3
    },
    {
@@ -1973,6 +1973,18 @@
     "n": 3
    },
    {
+    "domain": "newyorker.com",
+    "n": 2
+   },
+   {
+    "domain": "penguinrandomhouse.com",
+    "n": 2
+   },
+   {
+    "domain": "blog.hirokoyoda.com",
+    "n": 2
+   },
+   {
     "domain": "theatlantic.com",
     "n": 2
    },
@@ -1986,25 +1998,13 @@
    },
    {
     "domain": "nber.org",
-    "n": 2
-   },
-   {
-    "domain": "federalreserve.gov",
-    "n": 2
-   },
-   {
-    "domain": "ourworldindata.org",
-    "n": 2
-   },
-   {
-    "domain": "flickr.com",
     "n": 2
    }
   ],
   "top_sources_early": [
    {
     "domain": "noahpinion.blog",
-    "n": 32
+    "n": 34
    },
    {
     "domain": "unsplash.com",
@@ -2027,11 +2027,11 @@
     "n": 5
    },
    {
-    "domain": "reuters.com",
-    "n": 3
+    "domain": "nytimes.com",
+    "n": 4
    },
    {
-    "domain": "nytimes.com",
+    "domain": "reuters.com",
     "n": 3
    },
    {
@@ -2055,6 +2055,18 @@
     "n": 3
    },
    {
+    "domain": "newyorker.com",
+    "n": 2
+   },
+   {
+    "domain": "penguinrandomhouse.com",
+    "n": 2
+   },
+   {
+    "domain": "blog.hirokoyoda.com",
+    "n": 2
+   },
+   {
     "domain": "theatlantic.com",
     "n": 2
    },
@@ -2068,18 +2080,6 @@
    },
    {
     "domain": "nber.org",
-    "n": 2
-   },
-   {
-    "domain": "federalreserve.gov",
-    "n": 2
-   },
-   {
-    "domain": "ourworldindata.org",
-    "n": 2
-   },
-   {
-    "domain": "flickr.com",
     "n": 2
    }
   ],
