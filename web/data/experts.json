@@ -3814,114 +3814,114 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 116,
-   "signals": 116,
+   "posts": 120,
+   "signals": 120,
    "date_min": "2026-06-07",
    "date_max": "2026-06-21"
   },
   "signal_types": {
-   "article": 116
+   "article": 120
   },
   "signal_kinds": {
-   "article": 52,
-   "links": 61,
+   "links": 62,
+   "article": 55,
    "longread": 3
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 64.7,
+    "current": 64.2,
     "delta": 0.0,
     "series": {
-     "2026": 64.7
+     "2026": 64.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 35.3,
+    "current": 35.8,
     "delta": 0.0,
     "series": {
-     "2026": 35.3
+     "2026": 35.8
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 26.7,
+    "current": 25.8,
     "delta": 0.0,
     "series": {
-     "2026": 26.7
+     "2026": 25.8
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 21.6,
+    "current": 22.5,
     "delta": 0.0,
     "series": {
-     "2026": 21.6
+     "2026": 22.5
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 19.0,
+    "current": 20.0,
     "delta": 0.0,
     "series": {
-     "2026": 19.0
+     "2026": 20.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 15.5,
+    "current": 15.0,
     "delta": 0.0,
     "series": {
-     "2026": 15.5
+     "2026": 15.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 15.5,
+    "current": 15.0,
     "delta": 0.0,
     "series": {
-     "2026": 15.5
+     "2026": 15.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 13.8,
+    "current": 14.2,
     "delta": 0.0,
     "series": {
-     "2026": 13.8
+     "2026": 14.2
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 9.5,
+    "current": 9.2,
     "delta": 0.0,
     "series": {
-     "2026": 9.5
+     "2026": 9.2
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 6.0,
+    "current": 6.7,
     "delta": 0.0,
     "series": {
-     "2026": 6.0
+     "2026": 6.7
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 4.3,
+    "current": 4.2,
     "delta": 0.0,
     "series": {
-     "2026": 4.3
+     "2026": 4.2
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 2.6,
+    "current": 2.5,
     "delta": 0.0,
     "series": {
-     "2026": 2.6
+     "2026": 2.5
     }
    }
   ],
@@ -3931,7 +3931,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 397
+    "n": 411
    },
    {
     "domain": "x.com",
@@ -3939,11 +3939,11 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 28
+    "n": 31
    },
    {
     "domain": "theguardian.com",
-    "n": 19
+    "n": 21
    },
    {
     "domain": "wired.com",
@@ -3954,12 +3954,12 @@
     "n": 14
    },
    {
-    "domain": "reuters.com",
+    "domain": "wsj.com",
     "n": 12
    },
    {
-    "domain": "wsj.com",
-    "n": 11
+    "domain": "reuters.com",
+    "n": 12
    },
    {
     "domain": "bbc.com",
@@ -4013,7 +4013,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 397
+    "n": 411
    },
    {
     "domain": "x.com",
@@ -4021,11 +4021,11 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 28
+    "n": 31
    },
    {
     "domain": "theguardian.com",
-    "n": 19
+    "n": 21
    },
    {
     "domain": "wired.com",
@@ -4036,12 +4036,12 @@
     "n": 14
    },
    {
-    "domain": "reuters.com",
+    "domain": "wsj.com",
     "n": 12
    },
    {
-    "domain": "wsj.com",
-    "n": 11
+    "domain": "reuters.com",
+    "n": 12
    },
    {
     "domain": "bbc.com",
