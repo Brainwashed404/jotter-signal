@@ -3244,26 +3244,19 @@
   "blurb": "A weekly look at news and trends you may have missed, with plenty of commentary.",
   "url": "https://1234kyle5678.substack.com",
   "totals": {
-   "posts": 12,
-   "signals": 12,
+   "posts": 13,
+   "signals": 13,
    "date_min": "2026-05-26",
-   "date_max": "2026-06-21"
+   "date_max": "2026-06-23"
   },
   "signal_types": {
-   "article": 12
+   "article": 13
   },
   "signal_kinds": {
+   "longread": 1,
    "links": 12
   },
   "themes": [
-   {
-    "theme": "AI & machine learning",
-    "current": 100.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 100.0
-    }
-   },
    {
     "theme": "Social media & attention",
     "current": 100.0,
@@ -3281,75 +3274,83 @@
     }
    },
    {
-    "theme": "Platform power / Big Tech",
-    "current": 41.7,
+    "theme": "AI & machine learning",
+    "current": 92.3,
     "delta": 0.0,
     "series": {
-     "2026": 41.7
+     "2026": 92.3
     }
    },
    {
-    "theme": "Economy & markets",
-    "current": 41.7,
+    "theme": "Platform power / Big Tech",
+    "current": 38.5,
     "delta": 0.0,
     "series": {
-     "2026": 41.7
+     "2026": 38.5
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 33.3,
+    "current": 38.5,
     "delta": 0.0,
     "series": {
-     "2026": 33.3
+     "2026": 38.5
+    }
+   },
+   {
+    "theme": "Economy & markets",
+    "current": 38.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 38.5
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 33.3,
+    "current": 30.8,
     "delta": 0.0,
     "series": {
-     "2026": 33.3
+     "2026": 30.8
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 16.7,
+    "current": 15.4,
     "delta": 0.0,
     "series": {
-     "2026": 16.7
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 16.7,
-    "delta": 0.0,
-    "series": {
-     "2026": 16.7
-    }
-   },
-   {
-    "theme": "Surveillance & privacy",
-    "current": 8.3,
-    "delta": 0.0,
-    "series": {
-     "2026": 8.3
+     "2026": 15.4
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 8.3,
+    "current": 15.4,
     "delta": 0.0,
     "series": {
-     "2026": 8.3
+     "2026": 15.4
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 15.4,
+    "delta": 0.0,
+    "series": {
+     "2026": 15.4
+    }
+   },
+   {
+    "theme": "Surveillance & privacy",
+    "current": 7.7,
+    "delta": 0.0,
+    "series": {
+     "2026": 7.7
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 8.3,
+    "current": 7.7,
     "delta": 0.0,
     "series": {
-     "2026": 8.3
+     "2026": 7.7
     }
    }
   ],
@@ -3359,7 +3360,7 @@
   "top_sources_recent": [
    {
     "domain": "1234kyle5678.substack.com",
-    "n": 21
+    "n": 23
    },
    {
     "domain": "theguardian.com",
@@ -3368,6 +3369,10 @@
    {
     "domain": "x.com",
     "n": 6
+   },
+   {
+    "domain": "linkedin.com",
+    "n": 4
    },
    {
     "domain": "open.spotify.com",
@@ -3382,16 +3387,16 @@
     "n": 3
    },
    {
-    "domain": "linkedin.com",
-    "n": 3
-   },
-   {
     "domain": "washingtonpost.com",
     "n": 3
    },
    {
     "domain": "nytimes.com",
     "n": 3
+   },
+   {
+    "domain": "sites.prh.com",
+    "n": 2
    },
    {
     "domain": "thecultureslop.com",
@@ -3422,26 +3427,22 @@
     "n": 2
    },
    {
+    "domain": "explorationfound.wixsite.com",
+    "n": 1
+   },
+   {
     "domain": "docs.google.com",
     "n": 1
    },
    {
     "domain": "tranche.metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "cnet.com",
-    "n": 1
-   },
-   {
-    "domain": "theverge.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "1234kyle5678.substack.com",
-    "n": 21
+    "n": 23
    },
    {
     "domain": "theguardian.com",
@@ -3450,6 +3451,10 @@
    {
     "domain": "x.com",
     "n": 6
+   },
+   {
+    "domain": "linkedin.com",
+    "n": 4
    },
    {
     "domain": "open.spotify.com",
@@ -3464,16 +3469,16 @@
     "n": 3
    },
    {
-    "domain": "linkedin.com",
-    "n": 3
-   },
-   {
     "domain": "washingtonpost.com",
     "n": 3
    },
    {
     "domain": "nytimes.com",
     "n": 3
+   },
+   {
+    "domain": "sites.prh.com",
+    "n": 2
    },
    {
     "domain": "thecultureslop.com",
@@ -3504,19 +3509,15 @@
     "n": 2
    },
    {
+    "domain": "explorationfound.wixsite.com",
+    "n": 1
+   },
+   {
     "domain": "docs.google.com",
     "n": 1
    },
    {
     "domain": "tranche.metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "cnet.com",
-    "n": 1
-   },
-   {
-    "domain": "theverge.com",
     "n": 1
    }
   ],
@@ -3814,114 +3815,114 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 132,
-   "signals": 132,
+   "posts": 135,
+   "signals": 135,
    "date_min": "2026-06-07",
    "date_max": "2026-06-23"
   },
   "signal_types": {
-   "article": 132
+   "article": 135
   },
   "signal_kinds": {
-   "article": 60,
-   "links": 69,
+   "article": 61,
+   "links": 71,
    "longread": 3
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 65.2,
+    "current": 65.9,
     "delta": 0.0,
     "series": {
-     "2026": 65.2
+     "2026": 65.9
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 35.6,
+    "current": 36.3,
     "delta": 0.0,
     "series": {
-     "2026": 35.6
+     "2026": 36.3
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 26.5,
+    "current": 26.7,
     "delta": 0.0,
     "series": {
-     "2026": 26.5
+     "2026": 26.7
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 25.8,
+    "current": 25.9,
     "delta": 0.0,
     "series": {
-     "2026": 25.8
+     "2026": 25.9
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 20.5,
+    "current": 20.7,
     "delta": 0.0,
     "series": {
-     "2026": 20.5
+     "2026": 20.7
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 15.2,
+    "current": 14.8,
     "delta": 0.0,
     "series": {
-     "2026": 15.2
+     "2026": 14.8
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 14.4,
+    "current": 14.1,
     "delta": 0.0,
     "series": {
-     "2026": 14.4
+     "2026": 14.1
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 13.6,
+    "current": 14.1,
     "delta": 0.0,
     "series": {
-     "2026": 13.6
+     "2026": 14.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 9.8,
+    "current": 10.4,
     "delta": 0.0,
     "series": {
-     "2026": 9.8
+     "2026": 10.4
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 6.8,
+    "current": 7.4,
     "delta": 0.0,
     "series": {
-     "2026": 6.8
+     "2026": 7.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 3.8,
+    "current": 4.4,
     "delta": 0.0,
     "series": {
-     "2026": 3.8
+     "2026": 4.4
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 2.3,
+    "current": 2.2,
     "delta": 0.0,
     "series": {
-     "2026": 2.3
+     "2026": 2.2
     }
    }
   ],
@@ -3931,7 +3932,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 463
+    "n": 473
    },
    {
     "domain": "x.com",
@@ -3939,11 +3940,11 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 33
+    "n": 34
    },
    {
     "domain": "theguardian.com",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "wired.com",
@@ -3970,6 +3971,10 @@
     "n": 9
    },
    {
+    "domain": "bloomberg.com",
+    "n": 8
+   },
+   {
     "domain": "ft.com",
     "n": 8
    },
@@ -3978,11 +3983,11 @@
     "n": 8
    },
    {
-    "domain": "bloomberg.com",
+    "domain": "cnbc.com",
     "n": 7
    },
    {
-    "domain": "cnbc.com",
+    "domain": "finance.yahoo.com",
     "n": 6
    },
    {
@@ -4003,17 +4008,13 @@
    },
    {
     "domain": "bsky.app",
-    "n": 5
-   },
-   {
-    "domain": "finance.yahoo.com",
     "n": 5
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 463
+    "n": 473
    },
    {
     "domain": "x.com",
@@ -4021,11 +4022,11 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 33
+    "n": 34
    },
    {
     "domain": "theguardian.com",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "wired.com",
@@ -4052,6 +4053,10 @@
     "n": 9
    },
    {
+    "domain": "bloomberg.com",
+    "n": 8
+   },
+   {
     "domain": "ft.com",
     "n": 8
    },
@@ -4060,11 +4065,11 @@
     "n": 8
    },
    {
-    "domain": "bloomberg.com",
+    "domain": "cnbc.com",
     "n": 7
    },
    {
-    "domain": "cnbc.com",
+    "domain": "finance.yahoo.com",
     "n": 6
    },
    {
@@ -4085,10 +4090,6 @@
    },
    {
     "domain": "bsky.app",
-    "n": 5
-   },
-   {
-    "domain": "finance.yahoo.com",
     "n": 5
    }
   ],
@@ -7510,90 +7511,90 @@
   "blurb": "A daily newsletter on the most interesting things in the world, from media and design to science and culture.",
   "url": "https://whyisthisinteresting.substack.com",
   "totals": {
-   "posts": 13,
-   "signals": 13,
+   "posts": 14,
+   "signals": 14,
    "date_min": "2026-06-01",
-   "date_max": "2026-06-22"
+   "date_max": "2026-06-23"
   },
   "signal_types": {
-   "article": 13
+   "article": 14
   },
   "signal_kinds": {
-   "longread": 4,
+   "longread": 5,
    "links": 4,
    "article": 5
   },
   "themes": [
    {
     "theme": "Media & journalism",
-    "current": 92.3,
+    "current": 92.9,
     "delta": 0.0,
     "series": {
-     "2026": 92.3
-    }
-   },
-   {
-    "theme": "Social media & attention",
-    "current": 38.5,
-    "delta": 0.0,
-    "series": {
-     "2026": 38.5
+     "2026": 92.9
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 38.5,
+    "current": 42.9,
     "delta": 0.0,
     "series": {
-     "2026": 38.5
+     "2026": 42.9
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 35.7,
+    "delta": 0.0,
+    "series": {
+     "2026": 35.7
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 23.1,
+    "current": 28.6,
     "delta": 0.0,
     "series": {
-     "2026": 23.1
+     "2026": 28.6
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 15.4,
+    "current": 14.3,
     "delta": 0.0,
     "series": {
-     "2026": 15.4
+     "2026": 14.3
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 7.7,
+    "current": 7.1,
     "delta": 0.0,
     "series": {
-     "2026": 7.7
+     "2026": 7.1
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 7.7,
+    "current": 7.1,
     "delta": 0.0,
     "series": {
-     "2026": 7.7
+     "2026": 7.1
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 7.7,
+    "current": 7.1,
     "delta": 0.0,
     "series": {
-     "2026": 7.7
+     "2026": 7.1
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 7.7,
+    "current": 7.1,
     "delta": 0.0,
     "series": {
-     "2026": 7.7
+     "2026": 7.1
     }
    },
    {
@@ -7627,7 +7628,7 @@
   "top_sources_recent": [
    {
     "domain": "whyisthisinteresting.substack.com",
-    "n": 10
+    "n": 13
    },
    {
     "domain": "therealmccoys.com",
@@ -7644,6 +7645,10 @@
    {
     "domain": "mechanical-pencil.com",
     "n": 3
+   },
+   {
+    "domain": "3d-bbc.co.uk",
+    "n": 2
    },
    {
     "domain": "images.unsplash.com",
@@ -7670,6 +7675,14 @@
     "n": 2
    },
    {
+    "domain": "linkedin.com",
+    "n": 1
+   },
+   {
+    "domain": "storythings.com",
+    "n": 1
+   },
+   {
     "domain": "substackcdn.com",
     "n": 1
    },
@@ -7691,25 +7704,13 @@
    },
    {
     "domain": "oneminutepark.tv",
-    "n": 1
-   },
-   {
-    "domain": "consumed.today",
-    "n": 1
-   },
-   {
-    "domain": "shen.land",
-    "n": 1
-   },
-   {
-    "domain": "londonzoo.org",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "whyisthisinteresting.substack.com",
-    "n": 10
+    "n": 13
    },
    {
     "domain": "therealmccoys.com",
@@ -7726,6 +7727,10 @@
    {
     "domain": "mechanical-pencil.com",
     "n": 3
+   },
+   {
+    "domain": "3d-bbc.co.uk",
+    "n": 2
    },
    {
     "domain": "images.unsplash.com",
@@ -7752,6 +7757,14 @@
     "n": 2
    },
    {
+    "domain": "linkedin.com",
+    "n": 1
+   },
+   {
+    "domain": "storythings.com",
+    "n": 1
+   },
+   {
     "domain": "substackcdn.com",
     "n": 1
    },
@@ -7773,18 +7786,6 @@
    },
    {
     "domain": "oneminutepark.tv",
-    "n": 1
-   },
-   {
-    "domain": "consumed.today",
-    "n": 1
-   },
-   {
-    "domain": "shen.land",
-    "n": 1
-   },
-   {
-    "domain": "londonzoo.org",
     "n": 1
    }
   ],
