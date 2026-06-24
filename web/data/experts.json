@@ -305,87 +305,87 @@
   "url": "https://memex.naughtons.org",
   "totals": {
    "posts": 200,
-   "signals": 546,
-   "date_min": "2025-03-21",
-   "date_max": "2026-06-22"
+   "signals": 547,
+   "date_min": "2025-03-24",
+   "date_max": "2026-06-24"
   },
   "signal_types": {
    "longread": 196,
-   "commonplace": 130,
+   "note": 62,
+   "commonplace": 129,
+   "book": 96,
    "linkblog": 55,
-   "note": 61,
-   "book": 95,
    "chart": 9
   },
   "signal_kinds": {
    "longread": 197,
-   "quote": 132,
-   "links": 152,
-   "article": 56,
+   "article": 57,
+   "quote": 131,
+   "links": 153,
    "data": 9
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 58.2,
+    "current": 58.7,
     "delta": 0.0,
     "series": {
-     "2025": 63.7,
-     "2026": 52.6
+     "2025": 64.2,
+     "2026": 53.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 39.5,
+    "current": 39.3,
     "delta": 0.0,
     "series": {
-     "2025": 35.5,
-     "2026": 43.4
+     "2025": 35.8,
+     "2026": 42.9
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 37.5,
+    "current": 37.4,
     "delta": 0.0,
     "series": {
-     "2025": 35.5,
-     "2026": 39.5
+     "2025": 35.8,
+     "2026": 39.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 37.1,
+    "current": 36.7,
     "delta": 0.0,
     "series": {
-     "2025": 38.7,
-     "2026": 35.5
+     "2025": 38.2,
+     "2026": 35.1
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 33.0,
+    "current": 32.5,
     "delta": 0.0,
     "series": {
-     "2025": 33.1,
-     "2026": 32.9
+     "2025": 32.5,
+     "2026": 32.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 22.8,
+    "current": 22.7,
     "delta": 0.0,
     "series": {
-     "2025": 21.8,
-     "2026": 23.7
+     "2025": 22.0,
+     "2026": 23.4
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 21.7,
+    "current": 21.6,
     "delta": 0.0,
     "series": {
-     "2025": 21.0,
-     "2026": 22.4
+     "2025": 21.1,
+     "2026": 22.1
     }
    },
    {
@@ -393,17 +393,17 @@
     "current": 18.9,
     "delta": 0.0,
     "series": {
-     "2025": 19.4,
-     "2026": 18.4
+     "2025": 19.5,
+     "2026": 18.2
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 14.5,
+    "current": 14.4,
     "delta": 0.0,
     "series": {
-     "2025": 14.5,
-     "2026": 14.5
+     "2025": 14.6,
+     "2026": 14.3
     }
    },
    {
@@ -412,7 +412,7 @@
     "delta": 0.0,
     "series": {
      "2025": 7.3,
-     "2026": 9.2
+     "2026": 9.1
     }
    },
    {
@@ -426,10 +426,10 @@
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 4.1,
+    "current": 4.2,
     "delta": 0.0,
     "series": {
-     "2025": 5.6,
+     "2025": 5.7,
      "2026": 2.6
     }
    }
@@ -441,7 +441,7 @@
   "top_sources_recent": [
    {
     "domain": "observer.co.uk",
-    "n": 101
+    "n": 103
    },
    {
     "domain": "theguardian.com",
@@ -468,12 +468,12 @@
     "n": 10
    },
    {
-    "domain": "bbc.co.uk",
+    "domain": "tinabrown.substack.com",
     "n": 9
    },
    {
-    "domain": "tinabrown.substack.com",
-    "n": 9
+    "domain": "bbc.co.uk",
+    "n": 8
    },
    {
     "domain": "substack.com",
@@ -523,7 +523,7 @@
   "top_sources_early": [
    {
     "domain": "observer.co.uk",
-    "n": 101
+    "n": 103
    },
    {
     "domain": "theguardian.com",
@@ -550,12 +550,12 @@
     "n": 10
    },
    {
-    "domain": "bbc.co.uk",
+    "domain": "tinabrown.substack.com",
     "n": 9
    },
    {
-    "domain": "tinabrown.substack.com",
-    "n": 9
+    "domain": "bbc.co.uk",
+    "n": 8
    },
    {
     "domain": "substack.com",
@@ -4101,107 +4101,107 @@
   "blurb": "Semafor's technology coverage \u2014 AI, platforms and the business of tech.",
   "url": "https://www.semafor.com/vertical/tech",
   "totals": {
-   "posts": 40,
-   "signals": 40,
+   "posts": 41,
+   "signals": 41,
    "date_min": "2026-06-08",
    "date_max": "2026-06-23"
   },
   "signal_types": {
-   "article": 40
+   "article": 41
   },
   "signal_kinds": {
+   "links": 23,
    "article": 15,
-   "links": 22,
    "quote": 2,
    "data": 1
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 87.5,
+    "current": 85.4,
     "delta": 0.0,
     "series": {
-     "2026": 87.5
+     "2026": 85.4
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 50.0,
+    "current": 48.8,
     "delta": 0.0,
     "series": {
-     "2026": 50.0
+     "2026": 48.8
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 37.5,
+    "current": 39.0,
     "delta": 0.0,
     "series": {
-     "2026": 37.5
+     "2026": 39.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 35.0,
+    "current": 36.6,
     "delta": 0.0,
     "series": {
-     "2026": 35.0
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 17.5,
-    "delta": 0.0,
-    "series": {
-     "2026": 17.5
+     "2026": 36.6
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 17.5,
+    "current": 19.5,
     "delta": 0.0,
     "series": {
-     "2026": 17.5
+     "2026": 19.5
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 17.1,
+    "delta": 0.0,
+    "series": {
+     "2026": 17.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 7.5,
+    "current": 7.3,
     "delta": 0.0,
     "series": {
-     "2026": 7.5
+     "2026": 7.3
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 5.0,
+    "current": 4.9,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.9
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 5.0,
+    "current": 4.9,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.9
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 2.5,
+    "current": 2.4,
     "delta": 0.0,
     "series": {
-     "2026": 2.5
+     "2026": 2.4
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 2.5,
+    "current": 2.4,
     "delta": 0.0,
     "series": {
-     "2026": 2.5
+     "2026": 2.4
     }
    },
    {
@@ -4219,7 +4219,7 @@
   "top_sources_recent": [
    {
     "domain": "semafor.com",
-    "n": 41
+    "n": 42
    },
    {
     "domain": "wsj.com",
@@ -4227,7 +4227,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 9
+    "n": 10
    },
    {
     "domain": "bloomberg.com",
@@ -4254,6 +4254,14 @@
     "n": 4
    },
    {
+    "domain": "politico.eu",
+    "n": 3
+   },
+   {
+    "domain": "bbc.co.uk",
+    "n": 3
+   },
+   {
     "domain": "asia.nikkei.com",
     "n": 2
    },
@@ -4270,10 +4278,6 @@
     "n": 2
    },
    {
-    "domain": "bbc.co.uk",
-    "n": 2
-   },
-   {
     "domain": "anthropic.com",
     "n": 2
    },
@@ -4282,8 +4286,8 @@
     "n": 2
    },
    {
-    "domain": "politico.eu",
-    "n": 2
+    "domain": "forbes.com",
+    "n": 1
    },
    {
     "domain": "barrons.com",
@@ -4291,17 +4295,13 @@
    },
    {
     "domain": "bbc.com",
-    "n": 1
-   },
-   {
-    "domain": "csis.org",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "semafor.com",
-    "n": 41
+    "n": 42
    },
    {
     "domain": "wsj.com",
@@ -4309,7 +4309,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 9
+    "n": 10
    },
    {
     "domain": "bloomberg.com",
@@ -4336,6 +4336,14 @@
     "n": 4
    },
    {
+    "domain": "politico.eu",
+    "n": 3
+   },
+   {
+    "domain": "bbc.co.uk",
+    "n": 3
+   },
+   {
     "domain": "asia.nikkei.com",
     "n": 2
    },
@@ -4352,10 +4360,6 @@
     "n": 2
    },
    {
-    "domain": "bbc.co.uk",
-    "n": 2
-   },
-   {
     "domain": "anthropic.com",
     "n": 2
    },
@@ -4364,8 +4368,8 @@
     "n": 2
    },
    {
-    "domain": "politico.eu",
-    "n": 2
+    "domain": "forbes.com",
+    "n": 1
    },
    {
     "domain": "barrons.com",
@@ -4373,10 +4377,6 @@
    },
    {
     "domain": "bbc.com",
-    "n": 1
-   },
-   {
-    "domain": "csis.org",
     "n": 1
    }
   ],
