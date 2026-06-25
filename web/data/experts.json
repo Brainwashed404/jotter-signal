@@ -3816,98 +3816,98 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 153,
-   "signals": 153,
+   "posts": 155,
+   "signals": 155,
    "date_min": "2026-06-07",
    "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 153
+   "article": 155
   },
   "signal_kinds": {
-   "article": 69,
-   "longread": 5,
-   "links": 79
+   "article": 70,
+   "links": 80,
+   "longread": 5
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 64.1,
+    "current": 64.5,
     "delta": 0.0,
     "series": {
-     "2026": 64.1
+     "2026": 64.5
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 37.3,
+    "current": 37.4,
     "delta": 0.0,
     "series": {
-     "2026": 37.3
+     "2026": 37.4
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 27.5,
+    "current": 27.7,
     "delta": 0.0,
     "series": {
-     "2026": 27.5
+     "2026": 27.7
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 26.8,
+    "current": 26.5,
     "delta": 0.0,
     "series": {
-     "2026": 26.8
+     "2026": 26.5
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 19.0,
+    "current": 18.7,
     "delta": 0.0,
     "series": {
-     "2026": 19.0
+     "2026": 18.7
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 15.0,
+    "current": 14.8,
     "delta": 0.0,
     "series": {
-     "2026": 15.0
+     "2026": 14.8
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 14.4,
+    "current": 14.2,
     "delta": 0.0,
     "series": {
-     "2026": 14.4
+     "2026": 14.2
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 13.7,
+    "current": 13.5,
     "delta": 0.0,
     "series": {
-     "2026": 13.7
+     "2026": 13.5
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 11.8,
+    "current": 11.6,
     "delta": 0.0,
     "series": {
-     "2026": 11.8
+     "2026": 11.6
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 7.8,
+    "current": 7.7,
     "delta": 0.0,
     "series": {
-     "2026": 7.8
+     "2026": 7.7
     }
    },
    {
@@ -3933,7 +3933,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 534
+    "n": 548
    },
    {
     "domain": "x.com",
@@ -4015,7 +4015,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 534
+    "n": 548
    },
    {
     "domain": "x.com",
@@ -9145,74 +9145,74 @@
   "blurb": "Cognitive scientist and AI researcher; sceptical analysis of LLM hype, AI reliability, regulation and the path to trustworthy AI. Writes \"Marcus on AI\".",
   "url": "https://garymarcus.substack.com",
   "totals": {
-   "posts": 12,
-   "signals": 12,
+   "posts": 13,
+   "signals": 13,
    "date_min": "2026-06-09",
-   "date_max": "2026-06-18"
+   "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 12
+   "article": 13
   },
   "signal_kinds": {
-   "article": 9,
+   "article": 10,
    "longread": 2,
    "qanda": 1
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 91.7,
+    "current": 92.3,
     "delta": 0.0,
     "series": {
-     "2026": 91.7
+     "2026": 92.3
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 91.7,
+    "current": 92.3,
     "delta": 0.0,
     "series": {
-     "2026": 91.7
+     "2026": 92.3
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 50.0,
+    "current": 46.2,
     "delta": 0.0,
     "series": {
-     "2026": 50.0
-    }
-   },
-   {
-    "theme": "Geopolitics & power",
-    "current": 25.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 25.0
+     "2026": 46.2
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 25.0,
+    "current": 30.8,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 30.8
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 23.1,
+    "delta": 0.0,
+    "series": {
+     "2026": 23.1
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 16.7,
+    "current": 15.4,
     "delta": 0.0,
     "series": {
-     "2026": 16.7
+     "2026": 15.4
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 16.7,
+    "current": 15.4,
     "delta": 0.0,
     "series": {
-     "2026": 16.7
+     "2026": 15.4
     }
    },
    {
@@ -9266,7 +9266,7 @@
    },
    {
     "domain": "open.substack.com",
-    "n": 5
+    "n": 6
    },
    {
     "domain": "x.com",
@@ -9332,7 +9332,7 @@
    },
    {
     "domain": "open.substack.com",
-    "n": 5
+    "n": 6
    },
    {
     "domain": "x.com",
