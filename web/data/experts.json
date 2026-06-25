@@ -610,115 +610,115 @@
   "blurb": "Author and activist; writes Pluralistic on monopoly, platform power and 'enshittification' (a term he coined).",
   "url": "https://pluralistic.net",
   "totals": {
-   "posts": 36,
-   "signals": 108,
+   "posts": 37,
+   "signals": 111,
    "date_min": "2026-05-02",
-   "date_max": "2026-06-23"
+   "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 108
+   "article": 111
   },
   "signal_kinds": {
-   "longread": 30,
-   "links": 70,
+   "longread": 31,
+   "links": 72,
    "article": 7,
    "quote": 1
   },
   "themes": [
    {
     "theme": "Platform power / Big Tech",
-    "current": 94.4,
+    "current": 94.6,
     "delta": 0.0,
     "series": {
-     "2026": 94.4
+     "2026": 94.6
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 80.6,
+    "current": 81.1,
     "delta": 0.0,
     "series": {
-     "2026": 80.6
+     "2026": 81.1
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 72.2,
+    "current": 73.0,
     "delta": 0.0,
     "series": {
-     "2026": 72.2
+     "2026": 73.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 69.4,
+    "current": 70.3,
     "delta": 0.0,
     "series": {
-     "2026": 69.4
+     "2026": 70.3
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 66.7,
+    "current": 64.9,
     "delta": 0.0,
     "series": {
-     "2026": 66.7
-    }
-   },
-   {
-    "theme": "Media & journalism",
-    "current": 55.6,
-    "delta": 0.0,
-    "series": {
-     "2026": 55.6
+     "2026": 64.9
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 52.8,
+    "current": 54.1,
     "delta": 0.0,
     "series": {
-     "2026": 52.8
+     "2026": 54.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 52.8,
+    "current": 54.1,
     "delta": 0.0,
     "series": {
-     "2026": 52.8
+     "2026": 54.1
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 54.1,
+    "delta": 0.0,
+    "series": {
+     "2026": 54.1
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 41.7,
+    "current": 43.2,
     "delta": 0.0,
     "series": {
-     "2026": 41.7
+     "2026": 43.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 36.1,
+    "current": 37.8,
     "delta": 0.0,
     "series": {
-     "2026": 36.1
+     "2026": 37.8
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 27.8,
+    "current": 27.0,
     "delta": 0.0,
     "series": {
-     "2026": 27.8
+     "2026": 27.0
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 13.9,
+    "current": 13.5,
     "delta": 0.0,
     "series": {
-     "2026": 13.9
+     "2026": 13.5
     }
    }
   ],
@@ -728,11 +728,11 @@
   "top_sources_recent": [
    {
     "domain": "web.archive.org",
-    "n": 163
+    "n": 169
    },
    {
     "domain": "pluralistic.net",
-    "n": 110
+    "n": 115
    },
    {
     "domain": "memex.craphound.com",
@@ -751,12 +751,12 @@
     "n": 10
    },
    {
-    "domain": "theverge.com",
+    "domain": "arstechnica.com",
     "n": 8
    },
    {
-    "domain": "arstechnica.com",
-    "n": 7
+    "domain": "theverge.com",
+    "n": 8
    },
    {
     "domain": "thebignewsletter.com",
@@ -771,16 +771,16 @@
     "n": 6
    },
    {
+    "domain": "jacobin.com",
+    "n": 5
+   },
+   {
     "domain": "wired.com",
     "n": 5
    },
    {
     "domain": "flickr.com",
     "n": 5
-   },
-   {
-    "domain": "jacobin.com",
-    "n": 4
    },
    {
     "domain": "us.macmillan.com",
@@ -810,11 +810,11 @@
   "top_sources_early": [
    {
     "domain": "web.archive.org",
-    "n": 163
+    "n": 169
    },
    {
     "domain": "pluralistic.net",
-    "n": 110
+    "n": 115
    },
    {
     "domain": "memex.craphound.com",
@@ -833,12 +833,12 @@
     "n": 10
    },
    {
-    "domain": "theverge.com",
+    "domain": "arstechnica.com",
     "n": 8
    },
    {
-    "domain": "arstechnica.com",
-    "n": 7
+    "domain": "theverge.com",
+    "n": 8
    },
    {
     "domain": "thebignewsletter.com",
@@ -853,16 +853,16 @@
     "n": 6
    },
    {
+    "domain": "jacobin.com",
+    "n": 5
+   },
+   {
     "domain": "wired.com",
     "n": 5
    },
    {
     "domain": "flickr.com",
     "n": 5
-   },
-   {
-    "domain": "jacobin.com",
-    "n": 4
    },
    {
     "domain": "us.macmillan.com",
@@ -6078,16 +6078,16 @@
   "blurb": "Atlantic writer and podcaster on economics, technology and the 'abundance' agenda: building a better world by making more of what matters.",
   "url": "https://www.derekthompson.org",
   "totals": {
-   "posts": 22,
-   "signals": 22,
+   "posts": 23,
+   "signals": 23,
    "date_min": "2026-03-17",
-   "date_max": "2026-06-24"
+   "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 22
+   "article": 23
   },
   "signal_kinds": {
-   "links": 2,
+   "links": 3,
    "longread": 14,
    "qanda": 3,
    "article": 3
@@ -6095,98 +6095,98 @@
   "themes": [
    {
     "theme": "Media & journalism",
-    "current": 90.9,
+    "current": 87.0,
     "delta": 0.0,
     "series": {
-     "2026": 90.9
+     "2026": 87.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 81.8,
+    "current": 78.3,
     "delta": 0.0,
     "series": {
-     "2026": 81.8
+     "2026": 78.3
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 54.5,
+    "current": 52.2,
     "delta": 0.0,
     "series": {
-     "2026": 54.5
+     "2026": 52.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 50.0,
+    "current": 47.8,
     "delta": 0.0,
     "series": {
-     "2026": 50.0
+     "2026": 47.8
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 31.8,
+    "current": 30.4,
     "delta": 0.0,
     "series": {
-     "2026": 31.8
+     "2026": 30.4
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 27.3,
+    "current": 26.1,
     "delta": 0.0,
     "series": {
-     "2026": 27.3
+     "2026": 26.1
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 27.3,
+    "current": 26.1,
     "delta": 0.0,
     "series": {
-     "2026": 27.3
+     "2026": 26.1
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 18.2,
+    "current": 17.4,
     "delta": 0.0,
     "series": {
-     "2026": 18.2
+     "2026": 17.4
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 9.1,
+    "current": 8.7,
     "delta": 0.0,
     "series": {
-     "2026": 9.1
+     "2026": 8.7
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 4.5,
+    "current": 4.3,
     "delta": 0.0,
     "series": {
-     "2026": 4.5
+     "2026": 4.3
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 4.5,
+    "current": 4.3,
     "delta": 0.0,
     "series": {
-     "2026": 4.5
+     "2026": 4.3
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 4.5,
+    "current": 4.3,
     "delta": 0.0,
     "series": {
-     "2026": 4.5
+     "2026": 4.3
     }
    }
   ],
@@ -6196,15 +6196,15 @@
   "top_sources_recent": [
    {
     "domain": "unsplash.com",
-    "n": 38
+    "n": 40
    },
    {
     "domain": "images.unsplash.com",
-    "n": 10
+    "n": 11
    },
    {
     "domain": "derekthompson.org",
-    "n": 10
+    "n": 11
    },
    {
     "domain": "theatlantic.com",
@@ -6278,15 +6278,15 @@
   "top_sources_early": [
    {
     "domain": "unsplash.com",
-    "n": 38
+    "n": 40
    },
    {
     "domain": "images.unsplash.com",
-    "n": 10
+    "n": 11
    },
    {
     "domain": "derekthompson.org",
-    "n": 10
+    "n": 11
    },
    {
     "domain": "theatlantic.com",
@@ -7806,98 +7806,98 @@
   "blurb": "Astral Codex Ten: long-form essays on science, medicine, philosophy, politics and rationality.",
   "url": "https://www.astralcodexten.com",
   "totals": {
-   "posts": 24,
-   "signals": 24,
+   "posts": 25,
+   "signals": 25,
    "date_min": "2026-05-11",
-   "date_max": "2026-06-23"
+   "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 24
+   "article": 25
   },
   "signal_kinds": {
+   "links": 16,
    "longread": 7,
-   "links": 15,
    "article": 2
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 62.5,
+    "current": 60.0,
     "delta": 0.0,
     "series": {
-     "2026": 62.5
+     "2026": 60.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 29.2,
+    "current": 28.0,
     "delta": 0.0,
     "series": {
-     "2026": 29.2
+     "2026": 28.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 25.0,
+    "current": 24.0,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 24.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 25.0,
+    "current": 24.0,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 24.0
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 16.7,
+    "current": 16.0,
     "delta": 0.0,
     "series": {
-     "2026": 16.7
+     "2026": 16.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 16.7,
+    "current": 16.0,
     "delta": 0.0,
     "series": {
-     "2026": 16.7
+     "2026": 16.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 12.5,
+    "current": 12.0,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 12.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 4.2,
+    "current": 4.0,
     "delta": 0.0,
     "series": {
-     "2026": 4.2
+     "2026": 4.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 4.2,
+    "current": 4.0,
     "delta": 0.0,
     "series": {
-     "2026": 4.2
+     "2026": 4.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 4.2,
+    "current": 4.0,
     "delta": 0.0,
     "series": {
-     "2026": 4.2
+     "2026": 4.0
     }
    },
    {
@@ -7923,7 +7923,7 @@
   "top_sources_recent": [
    {
     "domain": "astralcodexten.com",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "reddit.com",
@@ -8005,7 +8005,7 @@
   "top_sources_early": [
    {
     "domain": "astralcodexten.com",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "reddit.com",
