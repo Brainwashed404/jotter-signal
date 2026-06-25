@@ -3816,106 +3816,106 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 147,
-   "signals": 147,
+   "posts": 149,
+   "signals": 149,
    "date_min": "2026-06-07",
-   "date_max": "2026-06-24"
+   "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 147
+   "article": 149
   },
   "signal_kinds": {
-   "links": 76,
-   "article": 67,
+   "article": 68,
+   "links": 77,
    "longread": 4
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 63.9,
+    "current": 63.8,
     "delta": 0.0,
     "series": {
-     "2026": 63.9
+     "2026": 63.8
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 36.1,
+    "current": 36.2,
     "delta": 0.0,
     "series": {
-     "2026": 36.1
+     "2026": 36.2
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 27.9,
+    "current": 27.5,
     "delta": 0.0,
     "series": {
-     "2026": 27.9
+     "2026": 27.5
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 26.5,
+    "current": 26.8,
     "delta": 0.0,
     "series": {
-     "2026": 26.5
+     "2026": 26.8
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 19.7,
+    "current": 19.5,
     "delta": 0.0,
     "series": {
-     "2026": 19.7
+     "2026": 19.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 15.0,
+    "current": 14.8,
     "delta": 0.0,
     "series": {
-     "2026": 15.0
+     "2026": 14.8
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 15.0,
+    "current": 14.8,
     "delta": 0.0,
     "series": {
-     "2026": 15.0
+     "2026": 14.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 14.3,
+    "current": 14.1,
     "delta": 0.0,
     "series": {
-     "2026": 14.3
+     "2026": 14.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 10.2,
+    "current": 10.7,
     "delta": 0.0,
     "series": {
-     "2026": 10.2
+     "2026": 10.7
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 8.2,
+    "current": 8.1,
     "delta": 0.0,
     "series": {
-     "2026": 8.2
+     "2026": 8.1
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 4.8,
+    "current": 4.7,
     "delta": 0.0,
     "series": {
-     "2026": 4.8
+     "2026": 4.7
     }
    },
    {
@@ -3933,11 +3933,11 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 511
+    "n": 520
    },
    {
     "domain": "x.com",
-    "n": 47
+    "n": 48
    },
    {
     "domain": "nytimes.com",
@@ -3953,19 +3953,19 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 17
+    "n": 18
    },
    {
     "domain": "wsj.com",
     "n": 16
    },
    {
-    "domain": "reuters.com",
+    "domain": "bbc.com",
     "n": 12
    },
    {
-    "domain": "bbc.com",
-    "n": 11
+    "domain": "reuters.com",
+    "n": 12
    },
    {
     "domain": "finance.yahoo.com",
@@ -4015,11 +4015,11 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 511
+    "n": 520
    },
    {
     "domain": "x.com",
-    "n": 47
+    "n": 48
    },
    {
     "domain": "nytimes.com",
@@ -4035,19 +4035,19 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 17
+    "n": 18
    },
    {
     "domain": "wsj.com",
     "n": 16
    },
    {
-    "domain": "reuters.com",
+    "domain": "bbc.com",
     "n": 12
    },
    {
-    "domain": "bbc.com",
-    "n": 11
+    "domain": "reuters.com",
+    "n": 12
    },
    {
     "domain": "finance.yahoo.com",
@@ -5791,91 +5791,91 @@
   "blurb": "Azeem Azhar on AI, technology and the exponential age \u2014 weekly analysis of how fast-moving tech reshapes business, society and geopolitics.",
   "url": "https://www.exponentialview.co",
   "totals": {
-   "posts": 20,
-   "signals": 20,
+   "posts": 21,
+   "signals": 21,
    "date_min": "2026-05-04",
-   "date_max": "2026-06-21"
+   "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 20
+   "article": 21
   },
   "signal_kinds": {
+   "longread": 5,
    "links": 4,
-   "longread": 4,
    "data": 2,
    "article": 10
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 95.0,
+    "current": 95.2,
     "delta": 0.0,
     "series": {
-     "2026": 95.0
+     "2026": 95.2
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 70.0,
+    "current": 71.4,
     "delta": 0.0,
     "series": {
-     "2026": 70.0
+     "2026": 71.4
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 65.0,
+    "current": 66.7,
     "delta": 0.0,
     "series": {
-     "2026": 65.0
+     "2026": 66.7
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 30.0,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 30.0
+     "2026": 33.3
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 20.0,
+    "current": 23.8,
     "delta": 0.0,
     "series": {
-     "2026": 20.0
+     "2026": 23.8
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 20.0,
+    "current": 23.8,
     "delta": 0.0,
     "series": {
-     "2026": 20.0
+     "2026": 23.8
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 15.0,
+    "current": 19.0,
     "delta": 0.0,
     "series": {
-     "2026": 15.0
+     "2026": 19.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 5.0,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 5.0,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.8
     }
    },
    {
@@ -5916,6 +5916,10 @@
     "n": 9
    },
    {
+    "domain": "intelligence.exponentialview.co",
+    "n": 5
+   },
+   {
     "domain": "strangeloopcanon.com",
     "n": 4
    },
@@ -5956,6 +5960,14 @@
     "n": 2
    },
    {
+    "domain": "mckinsey.com",
+    "n": 1
+   },
+   {
+    "domain": "bcg.com",
+    "n": 1
+   },
+   {
     "domain": "hbs.edu",
     "n": 1
    },
@@ -5973,18 +5985,6 @@
    },
    {
     "domain": "cognition.ai",
-    "n": 1
-   },
-   {
-    "domain": "sanders.senate.gov",
-    "n": 1
-   },
-   {
-    "domain": "politico.com",
-    "n": 1
-   },
-   {
-    "domain": "www-cdn.anthropic.com",
     "n": 1
    }
   ],
@@ -5998,6 +5998,10 @@
     "n": 9
    },
    {
+    "domain": "intelligence.exponentialview.co",
+    "n": 5
+   },
+   {
     "domain": "strangeloopcanon.com",
     "n": 4
    },
@@ -6038,6 +6042,14 @@
     "n": 2
    },
    {
+    "domain": "mckinsey.com",
+    "n": 1
+   },
+   {
+    "domain": "bcg.com",
+    "n": 1
+   },
+   {
     "domain": "hbs.edu",
     "n": 1
    },
@@ -6055,18 +6067,6 @@
    },
    {
     "domain": "cognition.ai",
-    "n": 1
-   },
-   {
-    "domain": "sanders.senate.gov",
-    "n": 1
-   },
-   {
-    "domain": "politico.com",
-    "n": 1
-   },
-   {
-    "domain": "www-cdn.anthropic.com",
     "n": 1
    }
   ],
@@ -8092,18 +8092,18 @@
   "blurb": "Andreessen Horowitz's publication on technology, startups and the ideas shaping the future.",
   "url": "https://www.a16z.news",
   "totals": {
-   "posts": 30,
-   "signals": 30,
+   "posts": 32,
+   "signals": 32,
    "date_min": "2026-06-02",
-   "date_max": "2026-06-24"
+   "date_max": "2026-06-25"
   },
   "signal_types": {
-   "article": 30
+   "article": 32
   },
   "signal_kinds": {
-   "longread": 25,
-   "links": 2,
-   "article": 3
+   "longread": 26,
+   "article": 4,
+   "links": 2
   },
   "themes": [
    {
@@ -8116,74 +8116,74 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 86.7,
+    "current": 84.4,
     "delta": 0.0,
     "series": {
-     "2026": 86.7
+     "2026": 84.4
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 60.0,
+    "current": 56.2,
     "delta": 0.0,
     "series": {
-     "2026": 60.0
+     "2026": 56.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 43.3,
+    "current": 40.6,
     "delta": 0.0,
     "series": {
-     "2026": 43.3
+     "2026": 40.6
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 23.3,
+    "current": 25.0,
     "delta": 0.0,
     "series": {
-     "2026": 23.3
+     "2026": 25.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 20.0,
+    "current": 21.9,
     "delta": 0.0,
     "series": {
-     "2026": 20.0
+     "2026": 21.9
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 16.7,
+    "current": 15.6,
     "delta": 0.0,
     "series": {
-     "2026": 16.7
+     "2026": 15.6
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 10.0,
+    "current": 9.4,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 9.4
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 3.3,
+    "current": 3.1,
     "delta": 0.0,
     "series": {
-     "2026": 3.3
+     "2026": 3.1
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 3.3,
+    "current": 3.1,
     "delta": 0.0,
     "series": {
-     "2026": 3.3
+     "2026": 3.1
     }
    },
    {
@@ -8209,11 +8209,11 @@
   "top_sources_recent": [
    {
     "domain": "a16z.news",
-    "n": 158
+    "n": 168
    },
    {
     "domain": "a16z.com",
-    "n": 31
+    "n": 33
    },
    {
     "domain": "x.com",
@@ -8226,6 +8226,22 @@
    {
     "domain": "build.a16z.com",
     "n": 2
+   },
+   {
+    "domain": "nasa.gov",
+    "n": 1
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 1
+   },
+   {
+    "domain": "ays-russia-90-million-for-soyuz-seat.html",
+    "n": 1
+   },
+   {
+    "domain": "netris.io",
+    "n": 1
    },
    {
     "domain": "incompleteideas.net",
@@ -8269,33 +8285,17 @@
    },
    {
     "domain": "ntrs.nasa.gov",
-    "n": 1
-   },
-   {
-    "domain": "scientificamerican.com",
-    "n": 1
-   },
-   {
-    "domain": "sparktoro.com",
-    "n": 1
-   },
-   {
-    "domain": "ahrefs.com",
-    "n": 1
-   },
-   {
-    "domain": "papers.ssrn.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "a16z.news",
-    "n": 158
+    "n": 168
    },
    {
     "domain": "a16z.com",
-    "n": 31
+    "n": 33
    },
    {
     "domain": "x.com",
@@ -8308,6 +8308,22 @@
    {
     "domain": "build.a16z.com",
     "n": 2
+   },
+   {
+    "domain": "nasa.gov",
+    "n": 1
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 1
+   },
+   {
+    "domain": "ays-russia-90-million-for-soyuz-seat.html",
+    "n": 1
+   },
+   {
+    "domain": "netris.io",
+    "n": 1
    },
    {
     "domain": "incompleteideas.net",
@@ -8351,22 +8367,6 @@
    },
    {
     "domain": "ntrs.nasa.gov",
-    "n": 1
-   },
-   {
-    "domain": "scientificamerican.com",
-    "n": 1
-   },
-   {
-    "domain": "sparktoro.com",
-    "n": 1
-   },
-   {
-    "domain": "ahrefs.com",
-    "n": 1
-   },
-   {
-    "domain": "papers.ssrn.com",
     "n": 1
    }
   ],
