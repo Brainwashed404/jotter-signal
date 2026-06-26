@@ -3816,114 +3816,114 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 160,
-   "signals": 160,
+   "posts": 164,
+   "signals": 164,
    "date_min": "2026-06-07",
    "date_max": "2026-06-26"
   },
   "signal_types": {
-   "article": 160
+   "article": 164
   },
   "signal_kinds": {
-   "links": 84,
-   "article": 71,
+   "links": 85,
+   "article": 74,
    "longread": 5
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 63.1,
+    "current": 63.4,
     "delta": 0.0,
     "series": {
-     "2026": 63.1
+     "2026": 63.4
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 36.9,
+    "current": 36.6,
     "delta": 0.0,
     "series": {
-     "2026": 36.9
+     "2026": 36.6
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 28.1,
+    "current": 28.0,
     "delta": 0.0,
     "series": {
-     "2026": 28.1
+     "2026": 28.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 26.2,
+    "current": 25.6,
     "delta": 0.0,
     "series": {
-     "2026": 26.2
+     "2026": 25.6
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 18.8,
+    "current": 18.3,
     "delta": 0.0,
     "series": {
-     "2026": 18.8
+     "2026": 18.3
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 16.2,
+    "current": 15.9,
     "delta": 0.0,
     "series": {
-     "2026": 16.2
+     "2026": 15.9
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 13.8,
+    "current": 14.0,
     "delta": 0.0,
     "series": {
-     "2026": 13.8
+     "2026": 14.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 13.1,
+    "current": 12.8,
     "delta": 0.0,
     "series": {
-     "2026": 13.1
+     "2026": 12.8
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 11.9,
+    "current": 11.6,
     "delta": 0.0,
     "series": {
-     "2026": 11.9
+     "2026": 11.6
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 8.8,
+    "current": 9.1,
     "delta": 0.0,
     "series": {
-     "2026": 8.8
+     "2026": 9.1
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 5.0,
+    "current": 4.9,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.9
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 2.5,
+    "current": 2.4,
     "delta": 0.0,
     "series": {
-     "2026": 2.5
+     "2026": 2.4
     }
    }
   ],
@@ -3933,19 +3933,19 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 569
+    "n": 581
    },
    {
     "domain": "x.com",
-    "n": 48
+    "n": 49
    },
    {
     "domain": "nytimes.com",
-    "n": 40
+    "n": 41
    },
    {
     "domain": "theguardian.com",
-    "n": 26
+    "n": 27
    },
    {
     "domain": "wired.com",
@@ -3960,16 +3960,24 @@
     "n": 17
    },
    {
+    "domain": "reddit.com",
+    "n": 16
+   },
+   {
     "domain": "bbc.com",
     "n": 13
    },
    {
-    "domain": "reddit.com",
+    "domain": "reuters.com",
     "n": 12
    },
    {
-    "domain": "reuters.com",
-    "n": 12
+    "domain": "ft.com",
+    "n": 10
+   },
+   {
+    "domain": "cnbc.com",
+    "n": 10
    },
    {
     "domain": "bloomberg.com",
@@ -3977,14 +3985,6 @@
    },
    {
     "domain": "finance.yahoo.com",
-    "n": 9
-   },
-   {
-    "domain": "cnbc.com",
-    "n": 9
-   },
-   {
-    "domain": "ft.com",
     "n": 9
    },
    {
@@ -4015,19 +4015,19 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 569
+    "n": 581
    },
    {
     "domain": "x.com",
-    "n": 48
+    "n": 49
    },
    {
     "domain": "nytimes.com",
-    "n": 40
+    "n": 41
    },
    {
     "domain": "theguardian.com",
-    "n": 26
+    "n": 27
    },
    {
     "domain": "wired.com",
@@ -4042,16 +4042,24 @@
     "n": 17
    },
    {
+    "domain": "reddit.com",
+    "n": 16
+   },
+   {
     "domain": "bbc.com",
     "n": 13
    },
    {
-    "domain": "reddit.com",
+    "domain": "reuters.com",
     "n": 12
    },
    {
-    "domain": "reuters.com",
-    "n": 12
+    "domain": "ft.com",
+    "n": 10
+   },
+   {
+    "domain": "cnbc.com",
+    "n": 10
    },
    {
     "domain": "bloomberg.com",
@@ -4059,14 +4067,6 @@
    },
    {
     "domain": "finance.yahoo.com",
-    "n": 9
-   },
-   {
-    "domain": "cnbc.com",
-    "n": 9
-   },
-   {
-    "domain": "ft.com",
     "n": 9
    },
    {
@@ -4102,16 +4102,16 @@
   "blurb": "Semafor's technology coverage \u2014 AI, platforms and the business of tech.",
   "url": "https://www.semafor.com/vertical/tech",
   "totals": {
-   "posts": 48,
-   "signals": 48,
+   "posts": 50,
+   "signals": 50,
    "date_min": "2026-06-08",
    "date_max": "2026-06-26"
   },
   "signal_types": {
-   "article": 48
+   "article": 50
   },
   "signal_kinds": {
-   "article": 21,
+   "article": 23,
    "links": 24,
    "quote": 2,
    "data": 1
@@ -4119,90 +4119,90 @@
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 83.3,
+    "current": 84.0,
     "delta": 0.0,
     "series": {
-     "2026": 83.3
+     "2026": 84.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 47.9,
+    "current": 48.0,
     "delta": 0.0,
     "series": {
-     "2026": 47.9
+     "2026": 48.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 35.4,
+    "current": 34.0,
     "delta": 0.0,
     "series": {
-     "2026": 35.4
+     "2026": 34.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 33.3,
+    "current": 32.0,
     "delta": 0.0,
     "series": {
-     "2026": 33.3
+     "2026": 32.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 18.8,
+    "current": 20.0,
     "delta": 0.0,
     "series": {
-     "2026": 18.8
+     "2026": 20.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 16.7,
+    "current": 16.0,
     "delta": 0.0,
     "series": {
-     "2026": 16.7
+     "2026": 16.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 6.2,
+    "current": 8.0,
     "delta": 0.0,
     "series": {
-     "2026": 6.2
+     "2026": 8.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 4.2,
+    "current": 4.0,
     "delta": 0.0,
     "series": {
-     "2026": 4.2
+     "2026": 4.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 4.2,
+    "current": 4.0,
     "delta": 0.0,
     "series": {
-     "2026": 4.2
+     "2026": 4.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 4.2,
+    "current": 4.0,
     "delta": 0.0,
     "series": {
-     "2026": 4.2
+     "2026": 4.0
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 2.1,
+    "current": 2.0,
     "delta": 0.0,
     "series": {
-     "2026": 2.1
+     "2026": 2.0
     }
    },
    {
@@ -4220,7 +4220,7 @@
   "top_sources_recent": [
    {
     "domain": "semafor.com",
-    "n": 48
+    "n": 49
    },
    {
     "domain": "wsj.com",
@@ -4291,18 +4291,18 @@
     "n": 2
    },
    {
-    "domain": "businessinsider.com",
+    "domain": "hollywoodreporter.com",
     "n": 1
    },
    {
-    "domain": "restofworld.org",
+    "domain": "businessinsider.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "semafor.com",
-    "n": 48
+    "n": 49
    },
    {
     "domain": "wsj.com",
@@ -4373,11 +4373,11 @@
     "n": 2
    },
    {
-    "domain": "businessinsider.com",
+    "domain": "hollywoodreporter.com",
     "n": 1
    },
    {
-    "domain": "restofworld.org",
+    "domain": "businessinsider.com",
     "n": 1
    }
   ],
