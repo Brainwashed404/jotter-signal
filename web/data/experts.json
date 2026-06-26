@@ -2092,17 +2092,17 @@
   "blurb": "Old media is dead. Exploring the Information Space and the future of media and attention.",
   "url": "https://www.peoplevsalgorithms.com",
   "totals": {
-   "posts": 22,
-   "signals": 22,
+   "posts": 23,
+   "signals": 23,
    "date_min": "2026-04-10",
-   "date_max": "2026-06-19"
+   "date_max": "2026-06-26"
   },
   "signal_types": {
-   "article": 22
+   "article": 23
   },
   "signal_kinds": {
+   "links": 14,
    "article": 1,
-   "links": 13,
    "longread": 8
   },
   "themes": [
@@ -2116,74 +2116,74 @@
    },
    {
     "theme": "Media & journalism",
-    "current": 95.5,
+    "current": 95.7,
     "delta": 0.0,
     "series": {
-     "2026": 95.5
+     "2026": 95.7
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 77.3,
+    "current": 78.3,
     "delta": 0.0,
     "series": {
-     "2026": 77.3
+     "2026": 78.3
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 63.6,
+    "current": 65.2,
     "delta": 0.0,
     "series": {
-     "2026": 63.6
+     "2026": 65.2
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 54.5,
+    "current": 52.2,
     "delta": 0.0,
     "series": {
-     "2026": 54.5
+     "2026": 52.2
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 22.7,
+    "current": 21.7,
     "delta": 0.0,
     "series": {
-     "2026": 22.7
+     "2026": 21.7
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 18.2,
+    "current": 17.4,
     "delta": 0.0,
     "series": {
-     "2026": 18.2
+     "2026": 17.4
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 13.6,
+    "current": 13.0,
     "delta": 0.0,
     "series": {
-     "2026": 13.6
+     "2026": 13.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 13.6,
+    "current": 13.0,
     "delta": 0.0,
     "series": {
-     "2026": 13.6
+     "2026": 13.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 9.1,
+    "current": 8.7,
     "delta": 0.0,
     "series": {
-     "2026": 9.1
+     "2026": 8.7
     }
    },
    {
@@ -2209,11 +2209,19 @@
   "top_sources_recent": [
    {
     "domain": "twitter.com",
-    "n": 22
+    "n": 24
    },
    {
     "domain": "peoplevsalgorithms.com",
-    "n": 21
+    "n": 22
+   },
+   {
+    "domain": "therebooting.com",
+    "n": 12
+   },
+   {
+    "domain": "threads.com",
+    "n": 12
    },
    {
     "domain": "podcasts.apple.com",
@@ -2221,14 +2229,6 @@
    },
    {
     "domain": "open.spotify.com",
-    "n": 11
-   },
-   {
-    "domain": "therebooting.com",
-    "n": 11
-   },
-   {
-    "domain": "threads.com",
     "n": 11
    },
    {
@@ -2244,11 +2244,11 @@
     "n": 5
    },
    {
-    "domain": "pvanotes.com",
-    "n": 3
+    "domain": "human.computer",
+    "n": 4
    },
    {
-    "domain": "human.computer",
+    "domain": "pvanotes.com",
     "n": 3
    },
    {
@@ -2291,11 +2291,19 @@
   "top_sources_early": [
    {
     "domain": "twitter.com",
-    "n": 22
+    "n": 24
    },
    {
     "domain": "peoplevsalgorithms.com",
-    "n": 21
+    "n": 22
+   },
+   {
+    "domain": "therebooting.com",
+    "n": 12
+   },
+   {
+    "domain": "threads.com",
+    "n": 12
    },
    {
     "domain": "podcasts.apple.com",
@@ -2303,14 +2311,6 @@
    },
    {
     "domain": "open.spotify.com",
-    "n": 11
-   },
-   {
-    "domain": "therebooting.com",
-    "n": 11
-   },
-   {
-    "domain": "threads.com",
     "n": 11
    },
    {
@@ -2326,11 +2326,11 @@
     "n": 5
    },
    {
-    "domain": "pvanotes.com",
-    "n": 3
+    "domain": "human.computer",
+    "n": 4
    },
    {
-    "domain": "human.computer",
+    "domain": "pvanotes.com",
     "n": 3
    },
    {
@@ -3530,98 +3530,98 @@
   "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
   "url": "https://www.protein.xyz/tag/seeds/",
   "totals": {
-   "posts": 17,
-   "signals": 17,
+   "posts": 18,
+   "signals": 18,
    "date_min": "2026-04-28",
-   "date_max": "2026-06-24"
+   "date_max": "2026-06-26"
   },
   "signal_types": {
-   "article": 17
+   "article": 18
   },
   "signal_kinds": {
+   "longread": 11,
    "article": 6,
-   "longread": 10,
    "qanda": 1
   },
   "themes": [
    {
     "theme": "Social media & attention",
-    "current": 76.5,
+    "current": 77.8,
     "delta": 0.0,
     "series": {
-     "2026": 76.5
+     "2026": 77.8
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 58.8,
+    "current": 61.1,
     "delta": 0.0,
     "series": {
-     "2026": 58.8
+     "2026": 61.1
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 58.8,
+    "current": 61.1,
     "delta": 0.0,
     "series": {
-     "2026": 58.8
+     "2026": 61.1
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 47.1,
+    "current": 50.0,
     "delta": 0.0,
     "series": {
-     "2026": 47.1
+     "2026": 50.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 41.2,
+    "current": 38.9,
     "delta": 0.0,
     "series": {
-     "2026": 41.2
+     "2026": 38.9
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 29.4,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 29.4
+     "2026": 33.3
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 29.4,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 29.4
+     "2026": 33.3
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 5.9,
+    "current": 5.6,
     "delta": 0.0,
     "series": {
-     "2026": 5.9
+     "2026": 5.6
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 5.9,
+    "current": 5.6,
     "delta": 0.0,
     "series": {
-     "2026": 5.9
+     "2026": 5.6
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 5.9,
+    "current": 5.6,
     "delta": 0.0,
     "series": {
-     "2026": 5.9
+     "2026": 5.6
     }
    },
    {
@@ -3647,11 +3647,11 @@
   "top_sources_recent": [
    {
     "domain": "instagram.com",
-    "n": 14
+    "n": 16
    },
    {
     "domain": "protein.xyz",
-    "n": 12
+    "n": 14
    },
    {
     "domain": "us06web.zoom.us",
@@ -3676,6 +3676,22 @@
    {
     "domain": "wsj.com",
     "n": 2
+   },
+   {
+    "domain": "thelightphone.com",
+    "n": 1
+   },
+   {
+    "domain": "teenage.engineering",
+    "n": 1
+   },
+   {
+    "domain": "zellerfeld.com",
+    "n": 1
+   },
+   {
+    "domain": "noware.nyc",
+    "n": 1
    },
    {
     "domain": "asexualhistoryoftheinternet.com",
@@ -3707,33 +3723,17 @@
    },
    {
     "domain": "ystrickler.com",
-    "n": 1
-   },
-   {
-    "domain": "pencilmagazine.com",
-    "n": 1
-   },
-   {
-    "domain": "stackmagazines.com",
-    "n": 1
-   },
-   {
-    "domain": "gq.com",
-    "n": 1
-   },
-   {
-    "domain": "kindastudios.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "instagram.com",
-    "n": 14
+    "n": 16
    },
    {
     "domain": "protein.xyz",
-    "n": 12
+    "n": 14
    },
    {
     "domain": "us06web.zoom.us",
@@ -3758,6 +3758,22 @@
    {
     "domain": "wsj.com",
     "n": 2
+   },
+   {
+    "domain": "thelightphone.com",
+    "n": 1
+   },
+   {
+    "domain": "teenage.engineering",
+    "n": 1
+   },
+   {
+    "domain": "zellerfeld.com",
+    "n": 1
+   },
+   {
+    "domain": "noware.nyc",
+    "n": 1
    },
    {
     "domain": "asexualhistoryoftheinternet.com",
@@ -3789,22 +3805,6 @@
    },
    {
     "domain": "ystrickler.com",
-    "n": 1
-   },
-   {
-    "domain": "pencilmagazine.com",
-    "n": 1
-   },
-   {
-    "domain": "stackmagazines.com",
-    "n": 1
-   },
-   {
-    "domain": "gq.com",
-    "n": 1
-   },
-   {
-    "domain": "kindastudios.com",
     "n": 1
    }
   ],
