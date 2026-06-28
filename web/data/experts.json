@@ -1806,16 +1806,16 @@
   "blurb": "Economics and other interesting stuff.",
   "url": "https://www.noahpinion.blog",
   "totals": {
-   "posts": 25,
-   "signals": 25,
+   "posts": 26,
+   "signals": 26,
    "date_min": "2026-05-11",
-   "date_max": "2026-06-26"
+   "date_max": "2026-06-28"
   },
   "signal_types": {
-   "article": 25
+   "article": 26
   },
   "signal_kinds": {
-   "links": 13,
+   "links": 14,
    "article": 1,
    "longread": 11
   },
@@ -1830,82 +1830,82 @@
    },
    {
     "theme": "Economy & markets",
-    "current": 96.0,
+    "current": 96.2,
     "delta": 0.0,
     "series": {
-     "2026": 96.0
+     "2026": 96.2
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 68.0,
+    "current": 69.2,
     "delta": 0.0,
     "series": {
-     "2026": 68.0
+     "2026": 69.2
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 56.0,
+    "current": 53.8,
     "delta": 0.0,
     "series": {
-     "2026": 56.0
+     "2026": 53.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 56.0,
+    "current": 53.8,
     "delta": 0.0,
     "series": {
-     "2026": 56.0
+     "2026": 53.8
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 48.0,
+    "current": 46.2,
     "delta": 0.0,
     "series": {
-     "2026": 48.0
+     "2026": 46.2
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 28.0,
+    "current": 30.8,
     "delta": 0.0,
     "series": {
-     "2026": 28.0
+     "2026": 30.8
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 28.0,
+    "current": 30.8,
     "delta": 0.0,
     "series": {
-     "2026": 28.0
+     "2026": 30.8
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 24.0,
+    "current": 23.1,
     "delta": 0.0,
     "series": {
-     "2026": 24.0
+     "2026": 23.1
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 16.0,
+    "current": 19.2,
     "delta": 0.0,
     "series": {
-     "2026": 16.0
+     "2026": 19.2
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 4.0,
+    "current": 3.8,
     "delta": 0.0,
     "series": {
-     "2026": 4.0
+     "2026": 3.8
     }
    },
    {
@@ -1931,7 +1931,7 @@
    },
    {
     "domain": "x.com",
-    "n": 10
+    "n": 12
    },
    {
     "domain": "wsj.com",
@@ -1952,6 +1952,10 @@
    {
     "domain": "rhg.com",
     "n": 5
+   },
+   {
+    "domain": "theatlantic.com",
+    "n": 3
    },
    {
     "domain": "web.archive.org",
@@ -1995,10 +1999,6 @@
    },
    {
     "domain": "blog.hirokoyoda.com",
-    "n": 2
-   },
-   {
-    "domain": "theatlantic.com",
     "n": 2
    }
   ],
@@ -2013,7 +2013,7 @@
    },
    {
     "domain": "x.com",
-    "n": 10
+    "n": 12
    },
    {
     "domain": "wsj.com",
@@ -2034,6 +2034,10 @@
    {
     "domain": "rhg.com",
     "n": 5
+   },
+   {
+    "domain": "theatlantic.com",
+    "n": 3
    },
    {
     "domain": "web.archive.org",
@@ -2077,10 +2081,6 @@
    },
    {
     "domain": "blog.hirokoyoda.com",
-    "n": 2
-   },
-   {
-    "domain": "theatlantic.com",
     "n": 2
    }
   ],
