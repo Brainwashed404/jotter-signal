@@ -5799,91 +5799,91 @@
   "blurb": "Azeem Azhar on AI, technology and the exponential age \u2014 weekly analysis of how fast-moving tech reshapes business, society and geopolitics.",
   "url": "https://www.exponentialview.co",
   "totals": {
-   "posts": 21,
-   "signals": 21,
+   "posts": 22,
+   "signals": 22,
    "date_min": "2026-05-04",
-   "date_max": "2026-06-25"
+   "date_max": "2026-06-28"
   },
   "signal_types": {
-   "article": 21
+   "article": 22
   },
   "signal_kinds": {
+   "article": 11,
    "longread": 5,
    "links": 4,
-   "data": 2,
-   "article": 10
+   "data": 2
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 95.2,
+    "current": 95.5,
     "delta": 0.0,
     "series": {
-     "2026": 95.2
+     "2026": 95.5
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 71.4,
+    "current": 72.7,
     "delta": 0.0,
     "series": {
-     "2026": 71.4
+     "2026": 72.7
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 66.7,
+    "current": 68.2,
     "delta": 0.0,
     "series": {
-     "2026": 66.7
+     "2026": 68.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 33.3,
+    "current": 36.4,
     "delta": 0.0,
     "series": {
-     "2026": 33.3
+     "2026": 36.4
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 23.8,
+    "current": 22.7,
     "delta": 0.0,
     "series": {
-     "2026": 23.8
-    }
-   },
-   {
-    "theme": "Labour & automation",
-    "current": 23.8,
-    "delta": 0.0,
-    "series": {
-     "2026": 23.8
+     "2026": 22.7
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 19.0,
+    "current": 22.7,
     "delta": 0.0,
     "series": {
-     "2026": 19.0
+     "2026": 22.7
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 22.7,
+    "delta": 0.0,
+    "series": {
+     "2026": 22.7
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 4.8,
+    "current": 4.5,
     "delta": 0.0,
     "series": {
-     "2026": 4.8
+     "2026": 4.5
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 4.8,
+    "current": 4.5,
     "delta": 0.0,
     "series": {
-     "2026": 4.8
+     "2026": 4.5
     }
    },
    {
@@ -5917,7 +5917,7 @@
   "top_sources_recent": [
    {
     "domain": "exponentialview.co",
-    "n": 29
+    "n": 31
    },
    {
     "domain": "x.com",
@@ -5944,6 +5944,14 @@
     "n": 3
    },
    {
+    "domain": "bloomberg.com",
+    "n": 2
+   },
+   {
+    "domain": "wsj.com",
+    "n": 2
+   },
+   {
     "domain": "nature.com",
     "n": 2
    },
@@ -5968,6 +5976,10 @@
     "n": 2
    },
    {
+    "domain": "om.co",
+    "n": 1
+   },
+   {
     "domain": "mckinsey.com",
     "n": 1
    },
@@ -5981,25 +5993,13 @@
    },
    {
     "domain": "uni-muenster.de",
-    "n": 1
-   },
-   {
-    "domain": "challengergray.com",
-    "n": 1
-   },
-   {
-    "domain": "econlab.substack.com",
-    "n": 1
-   },
-   {
-    "domain": "cognition.ai",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "exponentialview.co",
-    "n": 29
+    "n": 31
    },
    {
     "domain": "x.com",
@@ -6026,6 +6026,14 @@
     "n": 3
    },
    {
+    "domain": "bloomberg.com",
+    "n": 2
+   },
+   {
+    "domain": "wsj.com",
+    "n": 2
+   },
+   {
     "domain": "nature.com",
     "n": 2
    },
@@ -6050,6 +6058,10 @@
     "n": 2
    },
    {
+    "domain": "om.co",
+    "n": 1
+   },
+   {
     "domain": "mckinsey.com",
     "n": 1
    },
@@ -6063,18 +6075,6 @@
    },
    {
     "domain": "uni-muenster.de",
-    "n": 1
-   },
-   {
-    "domain": "challengergray.com",
-    "n": 1
-   },
-   {
-    "domain": "econlab.substack.com",
-    "n": 1
-   },
-   {
-    "domain": "cognition.ai",
     "n": 1
    }
   ],
