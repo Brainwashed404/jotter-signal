@@ -3816,98 +3816,98 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 175,
-   "signals": 175,
+   "posts": 178,
+   "signals": 178,
    "date_min": "2026-06-07",
-   "date_max": "2026-06-27"
+   "date_max": "2026-06-28"
   },
   "signal_types": {
-   "article": 175
+   "article": 178
   },
   "signal_kinds": {
-   "links": 92,
-   "article": 78,
+   "links": 93,
+   "article": 80,
    "longread": 5
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 62.3,
+    "current": 62.4,
     "delta": 0.0,
     "series": {
-     "2026": 62.3
+     "2026": 62.4
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 37.1,
+    "current": 36.5,
     "delta": 0.0,
     "series": {
-     "2026": 37.1
+     "2026": 36.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 28.0,
+    "current": 28.1,
     "delta": 0.0,
     "series": {
-     "2026": 28.0
+     "2026": 28.1
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 26.9,
+    "current": 27.0,
     "delta": 0.0,
     "series": {
-     "2026": 26.9
+     "2026": 27.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 18.9,
+    "current": 19.1,
     "delta": 0.0,
     "series": {
-     "2026": 18.9
+     "2026": 19.1
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 15.4,
+    "current": 15.2,
     "delta": 0.0,
     "series": {
-     "2026": 15.4
+     "2026": 15.2
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 13.1,
+    "current": 13.5,
     "delta": 0.0,
     "series": {
-     "2026": 13.1
+     "2026": 13.5
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 12.6,
+    "current": 12.9,
     "delta": 0.0,
     "series": {
-     "2026": 12.6
+     "2026": 12.9
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 11.4,
+    "current": 11.2,
     "delta": 0.0,
     "series": {
-     "2026": 11.4
+     "2026": 11.2
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 9.1,
+    "current": 9.0,
     "delta": 0.0,
     "series": {
-     "2026": 9.1
+     "2026": 9.0
     }
    },
    {
@@ -3920,10 +3920,10 @@
    },
    {
     "theme": "Crypto / web3",
-    "current": 2.3,
+    "current": 2.2,
     "delta": 0.0,
     "series": {
-     "2026": 2.3
+     "2026": 2.2
     }
    }
   ],
@@ -3933,15 +3933,15 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 627
+    "n": 636
    },
    {
     "domain": "x.com",
-    "n": 50
+    "n": 52
    },
    {
     "domain": "nytimes.com",
-    "n": 42
+    "n": 43
    },
    {
     "domain": "theguardian.com",
@@ -3984,12 +3984,12 @@
     "n": 10
    },
    {
-    "domain": "finance.yahoo.com",
+    "domain": "t.co",
     "n": 9
    },
    {
-    "domain": "t.co",
-    "n": 8
+    "domain": "finance.yahoo.com",
+    "n": 9
    },
    {
     "domain": "fortune.com",
@@ -4008,22 +4008,22 @@
     "n": 6
    },
    {
-    "domain": "washingtonpost.com",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "n": 5
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 627
+    "n": 636
    },
    {
     "domain": "x.com",
-    "n": 50
+    "n": 52
    },
    {
     "domain": "nytimes.com",
-    "n": 42
+    "n": 43
    },
    {
     "domain": "theguardian.com",
@@ -4066,12 +4066,12 @@
     "n": 10
    },
    {
-    "domain": "finance.yahoo.com",
+    "domain": "t.co",
     "n": 9
    },
    {
-    "domain": "t.co",
-    "n": 8
+    "domain": "finance.yahoo.com",
+    "n": 9
    },
    {
     "domain": "fortune.com",
@@ -4090,7 +4090,7 @@
     "n": 6
    },
    {
-    "domain": "washingtonpost.com",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "n": 5
    }
   ],
@@ -8583,16 +8583,16 @@
   "blurb": "A weekly roundup of collapse-related developments posted to r/collapse: environment, conflict, economy, energy and society, with sourced stats and links.",
   "url": "https://www.reddit.com/user/LastWeekInCollapse/",
   "totals": {
-   "posts": 8,
-   "signals": 8,
+   "posts": 9,
+   "signals": 9,
    "date_min": "2026-05-03",
-   "date_max": "2026-06-21"
+   "date_max": "2026-06-28"
   },
   "signal_types": {
-   "article": 8
+   "article": 9
   },
   "signal_kinds": {
-   "links": 8
+   "links": 9
   },
   "themes": [
    {
@@ -8613,66 +8613,66 @@
    },
    {
     "theme": "Geopolitics & power",
-    "current": 87.5,
+    "current": 88.9,
     "delta": 0.0,
     "series": {
-     "2026": 87.5
+     "2026": 88.9
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 62.5,
+    "current": 66.7,
     "delta": 0.0,
     "series": {
-     "2026": 62.5
+     "2026": 66.7
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 37.5,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 37.5
-    }
-   },
-   {
-    "theme": "Democracy & disinformation",
-    "current": 25.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 25.0
+     "2026": 33.3
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 25.0,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 33.3
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
+    "current": 22.2,
+    "delta": 0.0,
+    "series": {
+     "2026": 22.2
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 25.0,
+    "current": 22.2,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 22.2
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 25.0,
+    "current": 22.2,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 22.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 12.5,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 11.1
     }
    },
    {
@@ -8702,11 +8702,11 @@
    },
    {
     "domain": "substack.com",
-    "n": 8
+    "n": 9
    },
    {
     "domain": "old.reddit.com",
-    "n": 7
+    "n": 8
    },
    {
     "domain": "theguardian.com",
@@ -8714,11 +8714,19 @@
    },
    {
     "domain": "archive.ph",
-    "n": 4
+    "n": 5
    },
    {
     "domain": "nature.com",
     "n": 3
+   },
+   {
+    "domain": "cnn.com",
+    "n": 2
+   },
+   {
+    "domain": "npr.org",
+    "n": 2
    },
    {
     "domain": "woa.un.org",
@@ -8735,6 +8743,14 @@
    {
     "domain": "x.com",
     "n": 2
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 1
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 1
    },
    {
     "domain": "cidrap.umn.edu",
@@ -8758,22 +8774,6 @@
    },
    {
     "domain": "ncei.noaa.gov",
-    "n": 1
-   },
-   {
-    "domain": "pbs.org",
-    "n": 1
-   },
-   {
-    "domain": "thecooldown.com",
-    "n": 1
-   },
-   {
-    "domain": "theconversation.com",
-    "n": 1
-   },
-   {
-    "domain": "earth.com",
     "n": 1
    }
   ],
@@ -8784,11 +8784,11 @@
    },
    {
     "domain": "substack.com",
-    "n": 8
+    "n": 9
    },
    {
     "domain": "old.reddit.com",
-    "n": 7
+    "n": 8
    },
    {
     "domain": "theguardian.com",
@@ -8796,11 +8796,19 @@
    },
    {
     "domain": "archive.ph",
-    "n": 4
+    "n": 5
    },
    {
     "domain": "nature.com",
     "n": 3
+   },
+   {
+    "domain": "cnn.com",
+    "n": 2
+   },
+   {
+    "domain": "npr.org",
+    "n": 2
    },
    {
     "domain": "woa.un.org",
@@ -8817,6 +8825,14 @@
    {
     "domain": "x.com",
     "n": 2
+   },
+   {
+    "domain": "nytimes.com",
+    "n": 1
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 1
    },
    {
     "domain": "cidrap.umn.edu",
@@ -8840,22 +8856,6 @@
    },
    {
     "domain": "ncei.noaa.gov",
-    "n": 1
-   },
-   {
-    "domain": "pbs.org",
-    "n": 1
-   },
-   {
-    "domain": "thecooldown.com",
-    "n": 1
-   },
-   {
-    "domain": "theconversation.com",
-    "n": 1
-   },
-   {
-    "domain": "earth.com",
     "n": 1
    }
   ],
