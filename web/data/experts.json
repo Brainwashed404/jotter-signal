@@ -3816,98 +3816,98 @@
   "blurb": "Science and technology news \u2014 AI, space, energy and the near future. High-volume newsroom (most recent ~1,500 posts).",
   "url": "https://futurism.com",
   "totals": {
-   "posts": 199,
-   "signals": 199,
+   "posts": 200,
+   "signals": 200,
    "date_min": "2026-06-07",
    "date_max": "2026-06-30"
   },
   "signal_types": {
-   "article": 199
+   "article": 200
   },
   "signal_kinds": {
-   "article": 87,
-   "links": 104,
+   "article": 89,
+   "links": 103,
    "longread": 8
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 62.3,
+    "current": 63.0,
     "delta": 0.0,
     "series": {
-     "2026": 62.3
+     "2026": 63.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 34.2,
+    "current": 34.5,
     "delta": 0.0,
     "series": {
-     "2026": 34.2
+     "2026": 34.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 28.6,
+    "current": 28.5,
     "delta": 0.0,
     "series": {
-     "2026": 28.6
+     "2026": 28.5
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 28.1,
+    "current": 28.5,
     "delta": 0.0,
     "series": {
-     "2026": 28.1
+     "2026": 28.5
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 19.1,
+    "current": 19.0,
     "delta": 0.0,
     "series": {
-     "2026": 19.1
+     "2026": 19.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 16.1,
+    "current": 16.0,
     "delta": 0.0,
     "series": {
-     "2026": 16.1
+     "2026": 16.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 13.6,
+    "current": 13.5,
     "delta": 0.0,
     "series": {
-     "2026": 13.6
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 11.6,
-    "delta": 0.0,
-    "series": {
-     "2026": 11.6
+     "2026": 13.5
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 11.1,
+    "current": 11.5,
     "delta": 0.0,
     "series": {
-     "2026": 11.1
+     "2026": 11.5
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 11.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 11.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 9.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 9.0
+     "2026": 9.5
     }
    },
    {
@@ -3933,7 +3933,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 698
+    "n": 710
    },
    {
     "domain": "x.com",
@@ -3945,14 +3945,14 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 28
-   },
-   {
-    "domain": "reddit.com",
-    "n": 20
+    "n": 25
    },
    {
     "domain": "wired.com",
+    "n": 21
+   },
+   {
+    "domain": "reddit.com",
     "n": 20
    },
    {
@@ -4015,7 +4015,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 698
+    "n": 710
    },
    {
     "domain": "x.com",
@@ -4027,14 +4027,14 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 28
-   },
-   {
-    "domain": "reddit.com",
-    "n": 20
+    "n": 25
    },
    {
     "domain": "wired.com",
+    "n": 21
+   },
+   {
+    "domain": "reddit.com",
     "n": 20
    },
    {
@@ -6955,83 +6955,83 @@
   "blurb": "A signals newsletter tracking emerging shifts across technology, culture and business.",
   "url": "https://www.8ball.report",
   "totals": {
-   "posts": 20,
-   "signals": 20,
+   "posts": 21,
+   "signals": 21,
    "date_min": "2026-01-23",
-   "date_max": "2026-06-16"
+   "date_max": "2026-06-30"
   },
   "signal_types": {
-   "article": 20
+   "article": 21
   },
   "signal_kinds": {
+   "article": 9,
    "links": 10,
-   "article": 8,
    "longread": 1,
    "quote": 1
   },
   "themes": [
    {
     "theme": "Media & journalism",
-    "current": 65.0,
+    "current": 66.7,
     "delta": 0.0,
     "series": {
-     "2026": 65.0
+     "2026": 66.7
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 35.0,
+    "current": 38.1,
     "delta": 0.0,
     "series": {
-     "2026": 35.0
+     "2026": 38.1
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 30.0,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 30.0
+     "2026": 33.3
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 30.0,
+    "current": 28.6,
     "delta": 0.0,
     "series": {
-     "2026": 30.0
+     "2026": 28.6
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 15.0,
+    "current": 14.3,
     "delta": 0.0,
     "series": {
-     "2026": 15.0
+     "2026": 14.3
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 5.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
-    }
-   },
-   {
-    "theme": "Labour & automation",
-    "current": 5.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 5.0
+     "2026": 9.5
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 0.0,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 0.0
+     "2026": 4.8
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 4.8,
+    "delta": 0.0,
+    "series": {
+     "2026": 4.8
     }
    },
    {
@@ -7073,7 +7073,7 @@
   "top_sources_recent": [
    {
     "domain": "8ball.report",
-    "n": 20
+    "n": 21
    },
    {
     "domain": "x.com",
@@ -7155,7 +7155,7 @@
   "top_sources_early": [
    {
     "domain": "8ball.report",
-    "n": 20
+    "n": 21
    },
    {
     "domain": "x.com",
