@@ -3819,7 +3819,7 @@
    "posts": 200,
    "signals": 200,
    "date_min": "2026-06-07",
-   "date_max": "2026-06-30"
+   "date_max": "2026-07-01"
   },
   "signal_types": {
    "article": 200
@@ -3840,10 +3840,18 @@
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 34.5,
+    "current": 34.0,
     "delta": 0.0,
     "series": {
-     "2026": 34.5
+     "2026": 34.0
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 29.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 29.5
     }
    },
    {
@@ -3855,19 +3863,11 @@
     }
    },
    {
-    "theme": "Media & journalism",
-    "current": 28.5,
-    "delta": 0.0,
-    "series": {
-     "2026": 28.5
-    }
-   },
-   {
     "theme": "Social media & attention",
-    "current": 19.0,
+    "current": 19.5,
     "delta": 0.0,
     "series": {
-     "2026": 19.0
+     "2026": 19.5
     }
    },
    {
@@ -3880,10 +3880,10 @@
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 13.5,
+    "current": 13.0,
     "delta": 0.0,
     "series": {
-     "2026": 13.5
+     "2026": 13.0
     }
    },
    {
@@ -3896,10 +3896,10 @@
    },
    {
     "theme": "Regulation & governance",
-    "current": 11.5,
+    "current": 11.0,
     "delta": 0.0,
     "series": {
-     "2026": 11.5
+     "2026": 11.0
     }
    },
    {
@@ -3933,7 +3933,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 710
+    "n": 713
    },
    {
     "domain": "x.com",
@@ -3941,15 +3941,19 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 47
+    "n": 45
    },
    {
     "domain": "theguardian.com",
-    "n": 25
+    "n": 27
    },
    {
     "domain": "wired.com",
     "n": 21
+   },
+   {
+    "domain": "wsj.com",
+    "n": 20
    },
    {
     "domain": "reddit.com",
@@ -3958,10 +3962,6 @@
    {
     "domain": "businessinsider.com",
     "n": 20
-   },
-   {
-    "domain": "wsj.com",
-    "n": 19
    },
    {
     "domain": "bbc.com",
@@ -3992,15 +3992,15 @@
     "n": 10
    },
    {
-    "domain": "fortune.com",
-    "n": 8
-   },
-   {
     "domain": "newscientist.com",
     "n": 7
    },
    {
     "domain": "apnews.com",
+    "n": 7
+   },
+   {
+    "domain": "fortune.com",
     "n": 7
    },
    {
@@ -4015,7 +4015,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 710
+    "n": 713
    },
    {
     "domain": "x.com",
@@ -4023,15 +4023,19 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 47
+    "n": 45
    },
    {
     "domain": "theguardian.com",
-    "n": 25
+    "n": 27
    },
    {
     "domain": "wired.com",
     "n": 21
+   },
+   {
+    "domain": "wsj.com",
+    "n": 20
    },
    {
     "domain": "reddit.com",
@@ -4040,10 +4044,6 @@
    {
     "domain": "businessinsider.com",
     "n": 20
-   },
-   {
-    "domain": "wsj.com",
-    "n": 19
    },
    {
     "domain": "bbc.com",
@@ -4074,15 +4074,15 @@
     "n": 10
    },
    {
-    "domain": "fortune.com",
-    "n": 8
-   },
-   {
     "domain": "newscientist.com",
     "n": 7
    },
    {
     "domain": "apnews.com",
+    "n": 7
+   },
+   {
+    "domain": "fortune.com",
     "n": 7
    },
    {
@@ -8891,106 +8891,106 @@
   "blurb": "Scott Galloway and Ed Elson on markets, business and the economy: IPOs, big tech, valuations and the forces moving capital.",
   "url": "https://www.profgmedia.com",
   "totals": {
-   "posts": 31,
-   "signals": 31,
+   "posts": 32,
+   "signals": 32,
    "date_min": "2026-06-12",
-   "date_max": "2026-06-30"
+   "date_max": "2026-07-01"
   },
   "signal_types": {
-   "article": 31
+   "article": 32
   },
   "signal_kinds": {
+   "longread": 17,
    "article": 9,
-   "longread": 16,
    "links": 6
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 64.5,
+    "current": 65.6,
     "delta": 0.0,
     "series": {
-     "2026": 64.5
+     "2026": 65.6
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 64.5,
+    "current": 65.6,
     "delta": 0.0,
     "series": {
-     "2026": 64.5
+     "2026": 65.6
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 61.3,
+    "current": 62.5,
     "delta": 0.0,
     "series": {
-     "2026": 61.3
+     "2026": 62.5
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 38.7,
+    "current": 40.6,
     "delta": 0.0,
     "series": {
-     "2026": 38.7
+     "2026": 40.6
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 29.0,
+    "current": 31.2,
     "delta": 0.0,
     "series": {
-     "2026": 29.0
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 25.8,
-    "delta": 0.0,
-    "series": {
-     "2026": 25.8
-    }
-   },
-   {
-    "theme": "Geopolitics & power",
-    "current": 22.6,
-    "delta": 0.0,
-    "series": {
-     "2026": 22.6
+     "2026": 31.2
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 22.6,
+    "current": 25.0,
     "delta": 0.0,
     "series": {
-     "2026": 22.6
+     "2026": 25.0
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 25.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 25.0
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 21.9,
+    "delta": 0.0,
+    "series": {
+     "2026": 21.9
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 16.1,
+    "current": 15.6,
     "delta": 0.0,
     "series": {
-     "2026": 16.1
+     "2026": 15.6
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 12.9,
+    "current": 12.5,
     "delta": 0.0,
     "series": {
-     "2026": 12.9
+     "2026": 12.5
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 6.5,
+    "current": 6.2,
     "delta": 0.0,
     "series": {
-     "2026": 6.5
+     "2026": 6.2
     }
    },
    {
@@ -9008,7 +9008,7 @@
   "top_sources_recent": [
    {
     "domain": "profgmedia.com",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "nytimes.com",
@@ -9041,6 +9041,10 @@
    {
     "domain": "wsj.com",
     "n": 4
+   },
+   {
+    "domain": "x.com",
+    "n": 3
    },
    {
     "domain": "reuters.com",
@@ -9080,17 +9084,13 @@
    },
    {
     "domain": "bcg.com",
-    "n": 2
-   },
-   {
-    "domain": "espn.com",
     "n": 2
    }
   ],
   "top_sources_early": [
    {
     "domain": "profgmedia.com",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "nytimes.com",
@@ -9123,6 +9123,10 @@
    {
     "domain": "wsj.com",
     "n": 4
+   },
+   {
+    "domain": "x.com",
+    "n": 3
    },
    {
     "domain": "reuters.com",
@@ -9162,10 +9166,6 @@
    },
    {
     "domain": "bcg.com",
-    "n": 2
-   },
-   {
-    "domain": "espn.com",
     "n": 2
    }
   ],
