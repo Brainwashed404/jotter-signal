@@ -3825,41 +3825,41 @@
    "article": 200
   },
   "signal_kinds": {
-   "links": 103,
-   "article": 89,
+   "article": 91,
+   "links": 101,
    "longread": 8
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 62.5,
+    "current": 63.0,
     "delta": 0.0,
     "series": {
-     "2026": 62.5
+     "2026": 63.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 33.0,
+    "current": 33.5,
     "delta": 0.0,
     "series": {
-     "2026": 33.0
+     "2026": 33.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 28.5,
+    "current": 29.0,
     "delta": 0.0,
     "series": {
-     "2026": 28.5
+     "2026": 29.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 28.5,
+    "current": 28.0,
     "delta": 0.0,
     "series": {
-     "2026": 28.5
+     "2026": 28.0
     }
    },
    {
@@ -3896,10 +3896,10 @@
    },
    {
     "theme": "Regulation & governance",
-    "current": 10.5,
+    "current": 10.0,
     "delta": 0.0,
     "series": {
-     "2026": 10.5
+     "2026": 10.0
     }
    },
    {
@@ -3933,11 +3933,11 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 716
+    "n": 712
    },
    {
     "domain": "x.com",
-    "n": 71
+    "n": 74
    },
    {
     "domain": "nytimes.com",
@@ -3969,7 +3969,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 14
+    "n": 16
    },
    {
     "domain": "ft.com",
@@ -3980,16 +3980,16 @@
     "n": 12
    },
    {
+    "domain": "t.co",
+    "n": 11
+   },
+   {
     "domain": "finance.yahoo.com",
     "n": 10
    },
    {
-    "domain": "t.co",
-    "n": 10
-   },
-   {
     "domain": "cnbc.com",
-    "n": 10
+    "n": 9
    },
    {
     "domain": "newscientist.com",
@@ -4015,11 +4015,11 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 716
+    "n": 712
    },
    {
     "domain": "x.com",
-    "n": 71
+    "n": 74
    },
    {
     "domain": "nytimes.com",
@@ -4051,7 +4051,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 14
+    "n": 16
    },
    {
     "domain": "ft.com",
@@ -4062,16 +4062,16 @@
     "n": 12
    },
    {
+    "domain": "t.co",
+    "n": 11
+   },
+   {
     "domain": "finance.yahoo.com",
     "n": 10
    },
    {
-    "domain": "t.co",
-    "n": 10
-   },
-   {
     "domain": "cnbc.com",
-    "n": 10
+    "n": 9
    },
    {
     "domain": "newscientist.com",
