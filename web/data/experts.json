@@ -4102,16 +4102,16 @@
   "blurb": "Semafor's technology coverage \u2014 AI, platforms and the business of tech.",
   "url": "https://www.semafor.com/vertical/tech",
   "totals": {
-   "posts": 59,
-   "signals": 59,
+   "posts": 60,
+   "signals": 60,
    "date_min": "2026-06-08",
    "date_max": "2026-07-01"
   },
   "signal_types": {
-   "article": 59
+   "article": 60
   },
   "signal_kinds": {
-   "links": 30,
+   "links": 31,
    "article": 26,
    "quote": 2,
    "data": 1
@@ -4119,82 +4119,82 @@
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 81.4,
+    "current": 81.7,
     "delta": 0.0,
     "series": {
-     "2026": 81.4
+     "2026": 81.7
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 47.5,
+    "current": 46.7,
     "delta": 0.0,
     "series": {
-     "2026": 47.5
+     "2026": 46.7
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 35.6,
+    "current": 35.0,
     "delta": 0.0,
     "series": {
-     "2026": 35.6
+     "2026": 35.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 28.8,
+    "current": 30.0,
     "delta": 0.0,
     "series": {
-     "2026": 28.8
+     "2026": 30.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 20.3,
+    "current": 20.0,
     "delta": 0.0,
     "series": {
-     "2026": 20.3
+     "2026": 20.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 16.9,
+    "current": 16.7,
     "delta": 0.0,
     "series": {
-     "2026": 16.9
+     "2026": 16.7
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 8.5,
+    "current": 8.3,
     "delta": 0.0,
     "series": {
-     "2026": 8.5
-    }
-   },
-   {
-    "theme": "Social media & attention",
-    "current": 5.1,
-    "delta": 0.0,
-    "series": {
-     "2026": 5.1
+     "2026": 8.3
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 5.1,
+    "current": 6.7,
     "delta": 0.0,
     "series": {
-     "2026": 5.1
+     "2026": 6.7
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 5.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 5.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 5.1,
+    "current": 5.0,
     "delta": 0.0,
     "series": {
-     "2026": 5.1
+     "2026": 5.0
     }
    },
    {
@@ -4220,11 +4220,11 @@
   "top_sources_recent": [
    {
     "domain": "semafor.com",
-    "n": 58
+    "n": 59
    },
    {
     "domain": "bloomberg.com",
-    "n": 13
+    "n": 14
    },
    {
     "domain": "wsj.com",
@@ -4235,12 +4235,12 @@
     "n": 10
    },
    {
-    "domain": "nytimes.com",
+    "domain": "ft.com",
     "n": 8
    },
    {
-    "domain": "ft.com",
-    "n": 7
+    "domain": "nytimes.com",
+    "n": 8
    },
    {
     "domain": "cnbc.com",
@@ -4251,12 +4251,20 @@
     "n": 5
    },
    {
+    "domain": "theinformation.com",
+    "n": 4
+   },
+   {
     "domain": "bbc.co.uk",
     "n": 4
    },
    {
     "domain": "washingtonpost.com",
     "n": 4
+   },
+   {
+    "domain": "x.com",
+    "n": 3
    },
    {
     "domain": "europe2031.ai",
@@ -4275,10 +4283,6 @@
     "n": 3
    },
    {
-    "domain": "x.com",
-    "n": 2
-   },
-   {
     "domain": "darioamodei.com",
     "n": 2
    },
@@ -4288,10 +4292,6 @@
    },
    {
     "domain": "bbc.com",
-    "n": 2
-   },
-   {
-    "domain": "theinformation.com",
     "n": 2
    },
    {
@@ -4302,11 +4302,11 @@
   "top_sources_early": [
    {
     "domain": "semafor.com",
-    "n": 58
+    "n": 59
    },
    {
     "domain": "bloomberg.com",
-    "n": 13
+    "n": 14
    },
    {
     "domain": "wsj.com",
@@ -4317,12 +4317,12 @@
     "n": 10
    },
    {
-    "domain": "nytimes.com",
+    "domain": "ft.com",
     "n": 8
    },
    {
-    "domain": "ft.com",
-    "n": 7
+    "domain": "nytimes.com",
+    "n": 8
    },
    {
     "domain": "cnbc.com",
@@ -4333,12 +4333,20 @@
     "n": 5
    },
    {
+    "domain": "theinformation.com",
+    "n": 4
+   },
+   {
     "domain": "bbc.co.uk",
     "n": 4
    },
    {
     "domain": "washingtonpost.com",
     "n": 4
+   },
+   {
+    "domain": "x.com",
+    "n": 3
    },
    {
     "domain": "europe2031.ai",
@@ -4357,10 +4365,6 @@
     "n": 3
    },
    {
-    "domain": "x.com",
-    "n": 2
-   },
-   {
     "domain": "darioamodei.com",
     "n": 2
    },
@@ -4370,10 +4374,6 @@
    },
    {
     "domain": "bbc.com",
-    "n": 2
-   },
-   {
-    "domain": "theinformation.com",
     "n": 2
    },
    {
