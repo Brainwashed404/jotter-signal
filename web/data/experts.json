@@ -3818,15 +3818,15 @@
   "totals": {
    "posts": 200,
    "signals": 200,
-   "date_min": "2026-06-10",
+   "date_min": "2026-06-11",
    "date_max": "2026-07-04"
   },
   "signal_types": {
    "article": 200
   },
   "signal_kinds": {
-   "links": 100,
-   "article": 91,
+   "article": 93,
+   "links": 98,
    "longread": 9
   },
   "themes": [
@@ -3864,18 +3864,18 @@
    },
    {
     "theme": "Social media & attention",
-    "current": 18.5,
+    "current": 18.0,
     "delta": 0.0,
     "series": {
-     "2026": 18.5
+     "2026": 18.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 17.0,
+    "current": 16.5,
     "delta": 0.0,
     "series": {
-     "2026": 17.0
+     "2026": 16.5
     }
    },
    {
@@ -3904,18 +3904,18 @@
    },
    {
     "theme": "Geopolitics & power",
-    "current": 9.5,
+    "current": 9.0,
     "delta": 0.0,
     "series": {
-     "2026": 9.5
+     "2026": 9.0
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 5.0,
+    "current": 4.5,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.5
     }
    },
    {
@@ -3933,11 +3933,11 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 721
+    "n": 731
    },
    {
     "domain": "x.com",
-    "n": 67
+    "n": 62
    },
    {
     "domain": "nytimes.com",
@@ -3945,23 +3945,23 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 24
+    "n": 23
+   },
+   {
+    "domain": "wired.com",
+    "n": 21
+   },
+   {
+    "domain": "bbc.com",
+    "n": 21
    },
    {
     "domain": "reddit.com",
     "n": 21
    },
    {
-    "domain": "bbc.com",
-    "n": 20
-   },
-   {
-    "domain": "wired.com",
-    "n": 20
-   },
-   {
     "domain": "wsj.com",
-    "n": 19
+    "n": 20
    },
    {
     "domain": "reuters.com",
@@ -3969,7 +3969,7 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "bloomberg.com",
@@ -3981,7 +3981,7 @@
    },
    {
     "domain": "t.co",
-    "n": 10
+    "n": 9
    },
    {
     "domain": "finance.yahoo.com",
@@ -3996,11 +3996,11 @@
     "n": 7
    },
    {
-    "domain": "politico.com",
-    "n": 7
+    "domain": "npr.org",
+    "n": 6
    },
    {
-    "domain": "axios.com",
+    "domain": "cnn.com",
     "n": 6
    },
    {
@@ -4015,11 +4015,11 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 721
+    "n": 731
    },
    {
     "domain": "x.com",
-    "n": 67
+    "n": 62
    },
    {
     "domain": "nytimes.com",
@@ -4027,23 +4027,23 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 24
+    "n": 23
+   },
+   {
+    "domain": "wired.com",
+    "n": 21
+   },
+   {
+    "domain": "bbc.com",
+    "n": 21
    },
    {
     "domain": "reddit.com",
     "n": 21
    },
    {
-    "domain": "bbc.com",
-    "n": 20
-   },
-   {
-    "domain": "wired.com",
-    "n": 20
-   },
-   {
     "domain": "wsj.com",
-    "n": 19
+    "n": 20
    },
    {
     "domain": "reuters.com",
@@ -4051,7 +4051,7 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "bloomberg.com",
@@ -4063,7 +4063,7 @@
    },
    {
     "domain": "t.co",
-    "n": 10
+    "n": 9
    },
    {
     "domain": "finance.yahoo.com",
@@ -4078,11 +4078,11 @@
     "n": 7
    },
    {
-    "domain": "politico.com",
-    "n": 7
+    "domain": "npr.org",
+    "n": 6
    },
    {
-    "domain": "axios.com",
+    "domain": "cnn.com",
     "n": 6
    },
    {
@@ -7536,98 +7536,98 @@
   "blurb": "A daily newsletter on the most interesting things in the world, from media and design to science and culture.",
   "url": "https://whyisthisinteresting.substack.com",
   "totals": {
-   "posts": 20,
-   "signals": 20,
+   "posts": 21,
+   "signals": 21,
    "date_min": "2026-06-01",
-   "date_max": "2026-07-02"
+   "date_max": "2026-07-04"
   },
   "signal_types": {
-   "article": 20
+   "article": 21
   },
   "signal_kinds": {
+   "links": 7,
    "article": 8,
-   "longread": 6,
-   "links": 6
+   "longread": 6
   },
   "themes": [
    {
     "theme": "Media & journalism",
-    "current": 90.0,
+    "current": 90.5,
     "delta": 0.0,
     "series": {
-     "2026": 90.0
+     "2026": 90.5
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 35.0,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 35.0
+     "2026": 33.3
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 30.0,
+    "current": 28.6,
     "delta": 0.0,
     "series": {
-     "2026": 30.0
+     "2026": 28.6
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 25.0,
+    "current": 23.8,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 23.8
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 10.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 9.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 10.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 9.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 5.0,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.8
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 5.0,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.8
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 5.0,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 5.0,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 4.8
     }
    },
    {
@@ -7653,7 +7653,7 @@
   "top_sources_recent": [
    {
     "domain": "whyisthisinteresting.substack.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "unsplash.com",
@@ -7704,6 +7704,18 @@
     "n": 2
    },
    {
+    "domain": "african.business",
+    "n": 1
+   },
+   {
+    "domain": "facilethings.com",
+    "n": 1
+   },
+   {
+    "domain": "uncovered.ink",
+    "n": 1
+   },
+   {
     "domain": "profilebooks.com",
     "n": 1
    },
@@ -7717,25 +7729,13 @@
    },
    {
     "domain": "nbcnews.com",
-    "n": 1
-   },
-   {
-    "domain": "the-independent.com",
-    "n": 1
-   },
-   {
-    "domain": "marketingdive.com",
-    "n": 1
-   },
-   {
-    "domain": "archive.org",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "whyisthisinteresting.substack.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "unsplash.com",
@@ -7786,6 +7786,18 @@
     "n": 2
    },
    {
+    "domain": "african.business",
+    "n": 1
+   },
+   {
+    "domain": "facilethings.com",
+    "n": 1
+   },
+   {
+    "domain": "uncovered.ink",
+    "n": 1
+   },
+   {
     "domain": "profilebooks.com",
     "n": 1
    },
@@ -7799,18 +7811,6 @@
    },
    {
     "domain": "nbcnews.com",
-    "n": 1
-   },
-   {
-    "domain": "the-independent.com",
-    "n": 1
-   },
-   {
-    "domain": "marketingdive.com",
-    "n": 1
-   },
-   {
-    "domain": "archive.org",
     "n": 1
    }
   ],
