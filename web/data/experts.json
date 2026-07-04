@@ -3825,8 +3825,8 @@
    "article": 200
   },
   "signal_kinds": {
-   "article": 93,
    "links": 98,
+   "article": 93,
    "longread": 9
   },
   "themes": [
@@ -3888,18 +3888,18 @@
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 10.5,
+    "current": 11.0,
     "delta": 0.0,
     "series": {
-     "2026": 10.5
+     "2026": 11.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 10.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 9.5
     }
    },
    {
@@ -3933,11 +3933,11 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 739
+    "n": 742
    },
    {
     "domain": "x.com",
-    "n": 62
+    "n": 61
    },
    {
     "domain": "nytimes.com",
@@ -3965,7 +3965,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 18
+    "n": 17
    },
    {
     "domain": "businessinsider.com",
@@ -4015,11 +4015,11 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 739
+    "n": 742
    },
    {
     "domain": "x.com",
-    "n": 62
+    "n": 61
    },
    {
     "domain": "nytimes.com",
@@ -4047,7 +4047,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 18
+    "n": 17
    },
    {
     "domain": "businessinsider.com",
