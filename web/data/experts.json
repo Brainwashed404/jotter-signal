@@ -3819,14 +3819,14 @@
    "posts": 200,
    "signals": 200,
    "date_min": "2026-06-11",
-   "date_max": "2026-07-04"
+   "date_max": "2026-07-05"
   },
   "signal_types": {
    "article": 200
   },
   "signal_kinds": {
-   "links": 98,
-   "article": 93,
+   "article": 94,
+   "links": 97,
    "longread": 9
   },
   "themes": [
@@ -3840,10 +3840,10 @@
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 31.5,
+    "current": 32.0,
     "delta": 0.0,
     "series": {
-     "2026": 31.5
+     "2026": 32.0
     }
    },
    {
@@ -3856,10 +3856,10 @@
    },
    {
     "theme": "Media & journalism",
-    "current": 29.5,
+    "current": 29.0,
     "delta": 0.0,
     "series": {
-     "2026": 29.5
+     "2026": 29.0
     }
    },
    {
@@ -3933,11 +3933,11 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 742
+    "n": 745
    },
    {
     "domain": "x.com",
-    "n": 61
+    "n": 60
    },
    {
     "domain": "nytimes.com",
@@ -4015,11 +4015,11 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 742
+    "n": 745
    },
    {
     "domain": "x.com",
-    "n": 61
+    "n": 60
    },
    {
     "domain": "nytimes.com",
@@ -5807,103 +5807,103 @@
   "blurb": "Azeem Azhar on AI, technology and the exponential age \u2014 weekly analysis of how fast-moving tech reshapes business, society and geopolitics.",
   "url": "https://www.exponentialview.co",
   "totals": {
-   "posts": 23,
-   "signals": 23,
+   "posts": 24,
+   "signals": 24,
    "date_min": "2026-05-04",
-   "date_max": "2026-06-29"
+   "date_max": "2026-07-05"
   },
   "signal_types": {
-   "article": 23
+   "article": 24
   },
   "signal_kinds": {
+   "links": 6,
    "article": 12,
    "longread": 4,
-   "links": 5,
    "data": 2
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 95.7,
+    "current": 95.8,
     "delta": 0.0,
     "series": {
-     "2026": 95.7
+     "2026": 95.8
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 69.6,
+    "current": 70.8,
     "delta": 0.0,
     "series": {
-     "2026": 69.6
+     "2026": 70.8
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 65.2,
+    "current": 66.7,
     "delta": 0.0,
     "series": {
-     "2026": 65.2
+     "2026": 66.7
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 30.4,
+    "current": 29.2,
     "delta": 0.0,
     "series": {
-     "2026": 30.4
+     "2026": 29.2
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 26.1,
+    "current": 29.2,
     "delta": 0.0,
     "series": {
-     "2026": 26.1
-    }
-   },
-   {
-    "theme": "Surveillance & privacy",
-    "current": 21.7,
-    "delta": 0.0,
-    "series": {
-     "2026": 21.7
+     "2026": 29.2
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 21.7,
+    "current": 25.0,
     "delta": 0.0,
     "series": {
-     "2026": 21.7
+     "2026": 25.0
     }
    },
    {
-    "theme": "Climate & environment",
-    "current": 4.3,
+    "theme": "Surveillance & privacy",
+    "current": 20.8,
     "delta": 0.0,
     "series": {
-     "2026": 4.3
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 4.3,
-    "delta": 0.0,
-    "series": {
-     "2026": 4.3
-    }
-   },
-   {
-    "theme": "Democracy & disinformation",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
+     "2026": 20.8
     }
    },
    {
     "theme": "Social media & attention",
+    "current": 4.2,
+    "delta": 0.0,
+    "series": {
+     "2026": 4.2
+    }
+   },
+   {
+    "theme": "Climate & environment",
+    "current": 4.2,
+    "delta": 0.0,
+    "series": {
+     "2026": 4.2
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 4.2,
+    "delta": 0.0,
+    "series": {
+     "2026": 4.2
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
     "current": 0.0,
     "delta": 0.0,
     "series": {
@@ -5925,7 +5925,7 @@
   "top_sources_recent": [
    {
     "domain": "exponentialview.co",
-    "n": 33
+    "n": 35
    },
    {
     "domain": "x.com",
@@ -5940,6 +5940,10 @@
     "n": 4
    },
    {
+    "domain": "nature.com",
+    "n": 3
+   },
+   {
     "domain": "github.com",
     "n": 3
    },
@@ -5952,6 +5956,14 @@
     "n": 3
    },
    {
+    "domain": "goldmansachs.com",
+    "n": 2
+   },
+   {
+    "domain": "arxiv.org",
+    "n": 2
+   },
+   {
     "domain": "nber.org",
     "n": 2
    },
@@ -5961,10 +5973,6 @@
    },
    {
     "domain": "wsj.com",
-    "n": 2
-   },
-   {
-    "domain": "nature.com",
     "n": 2
    },
    {
@@ -5984,30 +5992,22 @@
     "n": 2
    },
    {
+    "domain": "ramp.com",
+    "n": 1
+   },
+   {
+    "domain": "cnbc.com",
+    "n": 1
+   },
+   {
     "domain": "epochai.substack.com",
-    "n": 1
-   },
-   {
-    "domain": "reuters.com",
-    "n": 1
-   },
-   {
-    "domain": "om.co",
-    "n": 1
-   },
-   {
-    "domain": "mckinsey.com",
-    "n": 1
-   },
-   {
-    "domain": "bcg.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "exponentialview.co",
-    "n": 33
+    "n": 35
    },
    {
     "domain": "x.com",
@@ -6022,6 +6022,10 @@
     "n": 4
    },
    {
+    "domain": "nature.com",
+    "n": 3
+   },
+   {
     "domain": "github.com",
     "n": 3
    },
@@ -6034,6 +6038,14 @@
     "n": 3
    },
    {
+    "domain": "goldmansachs.com",
+    "n": 2
+   },
+   {
+    "domain": "arxiv.org",
+    "n": 2
+   },
+   {
     "domain": "nber.org",
     "n": 2
    },
@@ -6043,10 +6055,6 @@
    },
    {
     "domain": "wsj.com",
-    "n": 2
-   },
-   {
-    "domain": "nature.com",
     "n": 2
    },
    {
@@ -6066,23 +6074,15 @@
     "n": 2
    },
    {
+    "domain": "ramp.com",
+    "n": 1
+   },
+   {
+    "domain": "cnbc.com",
+    "n": 1
+   },
+   {
     "domain": "epochai.substack.com",
-    "n": 1
-   },
-   {
-    "domain": "reuters.com",
-    "n": 1
-   },
-   {
-    "domain": "om.co",
-    "n": 1
-   },
-   {
-    "domain": "mckinsey.com",
-    "n": 1
-   },
-   {
-    "domain": "bcg.com",
     "n": 1
    }
   ],
