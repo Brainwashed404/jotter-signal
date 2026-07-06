@@ -3818,56 +3818,56 @@
   "totals": {
    "posts": 200,
    "signals": 200,
-   "date_min": "2026-06-12",
+   "date_min": "2026-06-13",
    "date_max": "2026-07-06"
   },
   "signal_types": {
    "article": 200
   },
   "signal_kinds": {
-   "links": 96,
-   "article": 96,
+   "article": 98,
+   "links": 94,
    "longread": 8
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 60.5,
+    "current": 61.0,
     "delta": 0.0,
     "series": {
-     "2026": 60.5
+     "2026": 61.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 31.0,
+    "current": 32.0,
     "delta": 0.0,
     "series": {
-     "2026": 31.0
+     "2026": 32.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 29.5,
+    "current": 30.0,
     "delta": 0.0,
     "series": {
-     "2026": 29.5
+     "2026": 30.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 27.5,
+    "current": 28.0,
     "delta": 0.0,
     "series": {
-     "2026": 27.5
+     "2026": 28.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 18.0,
+    "current": 18.5,
     "delta": 0.0,
     "series": {
-     "2026": 18.0
+     "2026": 18.5
     }
    },
    {
@@ -3880,50 +3880,50 @@
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 11.5,
+    "current": 11.0,
     "delta": 0.0,
     "series": {
-     "2026": 11.5
+     "2026": 11.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 11.5,
+    "current": 10.5,
     "delta": 0.0,
     "series": {
-     "2026": 11.5
-    }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 10.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 10.0
+     "2026": 10.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 9.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 9.0
+     "2026": 9.5
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 9.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 9.5
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 5.0,
+    "current": 5.5,
     "delta": 0.0,
     "series": {
-     "2026": 5.0
+     "2026": 5.5
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 1.5,
+    "current": 2.0,
     "delta": 0.0,
     "series": {
-     "2026": 1.5
+     "2026": 2.0
     }
    }
   ],
@@ -3933,19 +3933,23 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 745
+    "n": 752
    },
    {
     "domain": "x.com",
-    "n": 59
+    "n": 57
    },
    {
     "domain": "nytimes.com",
-    "n": 39
+    "n": 38
+   },
+   {
+    "domain": "wsj.com",
+    "n": 20
    },
    {
     "domain": "theguardian.com",
-    "n": 21
+    "n": 20
    },
    {
     "domain": "reddit.com",
@@ -3960,12 +3964,8 @@
     "n": 19
    },
    {
-    "domain": "wsj.com",
-    "n": 19
-   },
-   {
     "domain": "reuters.com",
-    "n": 17
+    "n": 15
    },
    {
     "domain": "businessinsider.com",
@@ -3981,7 +3981,7 @@
    },
    {
     "domain": "cnbc.com",
-    "n": 9
+    "n": 10
    },
    {
     "domain": "npr.org",
@@ -3996,38 +3996,42 @@
     "n": 8
    },
    {
-    "domain": "nature.com",
-    "n": 7
-   },
-   {
-    "domain": "newscientist.com",
-    "n": 7
-   },
-   {
     "domain": "t.co",
     "n": 7
    },
    {
     "domain": "apnews.com",
     "n": 7
+   },
+   {
+    "domain": "nature.com",
+    "n": 6
+   },
+   {
+    "domain": "newscientist.com",
+    "n": 6
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 745
+    "n": 752
    },
    {
     "domain": "x.com",
-    "n": 59
+    "n": 57
    },
    {
     "domain": "nytimes.com",
-    "n": 39
+    "n": 38
+   },
+   {
+    "domain": "wsj.com",
+    "n": 20
    },
    {
     "domain": "theguardian.com",
-    "n": 21
+    "n": 20
    },
    {
     "domain": "reddit.com",
@@ -4042,12 +4046,8 @@
     "n": 19
    },
    {
-    "domain": "wsj.com",
-    "n": 19
-   },
-   {
     "domain": "reuters.com",
-    "n": 17
+    "n": 15
    },
    {
     "domain": "businessinsider.com",
@@ -4063,7 +4063,7 @@
    },
    {
     "domain": "cnbc.com",
-    "n": 9
+    "n": 10
    },
    {
     "domain": "npr.org",
@@ -4078,20 +4078,20 @@
     "n": 8
    },
    {
-    "domain": "nature.com",
-    "n": 7
-   },
-   {
-    "domain": "newscientist.com",
-    "n": 7
-   },
-   {
     "domain": "t.co",
     "n": 7
    },
    {
     "domain": "apnews.com",
     "n": 7
+   },
+   {
+    "domain": "nature.com",
+    "n": 6
+   },
+   {
+    "domain": "newscientist.com",
+    "n": 6
    }
   ],
   "category": "publication"
