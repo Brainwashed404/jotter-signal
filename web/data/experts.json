@@ -3849,26 +3849,26 @@
    },
    {
     "theme": "Media & journalism",
-    "current": 29.0,
+    "current": 29.5,
     "delta": 0.0,
     "series": {
-     "2026": 29.0
+     "2026": 29.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 28.0,
+    "current": 28.5,
     "delta": 0.0,
     "series": {
-     "2026": 28.0
+     "2026": 28.5
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 18.5,
+    "current": 19.0,
     "delta": 0.0,
     "series": {
-     "2026": 18.5
+     "2026": 19.0
     }
    },
    {
@@ -3889,10 +3889,10 @@
    },
    {
     "theme": "Labour & automation",
-    "current": 11.0,
+    "current": 10.5,
     "delta": 0.0,
     "series": {
-     "2026": 11.0
+     "2026": 10.5
     }
    },
    {
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 756
+    "n": 753
    },
    {
     "domain": "x.com",
@@ -3945,19 +3945,15 @@
     "n": 37
    },
    {
-    "domain": "theguardian.com",
-    "n": 20
-   },
-   {
     "domain": "reddit.com",
-    "n": 20
+    "n": 21
    },
    {
     "domain": "wsj.com",
     "n": 19
    },
    {
-    "domain": "wired.com",
+    "domain": "theguardian.com",
     "n": 19
    },
    {
@@ -3965,12 +3961,16 @@
     "n": 18
    },
    {
+    "domain": "wired.com",
+    "n": 17
+   },
+   {
     "domain": "reuters.com",
     "n": 15
    },
    {
     "domain": "businessinsider.com",
-    "n": 14
+    "n": 13
    },
    {
     "domain": "ft.com",
@@ -3981,42 +3981,42 @@
     "n": 11
    },
    {
-    "domain": "cnbc.com",
+    "domain": "finance.yahoo.com",
     "n": 10
    },
    {
-    "domain": "finance.yahoo.com",
+    "domain": "cnbc.com",
     "n": 9
-   },
-   {
-    "domain": "npr.org",
-    "n": 8
    },
    {
     "domain": "tiktok.com",
     "n": 8
    },
    {
+    "domain": "npr.org",
+    "n": 7
+   },
+   {
     "domain": "t.co",
     "n": 7
    },
    {
-    "domain": "apnews.com",
-    "n": 7
+    "domain": "forbes.com",
+    "n": 6
    },
    {
     "domain": "nature.com",
     "n": 6
    },
    {
-    "domain": "newscientist.com",
+    "domain": "cnn.com",
     "n": 6
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 756
+    "n": 753
    },
    {
     "domain": "x.com",
@@ -4027,19 +4027,15 @@
     "n": 37
    },
    {
-    "domain": "theguardian.com",
-    "n": 20
-   },
-   {
     "domain": "reddit.com",
-    "n": 20
+    "n": 21
    },
    {
     "domain": "wsj.com",
     "n": 19
    },
    {
-    "domain": "wired.com",
+    "domain": "theguardian.com",
     "n": 19
    },
    {
@@ -4047,12 +4043,16 @@
     "n": 18
    },
    {
+    "domain": "wired.com",
+    "n": 17
+   },
+   {
     "domain": "reuters.com",
     "n": 15
    },
    {
     "domain": "businessinsider.com",
-    "n": 14
+    "n": 13
    },
    {
     "domain": "ft.com",
@@ -4063,35 +4063,35 @@
     "n": 11
    },
    {
-    "domain": "cnbc.com",
+    "domain": "finance.yahoo.com",
     "n": 10
    },
    {
-    "domain": "finance.yahoo.com",
+    "domain": "cnbc.com",
     "n": 9
-   },
-   {
-    "domain": "npr.org",
-    "n": 8
    },
    {
     "domain": "tiktok.com",
     "n": 8
    },
    {
+    "domain": "npr.org",
+    "n": 7
+   },
+   {
     "domain": "t.co",
     "n": 7
    },
    {
-    "domain": "apnews.com",
-    "n": 7
+    "domain": "forbes.com",
+    "n": 6
    },
    {
     "domain": "nature.com",
     "n": 6
    },
    {
-    "domain": "newscientist.com",
+    "domain": "cnn.com",
     "n": 6
    }
   ],
