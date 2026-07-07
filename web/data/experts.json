@@ -4389,17 +4389,17 @@
   "blurb": "Daily 'Start Up' roundup of the most important tech links and commentary, from the ex-Guardian technology editor.",
   "url": "https://theoverspill.blog",
   "totals": {
-   "posts": 23,
-   "signals": 23,
+   "posts": 24,
+   "signals": 24,
    "date_min": "2026-06-04",
-   "date_max": "2026-07-06"
+   "date_max": "2026-07-07"
   },
   "signal_types": {
-   "article": 23
+   "article": 24
   },
   "signal_kinds": {
-   "longread": 18,
-   "links": 5
+   "links": 6,
+   "longread": 18
   },
   "themes": [
    {
@@ -4412,90 +4412,90 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 95.7,
+    "current": 95.8,
     "delta": 0.0,
     "series": {
-     "2026": 95.7
+     "2026": 95.8
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 91.3,
+    "current": 91.7,
     "delta": 0.0,
     "series": {
-     "2026": 91.3
+     "2026": 91.7
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 82.6,
+    "current": 83.3,
     "delta": 0.0,
     "series": {
-     "2026": 82.6
+     "2026": 83.3
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 65.2,
+    "current": 62.5,
     "delta": 0.0,
     "series": {
-     "2026": 65.2
+     "2026": 62.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 56.5,
+    "current": 54.2,
     "delta": 0.0,
     "series": {
-     "2026": 56.5
+     "2026": 54.2
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 43.5,
+    "current": 41.7,
     "delta": 0.0,
     "series": {
-     "2026": 43.5
+     "2026": 41.7
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 34.8,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 34.8
+     "2026": 33.3
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 17.4,
+    "current": 16.7,
     "delta": 0.0,
     "series": {
-     "2026": 17.4
+     "2026": 16.7
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 17.4,
+    "current": 16.7,
     "delta": 0.0,
     "series": {
-     "2026": 17.4
+     "2026": 16.7
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 13.0,
+    "current": 16.7,
     "delta": 0.0,
     "series": {
-     "2026": 13.0
+     "2026": 16.7
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 4.3,
+    "current": 8.3,
     "delta": 0.0,
     "series": {
-     "2026": 4.3
+     "2026": 8.3
     }
    }
   ],
@@ -4505,35 +4505,35 @@
   "top_sources_recent": [
    {
     "domain": "twitter.com",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "threads.net",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "newsie.social",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "bsky.app",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "flickr.com",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "creativecommons.org",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "eepurl.com",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "theverge.com",
-    "n": 3
+    "n": 4
    },
    {
     "domain": "bbc.co.uk",
@@ -4587,35 +4587,35 @@
   "top_sources_early": [
    {
     "domain": "twitter.com",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "threads.net",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "newsie.social",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "bsky.app",
-    "n": 23
+    "n": 24
    },
    {
     "domain": "flickr.com",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "creativecommons.org",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "eepurl.com",
-    "n": 22
+    "n": 23
    },
    {
     "domain": "theverge.com",
-    "n": 3
+    "n": 4
    },
    {
     "domain": "bbc.co.uk",
@@ -4674,56 +4674,64 @@
   "blurb": "New media art, electronic music and hacktivism \u2014 a critical magazine running since 1993.",
   "url": "https://neural.it",
   "totals": {
-   "posts": 17,
-   "signals": 17,
+   "posts": 18,
+   "signals": 18,
    "date_min": "2026-05-27",
-   "date_max": "2026-07-02"
+   "date_max": "2026-07-07"
   },
   "signal_types": {
-   "article": 17
+   "article": 18
   },
   "signal_kinds": {
-   "article": 17
+   "article": 18
   },
   "themes": [
    {
     "theme": "Media & journalism",
-    "current": 23.5,
+    "current": 27.8,
     "delta": 0.0,
     "series": {
-     "2026": 23.5
+     "2026": 27.8
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 11.8,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 11.8
-    }
-   },
-   {
-    "theme": "Platform power / Big Tech",
-    "current": 5.9,
-    "delta": 0.0,
-    "series": {
-     "2026": 5.9
+     "2026": 11.1
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 5.9,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 5.9
+     "2026": 11.1
+    }
+   },
+   {
+    "theme": "Platform power / Big Tech",
+    "current": 5.6,
+    "delta": 0.0,
+    "series": {
+     "2026": 5.6
+    }
+   },
+   {
+    "theme": "Climate & environment",
+    "current": 5.6,
+    "delta": 0.0,
+    "series": {
+     "2026": 5.6
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 5.9,
+    "current": 5.6,
     "delta": 0.0,
     "series": {
-     "2026": 5.9
+     "2026": 5.6
     }
    },
    {
@@ -4744,14 +4752,6 @@
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
-   },
-   {
-    "theme": "Climate & environment",
     "current": 0.0,
     "delta": 0.0,
     "series": {
@@ -8394,105 +8394,105 @@
   "blurb": "The Future Laboratory's daily consumer-culture signals: emerging behaviours, brand moves and stats across sectors.",
   "url": "https://www.lsnglobal.com/daily-signals",
   "totals": {
-   "posts": 41,
-   "signals": 41,
+   "posts": 44,
+   "signals": 44,
    "date_min": "2026-06-17",
-   "date_max": "2026-07-06"
+   "date_max": "2026-07-07"
   },
   "signal_types": {
-   "article": 41
+   "article": 44
   },
   "signal_kinds": {
-   "links": 10,
-   "article": 31
+   "links": 11,
+   "article": 33
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 43.9,
+    "current": 43.2,
     "delta": 0.0,
     "series": {
-     "2026": 43.9
+     "2026": 43.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 34.1,
+    "current": 31.8,
     "delta": 0.0,
     "series": {
-     "2026": 34.1
+     "2026": 31.8
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 31.7,
+    "current": 29.5,
     "delta": 0.0,
     "series": {
-     "2026": 31.7
+     "2026": 29.5
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 24.4,
+    "current": 22.7,
     "delta": 0.0,
     "series": {
-     "2026": 24.4
+     "2026": 22.7
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 22.0,
+    "current": 20.5,
     "delta": 0.0,
     "series": {
-     "2026": 22.0
+     "2026": 20.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 9.8,
+    "current": 9.1,
     "delta": 0.0,
     "series": {
-     "2026": 9.8
+     "2026": 9.1
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 4.9,
+    "current": 4.5,
     "delta": 0.0,
     "series": {
-     "2026": 4.9
+     "2026": 4.5
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 2.4,
+    "current": 2.3,
     "delta": 0.0,
     "series": {
-     "2026": 2.4
+     "2026": 2.3
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 2.4,
+    "current": 2.3,
     "delta": 0.0,
     "series": {
-     "2026": 2.4
+     "2026": 2.3
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 2.4,
+    "current": 2.3,
     "delta": 0.0,
     "series": {
-     "2026": 2.4
+     "2026": 2.3
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 2.4,
+    "current": 2.3,
     "delta": 0.0,
     "series": {
-     "2026": 2.4
+     "2026": 2.3
     }
    },
    {
@@ -8510,7 +8510,7 @@
   "top_sources_recent": [
    {
     "domain": "lsnglobal.com",
-    "n": 161
+    "n": 174
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
@@ -8554,13 +8554,17 @@
    },
    {
     "domain": "thefuturelaboratory.com",
+    "n": 1
+   },
+   {
+    "domain": "murrayuniforms.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "lsnglobal.com",
-    "n": 161
+    "n": 174
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
@@ -8604,6 +8608,10 @@
    },
    {
     "domain": "thefuturelaboratory.com",
+    "n": 1
+   },
+   {
+    "domain": "murrayuniforms.com",
     "n": 1
    }
   ],
