@@ -3530,90 +3530,98 @@
   "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
   "url": "https://www.protein.xyz/tag/seeds/",
   "totals": {
-   "posts": 21,
-   "signals": 21,
+   "posts": 22,
+   "signals": 22,
    "date_min": "2026-04-28",
-   "date_max": "2026-06-29"
+   "date_max": "2026-07-07"
   },
   "signal_types": {
-   "article": 21
+   "article": 22
   },
   "signal_kinds": {
-   "article": 10,
+   "article": 11,
    "longread": 10,
    "qanda": 1
   },
   "themes": [
    {
     "theme": "Social media & attention",
-    "current": 76.2,
+    "current": 77.3,
     "delta": 0.0,
     "series": {
-     "2026": 76.2
+     "2026": 77.3
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 66.7,
+    "current": 63.6,
     "delta": 0.0,
     "series": {
-     "2026": 66.7
+     "2026": 63.6
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 57.1,
+    "current": 59.1,
     "delta": 0.0,
     "series": {
-     "2026": 57.1
+     "2026": 59.1
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 52.4,
+    "current": 54.5,
     "delta": 0.0,
     "series": {
-     "2026": 52.4
-    }
-   },
-   {
-    "theme": "Labour & automation",
-    "current": 38.1,
-    "delta": 0.0,
-    "series": {
-     "2026": 38.1
+     "2026": 54.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 33.3,
+    "current": 36.4,
     "delta": 0.0,
     "series": {
-     "2026": 33.3
+     "2026": 36.4
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 36.4,
+    "delta": 0.0,
+    "series": {
+     "2026": 36.4
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 28.6,
+    "current": 31.8,
     "delta": 0.0,
     "series": {
-     "2026": 28.6
+     "2026": 31.8
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 4.8,
+    "current": 4.5,
     "delta": 0.0,
     "series": {
-     "2026": 4.8
+     "2026": 4.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 4.8,
+    "current": 4.5,
     "delta": 0.0,
     "series": {
-     "2026": 4.8
+     "2026": 4.5
+    }
+   },
+   {
+    "theme": "Regulation & governance",
+    "current": 4.5,
+    "delta": 0.0,
+    "series": {
+     "2026": 4.5
     }
    },
    {
@@ -3631,14 +3639,6 @@
     "series": {
      "2026": 0.0
     }
-   },
-   {
-    "theme": "Regulation & governance",
-    "current": 0.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 0.0
-    }
    }
   ],
   "years": [
@@ -3647,7 +3647,7 @@
   "top_sources_recent": [
    {
     "domain": "instagram.com",
-    "n": 20
+    "n": 23
    },
    {
     "domain": "protein.xyz",
@@ -3660,6 +3660,10 @@
    {
     "domain": "newyorker.com",
     "n": 3
+   },
+   {
+    "domain": "wired.com",
+    "n": 2
    },
    {
     "domain": "thelightphone.com",
@@ -3694,6 +3698,18 @@
     "n": 2
    },
    {
+    "domain": "investor.snap.com",
+    "n": 1
+   },
+   {
+    "domain": "meta.com",
+    "n": 1
+   },
+   {
+    "domain": "cnet.com",
+    "n": 1
+   },
+   {
     "domain": "visdeurbel.nl",
     "n": 1
    },
@@ -3707,29 +3723,13 @@
    },
    {
     "domain": "kickstarter.com",
-    "n": 1
-   },
-   {
-    "domain": "metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "artistcorporations.com",
-    "n": 1
-   },
-   {
-    "domain": "darkforest.metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "dfos.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "instagram.com",
-    "n": 20
+    "n": 23
    },
    {
     "domain": "protein.xyz",
@@ -3742,6 +3742,10 @@
    {
     "domain": "newyorker.com",
     "n": 3
+   },
+   {
+    "domain": "wired.com",
+    "n": 2
    },
    {
     "domain": "thelightphone.com",
@@ -3776,6 +3780,18 @@
     "n": 2
    },
    {
+    "domain": "investor.snap.com",
+    "n": 1
+   },
+   {
+    "domain": "meta.com",
+    "n": 1
+   },
+   {
+    "domain": "cnet.com",
+    "n": 1
+   },
+   {
     "domain": "visdeurbel.nl",
     "n": 1
    },
@@ -3789,22 +3805,6 @@
    },
    {
     "domain": "kickstarter.com",
-    "n": 1
-   },
-   {
-    "domain": "metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "artistcorporations.com",
-    "n": 1
-   },
-   {
-    "domain": "darkforest.metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "dfos.com",
     "n": 1
    }
   ],
@@ -8432,7 +8432,7 @@
     }
    },
    {
-    "theme": "Platform power / Big Tech",
+    "theme": "AI & machine learning",
     "current": 22.7,
     "delta": 0.0,
     "series": {
@@ -8440,11 +8440,11 @@
     }
    },
    {
-    "theme": "AI & machine learning",
-    "current": 20.5,
+    "theme": "Platform power / Big Tech",
+    "current": 22.7,
     "delta": 0.0,
     "series": {
-     "2026": 20.5
+     "2026": 22.7
     }
    },
    {
