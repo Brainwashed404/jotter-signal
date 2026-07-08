@@ -306,50 +306,41 @@
   "totals": {
    "posts": 200,
    "signals": 549,
-   "date_min": "2025-04-02",
-   "date_max": "2026-07-06"
+   "date_min": "2025-04-04",
+   "date_max": "2026-07-08"
   },
   "signal_types": {
    "longread": 195,
-   "commonplace": 131,
-   "note": 65,
-   "book": 95,
+   "book": 96,
    "linkblog": 54,
+   "note": 64,
+   "commonplace": 131,
    "chart": 9
   },
   "signal_kinds": {
    "longread": 196,
+   "links": 153,
+   "article": 58,
    "quote": 133,
-   "article": 59,
-   "links": 152,
    "data": 9
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 59.1,
+    "current": 59.2,
     "delta": 0.0,
     "series": {
-     "2025": 63.9,
-     "2026": 54.3
+     "2025": 63.6,
+     "2026": 54.9
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 38.4,
+    "current": 37.9,
     "delta": 0.0,
     "series": {
-     "2025": 36.1,
-     "2026": 40.7
-    }
-   },
-   {
-    "theme": "Media & journalism",
-    "current": 36.7,
-    "delta": 0.0,
-    "series": {
-     "2025": 38.7,
-     "2026": 34.6
+     "2025": 35.6,
+     "2026": 40.2
     }
    },
    {
@@ -357,17 +348,26 @@
     "current": 36.5,
     "delta": 0.0,
     "series": {
-     "2025": 36.1,
-     "2026": 37.0
+     "2025": 36.4,
+     "2026": 36.6
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 36.5,
+    "delta": 0.0,
+    "series": {
+     "2025": 39.0,
+     "2026": 34.1
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 33.7,
+    "current": 33.2,
     "delta": 0.0,
     "series": {
-     "2025": 32.8,
-     "2026": 34.6
+     "2025": 32.2,
+     "2026": 34.1
     }
    },
    {
@@ -375,26 +375,26 @@
     "current": 22.6,
     "delta": 0.0,
     "series": {
-     "2025": 21.8,
-     "2026": 23.5
+     "2025": 22.0,
+     "2026": 23.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 21.0,
+    "current": 20.9,
     "delta": 0.0,
     "series": {
-     "2025": 21.0,
-     "2026": 21.0
+     "2025": 21.2,
+     "2026": 20.7
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 18.9,
+    "current": 19.5,
     "delta": 0.0,
     "series": {
-     "2025": 19.3,
-     "2026": 18.5
+     "2025": 19.5,
+     "2026": 19.5
     }
    },
    {
@@ -402,8 +402,8 @@
     "current": 13.9,
     "delta": 0.0,
     "series": {
-     "2025": 14.3,
-     "2026": 13.6
+     "2025": 14.4,
+     "2026": 13.4
     }
    },
    {
@@ -412,7 +412,7 @@
     "delta": 0.0,
     "series": {
      "2025": 7.6,
-     "2026": 8.6
+     "2026": 8.5
     }
    },
    {
@@ -430,7 +430,7 @@
     "delta": 0.0,
     "series": {
      "2025": 5.9,
-     "2026": 2.5
+     "2026": 2.4
     }
    }
   ],
@@ -445,7 +445,7 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 25
+    "n": 24
    },
    {
     "domain": "nytimes.com",
@@ -476,11 +476,11 @@
     "n": 8
    },
    {
-    "domain": "substack.com",
-    "n": 7
+    "domain": "persuasion.community",
+    "n": 8
    },
    {
-    "domain": "persuasion.community",
+    "domain": "substack.com",
     "n": 7
    },
    {
@@ -527,7 +527,7 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 25
+    "n": 24
    },
    {
     "domain": "nytimes.com",
@@ -558,11 +558,11 @@
     "n": 8
    },
    {
-    "domain": "substack.com",
-    "n": 7
+    "domain": "persuasion.community",
+    "n": 8
    },
    {
-    "domain": "persuasion.community",
+    "domain": "substack.com",
     "n": 7
    },
    {
@@ -3540,17 +3540,17 @@
    "article": 22
   },
   "signal_kinds": {
-   "article": 11,
-   "longread": 10,
+   "article": 15,
+   "longread": 6,
    "qanda": 1
   },
   "themes": [
    {
     "theme": "Social media & attention",
-    "current": 77.3,
+    "current": 72.7,
     "delta": 0.0,
     "series": {
-     "2026": 77.3
+     "2026": 72.7
     }
    },
    {
@@ -3563,42 +3563,42 @@
    },
    {
     "theme": "Economy & markets",
-    "current": 59.1,
+    "current": 50.0,
     "delta": 0.0,
     "series": {
-     "2026": 59.1
+     "2026": 50.0
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 54.5,
+    "current": 45.5,
     "delta": 0.0,
     "series": {
-     "2026": 54.5
+     "2026": 45.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 36.4,
-    "delta": 0.0,
-    "series": {
-     "2026": 36.4
-    }
-   },
-   {
-    "theme": "Labour & automation",
-    "current": 36.4,
-    "delta": 0.0,
-    "series": {
-     "2026": 36.4
-    }
-   },
-   {
-    "theme": "Platform power / Big Tech",
     "current": 31.8,
     "delta": 0.0,
     "series": {
      "2026": 31.8
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 31.8,
+    "delta": 0.0,
+    "series": {
+     "2026": 31.8
+    }
+   },
+   {
+    "theme": "Platform power / Big Tech",
+    "current": 27.3,
+    "delta": 0.0,
+    "series": {
+     "2026": 27.3
     }
    },
    {
@@ -3648,7 +3648,7 @@
   "top_sources_recent": [
    {
     "domain": "instagram.com",
-    "n": 23
+    "n": 21
    },
    {
     "domain": "protein.xyz",
@@ -3659,27 +3659,7 @@
     "n": 4
    },
    {
-    "domain": "newyorker.com",
-    "n": 3
-   },
-   {
     "domain": "wired.com",
-    "n": 2
-   },
-   {
-    "domain": "thelightphone.com",
-    "n": 2
-   },
-   {
-    "domain": "teenage.engineering",
-    "n": 2
-   },
-   {
-    "domain": "zellerfeld.com",
-    "n": 2
-   },
-   {
-    "domain": "noware.nyc",
     "n": 2
    },
    {
@@ -3692,10 +3672,6 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 2
-   },
-   {
-    "domain": "wsj.com",
     "n": 2
    },
    {
@@ -3724,13 +3700,37 @@
    },
    {
     "domain": "kickstarter.com",
+    "n": 1
+   },
+   {
+    "domain": "metalabel.com",
+    "n": 1
+   },
+   {
+    "domain": "artistcorporations.com",
+    "n": 1
+   },
+   {
+    "domain": "darkforest.metalabel.com",
+    "n": 1
+   },
+   {
+    "domain": "dfos.com",
+    "n": 1
+   },
+   {
+    "domain": "ystrickler.com",
+    "n": 1
+   },
+   {
+    "domain": "pencilmagazine.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "instagram.com",
-    "n": 23
+    "n": 21
    },
    {
     "domain": "protein.xyz",
@@ -3741,27 +3741,7 @@
     "n": 4
    },
    {
-    "domain": "newyorker.com",
-    "n": 3
-   },
-   {
     "domain": "wired.com",
-    "n": 2
-   },
-   {
-    "domain": "thelightphone.com",
-    "n": 2
-   },
-   {
-    "domain": "teenage.engineering",
-    "n": 2
-   },
-   {
-    "domain": "zellerfeld.com",
-    "n": 2
-   },
-   {
-    "domain": "noware.nyc",
     "n": 2
    },
    {
@@ -3774,10 +3754,6 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 2
-   },
-   {
-    "domain": "wsj.com",
     "n": 2
    },
    {
@@ -3806,6 +3782,30 @@
    },
    {
     "domain": "kickstarter.com",
+    "n": 1
+   },
+   {
+    "domain": "metalabel.com",
+    "n": 1
+   },
+   {
+    "domain": "artistcorporations.com",
+    "n": 1
+   },
+   {
+    "domain": "darkforest.metalabel.com",
+    "n": 1
+   },
+   {
+    "domain": "dfos.com",
+    "n": 1
+   },
+   {
+    "domain": "ystrickler.com",
+    "n": 1
+   },
+   {
+    "domain": "pencilmagazine.com",
     "n": 1
    }
   ],
