@@ -8395,105 +8395,105 @@
   "blurb": "The Future Laboratory's daily consumer-culture signals: emerging behaviours, brand moves and stats across sectors.",
   "url": "https://www.lsnglobal.com/daily-signals",
   "totals": {
-   "posts": 44,
-   "signals": 44,
+   "posts": 47,
+   "signals": 47,
    "date_min": "2026-06-17",
-   "date_max": "2026-07-07"
+   "date_max": "2026-07-08"
   },
   "signal_types": {
-   "article": 44
+   "article": 47
   },
   "signal_kinds": {
-   "links": 11,
-   "article": 33
+   "links": 13,
+   "article": 34
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 43.2,
+    "current": 42.6,
     "delta": 0.0,
     "series": {
-     "2026": 43.2
+     "2026": 42.6
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 31.8,
+    "current": 29.8,
     "delta": 0.0,
     "series": {
-     "2026": 31.8
+     "2026": 29.8
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 29.5,
+    "current": 27.7,
     "delta": 0.0,
     "series": {
-     "2026": 29.5
+     "2026": 27.7
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 22.7,
+    "current": 21.3,
     "delta": 0.0,
     "series": {
-     "2026": 22.7
+     "2026": 21.3
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 22.7,
+    "current": 21.3,
     "delta": 0.0,
     "series": {
-     "2026": 22.7
+     "2026": 21.3
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 9.1,
+    "current": 8.5,
     "delta": 0.0,
     "series": {
-     "2026": 9.1
+     "2026": 8.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 4.5,
+    "current": 4.3,
     "delta": 0.0,
     "series": {
-     "2026": 4.5
+     "2026": 4.3
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 2.3,
+    "current": 2.1,
     "delta": 0.0,
     "series": {
-     "2026": 2.3
+     "2026": 2.1
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 2.3,
+    "current": 2.1,
     "delta": 0.0,
     "series": {
-     "2026": 2.3
+     "2026": 2.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 2.3,
+    "current": 2.1,
     "delta": 0.0,
     "series": {
-     "2026": 2.3
+     "2026": 2.1
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 2.3,
+    "current": 2.1,
     "delta": 0.0,
     "series": {
-     "2026": 2.3
+     "2026": 2.1
     }
    },
    {
@@ -8511,7 +8511,7 @@
   "top_sources_recent": [
    {
     "domain": "lsnglobal.com",
-    "n": 174
+    "n": 188
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
@@ -8559,13 +8559,17 @@
    },
    {
     "domain": "murrayuniforms.com",
+    "n": 1
+   },
+   {
+    "domain": "galderma.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "lsnglobal.com",
-    "n": 174
+    "n": 188
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
@@ -8613,6 +8617,10 @@
    },
    {
     "domain": "murrayuniforms.com",
+    "n": 1
+   },
+   {
+    "domain": "galderma.com",
     "n": 1
    }
   ],
@@ -8908,106 +8916,106 @@
   "blurb": "Scott Galloway and Ed Elson on markets, business and the economy: IPOs, big tech, valuations and the forces moving capital.",
   "url": "https://www.profgmedia.com",
   "totals": {
-   "posts": 37,
-   "signals": 37,
+   "posts": 38,
+   "signals": 38,
    "date_min": "2026-06-12",
-   "date_max": "2026-07-07"
+   "date_max": "2026-07-08"
   },
   "signal_types": {
-   "article": 37
+   "article": 38
   },
   "signal_kinds": {
+   "article": 13,
    "longread": 19,
-   "article": 12,
    "links": 6
   },
   "themes": [
    {
     "theme": "Media & journalism",
-    "current": 64.9,
+    "current": 65.8,
     "delta": 0.0,
     "series": {
-     "2026": 64.9
+     "2026": 65.8
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 62.2,
+    "current": 63.2,
     "delta": 0.0,
     "series": {
-     "2026": 62.2
+     "2026": 63.2
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 62.2,
+    "current": 63.2,
     "delta": 0.0,
     "series": {
-     "2026": 62.2
+     "2026": 63.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 40.5,
+    "current": 42.1,
     "delta": 0.0,
     "series": {
-     "2026": 40.5
+     "2026": 42.1
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 29.7,
+    "current": 31.6,
     "delta": 0.0,
     "series": {
-     "2026": 29.7
+     "2026": 31.6
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 24.3,
+    "current": 23.7,
     "delta": 0.0,
     "series": {
-     "2026": 24.3
+     "2026": 23.7
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 24.3,
+    "current": 23.7,
     "delta": 0.0,
     "series": {
-     "2026": 24.3
+     "2026": 23.7
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 18.9,
+    "current": 18.4,
     "delta": 0.0,
     "series": {
-     "2026": 18.9
+     "2026": 18.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 16.2,
+    "current": 15.8,
     "delta": 0.0,
     "series": {
-     "2026": 16.2
+     "2026": 15.8
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 13.5,
+    "current": 13.2,
     "delta": 0.0,
     "series": {
-     "2026": 13.5
+     "2026": 13.2
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 10.8,
+    "current": 10.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.8
+     "2026": 10.5
     }
    },
    {
@@ -9025,7 +9033,7 @@
   "top_sources_recent": [
    {
     "domain": "profgmedia.com",
-    "n": 35
+    "n": 36
    },
    {
     "domain": "nytimes.com",
@@ -9046,6 +9054,10 @@
    {
     "domain": "bloomberg.com",
     "n": 6
+   },
+   {
+    "domain": "links.profgmedia.com",
+    "n": 5
    },
    {
     "domain": "ft.com",
@@ -9097,17 +9109,13 @@
    },
    {
     "domain": "techcrunch.com",
-    "n": 2
-   },
-   {
-    "domain": "wheresyoured.at",
     "n": 2
    }
   ],
   "top_sources_early": [
    {
     "domain": "profgmedia.com",
-    "n": 35
+    "n": 36
    },
    {
     "domain": "nytimes.com",
@@ -9128,6 +9136,10 @@
    {
     "domain": "bloomberg.com",
     "n": 6
+   },
+   {
+    "domain": "links.profgmedia.com",
+    "n": 5
    },
    {
     "domain": "ft.com",
@@ -9179,10 +9191,6 @@
    },
    {
     "domain": "techcrunch.com",
-    "n": 2
-   },
-   {
-    "domain": "wheresyoured.at",
     "n": 2
    }
   ],
