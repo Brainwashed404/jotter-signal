@@ -3819,15 +3819,15 @@
   "totals": {
    "posts": 200,
    "signals": 200,
-   "date_min": "2026-06-14",
+   "date_min": "2026-06-15",
    "date_max": "2026-07-08"
   },
   "signal_types": {
    "article": 200
   },
   "signal_kinds": {
-   "links": 96,
-   "article": 96,
+   "article": 97,
+   "links": 95,
    "longread": 8
   },
   "themes": [
@@ -3841,10 +3841,18 @@
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 34.5,
+    "current": 35.0,
     "delta": 0.0,
     "series": {
-     "2026": 34.5
+     "2026": 35.0
+    }
+   },
+   {
+    "theme": "Economy & markets",
+    "current": 30.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 30.0
     }
    },
    {
@@ -3856,27 +3864,19 @@
     }
    },
    {
-    "theme": "Economy & markets",
-    "current": 29.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 29.0
-    }
-   },
-   {
     "theme": "Social media & attention",
-    "current": 19.0,
+    "current": 20.0,
     "delta": 0.0,
     "series": {
-     "2026": 19.0
+     "2026": 20.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 15.0,
+    "current": 14.5,
     "delta": 0.0,
     "series": {
-     "2026": 15.0
+     "2026": 14.5
     }
    },
    {
@@ -3905,10 +3905,10 @@
    },
    {
     "theme": "Regulation & governance",
-    "current": 10.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 9.5
     }
    },
    {
@@ -3921,10 +3921,10 @@
    },
    {
     "theme": "Crypto / web3",
-    "current": 2.0,
+    "current": 2.5,
     "delta": 0.0,
     "series": {
-     "2026": 2.0
+     "2026": 2.5
     }
    }
   ],
@@ -3934,11 +3934,11 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 760
+    "n": 757
    },
    {
     "domain": "x.com",
-    "n": 56
+    "n": 55
    },
    {
     "domain": "nytimes.com",
@@ -3949,19 +3949,19 @@
     "n": 21
    },
    {
+    "domain": "wsj.com",
+    "n": 20
+   },
+   {
     "domain": "theguardian.com",
     "n": 19
    },
    {
-    "domain": "wsj.com",
-    "n": 18
+    "domain": "wired.com",
+    "n": 17
    },
    {
     "domain": "bbc.com",
-    "n": 18
-   },
-   {
-    "domain": "wired.com",
     "n": 17
    },
    {
@@ -3977,16 +3977,16 @@
     "n": 11
    },
    {
+    "domain": "cnbc.com",
+    "n": 10
+   },
+   {
     "domain": "finance.yahoo.com",
     "n": 10
    },
    {
     "domain": "ft.com",
     "n": 10
-   },
-   {
-    "domain": "cnbc.com",
-    "n": 9
    },
    {
     "domain": "cnn.com",
@@ -3997,30 +3997,30 @@
     "n": 8
    },
    {
+    "domain": "washingtonpost.com",
+    "n": 6
+   },
+   {
+    "domain": "t.co",
+    "n": 6
+   },
+   {
     "domain": "fortune.com",
     "n": 6
    },
    {
     "domain": "forbes.com",
-    "n": 6
-   },
-   {
-    "domain": "nature.com",
-    "n": 6
-   },
-   {
-    "domain": "npr.org",
     "n": 6
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 760
+    "n": 757
    },
    {
     "domain": "x.com",
-    "n": 56
+    "n": 55
    },
    {
     "domain": "nytimes.com",
@@ -4031,19 +4031,19 @@
     "n": 21
    },
    {
+    "domain": "wsj.com",
+    "n": 20
+   },
+   {
     "domain": "theguardian.com",
     "n": 19
    },
    {
-    "domain": "wsj.com",
-    "n": 18
+    "domain": "wired.com",
+    "n": 17
    },
    {
     "domain": "bbc.com",
-    "n": 18
-   },
-   {
-    "domain": "wired.com",
     "n": 17
    },
    {
@@ -4059,16 +4059,16 @@
     "n": 11
    },
    {
+    "domain": "cnbc.com",
+    "n": 10
+   },
+   {
     "domain": "finance.yahoo.com",
     "n": 10
    },
    {
     "domain": "ft.com",
     "n": 10
-   },
-   {
-    "domain": "cnbc.com",
-    "n": 9
    },
    {
     "domain": "cnn.com",
@@ -4079,19 +4079,19 @@
     "n": 8
    },
    {
+    "domain": "washingtonpost.com",
+    "n": 6
+   },
+   {
+    "domain": "t.co",
+    "n": 6
+   },
+   {
     "domain": "fortune.com",
     "n": 6
    },
    {
     "domain": "forbes.com",
-    "n": 6
-   },
-   {
-    "domain": "nature.com",
-    "n": 6
-   },
-   {
-    "domain": "npr.org",
     "n": 6
    }
   ],
@@ -9048,6 +9048,10 @@
     "n": 7
    },
    {
+    "domain": "links.profgmedia.com",
+    "n": 6
+   },
+   {
     "domain": "cnbc.com",
     "n": 6
    },
@@ -9058,10 +9062,6 @@
    {
     "domain": "bloomberg.com",
     "n": 6
-   },
-   {
-    "domain": "links.profgmedia.com",
-    "n": 5
    },
    {
     "domain": "ft.com",
@@ -9130,6 +9130,10 @@
     "n": 7
    },
    {
+    "domain": "links.profgmedia.com",
+    "n": 6
+   },
+   {
     "domain": "cnbc.com",
     "n": 6
    },
@@ -9140,10 +9144,6 @@
    {
     "domain": "bloomberg.com",
     "n": 6
-   },
-   {
-    "domain": "links.profgmedia.com",
-    "n": 5
    },
    {
     "domain": "ft.com",
