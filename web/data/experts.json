@@ -3826,17 +3826,17 @@
    "article": 200
   },
   "signal_kinds": {
-   "article": 97,
    "links": 95,
+   "article": 97,
    "longread": 8
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 63.0,
+    "current": 62.5,
     "delta": 0.0,
     "series": {
-     "2026": 63.0
+     "2026": 62.5
     }
    },
    {
@@ -3848,15 +3848,15 @@
     }
    },
    {
-    "theme": "Economy & markets",
-    "current": 30.0,
+    "theme": "Media & journalism",
+    "current": 30.5,
     "delta": 0.0,
     "series": {
-     "2026": 30.0
+     "2026": 30.5
     }
    },
    {
-    "theme": "Media & journalism",
+    "theme": "Economy & markets",
     "current": 30.0,
     "delta": 0.0,
     "series": {
@@ -3888,27 +3888,27 @@
     }
    },
    {
-    "theme": "Labour & automation",
-    "current": 11.0,
+    "theme": "Geopolitics & power",
+    "current": 10.5,
     "delta": 0.0,
     "series": {
-     "2026": 11.0
+     "2026": 10.5
     }
    },
    {
-    "theme": "Geopolitics & power",
-    "current": 10.0,
+    "theme": "Labour & automation",
+    "current": 10.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 10.5
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 9.5,
+    "current": 9.0,
     "delta": 0.0,
     "series": {
-     "2026": 9.5
+     "2026": 9.0
     }
    },
    {
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 757
+    "n": 755
    },
    {
     "domain": "x.com",
@@ -3957,10 +3957,6 @@
     "n": 19
    },
    {
-    "domain": "wired.com",
-    "n": 17
-   },
-   {
     "domain": "bbc.com",
     "n": 17
    },
@@ -3969,8 +3965,12 @@
     "n": 16
    },
    {
+    "domain": "wired.com",
+    "n": 14
+   },
+   {
     "domain": "businessinsider.com",
-    "n": 13
+    "n": 12
    },
    {
     "domain": "bloomberg.com",
@@ -4016,7 +4016,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 757
+    "n": 755
    },
    {
     "domain": "x.com",
@@ -4039,10 +4039,6 @@
     "n": 19
    },
    {
-    "domain": "wired.com",
-    "n": 17
-   },
-   {
     "domain": "bbc.com",
     "n": 17
    },
@@ -4051,8 +4047,12 @@
     "n": 16
    },
    {
+    "domain": "wired.com",
+    "n": 14
+   },
+   {
     "domain": "businessinsider.com",
-    "n": 13
+    "n": 12
    },
    {
     "domain": "bloomberg.com",
