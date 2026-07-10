@@ -3826,8 +3826,8 @@
    "article": 200
   },
   "signal_kinds": {
-   "links": 95,
-   "article": 97,
+   "article": 99,
+   "links": 93,
    "longread": 8
   },
   "themes": [
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 746
+    "n": 742
    },
    {
     "domain": "x.com",
@@ -3954,7 +3954,7 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "bbc.com",
@@ -3962,7 +3962,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 17
+    "n": 16
    },
    {
     "domain": "wired.com",
@@ -3981,16 +3981,24 @@
     "n": 11
    },
    {
-    "domain": "finance.yahoo.com",
-    "n": 11
+    "domain": "cnn.com",
+    "n": 9
    },
    {
-    "domain": "cnn.com",
+    "domain": "finance.yahoo.com",
     "n": 9
    },
    {
     "domain": "ft.com",
     "n": 9
+   },
+   {
+    "domain": "npr.org",
+    "n": 7
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 7
    },
    {
     "domain": "space.com",
@@ -4003,20 +4011,12 @@
    {
     "domain": "tiktok.com",
     "n": 7
-   },
-   {
-    "domain": "t.co",
-    "n": 6
-   },
-   {
-    "domain": "pmc.ncbi.nlm.nih.gov",
-    "n": 6
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 746
+    "n": 742
    },
    {
     "domain": "x.com",
@@ -4036,7 +4036,7 @@
    },
    {
     "domain": "theguardian.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "bbc.com",
@@ -4044,7 +4044,7 @@
    },
    {
     "domain": "reuters.com",
-    "n": 17
+    "n": 16
    },
    {
     "domain": "wired.com",
@@ -4063,16 +4063,24 @@
     "n": 11
    },
    {
-    "domain": "finance.yahoo.com",
-    "n": 11
+    "domain": "cnn.com",
+    "n": 9
    },
    {
-    "domain": "cnn.com",
+    "domain": "finance.yahoo.com",
     "n": 9
    },
    {
     "domain": "ft.com",
     "n": 9
+   },
+   {
+    "domain": "npr.org",
+    "n": 7
+   },
+   {
+    "domain": "nbcnews.com",
+    "n": 7
    },
    {
     "domain": "space.com",
@@ -4085,14 +4093,6 @@
    {
     "domain": "tiktok.com",
     "n": 7
-   },
-   {
-    "domain": "t.co",
-    "n": 6
-   },
-   {
-    "domain": "pmc.ncbi.nlm.nih.gov",
-    "n": 6
    }
   ],
   "category": "publication"
