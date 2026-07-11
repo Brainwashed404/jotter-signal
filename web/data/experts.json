@@ -3826,9 +3826,9 @@
    "article": 200
   },
   "signal_kinds": {
+   "links": 95,
    "article": 98,
-   "links": 94,
-   "longread": 8
+   "longread": 7
   },
   "themes": [
    {
@@ -3841,18 +3841,18 @@
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 36.0,
+    "current": 35.0,
     "delta": 0.0,
     "series": {
-     "2026": 36.0
+     "2026": 35.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 31.5,
+    "current": 30.5,
     "delta": 0.0,
     "series": {
-     "2026": 31.5
+     "2026": 30.5
     }
    },
    {
@@ -3881,18 +3881,18 @@
    },
    {
     "theme": "Geopolitics & power",
-    "current": 12.5,
+    "current": 13.0,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 13.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 12.5,
+    "current": 13.0,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 13.0
     }
    },
    {
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 746
+    "n": 750
    },
    {
     "domain": "x.com",
@@ -3946,18 +3946,18 @@
    },
    {
     "domain": "reddit.com",
-    "n": 21
+    "n": 20
    },
    {
     "domain": "wsj.com",
     "n": 20
    },
    {
-    "domain": "bbc.com",
-    "n": 17
+    "domain": "theguardian.com",
+    "n": 18
    },
    {
-    "domain": "theguardian.com",
+    "domain": "bbc.com",
     "n": 17
    },
    {
@@ -3977,6 +3977,10 @@
     "n": 11
    },
    {
+    "domain": "ft.com",
+    "n": 10
+   },
+   {
     "domain": "bloomberg.com",
     "n": 10
    },
@@ -3986,11 +3990,7 @@
    },
    {
     "domain": "finance.yahoo.com",
-    "n": 9
-   },
-   {
-    "domain": "ft.com",
-    "n": 9
+    "n": 8
    },
    {
     "domain": "npr.org",
@@ -4016,7 +4016,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 746
+    "n": 750
    },
    {
     "domain": "x.com",
@@ -4028,18 +4028,18 @@
    },
    {
     "domain": "reddit.com",
-    "n": 21
+    "n": 20
    },
    {
     "domain": "wsj.com",
     "n": 20
    },
    {
-    "domain": "bbc.com",
-    "n": 17
+    "domain": "theguardian.com",
+    "n": 18
    },
    {
-    "domain": "theguardian.com",
+    "domain": "bbc.com",
     "n": 17
    },
    {
@@ -4059,6 +4059,10 @@
     "n": 11
    },
    {
+    "domain": "ft.com",
+    "n": 10
+   },
+   {
     "domain": "bloomberg.com",
     "n": 10
    },
@@ -4068,11 +4072,7 @@
    },
    {
     "domain": "finance.yahoo.com",
-    "n": 9
-   },
-   {
-    "domain": "ft.com",
-    "n": 9
+    "n": 8
    },
    {
     "domain": "npr.org",
