@@ -610,17 +610,17 @@
   "blurb": "Author and activist; writes Pluralistic on monopoly, platform power and 'enshittification' (a term he coined).",
   "url": "https://pluralistic.net",
   "totals": {
-   "posts": 46,
-   "signals": 138,
+   "posts": 47,
+   "signals": 141,
    "date_min": "2026-05-02",
-   "date_max": "2026-07-10"
+   "date_max": "2026-07-11"
   },
   "signal_types": {
-   "article": 138
+   "article": 141
   },
   "signal_kinds": {
-   "longread": 40,
-   "links": 90,
+   "longread": 41,
+   "links": 92,
    "article": 7,
    "quote": 1
   },
@@ -635,90 +635,90 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 78.3,
+    "current": 78.7,
     "delta": 0.0,
     "series": {
-     "2026": 78.3
+     "2026": 78.7
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 73.9,
+    "current": 74.5,
     "delta": 0.0,
     "series": {
-     "2026": 73.9
+     "2026": 74.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 67.4,
+    "current": 68.1,
     "delta": 0.0,
     "series": {
-     "2026": 67.4
+     "2026": 68.1
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 60.9,
+    "current": 61.7,
     "delta": 0.0,
     "series": {
-     "2026": 60.9
+     "2026": 61.7
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 56.5,
+    "current": 55.3,
     "delta": 0.0,
     "series": {
-     "2026": 56.5
-    }
-   },
-   {
-    "theme": "Democracy & disinformation",
-    "current": 52.2,
-    "delta": 0.0,
-    "series": {
-     "2026": 52.2
+     "2026": 55.3
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 52.2,
+    "current": 53.2,
     "delta": 0.0,
     "series": {
-     "2026": 52.2
+     "2026": 53.2
+    }
+   },
+   {
+    "theme": "Democracy & disinformation",
+    "current": 51.1,
+    "delta": 0.0,
+    "series": {
+     "2026": 51.1
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 45.7,
+    "current": 44.7,
     "delta": 0.0,
     "series": {
-     "2026": 45.7
+     "2026": 44.7
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 37.0,
+    "current": 38.3,
     "delta": 0.0,
     "series": {
-     "2026": 37.0
+     "2026": 38.3
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 30.4,
+    "current": 29.8,
     "delta": 0.0,
     "series": {
-     "2026": 30.4
+     "2026": 29.8
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 13.0,
+    "current": 12.8,
     "delta": 0.0,
     "series": {
-     "2026": 13.0
+     "2026": 12.8
     }
    }
   ],
@@ -728,31 +728,35 @@
   "top_sources_recent": [
    {
     "domain": "web.archive.org",
-    "n": 199
+    "n": 202
    },
    {
     "domain": "pluralistic.net",
-    "n": 161
+    "n": 165
    },
    {
     "domain": "memex.craphound.com",
-    "n": 28
+    "n": 30
    },
    {
     "domain": "theguardian.com",
     "n": 17
    },
    {
+    "domain": "eff.org",
+    "n": 13
+   },
+   {
     "domain": "nytimes.com",
     "n": 13
    },
    {
-    "domain": "eff.org",
-    "n": 12
-   },
-   {
     "domain": "thebignewsletter.com",
     "n": 10
+   },
+   {
+    "domain": "prospect.org",
+    "n": 9
    },
    {
     "domain": "arstechnica.com",
@@ -760,10 +764,6 @@
    },
    {
     "domain": "wired.com",
-    "n": 8
-   },
-   {
-    "domain": "prospect.org",
     "n": 8
    },
    {
@@ -787,15 +787,15 @@
     "n": 6
    },
    {
+    "domain": "404media.co",
+    "n": 5
+   },
+   {
     "domain": "theregister.com",
     "n": 5
    },
    {
     "domain": "locusmag.com",
-    "n": 4
-   },
-   {
-    "domain": "404media.co",
     "n": 4
    },
    {
@@ -810,31 +810,35 @@
   "top_sources_early": [
    {
     "domain": "web.archive.org",
-    "n": 199
+    "n": 202
    },
    {
     "domain": "pluralistic.net",
-    "n": 161
+    "n": 165
    },
    {
     "domain": "memex.craphound.com",
-    "n": 28
+    "n": 30
    },
    {
     "domain": "theguardian.com",
     "n": 17
    },
    {
+    "domain": "eff.org",
+    "n": 13
+   },
+   {
     "domain": "nytimes.com",
     "n": 13
    },
    {
-    "domain": "eff.org",
-    "n": 12
-   },
-   {
     "domain": "thebignewsletter.com",
     "n": 10
+   },
+   {
+    "domain": "prospect.org",
+    "n": 9
    },
    {
     "domain": "arstechnica.com",
@@ -842,10 +846,6 @@
    },
    {
     "domain": "wired.com",
-    "n": 8
-   },
-   {
-    "domain": "prospect.org",
     "n": 8
    },
    {
@@ -869,15 +869,15 @@
     "n": 6
    },
    {
+    "domain": "404media.co",
+    "n": 5
+   },
+   {
     "domain": "theregister.com",
     "n": 5
    },
    {
     "domain": "locusmag.com",
-    "n": 4
-   },
-   {
-    "domain": "404media.co",
     "n": 4
    },
    {
@@ -8964,106 +8964,106 @@
   "blurb": "Scott Galloway and Ed Elson on markets, business and the economy: IPOs, big tech, valuations and the forces moving capital.",
   "url": "https://www.profgmedia.com",
   "totals": {
-   "posts": 41,
-   "signals": 41,
+   "posts": 42,
+   "signals": 42,
    "date_min": "2026-06-12",
-   "date_max": "2026-07-10"
+   "date_max": "2026-07-11"
   },
   "signal_types": {
-   "article": 41
+   "article": 42
   },
   "signal_kinds": {
+   "links": 7,
    "longread": 21,
-   "article": 14,
-   "links": 6
+   "article": 14
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 65.9,
+    "current": 64.3,
     "delta": 0.0,
     "series": {
-     "2026": 65.9
+     "2026": 64.3
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 65.9,
+    "current": 64.3,
     "delta": 0.0,
     "series": {
-     "2026": 65.9
+     "2026": 64.3
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 63.4,
+    "current": 61.9,
     "delta": 0.0,
     "series": {
-     "2026": 63.4
+     "2026": 61.9
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 43.9,
+    "current": 42.9,
     "delta": 0.0,
     "series": {
-     "2026": 43.9
+     "2026": 42.9
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 34.1,
+    "current": 33.3,
     "delta": 0.0,
     "series": {
-     "2026": 34.1
+     "2026": 33.3
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 24.4,
+    "current": 23.8,
     "delta": 0.0,
     "series": {
-     "2026": 24.4
+     "2026": 23.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 24.4,
+    "current": 23.8,
     "delta": 0.0,
     "series": {
-     "2026": 24.4
+     "2026": 23.8
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 19.5,
+    "current": 19.0,
     "delta": 0.0,
     "series": {
-     "2026": 19.5
+     "2026": 19.0
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 17.1,
+    "current": 16.7,
     "delta": 0.0,
     "series": {
-     "2026": 17.1
+     "2026": 16.7
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 14.6,
+    "current": 14.3,
     "delta": 0.0,
     "series": {
-     "2026": 14.6
+     "2026": 14.3
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 12.2,
+    "current": 11.9,
     "delta": 0.0,
     "series": {
-     "2026": 12.2
+     "2026": 11.9
     }
    },
    {
@@ -9081,7 +9081,7 @@
   "top_sources_recent": [
    {
     "domain": "profgmedia.com",
-    "n": 40
+    "n": 41
    },
    {
     "domain": "nytimes.com",
@@ -9120,6 +9120,10 @@
     "n": 4
    },
    {
+    "domain": "substack.com",
+    "n": 3
+   },
+   {
     "domain": "profgalloway.com",
     "n": 3
    },
@@ -9153,17 +9157,13 @@
    },
    {
     "domain": "economist.com",
-    "n": 2
-   },
-   {
-    "domain": "substack.com",
     "n": 2
    }
   ],
   "top_sources_early": [
    {
     "domain": "profgmedia.com",
-    "n": 40
+    "n": 41
    },
    {
     "domain": "nytimes.com",
@@ -9202,6 +9202,10 @@
     "n": 4
    },
    {
+    "domain": "substack.com",
+    "n": 3
+   },
+   {
     "domain": "profgalloway.com",
     "n": 3
    },
@@ -9235,10 +9239,6 @@
    },
    {
     "domain": "economist.com",
-    "n": 2
-   },
-   {
-    "domain": "substack.com",
     "n": 2
    }
   ],
