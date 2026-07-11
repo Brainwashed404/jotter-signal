@@ -3819,15 +3819,15 @@
   "totals": {
    "posts": 200,
    "signals": 200,
-   "date_min": "2026-06-17",
+   "date_min": "2026-06-18",
    "date_max": "2026-07-11"
   },
   "signal_types": {
    "article": 200
   },
   "signal_kinds": {
-   "links": 95,
-   "article": 97,
+   "article": 98,
+   "links": 94,
    "longread": 8
   },
   "themes": [
@@ -3849,26 +3849,26 @@
    },
    {
     "theme": "Media & journalism",
-    "current": 31.0,
+    "current": 31.5,
     "delta": 0.0,
     "series": {
-     "2026": 31.0
+     "2026": 31.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 30.5,
+    "current": 30.0,
     "delta": 0.0,
     "series": {
-     "2026": 30.5
+     "2026": 30.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 21.0,
+    "current": 21.5,
     "delta": 0.0,
     "series": {
-     "2026": 21.0
+     "2026": 21.5
     }
    },
    {
@@ -3897,10 +3897,10 @@
    },
    {
     "theme": "Labour & automation",
-    "current": 9.5,
+    "current": 10.0,
     "delta": 0.0,
     "series": {
-     "2026": 9.5
+     "2026": 10.0
     }
    },
    {
@@ -3913,10 +3913,10 @@
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 6.5,
+    "current": 7.0,
     "delta": 0.0,
     "series": {
-     "2026": 6.5
+     "2026": 7.0
     }
    },
    {
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 742
+    "n": 746
    },
    {
     "domain": "x.com",
@@ -3961,16 +3961,12 @@
     "n": 17
    },
    {
-    "domain": "reuters.com",
+    "domain": "wired.com",
     "n": 14
    },
    {
-    "domain": "bloomberg.com",
-    "n": 13
-   },
-   {
-    "domain": "wired.com",
-    "n": 13
+    "domain": "reuters.com",
+    "n": 14
    },
    {
     "domain": "cnbc.com",
@@ -3978,7 +3974,11 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 12
+    "n": 11
+   },
+   {
+    "domain": "bloomberg.com",
+    "n": 10
    },
    {
     "domain": "cnn.com",
@@ -4016,7 +4016,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 742
+    "n": 746
    },
    {
     "domain": "x.com",
@@ -4043,16 +4043,12 @@
     "n": 17
    },
    {
-    "domain": "reuters.com",
+    "domain": "wired.com",
     "n": 14
    },
    {
-    "domain": "bloomberg.com",
-    "n": 13
-   },
-   {
-    "domain": "wired.com",
-    "n": 13
+    "domain": "reuters.com",
+    "n": 14
    },
    {
     "domain": "cnbc.com",
@@ -4060,7 +4056,11 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 12
+    "n": 11
+   },
+   {
+    "domain": "bloomberg.com",
+    "n": 10
    },
    {
     "domain": "cnn.com",
