@@ -4103,16 +4103,16 @@
   "blurb": "Semafor's technology coverage \u2014 AI, platforms and the business of tech.",
   "url": "https://www.semafor.com/vertical/tech",
   "totals": {
-   "posts": 75,
-   "signals": 75,
+   "posts": 77,
+   "signals": 77,
    "date_min": "2026-06-08",
-   "date_max": "2026-07-10"
+   "date_max": "2026-07-11"
   },
   "signal_types": {
-   "article": 75
+   "article": 77
   },
   "signal_kinds": {
-   "article": 36,
+   "article": 38,
    "links": 36,
    "quote": 2,
    "data": 1
@@ -4120,82 +4120,82 @@
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 81.3,
+    "current": 81.8,
     "delta": 0.0,
     "series": {
-     "2026": 81.3
+     "2026": 81.8
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 48.0,
+    "current": 49.4,
     "delta": 0.0,
     "series": {
-     "2026": 48.0
+     "2026": 49.4
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 33.3,
+    "current": 32.5,
     "delta": 0.0,
     "series": {
-     "2026": 33.3
+     "2026": 32.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 29.3,
+    "current": 28.6,
     "delta": 0.0,
     "series": {
-     "2026": 29.3
+     "2026": 28.6
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 16.0,
+    "current": 15.6,
     "delta": 0.0,
     "series": {
-     "2026": 16.0
+     "2026": 15.6
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 16.0,
+    "current": 15.6,
     "delta": 0.0,
     "series": {
-     "2026": 16.0
+     "2026": 15.6
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 8.0,
+    "current": 7.8,
     "delta": 0.0,
     "series": {
-     "2026": 8.0
+     "2026": 7.8
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 6.7,
+    "current": 6.5,
     "delta": 0.0,
     "series": {
-     "2026": 6.7
+     "2026": 6.5
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 5.3,
+    "current": 5.2,
     "delta": 0.0,
     "series": {
-     "2026": 5.3
+     "2026": 5.2
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 4.0,
+    "current": 3.9,
     "delta": 0.0,
     "series": {
-     "2026": 4.0
+     "2026": 3.9
     }
    },
    {
@@ -4221,15 +4221,15 @@
   "top_sources_recent": [
    {
     "domain": "semafor.com",
-    "n": 77
+    "n": 78
    },
    {
     "domain": "bloomberg.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "wsj.com",
-    "n": 15
+    "n": 16
    },
    {
     "domain": "reuters.com",
@@ -4288,30 +4288,30 @@
     "n": 3
    },
    {
+    "domain": "techcrunch.com",
+    "n": 2
+   },
+   {
     "domain": "politico.com",
     "n": 2
    },
    {
     "domain": "fortune.com",
-    "n": 2
-   },
-   {
-    "domain": "businessinsider.com",
     "n": 2
    }
   ],
   "top_sources_early": [
    {
     "domain": "semafor.com",
-    "n": 77
+    "n": 78
    },
    {
     "domain": "bloomberg.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "wsj.com",
-    "n": 15
+    "n": 16
    },
    {
     "domain": "reuters.com",
@@ -4370,15 +4370,15 @@
     "n": 3
    },
    {
+    "domain": "techcrunch.com",
+    "n": 2
+   },
+   {
     "domain": "politico.com",
     "n": 2
    },
    {
     "domain": "fortune.com",
-    "n": 2
-   },
-   {
-    "domain": "businessinsider.com",
     "n": 2
    }
   ],
