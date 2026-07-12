@@ -3245,16 +3245,16 @@
   "blurb": "A weekly look at news and trends you may have missed, with plenty of commentary.",
   "url": "https://1234kyle5678.substack.com",
   "totals": {
-   "posts": 20,
-   "signals": 20,
+   "posts": 21,
+   "signals": 21,
    "date_min": "2026-05-26",
-   "date_max": "2026-07-09"
+   "date_max": "2026-07-12"
   },
   "signal_types": {
-   "article": 20
+   "article": 21
   },
   "signal_kinds": {
-   "links": 18,
+   "links": 19,
    "article": 1,
    "longread": 1
   },
@@ -3269,90 +3269,90 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 95.0,
+    "current": 95.2,
     "delta": 0.0,
     "series": {
-     "2026": 95.0
+     "2026": 95.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 95.0,
+    "current": 95.2,
     "delta": 0.0,
     "series": {
-     "2026": 95.0
-    }
-   },
-   {
-    "theme": "Economy & markets",
-    "current": 55.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 55.0
+     "2026": 95.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 50.0,
+    "current": 52.4,
     "delta": 0.0,
     "series": {
-     "2026": 50.0
+     "2026": 52.4
+    }
+   },
+   {
+    "theme": "Economy & markets",
+    "current": 52.4,
+    "delta": 0.0,
+    "series": {
+     "2026": 52.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 45.0,
+    "current": 42.9,
     "delta": 0.0,
     "series": {
-     "2026": 45.0
-    }
-   },
-   {
-    "theme": "Labour & automation",
-    "current": 25.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 25.0
+     "2026": 42.9
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 20.0,
+    "current": 23.8,
     "delta": 0.0,
     "series": {
-     "2026": 20.0
+     "2026": 23.8
+    }
+   },
+   {
+    "theme": "Labour & automation",
+    "current": 23.8,
+    "delta": 0.0,
+    "series": {
+     "2026": 23.8
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 20.0,
+    "current": 19.0,
     "delta": 0.0,
     "series": {
-     "2026": 20.0
+     "2026": 19.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 15.0,
+    "current": 14.3,
     "delta": 0.0,
     "series": {
-     "2026": 15.0
+     "2026": 14.3
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 10.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 9.5
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 10.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 9.5
     }
    }
   ],
@@ -3362,7 +3362,7 @@
   "top_sources_recent": [
    {
     "domain": "1234kyle5678.substack.com",
-    "n": 39
+    "n": 40
    },
    {
     "domain": "x.com",
@@ -3381,28 +3381,36 @@
     "n": 7
    },
    {
+    "domain": "open.spotify.com",
+    "n": 6
+   },
+   {
     "domain": "nytimes.com",
     "n": 6
+   },
+   {
+    "domain": "hipreplacement.substack.com",
+    "n": 5
+   },
+   {
+    "domain": "open.substack.com",
+    "n": 5
    },
    {
     "domain": "linkedin.com",
     "n": 5
    },
    {
-    "domain": "open.spotify.com",
-    "n": 5
-   },
-   {
-    "domain": "open.substack.com",
-    "n": 4
-   },
-   {
-    "domain": "hipreplacement.substack.com",
+    "domain": "instagram.com",
     "n": 4
    },
    {
     "domain": "variety.com",
     "n": 4
+   },
+   {
+    "domain": "thecultureslop.com",
+    "n": 3
    },
    {
     "domain": "feeld.co",
@@ -3417,19 +3425,11 @@
     "n": 2
    },
    {
-    "domain": "instagram.com",
-    "n": 2
-   },
-   {
     "domain": "cnbc.com",
     "n": 2
    },
    {
     "domain": "sites.prh.com",
-    "n": 2
-   },
-   {
-    "domain": "thecultureslop.com",
     "n": 2
    },
    {
@@ -3444,7 +3444,7 @@
   "top_sources_early": [
    {
     "domain": "1234kyle5678.substack.com",
-    "n": 39
+    "n": 40
    },
    {
     "domain": "x.com",
@@ -3463,28 +3463,36 @@
     "n": 7
    },
    {
+    "domain": "open.spotify.com",
+    "n": 6
+   },
+   {
     "domain": "nytimes.com",
     "n": 6
+   },
+   {
+    "domain": "hipreplacement.substack.com",
+    "n": 5
+   },
+   {
+    "domain": "open.substack.com",
+    "n": 5
    },
    {
     "domain": "linkedin.com",
     "n": 5
    },
    {
-    "domain": "open.spotify.com",
-    "n": 5
-   },
-   {
-    "domain": "open.substack.com",
-    "n": 4
-   },
-   {
-    "domain": "hipreplacement.substack.com",
+    "domain": "instagram.com",
     "n": 4
    },
    {
     "domain": "variety.com",
     "n": 4
+   },
+   {
+    "domain": "thecultureslop.com",
+    "n": 3
    },
    {
     "domain": "feeld.co",
@@ -3499,19 +3507,11 @@
     "n": 2
    },
    {
-    "domain": "instagram.com",
-    "n": 2
-   },
-   {
     "domain": "cnbc.com",
     "n": 2
    },
    {
     "domain": "sites.prh.com",
-    "n": 2
-   },
-   {
-    "domain": "thecultureslop.com",
     "n": 2
    },
    {
@@ -3826,9 +3826,9 @@
    "article": 200
   },
   "signal_kinds": {
-   "article": 101,
-   "links": 92,
-   "longread": 7
+   "links": 94,
+   "article": 100,
+   "longread": 6
   },
   "themes": [
    {
@@ -3849,10 +3849,10 @@
    },
    {
     "theme": "Media & journalism",
-    "current": 31.0,
+    "current": 30.5,
     "delta": 0.0,
     "series": {
-     "2026": 31.0
+     "2026": 30.5
     }
    },
    {
@@ -3865,10 +3865,10 @@
    },
    {
     "theme": "Social media & attention",
-    "current": 22.0,
+    "current": 21.5,
     "delta": 0.0,
     "series": {
-     "2026": 22.0
+     "2026": 21.5
     }
    },
    {
@@ -3905,10 +3905,10 @@
    },
    {
     "theme": "Regulation & governance",
-    "current": 8.0,
+    "current": 9.0,
     "delta": 0.0,
     "series": {
-     "2026": 8.0
+     "2026": 9.0
     }
    },
    {
@@ -3934,15 +3934,19 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 749
+    "n": 750
    },
    {
     "domain": "x.com",
-    "n": 68
+    "n": 69
    },
    {
     "domain": "nytimes.com",
     "n": 32
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 19
    },
    {
     "domain": "reddit.com",
@@ -3953,12 +3957,8 @@
     "n": 19
    },
    {
-    "domain": "theguardian.com",
-    "n": 18
-   },
-   {
     "domain": "bbc.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "reuters.com",
@@ -4016,15 +4016,19 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 749
+    "n": 750
    },
    {
     "domain": "x.com",
-    "n": 68
+    "n": 69
    },
    {
     "domain": "nytimes.com",
     "n": 32
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 19
    },
    {
     "domain": "reddit.com",
@@ -4035,12 +4039,8 @@
     "n": 19
    },
    {
-    "domain": "theguardian.com",
-    "n": 18
-   },
-   {
     "domain": "bbc.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "reuters.com",
