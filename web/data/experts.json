@@ -3819,7 +3819,7 @@
   "totals": {
    "posts": 200,
    "signals": 200,
-   "date_min": "2026-06-18",
+   "date_min": "2026-06-19",
    "date_max": "2026-07-12"
   },
   "signal_types": {
@@ -3833,34 +3833,34 @@
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 63.0,
+    "current": 64.0,
     "delta": 0.0,
     "series": {
-     "2026": 63.0
+     "2026": 64.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 35.5,
+    "current": 36.5,
     "delta": 0.0,
     "series": {
-     "2026": 35.5
+     "2026": 36.5
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 30.5,
+    "current": 31.0,
     "delta": 0.0,
     "series": {
-     "2026": 30.5
+     "2026": 31.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 29.5,
+    "current": 30.0,
     "delta": 0.0,
     "series": {
-     "2026": 29.5
+     "2026": 30.0
     }
    },
    {
@@ -3881,18 +3881,18 @@
    },
    {
     "theme": "Geopolitics & power",
-    "current": 13.0,
+    "current": 12.0,
     "delta": 0.0,
     "series": {
-     "2026": 13.0
+     "2026": 12.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 12.5,
+    "current": 12.0,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 12.0
     }
    },
    {
@@ -3905,10 +3905,10 @@
    },
    {
     "theme": "Regulation & governance",
-    "current": 7.5,
+    "current": 8.0,
     "delta": 0.0,
     "series": {
-     "2026": 7.5
+     "2026": 8.0
     }
    },
    {
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 748
+    "n": 749
    },
    {
     "domain": "x.com",
@@ -3958,15 +3958,15 @@
    },
    {
     "domain": "bbc.com",
-    "n": 17
-   },
-   {
-    "domain": "wired.com",
-    "n": 14
+    "n": 16
    },
    {
     "domain": "reuters.com",
     "n": 14
+   },
+   {
+    "domain": "wired.com",
+    "n": 13
    },
    {
     "domain": "cnbc.com",
@@ -3974,15 +3974,15 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 11
-   },
-   {
-    "domain": "ft.com",
     "n": 10
    },
    {
     "domain": "cnn.com",
     "n": 9
+   },
+   {
+    "domain": "ft.com",
+    "n": 8
    },
    {
     "domain": "bloomberg.com",
@@ -4016,7 +4016,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 748
+    "n": 749
    },
    {
     "domain": "x.com",
@@ -4040,15 +4040,15 @@
    },
    {
     "domain": "bbc.com",
-    "n": 17
-   },
-   {
-    "domain": "wired.com",
-    "n": 14
+    "n": 16
    },
    {
     "domain": "reuters.com",
     "n": 14
+   },
+   {
+    "domain": "wired.com",
+    "n": 13
    },
    {
     "domain": "cnbc.com",
@@ -4056,15 +4056,15 @@
    },
    {
     "domain": "businessinsider.com",
-    "n": 11
-   },
-   {
-    "domain": "ft.com",
     "n": 10
    },
    {
     "domain": "cnn.com",
     "n": 9
+   },
+   {
+    "domain": "ft.com",
+    "n": 8
    },
    {
     "domain": "bloomberg.com",
@@ -9537,17 +9537,17 @@
   "blurb": "Media ecologist and author of \"Postjournalism\". On McLuhan, the transformation of news media, and what AI means for writing, reading and human cognition.",
   "url": "https://www.andreymir.com",
   "totals": {
-   "posts": 25,
-   "signals": 25,
+   "posts": 26,
+   "signals": 26,
    "date_min": "2026-03-12",
-   "date_max": "2026-07-05"
+   "date_max": "2026-07-12"
   },
   "signal_types": {
-   "article": 25
+   "article": 26
   },
   "signal_kinds": {
+   "links": 9,
    "longread": 13,
-   "links": 8,
    "article": 2,
    "qanda": 2
   },
@@ -9562,82 +9562,82 @@
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 96.0,
+    "current": 96.2,
     "delta": 0.0,
     "series": {
-     "2026": 96.0
+     "2026": 96.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 84.0,
+    "current": 84.6,
     "delta": 0.0,
     "series": {
-     "2026": 84.0
+     "2026": 84.6
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 64.0,
+    "current": 65.4,
     "delta": 0.0,
     "series": {
-     "2026": 64.0
+     "2026": 65.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 64.0,
+    "current": 65.4,
     "delta": 0.0,
     "series": {
-     "2026": 64.0
+     "2026": 65.4
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 44.0,
+    "current": 42.3,
     "delta": 0.0,
     "series": {
-     "2026": 44.0
+     "2026": 42.3
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 12.0,
+    "current": 11.5,
     "delta": 0.0,
     "series": {
-     "2026": 12.0
+     "2026": 11.5
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 12.0,
+    "current": 11.5,
     "delta": 0.0,
     "series": {
-     "2026": 12.0
+     "2026": 11.5
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 12.0,
+    "current": 11.5,
     "delta": 0.0,
     "series": {
-     "2026": 12.0
+     "2026": 11.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 8.0,
+    "current": 7.7,
     "delta": 0.0,
     "series": {
-     "2026": 8.0
+     "2026": 7.7
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 4.0,
+    "current": 3.8,
     "delta": 0.0,
     "series": {
-     "2026": 4.0
+     "2026": 3.8
     }
    },
    {
@@ -9686,12 +9686,24 @@
     "n": 4
    },
    {
+    "domain": "default.blog",
+    "n": 3
+   },
+   {
+    "domain": "therepublicofletters.substack.com",
+    "n": 3
+   },
+   {
     "domain": "amazon.ca",
     "n": 3
    },
    {
     "domain": "npr.org",
     "n": 3
+   },
+   {
+    "domain": "city-journal.org",
+    "n": 2
    },
    {
     "domain": "pewresearch.org",
@@ -9720,18 +9732,6 @@
    {
     "domain": "upgrademedia.fr",
     "n": 2
-   },
-   {
-    "domain": "camoinassociates.com",
-    "n": 1
-   },
-   {
-    "domain": "frihedsbrevet.dk",
-    "n": 1
-   },
-   {
-    "domain": "thespinoff.co.nz",
-    "n": 1
    }
   ],
   "top_sources_early": [
@@ -9768,12 +9768,24 @@
     "n": 4
    },
    {
+    "domain": "default.blog",
+    "n": 3
+   },
+   {
+    "domain": "therepublicofletters.substack.com",
+    "n": 3
+   },
+   {
     "domain": "amazon.ca",
     "n": 3
    },
    {
     "domain": "npr.org",
     "n": 3
+   },
+   {
+    "domain": "city-journal.org",
+    "n": 2
    },
    {
     "domain": "pewresearch.org",
@@ -9802,18 +9814,6 @@
    {
     "domain": "upgrademedia.fr",
     "n": 2
-   },
-   {
-    "domain": "camoinassociates.com",
-    "n": 1
-   },
-   {
-    "domain": "frihedsbrevet.dk",
-    "n": 1
-   },
-   {
-    "domain": "thespinoff.co.nz",
-    "n": 1
    }
   ],
   "category": "author"
