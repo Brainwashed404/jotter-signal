@@ -1806,16 +1806,16 @@
   "blurb": "Economics and other interesting stuff.",
   "url": "https://www.noahpinion.blog",
   "totals": {
-   "posts": 33,
-   "signals": 33,
+   "posts": 34,
+   "signals": 34,
    "date_min": "2026-05-11",
-   "date_max": "2026-07-10"
+   "date_max": "2026-07-12"
   },
   "signal_types": {
-   "article": 33
+   "article": 34
   },
   "signal_kinds": {
-   "longread": 16,
+   "longread": 17,
    "links": 16,
    "article": 1
   },
@@ -1830,82 +1830,82 @@
    },
    {
     "theme": "Economy & markets",
-    "current": 90.9,
+    "current": 91.2,
     "delta": 0.0,
     "series": {
-     "2026": 90.9
+     "2026": 91.2
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 63.6,
+    "current": 61.8,
     "delta": 0.0,
     "series": {
-     "2026": 63.6
-    }
-   },
-   {
-    "theme": "Geopolitics & power",
-    "current": 51.5,
-    "delta": 0.0,
-    "series": {
-     "2026": 51.5
+     "2026": 61.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 51.5,
+    "current": 52.9,
     "delta": 0.0,
     "series": {
-     "2026": 51.5
+     "2026": 52.9
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 50.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 50.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 45.5,
+    "current": 47.1,
     "delta": 0.0,
     "series": {
-     "2026": 45.5
-    }
-   },
-   {
-    "theme": "Social media & attention",
-    "current": 33.3,
-    "delta": 0.0,
-    "series": {
-     "2026": 33.3
+     "2026": 47.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 33.3,
+    "current": 35.3,
     "delta": 0.0,
     "series": {
-     "2026": 33.3
+     "2026": 35.3
+    }
+   },
+   {
+    "theme": "Social media & attention",
+    "current": 32.4,
+    "delta": 0.0,
+    "series": {
+     "2026": 32.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 30.3,
+    "current": 29.4,
     "delta": 0.0,
     "series": {
-     "2026": 30.3
+     "2026": 29.4
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 15.2,
+    "current": 14.7,
     "delta": 0.0,
     "series": {
-     "2026": 15.2
+     "2026": 14.7
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 3.0,
+    "current": 2.9,
     "delta": 0.0,
     "series": {
-     "2026": 3.0
+     "2026": 2.9
     }
    },
    {
@@ -1931,7 +1931,7 @@
    },
    {
     "domain": "x.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "bloomberg.com",
@@ -1954,8 +1954,16 @@
     "n": 5
    },
    {
+    "domain": "theargumentmag.com",
+    "n": 4
+   },
+   {
     "domain": "axios.com",
     "n": 4
+   },
+   {
+    "domain": "news.gallup.com",
+    "n": 3
    },
    {
     "domain": "natesilver.net",
@@ -1990,15 +1998,7 @@
     "n": 3
    },
    {
-    "domain": "theargumentmag.com",
-    "n": 3
-   },
-   {
-    "domain": "science.org",
-    "n": 2
-   },
-   {
-    "domain": "economist.com",
+    "domain": "slowboring.com",
     "n": 2
    }
   ],
@@ -2013,7 +2013,7 @@
    },
    {
     "domain": "x.com",
-    "n": 16
+    "n": 17
    },
    {
     "domain": "bloomberg.com",
@@ -2036,8 +2036,16 @@
     "n": 5
    },
    {
+    "domain": "theargumentmag.com",
+    "n": 4
+   },
+   {
     "domain": "axios.com",
     "n": 4
+   },
+   {
+    "domain": "news.gallup.com",
+    "n": 3
    },
    {
     "domain": "natesilver.net",
@@ -2072,15 +2080,7 @@
     "n": 3
    },
    {
-    "domain": "theargumentmag.com",
-    "n": 3
-   },
-   {
-    "domain": "science.org",
-    "n": 2
-   },
-   {
-    "domain": "economist.com",
+    "domain": "slowboring.com",
     "n": 2
    }
   ],
