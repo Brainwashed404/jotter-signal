@@ -3826,8 +3826,8 @@
    "article": 200
   },
   "signal_kinds": {
-   "links": 97,
    "article": 97,
+   "links": 97,
    "longread": 6
   },
   "themes": [
@@ -3848,6 +3848,14 @@
     }
    },
    {
+    "theme": "Economy & markets",
+    "current": 31.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 31.0
+    }
+   },
+   {
     "theme": "Media & journalism",
     "current": 31.0,
     "delta": 0.0,
@@ -3856,67 +3864,59 @@
     }
    },
    {
-    "theme": "Economy & markets",
-    "current": 30.5,
-    "delta": 0.0,
-    "series": {
-     "2026": 30.5
-    }
-   },
-   {
     "theme": "Social media & attention",
-    "current": 21.5,
+    "current": 21.0,
     "delta": 0.0,
     "series": {
-     "2026": 21.5
+     "2026": 21.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 16.5,
+    "current": 16.0,
     "delta": 0.0,
     "series": {
-     "2026": 16.5
+     "2026": 16.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 13.0,
+    "current": 13.5,
     "delta": 0.0,
     "series": {
-     "2026": 13.0
+     "2026": 13.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 12.5,
+    "current": 12.0,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 12.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 10.0,
+    "current": 10.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.0
+     "2026": 10.5
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 9.5,
+    "current": 9.0,
     "delta": 0.0,
     "series": {
-     "2026": 9.5
+     "2026": 9.0
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 6.5,
+    "current": 6.0,
     "delta": 0.0,
     "series": {
-     "2026": 6.5
+     "2026": 6.0
     }
    },
    {
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 744
+    "n": 743
    },
    {
     "domain": "x.com",
@@ -3946,15 +3946,15 @@
    },
    {
     "domain": "bbc.com",
-    "n": 20
+    "n": 18
    },
    {
     "domain": "theguardian.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "reddit.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "wsj.com",
@@ -3962,11 +3962,11 @@
    },
    {
     "domain": "wired.com",
-    "n": 15
+    "n": 16
    },
    {
     "domain": "reuters.com",
-    "n": 14
+    "n": 13
    },
    {
     "domain": "cnbc.com",
@@ -3977,7 +3977,7 @@
     "n": 10
    },
    {
-    "domain": "cnn.com",
+    "domain": "ft.com",
     "n": 9
    },
    {
@@ -3985,11 +3985,11 @@
     "n": 8
    },
    {
-    "domain": "ft.com",
+    "domain": "bloomberg.com",
     "n": 8
    },
    {
-    "domain": "bloomberg.com",
+    "domain": "cnn.com",
     "n": 8
    },
    {
@@ -4016,7 +4016,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 744
+    "n": 743
    },
    {
     "domain": "x.com",
@@ -4028,15 +4028,15 @@
    },
    {
     "domain": "bbc.com",
-    "n": 20
+    "n": 18
    },
    {
     "domain": "theguardian.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "reddit.com",
-    "n": 19
+    "n": 18
    },
    {
     "domain": "wsj.com",
@@ -4044,11 +4044,11 @@
    },
    {
     "domain": "wired.com",
-    "n": 15
+    "n": 16
    },
    {
     "domain": "reuters.com",
-    "n": 14
+    "n": 13
    },
    {
     "domain": "cnbc.com",
@@ -4059,7 +4059,7 @@
     "n": 10
    },
    {
-    "domain": "cnn.com",
+    "domain": "ft.com",
     "n": 9
    },
    {
@@ -4067,11 +4067,11 @@
     "n": 8
    },
    {
-    "domain": "ft.com",
+    "domain": "bloomberg.com",
     "n": 8
    },
    {
-    "domain": "bloomberg.com",
+    "domain": "cnn.com",
     "n": 8
    },
    {
