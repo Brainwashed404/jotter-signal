@@ -3819,32 +3819,40 @@
   "totals": {
    "posts": 200,
    "signals": 200,
-   "date_min": "2026-06-19",
+   "date_min": "2026-06-20",
    "date_max": "2026-07-13"
   },
   "signal_types": {
    "article": 200
   },
   "signal_kinds": {
-   "article": 100,
-   "links": 94,
+   "links": 97,
+   "article": 97,
    "longread": 6
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 64.0,
+    "current": 65.0,
     "delta": 0.0,
     "series": {
-     "2026": 64.0
+     "2026": 65.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 36.5,
+    "current": 37.0,
     "delta": 0.0,
     "series": {
-     "2026": 36.5
+     "2026": 37.0
+    }
+   },
+   {
+    "theme": "Media & journalism",
+    "current": 31.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 31.0
     }
    },
    {
@@ -3853,14 +3861,6 @@
     "delta": 0.0,
     "series": {
      "2026": 30.5
-    }
-   },
-   {
-    "theme": "Media & journalism",
-    "current": 30.0,
-    "delta": 0.0,
-    "series": {
-     "2026": 30.0
     }
    },
    {
@@ -3873,18 +3873,18 @@
    },
    {
     "theme": "Climate & environment",
-    "current": 17.5,
+    "current": 16.5,
     "delta": 0.0,
     "series": {
-     "2026": 17.5
+     "2026": 16.5
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 12.5,
+    "current": 13.0,
     "delta": 0.0,
     "series": {
-     "2026": 12.5
+     "2026": 13.0
     }
    },
    {
@@ -3905,10 +3905,10 @@
    },
    {
     "theme": "Regulation & governance",
-    "current": 9.0,
+    "current": 9.5,
     "delta": 0.0,
     "series": {
-     "2026": 9.0
+     "2026": 9.5
     }
    },
    {
@@ -3934,7 +3934,7 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 749
+    "n": 744
    },
    {
     "domain": "x.com",
@@ -3942,7 +3942,11 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 32
+    "n": 33
+   },
+   {
+    "domain": "bbc.com",
+    "n": 20
    },
    {
     "domain": "theguardian.com",
@@ -3953,20 +3957,16 @@
     "n": 19
    },
    {
-    "domain": "bbc.com",
-    "n": 17
-   },
-   {
     "domain": "wsj.com",
     "n": 17
    },
    {
-    "domain": "reuters.com",
-    "n": 14
+    "domain": "wired.com",
+    "n": 15
    },
    {
-    "domain": "wired.com",
-    "n": 13
+    "domain": "reuters.com",
+    "n": 14
    },
    {
     "domain": "cnbc.com",
@@ -4016,7 +4016,7 @@
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 749
+    "n": 744
    },
    {
     "domain": "x.com",
@@ -4024,7 +4024,11 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 32
+    "n": 33
+   },
+   {
+    "domain": "bbc.com",
+    "n": 20
    },
    {
     "domain": "theguardian.com",
@@ -4035,20 +4039,16 @@
     "n": 19
    },
    {
-    "domain": "bbc.com",
-    "n": 17
-   },
-   {
     "domain": "wsj.com",
     "n": 17
    },
    {
-    "domain": "reuters.com",
-    "n": 14
+    "domain": "wired.com",
+    "n": 15
    },
    {
-    "domain": "wired.com",
-    "n": 13
+    "domain": "reuters.com",
+    "n": 14
    },
    {
     "domain": "cnbc.com",
@@ -8117,16 +8117,16 @@
   "blurb": "Andreessen Horowitz's publication on technology, startups and the ideas shaping the future.",
   "url": "https://www.a16z.news",
   "totals": {
-   "posts": 37,
-   "signals": 37,
+   "posts": 38,
+   "signals": 38,
    "date_min": "2026-06-02",
-   "date_max": "2026-07-03"
+   "date_max": "2026-07-13"
   },
   "signal_types": {
-   "article": 37
+   "article": 38
   },
   "signal_kinds": {
-   "longread": 29,
+   "longread": 30,
    "links": 4,
    "article": 4
   },
@@ -8141,82 +8141,82 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 83.8,
+    "current": 84.2,
     "delta": 0.0,
     "series": {
-     "2026": 83.8
+     "2026": 84.2
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 54.1,
+    "current": 55.3,
     "delta": 0.0,
     "series": {
-     "2026": 54.1
+     "2026": 55.3
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 37.8,
+    "current": 36.8,
     "delta": 0.0,
     "series": {
-     "2026": 37.8
+     "2026": 36.8
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 24.3,
+    "current": 26.3,
     "delta": 0.0,
     "series": {
-     "2026": 24.3
+     "2026": 26.3
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 21.6,
+    "current": 21.1,
     "delta": 0.0,
     "series": {
-     "2026": 21.6
+     "2026": 21.1
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 16.2,
+    "current": 18.4,
     "delta": 0.0,
     "series": {
-     "2026": 16.2
+     "2026": 18.4
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 10.8,
+    "current": 10.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.8
+     "2026": 10.5
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 5.4,
+    "current": 5.3,
     "delta": 0.0,
     "series": {
-     "2026": 5.4
+     "2026": 5.3
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 2.7,
+    "current": 2.6,
     "delta": 0.0,
     "series": {
-     "2026": 2.7
+     "2026": 2.6
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 2.7,
+    "current": 2.6,
     "delta": 0.0,
     "series": {
-     "2026": 2.7
+     "2026": 2.6
     }
    },
    {
@@ -8234,7 +8234,7 @@
   "top_sources_recent": [
    {
     "domain": "a16z.news",
-    "n": 197
+    "n": 202
    },
    {
     "domain": "a16z.com",
@@ -8242,7 +8242,7 @@
    },
    {
     "domain": "x.com",
-    "n": 9
+    "n": 11
    },
    {
     "domain": "linkedin.com",
@@ -8255,6 +8255,10 @@
    {
     "domain": "build.a16z.com",
     "n": 2
+   },
+   {
+    "domain": "cdixon.org",
+    "n": 1
    },
    {
     "domain": "aspi.org.au",
@@ -8306,17 +8310,13 @@
    },
    {
     "domain": "fda.gov",
-    "n": 1
-   },
-   {
-    "domain": "nature.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "a16z.news",
-    "n": 197
+    "n": 202
    },
    {
     "domain": "a16z.com",
@@ -8324,7 +8324,7 @@
    },
    {
     "domain": "x.com",
-    "n": 9
+    "n": 11
    },
    {
     "domain": "linkedin.com",
@@ -8337,6 +8337,10 @@
    {
     "domain": "build.a16z.com",
     "n": 2
+   },
+   {
+    "domain": "cdixon.org",
+    "n": 1
    },
    {
     "domain": "aspi.org.au",
@@ -8388,10 +8392,6 @@
    },
    {
     "domain": "fda.gov",
-    "n": 1
-   },
-   {
-    "domain": "nature.com",
     "n": 1
    }
   ],
@@ -8972,106 +8972,106 @@
   "blurb": "Scott Galloway and Ed Elson on markets, business and the economy: IPOs, big tech, valuations and the forces moving capital.",
   "url": "https://www.profgmedia.com",
   "totals": {
-   "posts": 43,
-   "signals": 43,
+   "posts": 44,
+   "signals": 44,
    "date_min": "2026-06-12",
    "date_max": "2026-07-13"
   },
   "signal_types": {
-   "article": 43
+   "article": 44
   },
   "signal_kinds": {
-   "longread": 22,
+   "longread": 23,
    "links": 7,
    "article": 14
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 65.1,
+    "current": 65.9,
     "delta": 0.0,
     "series": {
-     "2026": 65.1
+     "2026": 65.9
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 65.1,
+    "current": 65.9,
     "delta": 0.0,
     "series": {
-     "2026": 65.1
+     "2026": 65.9
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 62.8,
+    "current": 61.4,
     "delta": 0.0,
     "series": {
-     "2026": 62.8
+     "2026": 61.4
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 44.2,
+    "current": 43.2,
     "delta": 0.0,
     "series": {
-     "2026": 44.2
+     "2026": 43.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 32.6,
+    "current": 31.8,
     "delta": 0.0,
     "series": {
-     "2026": 32.6
+     "2026": 31.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 25.6,
+    "current": 25.0,
     "delta": 0.0,
     "series": {
-     "2026": 25.6
+     "2026": 25.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 23.3,
+    "current": 22.7,
     "delta": 0.0,
     "series": {
-     "2026": 23.3
+     "2026": 22.7
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 18.6,
+    "current": 20.5,
     "delta": 0.0,
     "series": {
-     "2026": 18.6
+     "2026": 20.5
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 16.3,
+    "current": 18.2,
     "delta": 0.0,
     "series": {
-     "2026": 16.3
+     "2026": 18.2
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 16.3,
+    "current": 15.9,
     "delta": 0.0,
     "series": {
-     "2026": 16.3
+     "2026": 15.9
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 14.0,
+    "current": 13.6,
     "delta": 0.0,
     "series": {
-     "2026": 14.0
+     "2026": 13.6
     }
    },
    {
@@ -9097,7 +9097,7 @@
    },
    {
     "domain": "wsj.com",
-    "n": 8
+    "n": 9
    },
    {
     "domain": "open.substack.com",
@@ -9124,6 +9124,10 @@
     "n": 5
    },
    {
+    "domain": "reuters.com",
+    "n": 4
+   },
+   {
     "domain": "economist.com",
     "n": 4
    },
@@ -9144,27 +9148,23 @@
     "n": 3
    },
    {
-    "domain": "reuters.com",
-    "n": 3
-   },
-   {
     "domain": "trumpwhitehouse.archives.gov",
     "n": 3
    },
    {
+    "domain": "kff.org",
+    "n": 2
+   },
+   {
+    "domain": "usatoday.com",
+    "n": 2
+   },
+   {
+    "domain": "foxnews.com",
+    "n": 2
+   },
+   {
     "domain": "pbs.org",
-    "n": 2
-   },
-   {
-    "domain": "sec.gov",
-    "n": 2
-   },
-   {
-    "domain": "apnews.com",
-    "n": 2
-   },
-   {
-    "domain": "bbc.com",
     "n": 2
    }
   ],
@@ -9179,7 +9179,7 @@
    },
    {
     "domain": "wsj.com",
-    "n": 8
+    "n": 9
    },
    {
     "domain": "open.substack.com",
@@ -9206,6 +9206,10 @@
     "n": 5
    },
    {
+    "domain": "reuters.com",
+    "n": 4
+   },
+   {
     "domain": "economist.com",
     "n": 4
    },
@@ -9226,27 +9230,23 @@
     "n": 3
    },
    {
-    "domain": "reuters.com",
-    "n": 3
-   },
-   {
     "domain": "trumpwhitehouse.archives.gov",
     "n": 3
    },
    {
+    "domain": "kff.org",
+    "n": 2
+   },
+   {
+    "domain": "usatoday.com",
+    "n": 2
+   },
+   {
+    "domain": "foxnews.com",
+    "n": 2
+   },
+   {
     "domain": "pbs.org",
-    "n": 2
-   },
-   {
-    "domain": "sec.gov",
-    "n": 2
-   },
-   {
-    "domain": "apnews.com",
-    "n": 2
-   },
-   {
-    "domain": "bbc.com",
     "n": 2
    }
   ],
