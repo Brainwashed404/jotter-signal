@@ -3531,98 +3531,98 @@
   "blurb": "SEEDS \u2014 Protein's cultural intelligence briefings on emerging signals, behaviours and shifts.",
   "url": "https://www.protein.xyz/tag/seeds/",
   "totals": {
-   "posts": 23,
-   "signals": 23,
+   "posts": 24,
+   "signals": 24,
    "date_min": "2026-04-28",
-   "date_max": "2026-07-09"
+   "date_max": "2026-07-14"
   },
   "signal_types": {
-   "article": 23
+   "article": 24
   },
   "signal_kinds": {
-   "article": 16,
+   "article": 17,
    "longread": 6,
    "qanda": 1
   },
   "themes": [
    {
     "theme": "Social media & attention",
-    "current": 69.6,
+    "current": 70.8,
     "delta": 0.0,
     "series": {
-     "2026": 69.6
+     "2026": 70.8
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 60.9,
+    "current": 62.5,
     "delta": 0.0,
     "series": {
-     "2026": 60.9
+     "2026": 62.5
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 47.8,
+    "current": 45.8,
     "delta": 0.0,
     "series": {
-     "2026": 47.8
+     "2026": 45.8
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 43.5,
+    "current": 41.7,
     "delta": 0.0,
     "series": {
-     "2026": 43.5
+     "2026": 41.7
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 30.4,
+    "current": 29.2,
     "delta": 0.0,
     "series": {
-     "2026": 30.4
+     "2026": 29.2
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 30.4,
+    "current": 29.2,
     "delta": 0.0,
     "series": {
-     "2026": 30.4
+     "2026": 29.2
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 26.1,
+    "current": 25.0,
     "delta": 0.0,
     "series": {
-     "2026": 26.1
+     "2026": 25.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 8.7,
+    "current": 8.3,
     "delta": 0.0,
     "series": {
-     "2026": 8.7
+     "2026": 8.3
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 4.3,
+    "current": 4.2,
     "delta": 0.0,
     "series": {
-     "2026": 4.3
+     "2026": 4.2
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 4.3,
+    "current": 4.2,
     "delta": 0.0,
     "series": {
-     "2026": 4.3
+     "2026": 4.2
     }
    },
    {
@@ -3652,11 +3652,19 @@
    },
    {
     "domain": "protein.xyz",
-    "n": 18
+    "n": 20
    },
    {
     "domain": "linkedin.com",
-    "n": 4
+    "n": 5
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 3
+   },
+   {
+    "domain": "vogue.com",
+    "n": 2
    },
    {
     "domain": "wired.com",
@@ -3671,8 +3679,12 @@
     "n": 2
    },
    {
-    "domain": "theguardian.com",
-    "n": 2
+    "domain": "nytimes.com",
+    "n": 1
+   },
+   {
+    "domain": "wmagazine.com",
+    "n": 1
    },
    {
     "domain": "dezeen.com",
@@ -3712,18 +3724,6 @@
    },
    {
     "domain": "metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "artistcorporations.com",
-    "n": 1
-   },
-   {
-    "domain": "darkforest.metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "dfos.com",
     "n": 1
    }
   ],
@@ -3734,11 +3734,19 @@
    },
    {
     "domain": "protein.xyz",
-    "n": 18
+    "n": 20
    },
    {
     "domain": "linkedin.com",
-    "n": 4
+    "n": 5
+   },
+   {
+    "domain": "theguardian.com",
+    "n": 3
+   },
+   {
+    "domain": "vogue.com",
+    "n": 2
    },
    {
     "domain": "wired.com",
@@ -3753,8 +3761,12 @@
     "n": 2
    },
    {
-    "domain": "theguardian.com",
-    "n": 2
+    "domain": "nytimes.com",
+    "n": 1
+   },
+   {
+    "domain": "wmagazine.com",
+    "n": 1
    },
    {
     "domain": "dezeen.com",
@@ -3794,18 +3806,6 @@
    },
    {
     "domain": "metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "artistcorporations.com",
-    "n": 1
-   },
-   {
-    "domain": "darkforest.metalabel.com",
-    "n": 1
-   },
-   {
-    "domain": "dfos.com",
     "n": 1
    }
   ],
@@ -4675,64 +4675,64 @@
   "blurb": "New media art, electronic music and hacktivism \u2014 a critical magazine running since 1993.",
   "url": "https://neural.it",
   "totals": {
-   "posts": 19,
-   "signals": 19,
+   "posts": 20,
+   "signals": 20,
    "date_min": "2026-05-27",
-   "date_max": "2026-07-10"
+   "date_max": "2026-07-14"
   },
   "signal_types": {
-   "article": 19
+   "article": 20
   },
   "signal_kinds": {
-   "article": 19
+   "article": 20
   },
   "themes": [
    {
     "theme": "Media & journalism",
-    "current": 26.3,
+    "current": 25.0,
     "delta": 0.0,
     "series": {
-     "2026": 26.3
+     "2026": 25.0
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 10.5,
+    "current": 10.0,
     "delta": 0.0,
     "series": {
-     "2026": 10.5
+     "2026": 10.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 10.5,
+    "current": 10.0,
     "delta": 0.0,
     "series": {
-     "2026": 10.5
+     "2026": 10.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 5.3,
+    "current": 5.0,
     "delta": 0.0,
     "series": {
-     "2026": 5.3
+     "2026": 5.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 5.3,
+    "current": 5.0,
     "delta": 0.0,
     "series": {
-     "2026": 5.3
+     "2026": 5.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 5.3,
+    "current": 5.0,
     "delta": 0.0,
     "series": {
-     "2026": 5.3
+     "2026": 5.0
     }
    },
    {
@@ -8403,105 +8403,105 @@
   "blurb": "The Future Laboratory's daily consumer-culture signals: emerging behaviours, brand moves and stats across sectors.",
   "url": "https://www.lsnglobal.com/daily-signals",
   "totals": {
-   "posts": 56,
-   "signals": 56,
+   "posts": 59,
+   "signals": 59,
    "date_min": "2026-06-17",
-   "date_max": "2026-07-13"
+   "date_max": "2026-07-14"
   },
   "signal_types": {
-   "article": 56
+   "article": 59
   },
   "signal_kinds": {
-   "links": 16,
-   "article": 40
+   "links": 18,
+   "article": 41
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 44.6,
+    "current": 44.1,
     "delta": 0.0,
     "series": {
-     "2026": 44.6
+     "2026": 44.1
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 30.4,
+    "current": 28.8,
     "delta": 0.0,
     "series": {
-     "2026": 30.4
+     "2026": 28.8
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 28.6,
+    "current": 27.1,
     "delta": 0.0,
     "series": {
-     "2026": 28.6
+     "2026": 27.1
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 21.4,
+    "current": 20.3,
     "delta": 0.0,
     "series": {
-     "2026": 21.4
+     "2026": 20.3
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 17.9,
+    "current": 18.6,
     "delta": 0.0,
     "series": {
-     "2026": 17.9
+     "2026": 18.6
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 7.1,
+    "current": 8.5,
     "delta": 0.0,
     "series": {
-     "2026": 7.1
+     "2026": 8.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 7.1,
+    "current": 6.8,
     "delta": 0.0,
     "series": {
-     "2026": 7.1
+     "2026": 6.8
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 3.6,
+    "current": 3.4,
     "delta": 0.0,
     "series": {
-     "2026": 3.6
+     "2026": 3.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 1.8,
+    "current": 1.7,
     "delta": 0.0,
     "series": {
-     "2026": 1.8
+     "2026": 1.7
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 1.8,
+    "current": 1.7,
     "delta": 0.0,
     "series": {
-     "2026": 1.8
+     "2026": 1.7
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 1.8,
+    "current": 1.7,
     "delta": 0.0,
     "series": {
-     "2026": 1.8
+     "2026": 1.7
     }
    },
    {
@@ -8519,11 +8519,11 @@
   "top_sources_recent": [
    {
     "domain": "lsnglobal.com",
-    "n": 223
+    "n": 235
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
-    "n": 20
+    "n": 22
    },
    {
     "domain": "healf.com",
@@ -8601,11 +8601,11 @@
   "top_sources_early": [
    {
     "domain": "lsnglobal.com",
-    "n": 223
+    "n": 235
    },
    {
     "domain": "eur03.safelinks.protection.outlook.com",
-    "n": 20
+    "n": 22
    },
    {
     "domain": "healf.com",
