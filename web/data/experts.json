@@ -8972,114 +8972,114 @@
   "blurb": "Scott Galloway and Ed Elson on markets, business and the economy: IPOs, big tech, valuations and the forces moving capital.",
   "url": "https://www.profgmedia.com",
   "totals": {
-   "posts": 44,
-   "signals": 44,
+   "posts": 45,
+   "signals": 45,
    "date_min": "2026-06-12",
    "date_max": "2026-07-13"
   },
   "signal_types": {
-   "article": 44
+   "article": 45
   },
   "signal_kinds": {
+   "article": 15,
    "longread": 23,
-   "links": 7,
-   "article": 14
+   "links": 7
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 65.9,
+    "current": 64.4,
     "delta": 0.0,
     "series": {
-     "2026": 65.9
+     "2026": 64.4
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 65.9,
+    "current": 64.4,
     "delta": 0.0,
     "series": {
-     "2026": 65.9
+     "2026": 64.4
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 61.4,
+    "current": 60.0,
     "delta": 0.0,
     "series": {
-     "2026": 61.4
+     "2026": 60.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 43.2,
+    "current": 42.2,
     "delta": 0.0,
     "series": {
-     "2026": 43.2
+     "2026": 42.2
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 31.8,
+    "current": 31.1,
     "delta": 0.0,
     "series": {
-     "2026": 31.8
+     "2026": 31.1
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 25.0,
+    "current": 24.4,
     "delta": 0.0,
     "series": {
-     "2026": 25.0
+     "2026": 24.4
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 22.7,
+    "current": 22.2,
     "delta": 0.0,
     "series": {
-     "2026": 22.7
+     "2026": 22.2
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 20.5,
+    "current": 20.0,
     "delta": 0.0,
     "series": {
-     "2026": 20.5
+     "2026": 20.0
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 18.2,
+    "current": 17.8,
     "delta": 0.0,
     "series": {
-     "2026": 18.2
+     "2026": 17.8
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 15.9,
+    "current": 15.6,
     "delta": 0.0,
     "series": {
-     "2026": 15.9
+     "2026": 15.6
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 13.6,
+    "current": 13.3,
     "delta": 0.0,
     "series": {
-     "2026": 13.6
+     "2026": 13.3
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 2.3,
+    "current": 2.2,
     "delta": 0.0,
     "series": {
-     "2026": 2.3
+     "2026": 2.2
     }
    }
   ],
@@ -9089,7 +9089,7 @@
   "top_sources_recent": [
    {
     "domain": "profgmedia.com",
-    "n": 41
+    "n": 42
    },
    {
     "domain": "nytimes.com",
@@ -9171,7 +9171,7 @@
   "top_sources_early": [
    {
     "domain": "profgmedia.com",
-    "n": 41
+    "n": 42
    },
    {
     "domain": "nytimes.com",
