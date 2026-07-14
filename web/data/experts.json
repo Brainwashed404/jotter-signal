@@ -4390,16 +4390,16 @@
   "blurb": "Daily 'Start Up' roundup of the most important tech links and commentary, from the ex-Guardian technology editor.",
   "url": "https://theoverspill.blog",
   "totals": {
-   "posts": 28,
-   "signals": 28,
+   "posts": 29,
+   "signals": 29,
    "date_min": "2026-06-04",
-   "date_max": "2026-07-13"
+   "date_max": "2026-07-14"
   },
   "signal_types": {
-   "article": 28
+   "article": 29
   },
   "signal_kinds": {
-   "longread": 22,
+   "longread": 23,
    "links": 6
   },
   "themes": [
@@ -4413,90 +4413,90 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 96.4,
+    "current": 96.6,
     "delta": 0.0,
     "series": {
-     "2026": 96.4
+     "2026": 96.6
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 92.9,
+    "current": 93.1,
     "delta": 0.0,
     "series": {
-     "2026": 92.9
+     "2026": 93.1
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 82.1,
+    "current": 82.8,
     "delta": 0.0,
     "series": {
-     "2026": 82.1
+     "2026": 82.8
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 60.7,
+    "current": 58.6,
     "delta": 0.0,
     "series": {
-     "2026": 60.7
+     "2026": 58.6
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 50.0,
+    "current": 51.7,
     "delta": 0.0,
     "series": {
-     "2026": 50.0
+     "2026": 51.7
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 42.9,
+    "current": 44.8,
     "delta": 0.0,
     "series": {
-     "2026": 42.9
+     "2026": 44.8
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 32.1,
+    "current": 34.5,
     "delta": 0.0,
     "series": {
-     "2026": 32.1
+     "2026": 34.5
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 21.4,
+    "current": 20.7,
     "delta": 0.0,
     "series": {
-     "2026": 21.4
+     "2026": 20.7
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 17.9,
+    "current": 17.2,
     "delta": 0.0,
     "series": {
-     "2026": 17.9
+     "2026": 17.2
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 14.3,
+    "current": 13.8,
     "delta": 0.0,
     "series": {
-     "2026": 14.3
+     "2026": 13.8
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 14.3,
+    "current": 13.8,
     "delta": 0.0,
     "series": {
-     "2026": 14.3
+     "2026": 13.8
     }
    }
   ],
@@ -4506,31 +4506,31 @@
   "top_sources_recent": [
    {
     "domain": "twitter.com",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "threads.net",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "newsie.social",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "bsky.app",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "flickr.com",
-    "n": 27
+    "n": 28
    },
    {
     "domain": "creativecommons.org",
-    "n": 27
+    "n": 28
    },
    {
     "domain": "eepurl.com",
-    "n": 27
+    "n": 28
    },
    {
     "domain": "theverge.com",
@@ -4547,6 +4547,10 @@
    {
     "domain": "bbc.co.uk",
     "n": 2
+   },
+   {
+    "domain": "wired.com",
+    "n": 1
    },
    {
     "domain": "insidehighered.com",
@@ -4578,41 +4582,37 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 1
-   },
-   {
-    "domain": "edition.cnn.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "twitter.com",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "threads.net",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "newsie.social",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "bsky.app",
-    "n": 28
+    "n": 29
    },
    {
     "domain": "flickr.com",
-    "n": 27
+    "n": 28
    },
    {
     "domain": "creativecommons.org",
-    "n": 27
+    "n": 28
    },
    {
     "domain": "eepurl.com",
-    "n": 27
+    "n": 28
    },
    {
     "domain": "theverge.com",
@@ -4629,6 +4629,10 @@
    {
     "domain": "bbc.co.uk",
     "n": 2
+   },
+   {
+    "domain": "wired.com",
+    "n": 1
    },
    {
     "domain": "insidehighered.com",
@@ -4660,10 +4664,6 @@
    },
    {
     "domain": "nytimes.com",
-    "n": 1
-   },
-   {
-    "domain": "edition.cnn.com",
     "n": 1
    }
   ],
