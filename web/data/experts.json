@@ -3819,16 +3819,16 @@
   "totals": {
    "posts": 200,
    "signals": 200,
-   "date_min": "2026-06-21",
-   "date_max": "2026-07-14"
+   "date_min": "2026-06-22",
+   "date_max": "2026-07-15"
   },
   "signal_types": {
    "article": 200
   },
   "signal_kinds": {
-   "links": 100,
-   "longread": 7,
-   "article": 93
+   "links": 101,
+   "article": 92,
+   "longread": 7
   },
   "themes": [
    {
@@ -3841,10 +3841,10 @@
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 37.5,
+    "current": 37.0,
     "delta": 0.0,
     "series": {
-     "2026": 37.5
+     "2026": 37.0
     }
    },
    {
@@ -3857,34 +3857,26 @@
    },
    {
     "theme": "Economy & markets",
-    "current": 30.5,
+    "current": 29.5,
     "delta": 0.0,
     "series": {
-     "2026": 30.5
+     "2026": 29.5
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 22.5,
+    "current": 22.0,
     "delta": 0.0,
     "series": {
-     "2026": 22.5
+     "2026": 22.0
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 15.5,
+    "current": 16.0,
     "delta": 0.0,
     "series": {
-     "2026": 15.5
-    }
-   },
-   {
-    "theme": "Geopolitics & power",
-    "current": 13.5,
-    "delta": 0.0,
-    "series": {
-     "2026": 13.5
+     "2026": 16.0
     }
    },
    {
@@ -3893,6 +3885,14 @@
     "delta": 0.0,
     "series": {
      "2026": 13.5
+    }
+   },
+   {
+    "theme": "Geopolitics & power",
+    "current": 13.0,
+    "delta": 0.0,
+    "series": {
+     "2026": 13.0
     }
    },
    {
@@ -3934,22 +3934,30 @@
   "top_sources_recent": [
    {
     "domain": "futurism.com",
-    "n": 745
+    "n": 737
    },
    {
     "domain": "x.com",
-    "n": 77
+    "n": 79
    },
    {
     "domain": "nytimes.com",
-    "n": 34
+    "n": 33
+   },
+   {
+    "domain": "reddit.com",
+    "n": 20
+   },
+   {
+    "domain": "wired.com",
+    "n": 18
    },
    {
     "domain": "bbc.com",
     "n": 18
    },
    {
-    "domain": "wired.com",
+    "domain": "wsj.com",
     "n": 17
    },
    {
@@ -3957,20 +3965,12 @@
     "n": 17
    },
    {
-    "domain": "wsj.com",
-    "n": 17
-   },
-   {
-    "domain": "reddit.com",
-    "n": 16
-   },
-   {
     "domain": "reuters.com",
     "n": 14
    },
    {
-    "domain": "cnbc.com",
-    "n": 11
+    "domain": "space.com",
+    "n": 9
    },
    {
     "domain": "cnn.com",
@@ -3981,12 +3981,12 @@
     "n": 9
    },
    {
-    "domain": "businessinsider.com",
+    "domain": "cnbc.com",
     "n": 9
    },
    {
-    "domain": "space.com",
-    "n": 8
+    "domain": "businessinsider.com",
+    "n": 9
    },
    {
     "domain": "bloomberg.com",
@@ -3997,7 +3997,7 @@
     "n": 8
    },
    {
-    "domain": "npr.org",
+    "domain": "t.co",
     "n": 7
    },
    {
@@ -4005,33 +4005,41 @@
     "n": 7
    },
    {
-    "domain": "washingtonpost.com",
+    "domain": "tiktok.com",
     "n": 7
    },
    {
-    "domain": "tiktok.com",
-    "n": 7
+    "domain": "404media.co",
+    "n": 6
    }
   ],
   "top_sources_early": [
    {
     "domain": "futurism.com",
-    "n": 745
+    "n": 737
    },
    {
     "domain": "x.com",
-    "n": 77
+    "n": 79
    },
    {
     "domain": "nytimes.com",
-    "n": 34
+    "n": 33
+   },
+   {
+    "domain": "reddit.com",
+    "n": 20
+   },
+   {
+    "domain": "wired.com",
+    "n": 18
    },
    {
     "domain": "bbc.com",
     "n": 18
    },
    {
-    "domain": "wired.com",
+    "domain": "wsj.com",
     "n": 17
    },
    {
@@ -4039,20 +4047,12 @@
     "n": 17
    },
    {
-    "domain": "wsj.com",
-    "n": 17
-   },
-   {
-    "domain": "reddit.com",
-    "n": 16
-   },
-   {
     "domain": "reuters.com",
     "n": 14
    },
    {
-    "domain": "cnbc.com",
-    "n": 11
+    "domain": "space.com",
+    "n": 9
    },
    {
     "domain": "cnn.com",
@@ -4063,12 +4063,12 @@
     "n": 9
    },
    {
-    "domain": "businessinsider.com",
+    "domain": "cnbc.com",
     "n": 9
    },
    {
-    "domain": "space.com",
-    "n": 8
+    "domain": "businessinsider.com",
+    "n": 9
    },
    {
     "domain": "bloomberg.com",
@@ -4079,7 +4079,7 @@
     "n": 8
    },
    {
-    "domain": "npr.org",
+    "domain": "t.co",
     "n": 7
    },
    {
@@ -4087,12 +4087,12 @@
     "n": 7
    },
    {
-    "domain": "washingtonpost.com",
+    "domain": "tiktok.com",
     "n": 7
    },
    {
-    "domain": "tiktok.com",
-    "n": 7
+    "domain": "404media.co",
+    "n": 6
    }
   ],
   "category": "publication"
@@ -4103,111 +4103,111 @@
   "blurb": "Semafor's technology coverage \u2014 AI, platforms and the business of tech.",
   "url": "https://www.semafor.com/vertical/tech",
   "totals": {
-   "posts": 81,
-   "signals": 81,
+   "posts": 84,
+   "signals": 84,
    "date_min": "2026-06-08",
    "date_max": "2026-07-15"
   },
   "signal_types": {
-   "article": 81
+   "article": 84
   },
   "signal_kinds": {
-   "links": 38,
-   "article": 40,
+   "links": 39,
+   "article": 42,
    "quote": 2,
    "data": 1
   },
   "themes": [
    {
     "theme": "AI & machine learning",
-    "current": 80.2,
+    "current": 81.0,
     "delta": 0.0,
     "series": {
-     "2026": 80.2
+     "2026": 81.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 49.4,
+    "current": 48.8,
     "delta": 0.0,
     "series": {
-     "2026": 49.4
+     "2026": 48.8
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 30.9,
+    "current": 29.8,
     "delta": 0.0,
     "series": {
-     "2026": 30.9
+     "2026": 29.8
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 27.2,
+    "current": 27.4,
     "delta": 0.0,
     "series": {
-     "2026": 27.2
+     "2026": 27.4
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 14.8,
+    "current": 16.7,
     "delta": 0.0,
     "series": {
-     "2026": 14.8
+     "2026": 16.7
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 14.8,
+    "current": 14.3,
     "delta": 0.0,
     "series": {
-     "2026": 14.8
+     "2026": 14.3
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 7.4,
+    "current": 7.1,
     "delta": 0.0,
     "series": {
-     "2026": 7.4
+     "2026": 7.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 6.2,
+    "current": 6.0,
     "delta": 0.0,
     "series": {
-     "2026": 6.2
+     "2026": 6.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 4.9,
+    "current": 4.8,
     "delta": 0.0,
     "series": {
-     "2026": 4.9
+     "2026": 4.8
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 3.7,
+    "current": 3.6,
     "delta": 0.0,
     "series": {
-     "2026": 3.7
-    }
-   },
-   {
-    "theme": "Crypto / web3",
-    "current": 2.5,
-    "delta": 0.0,
-    "series": {
-     "2026": 2.5
+     "2026": 3.6
     }
    },
    {
     "theme": "Democracy & disinformation",
+    "current": 1.2,
+    "delta": 0.0,
+    "series": {
+     "2026": 1.2
+    }
+   },
+   {
+    "theme": "Crypto / web3",
     "current": 1.2,
     "delta": 0.0,
     "series": {
@@ -4221,11 +4221,11 @@
   "top_sources_recent": [
    {
     "domain": "semafor.com",
-    "n": 81
+    "n": 84
    },
    {
     "domain": "bloomberg.com",
-    "n": 17
+    "n": 18
    },
    {
     "domain": "wsj.com",
@@ -4233,11 +4233,15 @@
    },
    {
     "domain": "reuters.com",
-    "n": 11
+    "n": 12
    },
    {
     "domain": "ft.com",
     "n": 10
+   },
+   {
+    "domain": "x.com",
+    "n": 9
    },
    {
     "domain": "nytimes.com",
@@ -4246,10 +4250,6 @@
    {
     "domain": "cnbc.com",
     "n": 7
-   },
-   {
-    "domain": "x.com",
-    "n": 6
    },
    {
     "domain": "wired.com",
@@ -4266,6 +4266,10 @@
    {
     "domain": "washingtonpost.com",
     "n": 4
+   },
+   {
+    "domain": "scmp.com",
+    "n": 3
    },
    {
     "domain": "darioamodei.com",
@@ -4288,26 +4292,22 @@
     "n": 3
    },
    {
+    "domain": "demishassabis.substack.com",
+    "n": 2
+   },
+   {
     "domain": "ai-2040.com",
-    "n": 2
-   },
-   {
-    "domain": "finance.yahoo.com",
-    "n": 2
-   },
-   {
-    "domain": "newscientist.com",
     "n": 2
    }
   ],
   "top_sources_early": [
    {
     "domain": "semafor.com",
-    "n": 81
+    "n": 84
    },
    {
     "domain": "bloomberg.com",
-    "n": 17
+    "n": 18
    },
    {
     "domain": "wsj.com",
@@ -4315,11 +4315,15 @@
    },
    {
     "domain": "reuters.com",
-    "n": 11
+    "n": 12
    },
    {
     "domain": "ft.com",
     "n": 10
+   },
+   {
+    "domain": "x.com",
+    "n": 9
    },
    {
     "domain": "nytimes.com",
@@ -4328,10 +4332,6 @@
    {
     "domain": "cnbc.com",
     "n": 7
-   },
-   {
-    "domain": "x.com",
-    "n": 6
    },
    {
     "domain": "wired.com",
@@ -4348,6 +4348,10 @@
    {
     "domain": "washingtonpost.com",
     "n": 4
+   },
+   {
+    "domain": "scmp.com",
+    "n": 3
    },
    {
     "domain": "darioamodei.com",
@@ -4370,15 +4374,11 @@
     "n": 3
    },
    {
+    "domain": "demishassabis.substack.com",
+    "n": 2
+   },
+   {
     "domain": "ai-2040.com",
-    "n": 2
-   },
-   {
-    "domain": "finance.yahoo.com",
-    "n": 2
-   },
-   {
-    "domain": "newscientist.com",
     "n": 2
    }
   ],
@@ -8117,16 +8117,16 @@
   "blurb": "Andreessen Horowitz's publication on technology, startups and the ideas shaping the future.",
   "url": "https://www.a16z.news",
   "totals": {
-   "posts": 39,
-   "signals": 39,
+   "posts": 40,
+   "signals": 40,
    "date_min": "2026-06-02",
-   "date_max": "2026-07-14"
+   "date_max": "2026-07-15"
   },
   "signal_types": {
-   "article": 39
+   "article": 40
   },
   "signal_kinds": {
-   "longread": 31,
+   "longread": 32,
    "links": 4,
    "article": 4
   },
@@ -8141,82 +8141,82 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 84.6,
+    "current": 85.0,
     "delta": 0.0,
     "series": {
-     "2026": 84.6
+     "2026": 85.0
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 56.4,
+    "current": 55.0,
     "delta": 0.0,
     "series": {
-     "2026": 56.4
+     "2026": 55.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 38.5,
+    "current": 40.0,
     "delta": 0.0,
     "series": {
-     "2026": 38.5
+     "2026": 40.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 28.2,
+    "current": 30.0,
     "delta": 0.0,
     "series": {
-     "2026": 28.2
+     "2026": 30.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 20.5,
+    "current": 20.0,
     "delta": 0.0,
     "series": {
-     "2026": 20.5
+     "2026": 20.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 17.9,
+    "current": 17.5,
     "delta": 0.0,
     "series": {
-     "2026": 17.9
+     "2026": 17.5
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 10.3,
+    "current": 12.5,
     "delta": 0.0,
     "series": {
-     "2026": 10.3
+     "2026": 12.5
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 5.1,
+    "current": 5.0,
     "delta": 0.0,
     "series": {
-     "2026": 5.1
+     "2026": 5.0
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 2.6,
+    "current": 2.5,
     "delta": 0.0,
     "series": {
-     "2026": 2.6
+     "2026": 2.5
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 2.6,
+    "current": 2.5,
     "delta": 0.0,
     "series": {
-     "2026": 2.6
+     "2026": 2.5
     }
    },
    {
@@ -8234,7 +8234,7 @@
   "top_sources_recent": [
    {
     "domain": "a16z.news",
-    "n": 207
+    "n": 212
    },
    {
     "domain": "a16z.com",
@@ -8249,12 +8249,20 @@
     "n": 8
    },
    {
+    "domain": "law.uchicago.edu",
+    "n": 2
+   },
+   {
     "domain": "papers.ssrn.com",
     "n": 2
    },
    {
     "domain": "build.a16z.com",
     "n": 2
+   },
+   {
+    "domain": "time.com",
+    "n": 1
    },
    {
     "domain": "cdixon.org",
@@ -8302,21 +8310,13 @@
    },
    {
     "domain": "scmp.com",
-    "n": 1
-   },
-   {
-    "domain": "drive.google.com",
-    "n": 1
-   },
-   {
-    "domain": "fda.gov",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "a16z.news",
-    "n": 207
+    "n": 212
    },
    {
     "domain": "a16z.com",
@@ -8331,12 +8331,20 @@
     "n": 8
    },
    {
+    "domain": "law.uchicago.edu",
+    "n": 2
+   },
+   {
     "domain": "papers.ssrn.com",
     "n": 2
    },
    {
     "domain": "build.a16z.com",
     "n": 2
+   },
+   {
+    "domain": "time.com",
+    "n": 1
    },
    {
     "domain": "cdixon.org",
@@ -8384,14 +8392,6 @@
    },
    {
     "domain": "scmp.com",
-    "n": 1
-   },
-   {
-    "domain": "drive.google.com",
-    "n": 1
-   },
-   {
-    "domain": "fda.gov",
     "n": 1
    }
   ],
@@ -8972,106 +8972,106 @@
   "blurb": "Scott Galloway and Ed Elson on markets, business and the economy: IPOs, big tech, valuations and the forces moving capital.",
   "url": "https://www.profgmedia.com",
   "totals": {
-   "posts": 49,
-   "signals": 49,
+   "posts": 50,
+   "signals": 50,
    "date_min": "2026-06-12",
    "date_max": "2026-07-15"
   },
   "signal_types": {
-   "article": 49
+   "article": 50
   },
   "signal_kinds": {
+   "article": 17,
    "longread": 25,
-   "links": 8,
-   "article": 16
+   "links": 8
   },
   "themes": [
    {
     "theme": "Economy & markets",
-    "current": 65.3,
+    "current": 64.0,
     "delta": 0.0,
     "series": {
-     "2026": 65.3
+     "2026": 64.0
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 65.3,
+    "current": 64.0,
     "delta": 0.0,
     "series": {
-     "2026": 65.3
+     "2026": 64.0
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 61.2,
+    "current": 60.0,
     "delta": 0.0,
     "series": {
-     "2026": 61.2
+     "2026": 60.0
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 42.9,
+    "current": 42.0,
     "delta": 0.0,
     "series": {
-     "2026": 42.9
+     "2026": 42.0
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 28.6,
+    "current": 28.0,
     "delta": 0.0,
     "series": {
-     "2026": 28.6
+     "2026": 28.0
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 24.5,
+    "current": 24.0,
     "delta": 0.0,
     "series": {
-     "2026": 24.5
+     "2026": 24.0
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 22.4,
+    "current": 22.0,
     "delta": 0.0,
     "series": {
-     "2026": 22.4
+     "2026": 22.0
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 18.4,
+    "current": 18.0,
     "delta": 0.0,
     "series": {
-     "2026": 18.4
+     "2026": 18.0
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 16.3,
+    "current": 16.0,
     "delta": 0.0,
     "series": {
-     "2026": 16.3
+     "2026": 16.0
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 14.3,
+    "current": 14.0,
     "delta": 0.0,
     "series": {
-     "2026": 14.3
+     "2026": 14.0
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 14.3,
+    "current": 14.0,
     "delta": 0.0,
     "series": {
-     "2026": 14.3
+     "2026": 14.0
     }
    },
    {
@@ -9089,7 +9089,7 @@
   "top_sources_recent": [
    {
     "domain": "profgmedia.com",
-    "n": 49
+    "n": 50
    },
    {
     "domain": "nytimes.com",
@@ -9105,7 +9105,7 @@
    },
    {
     "domain": "92ny.org",
-    "n": 8
+    "n": 9
    },
    {
     "domain": "ft.com",
@@ -9171,7 +9171,7 @@
   "top_sources_early": [
    {
     "domain": "profgmedia.com",
-    "n": 49
+    "n": 50
    },
    {
     "domain": "nytimes.com",
@@ -9187,7 +9187,7 @@
    },
    {
     "domain": "92ny.org",
-    "n": 8
+    "n": 9
    },
    {
     "domain": "ft.com",
@@ -9545,16 +9545,16 @@
   "blurb": "Media ecologist and author of \"Postjournalism\". On McLuhan, the transformation of news media, and what AI means for writing, reading and human cognition.",
   "url": "https://www.andreymir.com",
   "totals": {
-   "posts": 26,
-   "signals": 26,
+   "posts": 27,
+   "signals": 27,
    "date_min": "2026-03-12",
-   "date_max": "2026-07-12"
+   "date_max": "2026-07-15"
   },
   "signal_types": {
-   "article": 26
+   "article": 27
   },
   "signal_kinds": {
-   "links": 9,
+   "links": 10,
    "longread": 13,
    "article": 2,
    "qanda": 2
@@ -9570,82 +9570,82 @@
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 96.2,
+    "current": 96.3,
     "delta": 0.0,
     "series": {
-     "2026": 96.2
+     "2026": 96.3
     }
    },
    {
     "theme": "Social media & attention",
-    "current": 84.6,
+    "current": 85.2,
     "delta": 0.0,
     "series": {
-     "2026": 84.6
+     "2026": 85.2
     }
    },
    {
     "theme": "AI & machine learning",
-    "current": 65.4,
+    "current": 66.7,
     "delta": 0.0,
     "series": {
-     "2026": 65.4
+     "2026": 66.7
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 65.4,
+    "current": 66.7,
     "delta": 0.0,
     "series": {
-     "2026": 65.4
+     "2026": 66.7
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 42.3,
+    "current": 40.7,
     "delta": 0.0,
     "series": {
-     "2026": 42.3
+     "2026": 40.7
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 11.5,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 11.5
+     "2026": 11.1
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 11.5,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 11.5
+     "2026": 11.1
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 11.5,
+    "current": 11.1,
     "delta": 0.0,
     "series": {
-     "2026": 11.5
+     "2026": 11.1
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 7.7,
+    "current": 7.4,
     "delta": 0.0,
     "series": {
-     "2026": 7.7
+     "2026": 7.4
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 3.8,
+    "current": 3.7,
     "delta": 0.0,
     "series": {
-     "2026": 3.8
+     "2026": 3.7
     }
    },
    {
@@ -9667,15 +9667,15 @@
    },
    {
     "domain": "andreymir.com",
-    "n": 27
+    "n": 29
+   },
+   {
+    "domain": "2067journal.ca",
+    "n": 11
    },
    {
     "domain": "x.com",
     "n": 10
-   },
-   {
-    "domain": "2067journal.ca",
-    "n": 8
    },
    {
     "domain": "hipermediaciones.com",
@@ -9710,6 +9710,10 @@
     "n": 3
    },
    {
+    "domain": "tvo.org",
+    "n": 2
+   },
+   {
     "domain": "city-journal.org",
     "n": 2
    },
@@ -9735,10 +9739,6 @@
    },
    {
     "domain": "derekthompson.org",
-    "n": 2
-   },
-   {
-    "domain": "upgrademedia.fr",
     "n": 2
    }
   ],
@@ -9749,15 +9749,15 @@
    },
    {
     "domain": "andreymir.com",
-    "n": 27
+    "n": 29
+   },
+   {
+    "domain": "2067journal.ca",
+    "n": 11
    },
    {
     "domain": "x.com",
     "n": 10
-   },
-   {
-    "domain": "2067journal.ca",
-    "n": 8
    },
    {
     "domain": "hipermediaciones.com",
@@ -9792,6 +9792,10 @@
     "n": 3
    },
    {
+    "domain": "tvo.org",
+    "n": 2
+   },
+   {
     "domain": "city-journal.org",
     "n": 2
    },
@@ -9817,10 +9821,6 @@
    },
    {
     "domain": "derekthompson.org",
-    "n": 2
-   },
-   {
-    "domain": "upgrademedia.fr",
     "n": 2
    }
   ],
