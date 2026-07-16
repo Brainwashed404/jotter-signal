@@ -4390,17 +4390,17 @@
   "blurb": "Daily 'Start Up' roundup of the most important tech links and commentary, from the ex-Guardian technology editor.",
   "url": "https://theoverspill.blog",
   "totals": {
-   "posts": 30,
-   "signals": 30,
+   "posts": 31,
+   "signals": 31,
    "date_min": "2026-06-04",
-   "date_max": "2026-07-15"
+   "date_max": "2026-07-16"
   },
   "signal_types": {
-   "article": 30
+   "article": 31
   },
   "signal_kinds": {
-   "links": 7,
-   "longread": 23
+   "longread": 24,
+   "links": 7
   },
   "themes": [
    {
@@ -4413,90 +4413,90 @@
    },
    {
     "theme": "AI & machine learning",
-    "current": 96.7,
+    "current": 96.8,
     "delta": 0.0,
     "series": {
-     "2026": 96.7
+     "2026": 96.8
     }
    },
    {
     "theme": "Platform power / Big Tech",
-    "current": 93.3,
+    "current": 93.5,
     "delta": 0.0,
     "series": {
-     "2026": 93.3
+     "2026": 93.5
     }
    },
    {
     "theme": "Media & journalism",
-    "current": 83.3,
+    "current": 83.9,
     "delta": 0.0,
     "series": {
-     "2026": 83.3
+     "2026": 83.9
     }
    },
    {
     "theme": "Regulation & governance",
-    "current": 56.7,
+    "current": 54.8,
     "delta": 0.0,
     "series": {
-     "2026": 56.7
+     "2026": 54.8
     }
    },
    {
     "theme": "Economy & markets",
-    "current": 53.3,
+    "current": 51.6,
     "delta": 0.0,
     "series": {
-     "2026": 53.3
+     "2026": 51.6
     }
    },
    {
     "theme": "Surveillance & privacy",
-    "current": 43.3,
+    "current": 45.2,
     "delta": 0.0,
     "series": {
-     "2026": 43.3
+     "2026": 45.2
     }
    },
    {
     "theme": "Geopolitics & power",
-    "current": 36.7,
+    "current": 38.7,
     "delta": 0.0,
     "series": {
-     "2026": 36.7
+     "2026": 38.7
     }
    },
    {
     "theme": "Climate & environment",
-    "current": 20.0,
+    "current": 19.4,
     "delta": 0.0,
     "series": {
-     "2026": 20.0
+     "2026": 19.4
     }
    },
    {
     "theme": "Labour & automation",
-    "current": 20.0,
+    "current": 19.4,
     "delta": 0.0,
     "series": {
-     "2026": 20.0
+     "2026": 19.4
     }
    },
    {
     "theme": "Democracy & disinformation",
-    "current": 13.3,
+    "current": 12.9,
     "delta": 0.0,
     "series": {
-     "2026": 13.3
+     "2026": 12.9
     }
    },
    {
     "theme": "Crypto / web3",
-    "current": 13.3,
+    "current": 12.9,
     "delta": 0.0,
     "series": {
-     "2026": 13.3
+     "2026": 12.9
     }
    }
   ],
@@ -4506,31 +4506,31 @@
   "top_sources_recent": [
    {
     "domain": "twitter.com",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "threads.net",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "newsie.social",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "bsky.app",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "flickr.com",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "creativecommons.org",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "eepurl.com",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "theverge.com",
@@ -4551,6 +4551,10 @@
    {
     "domain": "bbc.co.uk",
     "n": 2
+   },
+   {
+    "domain": "businessinsider.com",
+    "n": 1
    },
    {
     "domain": "wired.com",
@@ -4578,41 +4582,37 @@
    },
    {
     "domain": "worksinprogress.co",
-    "n": 1
-   },
-   {
-    "domain": "nytimes.com",
     "n": 1
    }
   ],
   "top_sources_early": [
    {
     "domain": "twitter.com",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "threads.net",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "newsie.social",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "bsky.app",
-    "n": 30
+    "n": 31
    },
    {
     "domain": "flickr.com",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "creativecommons.org",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "eepurl.com",
-    "n": 29
+    "n": 30
    },
    {
     "domain": "theverge.com",
@@ -4633,6 +4633,10 @@
    {
     "domain": "bbc.co.uk",
     "n": 2
+   },
+   {
+    "domain": "businessinsider.com",
+    "n": 1
    },
    {
     "domain": "wired.com",
@@ -4660,10 +4664,6 @@
    },
    {
     "domain": "worksinprogress.co",
-    "n": 1
-   },
-   {
-    "domain": "nytimes.com",
     "n": 1
    }
   ],
